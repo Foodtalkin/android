@@ -9,5 +9,7 @@
 
     <string name="facebook_app_id">567830766693152</string>
 
+    <string name="connection_error">Check your internet connection</string>
+
 
 </resources>
