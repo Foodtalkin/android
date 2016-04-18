@@ -16,6 +16,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -32,7 +38,15 @@ import com.google.android.gms.location.LocationServices;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import in.foodtalk.android.app.AppController;
+import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.GetLocation;
+import in.foodtalk.android.module.Login;
+import in.foodtalk.android.object.LoginInfo;
+import in.foodtalk.android.object.LoginValue;
 
 public class FbLogin extends AppCompatActivity implements OnClickListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
@@ -40,12 +54,18 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
 
     private CallbackManager callbackManager;
 
+    private String TAG = Login.class.getSimpleName();
+
 
     //--location provider vars----------
     Location mLastLocation;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     String lat, lon;
+
+    public LoginInfo loginInfo = new LoginInfo();
+
+    private DatabaseHandler db;
     //-----------------------------------
 
     @Override
@@ -53,6 +73,8 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fb_login);
 
+        db = new DatabaseHandler(getApplicationContext());
+        //Log.d("data count", db.getRowCount()+"");
         /********** get Gps location service LocationManager object ***********/
         //locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -63,15 +85,9 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
 		     Third(minDistance) :  the minimum distance interval for notifications, in meters
 		     Fourth(listener)   :  a {#link LocationListener} whose onLocationChanged(Location) method will be called for each location update
         */
-
-
-
-
         /********* After registration onLocationChanged method called periodically after each 3 sec ***********/
 
         buildGoogleApiClient();
-
-
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         GetLocation getLocation = new GetLocation(this);
@@ -110,6 +126,23 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                                     String name = object.getString("name");
                                     String gender = object.getString("gender");
                                     Log.d("fb user info", "id: " + id + "name: " + name + " email: " + email + " gender: " + gender + " birthday: " + birthday);
+
+
+                                    loginInfo.fullName = name;
+                                    loginInfo.email = email;
+                                    loginInfo.gender = gender;
+                                    loginInfo.facebookId = id;
+                                    loginInfo.latitude = ((lat == null) ? "N/A" : lat);
+                                    loginInfo.longitude= ((lon == null) ? "N/A" : lon);
+                                    loginInfo.signInType = "F";
+                                    loginInfo.deviceToken = "548698784";
+                                    loginInfo.image = "https://graph.facebook.com/"+id+"/picture?type=large";
+
+                                   // Login login = new Login(getApplicationContext());
+                                    postLoginInfo(loginInfo,"login");
+
+
+
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -121,11 +154,7 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                 request.executeAsync();
                 //-------------
 
-                //--Start new activity--
-                Intent i = new Intent(FbLogin.this, WelcomeUsername.class);
-                startActivity(i);
-                finish();
-                //----------------------
+
             }
 
             @Override
@@ -235,7 +264,6 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
             // permissions this app might request
         }
     }
-
     @Override
     public void onConnectionSuspended(int i) {
 
@@ -250,7 +278,6 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
     public void onConnectionFailed(ConnectionResult connectionResult) {
         buildGoogleApiClient();
     }
-
     synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -273,5 +300,103 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         Log.d("GPS location","Longitude"+lon);
         //txtOutputLat.setText(lat);
         //txtOutputLon.setText(lon);
+    }
+
+
+    //----------------post to api------------------------------
+    public void postLoginInfo(LoginInfo loginInfo, String tag) throws JSONException {
+        //showProgressDialog();
+
+
+        JSONObject obj = new JSONObject();
+        obj.put("signInType", loginInfo.signInType);
+        obj.put("fullName", loginInfo.fullName);
+        obj.put("email",loginInfo.email);
+        obj.put("facebookId",loginInfo.facebookId);
+        obj.put("latitude",loginInfo.latitude);
+        obj.put("longitude",loginInfo.longitude);
+        obj.put("deviceToken","12344566776");
+        obj.put("image",loginInfo.image);
+        //obj.put("twitterId","");
+        //obj.put("googleId","");
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+                "http://52.74.13.4/index.php/service/auth/signin", obj,
+                new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "After Sending JsongObj"+response.toString());
+                        //msgResponse.setText(response.toString());
+                        Log.d("Login Respond", response.toString());
+
+                        /*JSONObject jObj = new JSONObject(response);
+                        JSONObject status = jObj.getJSONObject("status");
+                        String type = status.getString("type");*/
+
+                        try {
+                            String apiMessage  = response.getString("apiMessage");
+
+                            JSONObject jObj = response.getJSONObject("profile");
+
+                            String fullName = jObj.getString("fullName");
+                            String fId = jObj.getString("facebookId");
+                            String userName = jObj.getString("userName");
+                            String uId = response.getString("userId");
+                            String sessionId = response.getString("sessionId");
+
+                            LoginValue loginValue = new LoginValue();
+                            loginValue.fbId = fId;
+                            loginValue.uId = uId;
+                            loginValue.sId = sessionId;
+                            loginValue.name = fullName;
+                            //loginValue.userName = userName;
+
+                            loginValue.userName = ((userName.equals("")) ? "NA" : userName);
+
+                            Log.d("check table", db.getRowCount()+"");
+                            db.addUser(loginValue);
+
+                           //------Start new activity according to api response
+                            if(userName.equals("") || userName.equals(null)){
+
+                                Intent i = new Intent(FbLogin.this, WelcomeUsername.class);
+                                startActivity(i);
+
+                            }else {
+                                Intent i = new Intent(FbLogin.this, Home.class);
+                                startActivity(i);
+                            }
+                            finish();
+                           // loginValue.userName;
+                            //db.addUser();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        //--Start new activity--
+                        //----------------------
+                        //hideProgressDialog();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                // hideProgressDialog();
+            }
+        }) {
+            /**
+             * Passing some request headers
+             * */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(jsonObjReq,tag);
+        // Cancelling request
+        // ApplicationController.getInstance().getRequestQueue().cancelAll(tag_json_obj);
     }
 }

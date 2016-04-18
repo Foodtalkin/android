@@ -4,16 +4,22 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+
+import in.foodtalk.android.module.DatabaseHandler;
 
 public class SplashScreen extends AppCompatActivity {
 
     // Splash screen timer
     private static int SPLASH_TIME_OUT = 3000;
 
+    private DatabaseHandler db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
+        db = new DatabaseHandler(getApplicationContext());
 
         new Handler().postDelayed(new Runnable() {
 
@@ -26,9 +32,16 @@ public class SplashScreen extends AppCompatActivity {
             public void run() {
                 // This method will be executed once the timer is over
                 // Start your app main activity
-                Intent i = new Intent(SplashScreen.this, FbLogin.class);
+                int count  = db.getRowCount();
+                 //int count  = 0;
+                Log.d("from splash check login",count+"");
+                Intent i;
+                if(count > 0){
+                    i = new Intent(SplashScreen.this, Home.class);
+                }else {
+                    i = new Intent(SplashScreen.this, FbLogin.class);
+                }
                 startActivity(i);
-
                 // close this activity
                 finish();
             }
