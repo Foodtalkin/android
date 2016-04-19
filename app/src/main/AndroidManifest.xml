@@ -3,9 +3,9 @@
     package="in.foodtalk.android">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".app.AppController"
@@ -39,9 +39,10 @@
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:theme="@style/FullyTranslucent" />
-
-        <activity android:name=".Home"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Home"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ShareApp"></activity>
     </application>
 
 </manifest>

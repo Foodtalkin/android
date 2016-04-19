@@ -37,7 +37,13 @@ public class SplashScreen extends AppCompatActivity {
                 Log.d("from splash check login",count+"");
                 Intent i;
                 if(count > 0){
-                    i = new Intent(SplashScreen.this, Home.class);
+                    if(db.getUserDetails().get("userName").equals("N/A")){
+                        i = new Intent(SplashScreen.this, WelcomeUsername.class);
+                    }
+                    else {
+                        i = new Intent(SplashScreen.this, Home.class);
+                    }
+                    Log.d("user info from Splash", db.getUserDetails().get("userName")+"");
                 }else {
                     i = new Intent(SplashScreen.this, FbLogin.class);
                 }

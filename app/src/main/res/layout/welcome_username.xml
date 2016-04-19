@@ -37,17 +37,36 @@
             android:textColor="@color/colorText1"
             android:textAlignment="center"
             />
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/round_corner"
-            android:textSize="30sp"
-            />
-        <ImageButton
+        <TextView
+            android:id="@+id/txt_username_error"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/btn_finish_disabled"
+            android:text="@string/user_name_taken"
+            android:textColor="@color/errorText"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="left"
+            android:paddingLeft="4dp"
+            android:alpha="0"/>
+        <EditText
+            android:id="@+id/txt_username"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/round_corner"
+            android:textSize="16sp"
+            android:textCursorDrawable="@drawable/color_cursor"
+            android:hint="User Name"
+            android:textColor="#333"
+            android:paddingLeft="10dp"
+            android:singleLine="true"
+            android:maxLength="16"
+            android:digits="@string/alphanumber"
+            />
+        <ImageButton
+            android:id="@+id/btn_user_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btn_user_disabled"
             android:layout_marginTop="30dp"
             android:background="@android:color/transparent"/>
     </LinearLayout>

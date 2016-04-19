@@ -26,7 +26,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
 
 
     }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -34,7 +33,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                 // OK button
                // Log.d("faceboo: ", "click getInfo button");
                 Log.d("getInfo",db.getRowCount()+"");
-                Log.d("get user info", db.getUserDetails().get("fullName")+"");
+                Log.d("get user info", db.getUserDetails().get("userName")+"");
                 break;
             case R.id.btn_delRow:
                 // OK button

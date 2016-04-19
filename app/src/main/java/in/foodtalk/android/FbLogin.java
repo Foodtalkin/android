@@ -42,6 +42,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import in.foodtalk.android.app.AppController;
+import in.foodtalk.android.app.Config;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.GetLocation;
 import in.foodtalk.android.module.Login;
@@ -55,6 +56,8 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
     private CallbackManager callbackManager;
 
     private String TAG = Login.class.getSimpleName();
+
+    private Config config;
 
 
     //--location provider vars----------
@@ -72,6 +75,7 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fb_login);
+        config = new Config();
 
         db = new DatabaseHandler(getApplicationContext());
         //Log.d("data count", db.getRowCount()+"");
@@ -127,7 +131,6 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                                     String gender = object.getString("gender");
                                     Log.d("fb user info", "id: " + id + "name: " + name + " email: " + email + " gender: " + gender + " birthday: " + birthday);
 
-
                                     loginInfo.fullName = name;
                                     loginInfo.email = email;
                                     loginInfo.gender = gender;
@@ -153,8 +156,6 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                 request.setParameters(parameters);
                 request.executeAsync();
                 //-------------
-
-
             }
 
             @Override
@@ -192,11 +193,8 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
 
     //---------------location provider-------------------------------
 
-
     @Override
     public void onConnected(Bundle bundle) {
-
-
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(100); // Update location every second
@@ -208,7 +206,6 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         if (mLastLocation != null) {
             lat = String.valueOf(mLastLocation.getLatitude());
             lon = String.valueOf(mLastLocation.getLongitude());
-
         }
         updateUI();
     }
@@ -303,11 +300,11 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
     }
 
 
+
+
     //----------------post to api------------------------------
     public void postLoginInfo(LoginInfo loginInfo, String tag) throws JSONException {
         //showProgressDialog();
-
-
         JSONObject obj = new JSONObject();
         obj.put("signInType", loginInfo.signInType);
         obj.put("fullName", loginInfo.fullName);
@@ -320,14 +317,17 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         //obj.put("twitterId","");
         //obj.put("googleId","");
 
+        Log.d("JSon obj",obj+"");
+
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                "http://52.74.13.4/index.php/service/auth/signin", obj,
+                config.URL_LOGIN, obj,
                 new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, "After Sending JsongObj"+response.toString());
+                        //Log.d(TAG, "After Sending JsongObj"+response.toString());
                         //msgResponse.setText(response.toString());
+                        Log.d("onResponse", "check resonse");
                         Log.d("Login Respond", response.toString());
 
                         /*JSONObject jObj = new JSONObject(response);
@@ -352,14 +352,13 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                             loginValue.name = fullName;
                             //loginValue.userName = userName;
 
-                            loginValue.userName = ((userName.equals("")) ? "NA" : userName);
+                            loginValue.userName = ((userName.equals("")) ? "N/A" : userName);
 
                             Log.d("check table", db.getRowCount()+"");
                             db.addUser(loginValue);
 
-                           //------Start new activity according to api response
+                            //------Start new activity according to api response
                             if(userName.equals("") || userName.equals(null)){
-
                                 Intent i = new Intent(FbLogin.this, WelcomeUsername.class);
                                 startActivity(i);
 
@@ -368,12 +367,9 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                                 startActivity(i);
                             }
                             finish();
-                           // loginValue.userName;
-                            //db.addUser();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        //--Start new activity--
                         //----------------------
                         //hideProgressDialog();
                     }
