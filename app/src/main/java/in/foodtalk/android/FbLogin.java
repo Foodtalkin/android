@@ -31,6 +31,7 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.common.ConnectionResult;
@@ -41,6 +42,7 @@ import com.google.android.gms.location.LocationServices;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -87,8 +89,8 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         pDialog.setMessage("Loading...");
         pDialog.setCancelable(true);
 
-        btnPost = (Button) findViewById(R.id.btn_post);
-        btnPost.setOnClickListener(this);
+        //btnPost = (Button) findViewById(R.id.btn_post);
+        //btnPost.setOnClickListener(this);
 
         db = new DatabaseHandler(getApplicationContext());
         //Log.d("data count", db.getRowCount()+"");
@@ -184,6 +186,13 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
             }
         });
     }
+
+    private void fblogin(){
+        ArrayList<String> permissions = new ArrayList();
+        permissions.add("manage_pages");
+        permissions.add("publish_actions");
+        LoginManager.getInstance().logInWithPublishPermissions(this, permissions);
+    }
     private void showProgressDialog() {
         if (!pDialog.isShowing())
             pDialog.show();
@@ -208,14 +217,7 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                 Log.d("faceboo: ", "click login button");
                 showProgressDialog();
                 break;
-            case R.id.btn_post:
-                LoginInfo loginInfo = new LoginInfo();
-                try {
-                    postLoginInfo(loginInfo, "Login info");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                break;
+
         }
     }
 
