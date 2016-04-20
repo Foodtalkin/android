@@ -42,7 +42,8 @@
         <activity
             android:name=".Home"
             android:screenOrientation="portrait" />
-        <activity android:name=".ShareApp"></activity>
+        <activity android:name=".ShareApp" />
+        <activity android:name=".Test"></activity>
     </application>
 
 </manifest>

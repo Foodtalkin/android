@@ -1,6 +1,7 @@
 package in.foodtalk.android;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,9 +15,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -69,6 +72,9 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
     public LoginInfo loginInfo = new LoginInfo();
 
     private DatabaseHandler db;
+
+    private Button btnPost;
+    private ProgressDialog pDialog;
     //-----------------------------------
 
     @Override
@@ -76,6 +82,13 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fb_login);
         config = new Config();
+
+        pDialog = new ProgressDialog(this);
+        pDialog.setMessage("Loading...");
+        pDialog.setCancelable(true);
+
+        btnPost = (Button) findViewById(R.id.btn_post);
+        btnPost.setOnClickListener(this);
 
         db = new DatabaseHandler(getApplicationContext());
         //Log.d("data count", db.getRowCount()+"");
@@ -143,9 +156,6 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
 
                                    // Login login = new Login(getApplicationContext());
                                     postLoginInfo(loginInfo,"login");
-
-
-
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -174,6 +184,15 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
             }
         });
     }
+    private void showProgressDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (pDialog.isShowing())
+            pDialog.hide();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -187,6 +206,15 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
             case R.id.login_button:
                 // OK button
                 Log.d("faceboo: ", "click login button");
+                showProgressDialog();
+                break;
+            case R.id.btn_post:
+                LoginInfo loginInfo = new LoginInfo();
+                try {
+                    postLoginInfo(loginInfo, "Login info");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
         }
     }
@@ -305,6 +333,18 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
     //----------------post to api------------------------------
     public void postLoginInfo(LoginInfo loginInfo, String tag) throws JSONException {
         //showProgressDialog();
+
+        //----------
+        JSONObject objTest = new JSONObject();
+        objTest.put("signInType", "F");
+        objTest.put("fullName", "Mandeep Singh");
+        objTest.put("email","mandeep11@yahoo.com");
+        objTest.put("facebookId","10209122833009011");
+        objTest.put("latitude","28.6753863");
+        objTest.put("longitude","77.180826");
+        objTest.put("deviceToken","12344566776");
+        objTest.put("image","https:\\/\\/graph.facebook.com\\/10209122833009021\\/picture?type=large");
+        //---------------
         JSONObject obj = new JSONObject();
         obj.put("signInType", loginInfo.signInType);
         obj.put("fullName", loginInfo.fullName);
@@ -317,7 +357,7 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         //obj.put("twitterId","");
         //obj.put("googleId","");
 
-        Log.d("JSon obj",obj+"");
+        //Log.d("JSon obj",obj+"");
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                 config.URL_LOGIN, obj,
@@ -325,6 +365,8 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
 
                     @Override
                     public void onResponse(JSONObject response) {
+
+                        hideProgressDialog();
                         //Log.d(TAG, "After Sending JsongObj"+response.toString());
                         //msgResponse.setText(response.toString());
                         Log.d("onResponse", "check resonse");
@@ -333,12 +375,10 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                         /*JSONObject jObj = new JSONObject(response);
                         JSONObject status = jObj.getJSONObject("status");
                         String type = status.getString("type");*/
-
                         try {
                             String apiMessage  = response.getString("apiMessage");
 
                             JSONObject jObj = response.getJSONObject("profile");
-
                             String fullName = jObj.getString("fullName");
                             String fId = jObj.getString("facebookId");
                             String userName = jObj.getString("userName");
@@ -354,7 +394,7 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
 
                             loginValue.userName = ((userName.equals("")) ? "N/A" : userName);
 
-                            Log.d("check table", db.getRowCount()+"");
+                           // Log.d("check table", db.getRowCount()+"");
                             db.addUser(loginValue);
 
                             //------Start new activity according to api response
@@ -390,7 +430,9 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                 return headers;
             }
         };
+        final int DEFAULT_TIMEOUT = 60000;
         // Adding request to request queue
+        jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         AppController.getInstance().addToRequestQueue(jsonObjReq,tag);
         // Cancelling request
         // ApplicationController.getInstance().getRequestQueue().cancelAll(tag_json_obj);
