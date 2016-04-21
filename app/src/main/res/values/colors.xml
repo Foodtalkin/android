@@ -9,4 +9,5 @@
 
     <color name="icon_txt_active">#fff</color>
     <color name="icon_txt">#939393</color>
+    <color name="bg_color">#141d2d</color>
 </resources>

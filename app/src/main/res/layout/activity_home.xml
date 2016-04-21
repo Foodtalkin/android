@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="in.foodtalk.android.Home"
-    android:background="#141d2d">
+    android:background="@color/bg_color">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -36,30 +36,36 @@
 
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
             android:background="#10151f">
             <LinearLayout
+                android:id="@+id/btn_home"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="@dimen/icon_padding"
                 android:layout_weight="1">
-                <ImageButton
+                <ImageView
+                    android:id="@+id/home_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/home"
-                    android:background="@null"
+                    android:src="@drawable/home_active"
                     android:layout_gravity="center_horizontal"
+                    android:clickable="false"
                     />
                 <TextView
+                    android:id="@+id/home_txt_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Home"
@@ -70,19 +76,23 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/btn_discover"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="@dimen/icon_padding"
                 android:layout_weight="1">
                 <ImageButton
+                    android:id="@+id/discover_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/discover"
                     android:background="@null"
                     android:layout_gravity="center_horizontal"
+                    android:clickable="false"
                     />
                 <TextView
+                    android:id="@+id/discover_txt_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Discover"
@@ -92,19 +102,23 @@
                     android:layout_gravity="center_horizontal"/>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/btn_newpost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="@dimen/icon_padding"
                 android:layout_weight="1">
                 <ImageButton
+                    android:id="@+id/newpost_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/newpost"
                     android:background="@null"
                     android:layout_gravity="center_horizontal"
+                    android:clickable="false"
                     />
                 <TextView
+                    android:id="@+id/newpost_txt_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="New Post"
@@ -114,19 +128,23 @@
                     android:layout_gravity="center_horizontal"/>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/btn_notification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="@dimen/icon_padding"
                 android:layout_weight="1">
                 <ImageButton
+                    android:id="@+id/noti_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/notifiactions"
+                    android:src="@drawable/notifications"
                     android:background="@null"
                     android:layout_gravity="center_horizontal"
+                    android:clickable="false"
                     />
                 <TextView
+                    android:id="@+id/noti_txt_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Notifications"
@@ -136,19 +154,23 @@
                     android:layout_gravity="center_horizontal"/>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/btn_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="@dimen/icon_padding"
                 android:layout_weight="1">
                 <ImageButton
+                    android:id="@+id/more_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/more"
                     android:background="@null"
                     android:layout_gravity="center_horizontal"
+                    android:clickable="false"
                     />
                 <TextView
+                    android:id="@+id/more_txt_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="More"
