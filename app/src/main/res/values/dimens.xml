@@ -3,8 +3,12 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="txt_size_icon">12sp</dimen>
+    <dimen name="txt_size_card_icon">18sp</dimen>
+    <dimen name="margin_txt_icon_card">10dp</dimen>
     <dimen name="txt_icon_margin">4dp</dimen>
     <dimen name="icon_padding">10dp</dimen>
+
+
 
 
 

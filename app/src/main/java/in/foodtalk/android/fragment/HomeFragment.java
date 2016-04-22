@@ -13,14 +13,15 @@ import in.foodtalk.android.R;
  * Created by RetailAdmin on 21-04-2016.
  */
 public class HomeFragment extends Fragment {
-
-
     View layout;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         layout = inflater.inflate(R.layout.home_fragment, container, false);
-
         return layout;
+    }
+
+
+    private void getPost(){
+
     }
 }

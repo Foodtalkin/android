@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#333</color>
+    <color name="colorPrimaryDark">#10151f</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorText1">#b7b7b7</color>
     <color name="colorText2">#ffffff</color>
+    <color name="blackText">#171717</color>
     <color name="errorText">#fc4a4a</color>
 
     <color name="icon_txt_active">#fff</color>
     <color name="icon_txt">#939393</color>
     <color name="bg_color">#141d2d</color>
+
+
+
+
+
 </resources>

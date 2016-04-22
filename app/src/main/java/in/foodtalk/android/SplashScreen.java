@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import in.foodtalk.android.module.DatabaseHandler;
 
@@ -18,7 +19,9 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setActivityBackgroundColor(R.color.bg_color);
         setContentView(R.layout.splash);
+
         db = new DatabaseHandler(getApplicationContext());
 
         new Handler().postDelayed(new Runnable() {
@@ -55,5 +58,9 @@ public class SplashScreen extends AppCompatActivity {
                 finish();
             }
         }, SPLASH_TIME_OUT);
+    }
+    public void setActivityBackgroundColor(int color) {
+        View view = this.getWindow().getDecorView();
+        view.setBackgroundColor(color);
     }
 }

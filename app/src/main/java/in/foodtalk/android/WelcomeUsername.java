@@ -137,7 +137,6 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                         /*JSONObject jObj = new JSONObject(response);
                         JSONObject status = jObj.getJSONObject("status");
                         String type = status.getString("type");*/
@@ -173,7 +172,6 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
         String userName = jObj.getString("userName");
         String uId = response.getString("userId");
         String sessionId = response.getString("sessionId");
-
         LoginValue loginValue = new LoginValue();
         loginValue.fbId = fId;
         loginValue.uId = uId;
@@ -213,7 +211,6 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
                // mSwitcher.startAnimation(in);
 
             }
-
             @Override
             public void onAnimationRepeat(Animation animation) {
 

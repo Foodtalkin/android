@@ -132,16 +132,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
         }
     }
     private void setFragmentView(Fragment newFragment, int pageN){
-
-
-
         icons[pageNo].setImageResource(imgR[pageNo]);
         icons[pageN].setImageResource(imgRA[pageN]);
-
         txtIcons[pageN].setTextColor(getResources().getColor(R.color.icon_txt_active));
         txtIcons[pageNo].setTextColor(getResources().getColor(R.color.icon_txt));
-
-
         //icons[pageN].setImageResource(R.drawable.home);
         // Create new fragment and transaction
         Fragment discoverF = new DiscoverFragment();

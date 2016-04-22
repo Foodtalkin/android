@@ -115,10 +115,10 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         String altitude = getLocation.getUserLocation().altitude;
         String speed = getLocation.getUserLocation().speed;
 
-       // Log.d("location", "latitude: " + latitude);
-       // Log.d("location", "longitude: " + longitude);
-       // Log.d("location", "altitude: " + altitude);
-       // Log.d("location", "speed: " + speed);
+        // Log.d("location", "latitude: " + latitude);
+        // Log.d("location", "longitude: " + longitude);
+        // Log.d("location", "altitude: " + altitude);
+        // Log.d("location", "speed: " + speed);
 
         callbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
@@ -151,13 +151,13 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                                     loginInfo.gender = gender;
                                     loginInfo.facebookId = id;
                                     loginInfo.latitude = ((lat == null) ? "N/A" : lat);
-                                    loginInfo.longitude= ((lon == null) ? "N/A" : lon);
+                                    loginInfo.longitude = ((lon == null) ? "N/A" : lon);
                                     loginInfo.signInType = "F";
                                     loginInfo.deviceToken = "548698784";
-                                    loginInfo.image = "https://graph.facebook.com/"+id+"/picture?type=large";
+                                    loginInfo.image = "https://graph.facebook.com/" + id + "/picture?type=large";
 
-                                   // Login login = new Login(getApplicationContext());
-                                    postLoginInfo(loginInfo,"login");
+                                    // Login login = new Login(getApplicationContext());
+                                    postLoginInfo(loginInfo, "login");
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -187,12 +187,13 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         });
     }
 
-    private void fblogin(){
+    private void fblogin() {
         ArrayList<String> permissions = new ArrayList();
         permissions.add("manage_pages");
         permissions.add("publish_actions");
         LoginManager.getInstance().logInWithPublishPermissions(this, permissions);
     }
+
     private void showProgressDialog() {
         if (!pDialog.isShowing())
             pDialog.show();
@@ -231,6 +232,16 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
 
         //LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         init();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mLastLocation != null) {
@@ -240,7 +251,7 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         updateUI();
     }
 
-    public void init(){
+    public void init() {
         int currentapiVersion = android.os.Build.VERSION.SDK_INT;
 
         Log.d("check version", "v" + currentapiVersion);
@@ -250,6 +261,16 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
 
             // Do something for lollipop and above versions
         } else {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
             Log.d("check version", " less then Marshmallow");
             // do something for phones running an SDK before lollipop
