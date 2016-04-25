@@ -63,7 +63,6 @@ public class HomeFragment extends Fragment {
         postObj = new PostObj();
         Log.d("get user info F", db.getUserDetails().get("sessionId"));
         Log.d("get user info F", db.getUserDetails().get("userId"));
-
         try {
             createUserName();
         } catch (JSONException e) {

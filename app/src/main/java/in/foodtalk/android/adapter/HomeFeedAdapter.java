@@ -1,6 +1,7 @@
 package in.foodtalk.android.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,9 +11,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.ImageRequest;
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.object.PostObj;
 
 /**
@@ -32,7 +40,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
        // Log.d("from adapter function", postObj.get(1).dishName);
 
         for (int i=0; postObj.size()>i;i++){
-            Log.d("from adapter function", postObj.get(i).dishName);
+           // Log.d("from adapter function", postObj.get(i).dishName);
         }
 
     }
@@ -54,10 +62,32 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         postHolder.txtCountBookmark.setText(current.bookmarkCount);
         postHolder.txtCountComment.setText(current.commentCount);
 
-        Log.d("from adapter", current.userName+" is having "+current.dishName+" at "+current.restaurantName);
+        //imgLoader(postHolder.dishImage, current.postImage);
+        Picasso.with(context)
+                .load(current.postImage)
+                .fit().centerCrop()
+                .into(postHolder.dishImage);
+        Picasso.with(context)
+                .load(current.userThumb)
+                .into(postHolder.userThumbnail);
+        /*if(current.postImage != null){
+            Picasso.with(context)
+                    .load(current.postImage)
+                    .fit().centerCrop()
+                    .into(postHolder.dishImage);
+            // Log.d("value from current", myUrl);
+        }else{
+            //Log.d("value from current", "null");
+            //postHolder.imgHolder.setImageResource(R.drawable.nav_top_img);
+            Picasso.with(context)
+                    .load(R.drawable.placeholder)
+                    .fit().centerCrop()
+                    .into(postHolder.dishImage);
+        }*/
+
+        //Log.d("from adapter", current.userName+" is having "+current.dishName+" at "+current.restaurantName);
 
     }
-
     @Override
     public int getItemCount() {
         return postObj.size();
@@ -84,10 +114,10 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             txtCountBookmark = (TextView) itemView.findViewById(R.id.txt_count_bookmark);
             txtCountComment = (TextView) itemView.findViewById(R.id.txt_count_comment);
         }
-
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             return false;
         }
+
     }
 }
