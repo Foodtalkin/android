@@ -9,6 +9,9 @@ public class Config {
     public static String URL_LOGIN = "http://"+IP+"/index.php/service/auth/signin"; // ----testing url
    // public static String URL_LOGIN = "http://52.74.136.146/index.php/service/auth/signin";
 
-    public static String URL_POST_LIST = "http://"+IP+"/index.php/service/auth/signin";
+    public static String URL_POST_LIST = "http://"+IP+"/index.php/service/post/list";
+
+
+
 
 }

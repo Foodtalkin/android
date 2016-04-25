@@ -1,6 +1,7 @@
 package in.foodtalk.android;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
 
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import in.foodtalk.android.fragment.MoreFragment;
 import in.foodtalk.android.fragment.NewpostFragment;
 import in.foodtalk.android.fragment.NotiFragment;
 import in.foodtalk.android.module.DatabaseHandler;
+import in.foodtalk.android.module.Login;
 
 public class Home extends AppCompatActivity implements View.OnClickListener{
 
@@ -30,6 +32,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
     private TextView[] txtIcons;
     private int[] imgR;
     private int[] imgRA;
+
+    private LinearLayout btnLogout;
 
 
     HomeFragment homeFragment;
@@ -44,6 +48,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         db = new DatabaseHandler(getApplicationContext());
         setContentView(R.layout.activity_home);
+
+        btnLogout = (LinearLayout) findViewById(R.id.btn_logout);
+
+        btnLogout.setOnClickListener(this);
 
         btnHome = (LinearLayout) findViewById(R.id.btn_home);
         btnDiscover = (LinearLayout) findViewById(R.id.btn_discover);
@@ -78,6 +86,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
        // Log.d("getInfo",db.getRowCount()+"");
        // Log.d("get user info", db.getUserDetails().get("userName")+"");
 
+        Log.d("get user info", "session id: "+db.getUserDetails().get("sessionId"));
+        Log.d("get user info", "user id: "+db.getUserDetails().get("userId"));
+        Log.d("get user info", "full name: "+db.getUserDetails().get("fullName"));
+        Log.d("get user info", "user name: "+db.getUserDetails().get("userName"));
+
         homeFragment = new HomeFragment();
         discoverFragment =  new DiscoverFragment();
         newpostFragment = new NewpostFragment();
@@ -105,7 +118,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
                     setFragmentView (discoverFragment , 1);
                     pageNo = 1;
                 }
-
                 break;
             case R.id.btn_newpost:
                 if(pageNo != 2){
@@ -129,6 +141,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
                 }
                 Log.d("onClick", "btn more");
                 break;
+            case R.id.btn_logout:
+                Log.d("btn clicked", "logout");
+                logOut();
+                break;
         }
     }
     private void setFragmentView(Fragment newFragment, int pageN){
@@ -146,5 +162,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
         transaction.addToBackStack(null);
         // Commit the transaction
         transaction.commit();
+    }
+
+    private void logOut(){
+        db.resetTables();
+        Intent i = new Intent(this, FbLogin.class);
+        startActivity(i);
+        finish();
     }
 }
