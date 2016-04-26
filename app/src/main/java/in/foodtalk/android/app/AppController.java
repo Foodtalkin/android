@@ -18,6 +18,8 @@ import com.facebook.FacebookSdk;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import in.foodtalk.android.module.LruBitmapCache;
+
 public class AppController extends Application {
 
     public static final String TAG = AppController.class
@@ -63,10 +65,10 @@ public class AppController extends Application {
 
     public ImageLoader getImageLoader() {
         getRequestQueue();
-        /*if (mImageLoader == null) {
+        if (mImageLoader == null) {
             mImageLoader = new ImageLoader(this.mRequestQueue,
                     new LruBitmapCache());
-        }*/
+        }
         return this.mImageLoader;
     }
 

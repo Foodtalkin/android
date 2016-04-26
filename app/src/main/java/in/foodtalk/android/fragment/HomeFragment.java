@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,32 +46,38 @@ public class HomeFragment extends Fragment {
     HomeFeedAdapter homeFeedAdapter;
     List<PostObj> postData = new ArrayList<>();
 
+    private RecyclerView.LayoutManager mLayoutManager;
+
     RecyclerView recyclerView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.home_fragment, container, false);
-        recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_home);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
 
+
+        recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_home);
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
         return layout;
     }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
 
+        //recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         config = new Config();
         db = new DatabaseHandler(getActivity().getApplicationContext());
         postObj = new PostObj();
         Log.d("get user info F", db.getUserDetails().get("sessionId"));
         Log.d("get user info F", db.getUserDetails().get("userId"));
         try {
-            createUserName();
+            getPostFeed();
         } catch (JSONException e) {
             e.printStackTrace();
         }
         super.onActivityCreated(savedInstanceState);
     }
-    private void createUserName() throws JSONException {
+    private void getPostFeed() throws JSONException {
         JSONObject obj = new JSONObject();
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
         obj.put("includeCount", "1");
@@ -88,10 +95,9 @@ public class HomeFragment extends Fragment {
                         Log.d("Login Respond", response.toString());
                         try {
                             String status = response.getString("status");
-
                             if (!status.equals("error")){
                                //-- getAndSave(response);
-                                abc(response);
+                                loadDataIntoView(response);
                             }else {
                                 String errorCode = response.getString("errorCode");
                                 if(errorCode.equals("6")){
@@ -100,16 +106,11 @@ public class HomeFragment extends Fragment {
                                 }else {
                                     Log.e("Response status", "some error");
                                 }
-
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Log.d("Json Error", e+"");
                         }
-                        /*JSONObject jObj = new JSONObject(response);
-                        JSONObject status = jObj.getJSONObject("status");
-                        String type = status.getString("type");*/
-                        //--Start new activity--
                         //----------------------
                         //hideProgressDialog();
                     }
@@ -132,8 +133,7 @@ public class HomeFragment extends Fragment {
         };
         AppController.getInstance().addToRequestQueue(jsonObjReq,"gethomefeed");
     }
-
-    private void abc(JSONObject response) throws JSONException {
+    private void loadDataIntoView(JSONObject response) throws JSONException {
 
         JSONArray postArray = response.getJSONArray("posts");
         JSONObject postObject = postArray.getJSONObject(0);
@@ -156,19 +156,14 @@ public class HomeFragment extends Fragment {
             current.userImage = postArray.getJSONObject(i).getString("userImage");
             current.postImage = postArray.getJSONObject(i).getString("postImage");
             current.postThumb = postArray.getJSONObject(i).getString("postThumb");
+            current.iLikedIt = postArray.getJSONObject(i).getString("iLikedIt");
 
             postData.add(current);
            // Log.d("user name", userName);
         }
-
-
-
         //postData = (List<PostObj>) postObj;
-
         homeFeedAdapter = new HomeFeedAdapter(getActivity(), postData);
         recyclerView.setAdapter(homeFeedAdapter);
-
-
     }
     private void logOut(){
         db.resetTables();
