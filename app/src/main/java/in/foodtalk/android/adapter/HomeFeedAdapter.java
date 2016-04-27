@@ -27,29 +27,31 @@ import java.util.concurrent.TimeUnit;
 
 import in.foodtalk.android.R;
 import in.foodtalk.android.app.AppController;
+import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.object.PostObj;
 
 /**
  * Created by RetailAdmin on 25-04-2016.
  */
-public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
+public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>   {
 
-    private List<PostObj> postObj;
+    public List<PostObj> postObj;
     private LayoutInflater layoutInflater;
     private Context context;
 
     private long lastTouchTime = -1;
 
-    public HomeFeedAdapter(Context context, List<PostObj> postObj){
+    PostLikeCallback likeCallback;
+
+    public HomeFeedAdapter(Context context, List<PostObj> postObj, PostLikeCallback postLikeCallback){
         layoutInflater = LayoutInflater.from(context);
         this.postObj = postObj;
         this.context = context;
         //Log.d("from adapter function", postObj.get(0).dishName);
        // Log.d("from adapter function", postObj.get(1).dishName);
 
-        for (int i=0; postObj.size()>i;i++){
-           // Log.d("from adapter function", postObj.get(i).dishName);
-        }
+       likeCallback = (PostLikeCallback) context;
+        //likeCallback = postLikeCallback;
 
     }
 
@@ -72,17 +74,26 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         postHolder.txtCountBookmark.setText(current.bookmarkCount);
         postHolder.txtCountComment.setText(current.commentCount);
 
-        if (current.iLikedIt.equals("1")){
-            postHolder.likeIconImg.setImageResource(R.drawable.heart_active);
-        }else {
-            postHolder.likeIconImg.setImageResource(R.drawable.heart);
+        //postHolder.postId = current.id;
+        postHolder.postObj1 = current;
+
+        if(current.iLikedIt != null){
+            if (current.iLikedIt.equals("1")){
+                postHolder.likeIconImg.setImageResource(R.drawable.heart_active);
+            }else {
+                postHolder.likeIconImg.setImageResource(R.drawable.heart);
+            }
+        }else{
+            Log.e("HomeFeedAdapter","null iLikeIt position: "+ position);
         }
+
+
+
         //imgLoader(postHolder.dishImage, current.postImage);
         //imgLoader(postHolder.dishImage, current.postImage);
         Log.d("image url", current.postImage);
         Picasso.with(context)
                 .load(current.postImage)
-
                 //.fit().centerCrop()
                 .fit()
                 .placeholder(R.drawable.placeholder)
@@ -108,26 +119,17 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         //Log.d("from adapter", current.userName+" is having "+current.dishName+" at "+current.restaurantName);
 
+
     }
     @Override
     public int getItemCount() {
         return postObj.size();
     }
-
-    public void imgLoader(ImageView imgV, String url){
-        ImageLoader mImageLoader;
-        ImageView mImageView;
-// The URL for the image that is being loaded.
-        String IMAGE_URL =
-                "http://developer.android.com/images/training/system-ui.png";
-
-       // mImageView = (ImageView) findViewById(R.id.regularImageView);
-
-// Get the ImageLoader through your singleton class.
-        mImageLoader = AppController.getInstance().getImageLoader();
-        mImageLoader.get(url, ImageLoader.getImageListener(imgV,
-                R.drawable.placeholder, R.drawable.placeholder));
+    public void onchange(){
+        notifyDataSetChanged();
     }
+
+
     class PostHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
 
         ImageView userThumbnail;
@@ -141,6 +143,9 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ImageView likeHeart;
         ImageView likeIconImg;
         Animation mAnimation;
+
+        //String postId;
+        PostObj postObj1;
 
         LinearLayout iconLike, iconBookmark, iconComment, iconOption;
 
@@ -196,14 +201,11 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         }
                     }.start();
                 }
-
                 @Override
                 public void onAnimationRepeat(Animation animation) {
 
                 }
             });
-
-
         }
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -214,11 +216,28 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             Log.d("clicked", "dish image"+ getPosition());
                             long thisTime = System.currentTimeMillis();
                             if (thisTime - lastTouchTime < 250) {
-
                                 Log.d("clicked", "img double");
-                                likeIconImg.setImageResource(R.drawable.heart_active);
+
                                 likeHeart.setVisibility(View.VISIBLE);
                                 likeHeart.startAnimation(mAnimation);
+                                if (postObj1.iLikedIt.equals("0")){
+                                    //-----update image when click on like icon--
+                                    likeIconImg.setImageResource(R.drawable.heart_active);
+                                    String likeCount = String.valueOf(Integer.parseInt(txtCountLike.getText().toString())+1);
+                                    txtCountLike.setText(likeCount);
+
+                                    //----update postObj for runtime-----------
+                                    postObj1.iLikedIt = "1";
+                                    postObj1.likeCount = likeCount;
+                                    postObj.set(getPosition(), postObj1);
+                                    //------------------------------------------
+                                    if(likeCallback != null){
+                                        likeCallback.like(getPosition(), postObj1.id, true);
+                                    }else{
+                                        Log.e("HomeFeedAdapter","null likeCallback");
+                                    }
+                                }
+
                                 // Double click
                                 //p = mapView.getProjection().fromPixels((int) e.getX(), (int) e.getY());
                                 lastTouchTime = -1;
@@ -236,6 +255,37 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("clicked", "icon like");
+                            if (postObj1.iLikedIt.equals("0")){
+                                likeIconImg.setImageResource(R.drawable.heart_active);
+                                String likeCount = String.valueOf(Integer.parseInt(txtCountLike.getText().toString())+1);
+                                txtCountLike.setText(likeCount);
+
+                                //----update postObj for runtime-----------
+                                postObj1.iLikedIt = "1";
+                                postObj1.likeCount = likeCount;
+                                postObj.set(getPosition(), postObj1);
+                                //------------------------------------------
+                                if(likeCallback != null){
+                                    likeCallback.like(getPosition(), postObj1.id, true);
+                                }else{
+                                    Log.e("HomeFeedAdapter","null likeCallback");
+                                }
+                            }else {
+                                likeIconImg.setImageResource(R.drawable.heart);
+                                String likeCount = String.valueOf(Integer.parseInt(txtCountLike.getText().toString())-1);
+                                txtCountLike.setText(likeCount);
+
+                                //----update postObj for runtime-----------
+                                postObj1.iLikedIt = "0";
+                                postObj1.likeCount = likeCount;
+                                postObj.set(getPosition(), postObj1);
+                                //------------------------------------------
+                                if(likeCallback != null){
+                                    likeCallback.like(getPosition(), postObj1.id, false);
+                                }else{
+                                    Log.e("HomeFeedAdapter","null likeCallback");
+                                }
+                            }
                             break;
                     }
                 }
@@ -267,8 +317,5 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
             return true;
         }
-    }
-    public interface OnDatasetChange{
-        public void update(View view, int position, String iLikedIt);
     }
 }

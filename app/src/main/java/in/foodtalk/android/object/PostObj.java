@@ -4,6 +4,7 @@ package in.foodtalk.android.object;
  * Created by RetailAdmin on 25-04-2016.
  */
 public class PostObj {
+    public String id;
     public String userName;
     public String restaurantName;
     public String dishName;

@@ -11,7 +11,8 @@ public class Config {
 
     public static String URL_POST_LIST = "http://"+IP+"/index.php/service/post/list";
 
+    public static String URL_POST_LIKE = "http://"+IP+"/index.php/service/like/add";
+    public static String URL_POST_UNLIKE = "http://"+IP+"/index.php/service/like/delete";
 
-
-
+    public static String URL_POST_BOOKMARK = "http://"+IP+"/index.php/service/like/delete";
 }

@@ -32,13 +32,14 @@ import in.foodtalk.android.R;
 import in.foodtalk.android.adapter.HomeFeedAdapter;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.object.PostObj;
 
 /**
  * Created by RetailAdmin on 21-04-2016.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment{
     View layout;
     DatabaseHandler db;
     Config config;
@@ -48,13 +49,19 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView.LayoutManager mLayoutManager;
 
+    PostLikeCallback likeCallback;
+
     RecyclerView recyclerView;
+
+    PostLikeCallback postLikeCallback;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.home_fragment, container, false);
 
 
+
+        //postLikeCallback = this;
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_home);
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
@@ -63,7 +70,6 @@ public class HomeFragment extends Fragment {
     }
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-
         //recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         config = new Config();
         db = new DatabaseHandler(getActivity().getApplicationContext());
@@ -144,6 +150,7 @@ public class HomeFragment extends Fragment {
             //String userName = postArray.getJSONObject(i).getString("userName");
             //PostObj current = new PostObj();
             PostObj current = new PostObj();
+            current.id = postArray.getJSONObject(i).getString("id");
             current.userName = postArray.getJSONObject(i).getString("userName");
             current.dishName = postArray.getJSONObject(i).getString("dishName");
             current.restaurantName = postArray.getJSONObject(i).getString("restaurantName");
@@ -162,7 +169,7 @@ public class HomeFragment extends Fragment {
            // Log.d("user name", userName);
         }
         //postData = (List<PostObj>) postObj;
-        homeFeedAdapter = new HomeFeedAdapter(getActivity(), postData);
+        homeFeedAdapter = new HomeFeedAdapter(getActivity(), postData, postLikeCallback);
         recyclerView.setAdapter(homeFeedAdapter);
     }
     private void logOut(){
@@ -171,4 +178,6 @@ public class HomeFragment extends Fragment {
         startActivity(i);
         getActivity().finish();
     }
+
+
 }

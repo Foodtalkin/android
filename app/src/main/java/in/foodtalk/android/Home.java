@@ -13,6 +13,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.json.JSONException;
+
+import in.foodtalk.android.apicall.PostLikeApi;
+import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.fragment.DiscoverFragment;
 import in.foodtalk.android.fragment.HomeFragment;
 import in.foodtalk.android.fragment.MoreFragment;
@@ -21,7 +25,7 @@ import in.foodtalk.android.fragment.NotiFragment;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.Login;
 
-public class Home extends AppCompatActivity implements View.OnClickListener{
+public class Home extends AppCompatActivity implements View.OnClickListener , PostLikeCallback{
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
@@ -42,11 +46,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
     NotiFragment notiFragment;
     MoreFragment moreFragment;
 
+    PostLikeApi postLikeApi;
+
     int pageNo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = new DatabaseHandler(getApplicationContext());
+        postLikeApi = new PostLikeApi(this);
         setContentView(R.layout.activity_home);
 
         btnLogout = (LinearLayout) findViewById(R.id.btn_logout);
@@ -169,5 +176,15 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
         Intent i = new Intent(this, FbLogin.class);
         startActivity(i);
         finish();
+    }
+
+    @Override
+    public void like(int position, String postId, Boolean like) {
+        Log.d("likeResponse",position+" postid: "+ postId);
+        try {
+            postLikeApi.postLike(postId, like);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
