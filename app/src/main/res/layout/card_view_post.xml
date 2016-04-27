@@ -116,6 +116,7 @@
                     android:paddingTop="@dimen/home_card_padding"
                     android:paddingBottom="@dimen/home_card_padding">
                     <ImageView
+                        android:id="@+id/img_icon_bookmark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/bookmark"

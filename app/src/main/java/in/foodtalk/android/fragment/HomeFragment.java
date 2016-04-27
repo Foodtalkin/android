@@ -164,6 +164,7 @@ public class HomeFragment extends Fragment{
             current.postImage = postArray.getJSONObject(i).getString("postImage");
             current.postThumb = postArray.getJSONObject(i).getString("postThumb");
             current.iLikedIt = postArray.getJSONObject(i).getString("iLikedIt");
+            current.iBookark = postArray.getJSONObject(i).getString("iBookark");
 
             postData.add(current);
            // Log.d("user name", userName);

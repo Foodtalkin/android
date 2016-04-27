@@ -16,6 +16,7 @@ public class PostObj {
     public String likeCount;
     public String commentCount;
     public String bookmarkCount;
+    public String iBookark;
     public String iLikedIt;
     public String city;
     public String country;

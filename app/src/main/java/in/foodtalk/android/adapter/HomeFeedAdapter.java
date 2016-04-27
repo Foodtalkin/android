@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 import in.foodtalk.android.R;
 import in.foodtalk.android.app.AppController;
+import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.object.PostObj;
 
@@ -42,6 +43,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private long lastTouchTime = -1;
 
     PostLikeCallback likeCallback;
+    PostBookmarkCallback bookmarkCallback;
 
     public HomeFeedAdapter(Context context, List<PostObj> postObj, PostLikeCallback postLikeCallback){
         layoutInflater = LayoutInflater.from(context);
@@ -50,7 +52,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         //Log.d("from adapter function", postObj.get(0).dishName);
        // Log.d("from adapter function", postObj.get(1).dishName);
 
-       likeCallback = (PostLikeCallback) context;
+        likeCallback = (PostLikeCallback) context;
+        bookmarkCallback = (PostBookmarkCallback) context;
         //likeCallback = postLikeCallback;
 
     }
@@ -86,11 +89,19 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }else{
             Log.e("HomeFeedAdapter","null iLikeIt position: "+ position);
         }
+        if(current.iBookark != null){
+            if(current.iBookark.equals("1")){
+                postHolder.bookmarImg.setImageResource(R.drawable.bookmark_active);
+            }else {
+                postHolder.bookmarImg.setImageResource(R.drawable.bookmark);
+            }
+        }else {
+            Log.e("HomeFeedAdapter","null iBookark position: "+position);
+        }
 
 
 
-        //imgLoader(postHolder.dishImage, current.postImage);
-        //imgLoader(postHolder.dishImage, current.postImage);
+
         Log.d("image url", current.postImage);
         Picasso.with(context)
                 .load(current.postImage)
@@ -102,23 +113,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 .load(current.userThumb)
                 .placeholder(R.drawable.placeholder)
                 .into(postHolder.userThumbnail);
-        /*if(current.postImage != null){
-            Picasso.with(context)
-                    .load(current.postImage)
-                    .fit().centerCrop()
-                    .into(postHolder.dishImage);
-            // Log.d("value from current", myUrl);
-        }else{
-            //Log.d("value from current", "null");
-            //postHolder.imgHolder.setImageResource(R.drawable.nav_top_img);
-            Picasso.with(context)
-                    .load(R.drawable.placeholder)
-                    .fit().centerCrop()
-                    .into(postHolder.dishImage);
-        }*/
-
-        //Log.d("from adapter", current.userName+" is having "+current.dishName+" at "+current.restaurantName);
-
 
     }
     @Override
@@ -142,6 +136,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         ImageView likeHeart;
         ImageView likeIconImg;
+        ImageView bookmarImg;
         Animation mAnimation;
 
         //String postId;
@@ -159,6 +154,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             txtCountBookmark = (TextView) itemView.findViewById(R.id.txt_count_bookmark);
             txtCountComment = (TextView) itemView.findViewById(R.id.txt_count_comment);
             likeIconImg = (ImageView) itemView.findViewById(R.id.icon_heart_img);
+            bookmarImg = (ImageView) itemView.findViewById(R.id.img_icon_bookmark);
 
             likeHeart = (ImageView) itemView.findViewById(R.id.like_heart);
 
@@ -294,6 +290,32 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("clicked", "icon bookmark");
+                            if(postObj1.iBookark.equals("0")){
+                                String bookmarkCount = String.valueOf(Integer.parseInt(txtCountBookmark.getText().toString())+1);
+                                txtCountBookmark.setText(bookmarkCount);
+
+                                bookmarImg.setImageResource(R.drawable.bookmark_active);
+
+                                //----update postObj for runtime-----------
+                                postObj1.iBookark = "1";
+                                postObj1.bookmarkCount = bookmarkCount;
+                                postObj.set(getPosition(), postObj1);
+                                //------------------------------------------
+                                bookmarkCallback.bookmark(getPosition(),postObj1.id, true);
+                            }else {
+                                String bookmarkCount = String.valueOf(Integer.parseInt(txtCountBookmark.getText().toString())-1);
+                                txtCountBookmark.setText(bookmarkCount);
+
+                                bookmarImg.setImageResource(R.drawable.bookmark);
+
+                                //----update postObj for runtime-----------
+                                postObj1.iBookark = "0";
+                                postObj1.bookmarkCount = bookmarkCount;
+                                postObj.set(getPosition(), postObj1);
+                                //------------------------------------------
+                                bookmarkCallback.bookmark(getPosition(),postObj1.id, false);
+                            }
+
                             break;
                     }
                 }

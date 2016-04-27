@@ -22,23 +22,23 @@ import in.foodtalk.android.module.DatabaseHandler;
 /**
  * Created by RetailAdmin on 27-04-2016.
  */
-public class PostLikeApi {
+public class PostBookmarkApi {
     DatabaseHandler db;
     Config config;
     String apiUrl;
     Context context;
-    public PostLikeApi(Context context){
+    public PostBookmarkApi (Context context){
         config = new Config();
         db = new DatabaseHandler(context);
         this.context = context;
     }
-    public void postLike(String postId, boolean likePost) throws JSONException {
+    public void postLike(String postId, boolean bookmarkPost) throws JSONException {
 
-        if (likePost){
-            apiUrl = config.URL_POST_LIKE;
+        if (bookmarkPost){
+            apiUrl = config.URL_POST_BOOKMARK;
 
         }else {
-            apiUrl = config.URL_POST_UNLIKE;
+            apiUrl = config.URL_POST_REMOVE_BOOKMARK;
         }
 
 
@@ -91,6 +91,6 @@ public class PostLikeApi {
                 return headers;
             }
         };
-        AppController.getInstance().addToRequestQueue(jsonObjReq,"postlike");
+        AppController.getInstance().addToRequestQueue(jsonObjReq,"postbookmark");
     }
 }

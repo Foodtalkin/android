@@ -15,7 +15,9 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 
+import in.foodtalk.android.apicall.PostBookmarkApi;
 import in.foodtalk.android.apicall.PostLikeApi;
+import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.fragment.DiscoverFragment;
 import in.foodtalk.android.fragment.HomeFragment;
@@ -25,7 +27,7 @@ import in.foodtalk.android.fragment.NotiFragment;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.Login;
 
-public class Home extends AppCompatActivity implements View.OnClickListener , PostLikeCallback{
+public class Home extends AppCompatActivity implements View.OnClickListener , PostLikeCallback , PostBookmarkCallback{
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
@@ -47,6 +49,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener , Po
     MoreFragment moreFragment;
 
     PostLikeApi postLikeApi;
+    PostBookmarkApi postBookmarkApi;
 
     int pageNo;
     @Override
@@ -54,6 +57,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener , Po
         super.onCreate(savedInstanceState);
         db = new DatabaseHandler(getApplicationContext());
         postLikeApi = new PostLikeApi(this);
+        postBookmarkApi = new PostBookmarkApi(this);
         setContentView(R.layout.activity_home);
 
         btnLogout = (LinearLayout) findViewById(R.id.btn_logout);
@@ -186,5 +190,16 @@ public class Home extends AppCompatActivity implements View.OnClickListener , Po
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void bookmark(int position, String postId, Boolean bookmark) {
+        //Log.d("bookmark", "position"+ position);
+        try {
+            postBookmarkApi.postLike(postId, bookmark);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 }
