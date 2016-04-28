@@ -29,6 +29,7 @@ import in.foodtalk.android.R;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
+import in.foodtalk.android.communicator.PostOptionCallback;
 import in.foodtalk.android.object.PostObj;
 
 /**
@@ -44,6 +45,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     PostLikeCallback likeCallback;
     PostBookmarkCallback bookmarkCallback;
+    PostOptionCallback optionCallback;
 
     public HomeFeedAdapter(Context context, List<PostObj> postObj, PostLikeCallback postLikeCallback){
         layoutInflater = LayoutInflater.from(context);
@@ -54,6 +56,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         likeCallback = (PostLikeCallback) context;
         bookmarkCallback = (PostBookmarkCallback) context;
+        optionCallback = (PostOptionCallback) context;
         //likeCallback = postLikeCallback;
 
     }
@@ -343,7 +346,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 case R.id.icon_option_holder:{
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
-                            Log.d("clicked", "icon option");
+                            Log.d("clicked", "post user id"+postObj1.userId +"post id: "+postObj1.id );
+                            optionCallback.option(getPosition(),postObj1.id,postObj1.userId);
                             break;
                     }
                 }

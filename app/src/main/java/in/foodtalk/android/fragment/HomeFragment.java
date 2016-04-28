@@ -1,5 +1,6 @@
 package in.foodtalk.android.fragment;
 
+import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -58,6 +60,8 @@ public class HomeFragment extends Fragment{
 
     SwipeRefreshLayout swipeRefreshHome;
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.home_fragment, container, false);
@@ -70,6 +74,8 @@ public class HomeFragment extends Fragment{
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
+
+
 
 
         swipeRefreshHome.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -102,8 +108,6 @@ public class HomeFragment extends Fragment{
 
         super.onActivityCreated(savedInstanceState);
     }
-
-
 
     private void getPostFeed(final String tag) throws JSONException {
 
@@ -182,6 +186,7 @@ public class HomeFragment extends Fragment{
             PostObj current = new PostObj();
             current.id = postArray.getJSONObject(i).getString("id");
             current.userName = postArray.getJSONObject(i).getString("userName");
+            current.userId = postArray.getJSONObject(i).getString("userId");
             current.dishName = postArray.getJSONObject(i).getString("dishName");
             current.restaurantName = postArray.getJSONObject(i).getString("restaurantName");
             current.createDate = postArray.getJSONObject(i).getString("createDate");
@@ -198,7 +203,7 @@ public class HomeFragment extends Fragment{
 
            // postData.clear();
             postData.add(current);
-            Log.d("dish name", postData.get(i).dishName);
+            Log.d("dish name", postData.get(i).userId);
         }
         //postData = (List<PostObj>) postObj;
         if (tag.equals("load")){

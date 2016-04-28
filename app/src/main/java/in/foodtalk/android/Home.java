@@ -1,5 +1,6 @@
 package in.foodtalk.android;
 
+import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
@@ -19,6 +20,7 @@ import in.foodtalk.android.apicall.PostBookmarkApi;
 import in.foodtalk.android.apicall.PostLikeApi;
 import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
+import in.foodtalk.android.communicator.PostOptionCallback;
 import in.foodtalk.android.fragment.DiscoverFragment;
 import in.foodtalk.android.fragment.HomeFragment;
 import in.foodtalk.android.fragment.MoreFragment;
@@ -27,7 +29,8 @@ import in.foodtalk.android.fragment.NotiFragment;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.Login;
 
-public class Home extends AppCompatActivity implements View.OnClickListener , PostLikeCallback , PostBookmarkCallback{
+public class Home extends AppCompatActivity implements View.OnClickListener ,
+        PostLikeCallback , PostBookmarkCallback, PostOptionCallback{
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
@@ -50,6 +53,16 @@ public class Home extends AppCompatActivity implements View.OnClickListener , Po
 
     PostLikeApi postLikeApi;
     PostBookmarkApi postBookmarkApi;
+
+    Dialog dialogPost;
+    LinearLayout alertReport;
+    LinearLayout actionBtns;
+
+    String sessionId;
+    String userId;
+    String currentPostUserId;
+    String currentPostId;
+
 
     int pageNo;
     @Override
@@ -97,10 +110,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener , Po
        // Log.d("getInfo",db.getRowCount()+"");
        // Log.d("get user info", db.getUserDetails().get("userName")+"");
 
-        Log.d("get user info", "session id: "+db.getUserDetails().get("sessionId"));
-        Log.d("get user info", "user id: "+db.getUserDetails().get("userId"));
-        Log.d("get user info", "full name: "+db.getUserDetails().get("fullName"));
-        Log.d("get user info", "user name: "+db.getUserDetails().get("userName"));
+       // Log.d("get user info", "session id: "+db.getUserDetails().get("sessionId"));
+       // Log.d("get user info", "user id: "+db.getUserDetails().get("userId"));
+        //Log.d("get user info", "full name: "+db.getUserDetails().get("fullName"));
+       //Log.d("get user info", "user name: "+db.getUserDetails().get("userName"));
+
+        userId = db.getUserDetails().get("userId");
+        sessionId = db.getUserDetails().get("sessionId");
 
         homeFragment = new HomeFragment();
         discoverFragment =  new DiscoverFragment();
@@ -200,6 +216,56 @@ public class Home extends AppCompatActivity implements View.OnClickListener , Po
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+    @Override
+    public void option(int position, String postId, String userId) {
+        Log.d("option callback","post id: "+ postId);
+        showDialog(postId, userId);
+    }
+    private void showDialog(String postId, final String userId){
 
+        currentPostUserId = userId;
+        currentPostId = postId;
+        dialogPost = new Dialog(this);
+        dialogPost.setContentView(R.layout.dialog_post);
+
+        TextView btnReport = (TextView) dialogPost.findViewById(R.id.btn_report_post);
+        TextView btnCancel = (TextView) dialogPost.findViewById(R.id.btn_cancel_post);
+        TextView btnDelete = (TextView) dialogPost.findViewById(R.id.btn_delete_post);
+        alertReport = (LinearLayout) dialogPost.findViewById(R.id.alert_report);
+        actionBtns = (LinearLayout) dialogPost.findViewById(R.id.action_btns_dialog);
+
+        alertReport.setVisibility(View.GONE);
+
+        if(this.userId.equals(userId)){
+            btnDelete.setVisibility(View.VISIBLE);
+            btnReport.setVisibility(View.GONE);
+        }else {
+            btnDelete.setVisibility(View.GONE);
+            btnReport.setVisibility(View.VISIBLE);
+        }
+
+        dialogPost.show();
+        btnReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("dialog","btnReport "+currentPostUserId);
+                actionBtns.setVisibility(View.GONE);
+                alertReport.setVisibility(View.VISIBLE);
+            }
+        });
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               // Log.d("dialog","btnReport");
+                dialogPost.dismiss();
+            }
+        });
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 }

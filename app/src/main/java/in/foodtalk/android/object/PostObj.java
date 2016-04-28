@@ -6,6 +6,7 @@ package in.foodtalk.android.object;
 public class PostObj {
     public String id;
     public String userName;
+    public String userId;
     public String restaurantName;
     public String dishName;
     public String createDate;

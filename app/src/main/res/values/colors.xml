@@ -6,6 +6,7 @@
     <color name="colorText1">#b7b7b7</color>
     <color name="colorText2">#ffffff</color>
     <color name="blackText">#171717</color>
+    <color name="blackText1">#4b4f54</color>
     <color name="errorText">#fc4a4a</color>
 
     <color name="icon_txt_active">#fff</color>
