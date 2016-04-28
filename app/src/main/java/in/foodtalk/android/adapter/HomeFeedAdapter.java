@@ -123,6 +123,18 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyDataSetChanged();
     }
 
+    public void clear() {
+        postObj.clear();
+        notifyDataSetChanged();
+    }
+
+    // Add a list of items
+    public void addAll(List<PostObj> list) {
+        Log.d("addAll ",list.get(0).dishName);
+        postObj.addAll(list);
+        notifyDataSetChanged();
+    }
+
 
     class PostHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
 

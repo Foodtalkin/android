@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -55,6 +56,8 @@ public class HomeFragment extends Fragment{
 
     PostLikeCallback postLikeCallback;
 
+    SwipeRefreshLayout swipeRefreshHome;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.home_fragment, container, false);
@@ -63,9 +66,23 @@ public class HomeFragment extends Fragment{
 
         //postLikeCallback = this;
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_home);
+        swipeRefreshHome = (SwipeRefreshLayout) layout.findViewById(R.id.swipeRefreshHome);
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
+
+
+        swipeRefreshHome.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.d("swip to refresh home", "Refreshing");
+                try {
+                    getPostFeed("refresh");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         return layout;
     }
     @Override
@@ -77,13 +94,20 @@ public class HomeFragment extends Fragment{
         Log.d("get user info F", db.getUserDetails().get("sessionId"));
         Log.d("get user info F", db.getUserDetails().get("userId"));
         try {
-            getPostFeed();
+            getPostFeed("load");
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+
         super.onActivityCreated(savedInstanceState);
     }
-    private void getPostFeed() throws JSONException {
+
+
+
+    private void getPostFeed(final String tag) throws JSONException {
+
+        Log.d("getPostFeed", "post data");
         JSONObject obj = new JSONObject();
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
         obj.put("includeCount", "1");
@@ -103,7 +127,7 @@ public class HomeFragment extends Fragment{
                             String status = response.getString("status");
                             if (!status.equals("error")){
                                //-- getAndSave(response);
-                                loadDataIntoView(response);
+                                loadDataIntoView(response , tag);
                             }else {
                                 String errorCode = response.getString("errorCode");
                                 if(errorCode.equals("6")){
@@ -139,12 +163,18 @@ public class HomeFragment extends Fragment{
         };
         AppController.getInstance().addToRequestQueue(jsonObjReq,"gethomefeed");
     }
-    private void loadDataIntoView(JSONObject response) throws JSONException {
+    private void loadDataIntoView(JSONObject response , String tag) throws JSONException {
+
+        swipeRefreshHome.setRefreshing(false);
 
         JSONArray postArray = response.getJSONArray("posts");
         JSONObject postObject = postArray.getJSONObject(0);
         //String userName = postObject.getString("userName");
         //Log.d("user name from post", userName);
+        Log.d("check list array", postData.size()+"");
+        if (postData.size() > 0){
+            postData.clear();
+        }
 
         for (int i=0; postArray.length()>i;i++){
             //String userName = postArray.getJSONObject(i).getString("userName");
@@ -166,12 +196,22 @@ public class HomeFragment extends Fragment{
             current.iLikedIt = postArray.getJSONObject(i).getString("iLikedIt");
             current.iBookark = postArray.getJSONObject(i).getString("iBookark");
 
+           // postData.clear();
             postData.add(current);
-           // Log.d("user name", userName);
+            Log.d("dish name", postData.get(i).dishName);
         }
         //postData = (List<PostObj>) postObj;
-        homeFeedAdapter = new HomeFeedAdapter(getActivity(), postData, postLikeCallback);
-        recyclerView.setAdapter(homeFeedAdapter);
+        if (tag.equals("load")){
+            homeFeedAdapter = new HomeFeedAdapter(getActivity(), postData, postLikeCallback);
+            // recyclerView.invalidate();
+            recyclerView.setAdapter(homeFeedAdapter);
+        }else if (tag.equals("refresh")){
+           // homeFeedAdapter.clear();
+            homeFeedAdapter.addAll(postData);
+        }
+
+
+        //homeFeedAdapter.notifyDataSetChanged();
     }
     private void logOut(){
         db.resetTables();
