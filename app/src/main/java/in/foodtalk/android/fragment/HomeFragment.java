@@ -16,9 +16,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
@@ -37,6 +39,7 @@ import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.module.DatabaseHandler;
+import in.foodtalk.android.module.EndlessRecyclerOnScrollListener;
 import in.foodtalk.android.object.PostObj;
 
 /**
@@ -60,6 +63,8 @@ public class HomeFragment extends Fragment{
 
     SwipeRefreshLayout swipeRefreshHome;
 
+    LinearLayoutManager linearLayoutManager;
+
 
 
     @Override
@@ -72,8 +77,12 @@ public class HomeFragment extends Fragment{
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_home);
         swipeRefreshHome = (SwipeRefreshLayout) layout.findViewById(R.id.swipeRefreshHome);
         // use a linear layout manager
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+
 
 
 
@@ -109,7 +118,7 @@ public class HomeFragment extends Fragment{
         super.onActivityCreated(savedInstanceState);
     }
 
-    private void getPostFeed(final String tag) throws JSONException {
+    public void getPostFeed(final String tag) throws JSONException {
 
         Log.d("getPostFeed", "post data");
         JSONObject obj = new JSONObject();
@@ -151,7 +160,7 @@ public class HomeFragment extends Fragment{
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                // VolleyLog.d(TAG, "Error: " + error.getMessage());
+                 VolleyLog.d("Response", "Error: " + error.getMessage());
                 // hideProgressDialog();
             }
         }) {
@@ -165,6 +174,10 @@ public class HomeFragment extends Fragment{
                 return headers;
             }
         };
+
+        final int DEFAULT_TIMEOUT = 6000;
+        // Adding request to request queue
+        jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         AppController.getInstance().addToRequestQueue(jsonObjReq,"gethomefeed");
     }
     private void loadDataIntoView(JSONObject response , String tag) throws JSONException {
@@ -210,13 +223,23 @@ public class HomeFragment extends Fragment{
             homeFeedAdapter = new HomeFeedAdapter(getActivity(), postData, postLikeCallback);
             // recyclerView.invalidate();
             recyclerView.setAdapter(homeFeedAdapter);
+            callScrollClass();
+
+
         }else if (tag.equals("refresh")){
            // homeFeedAdapter.clear();
+            Log.d("on update","postData size: " +postData.size());
             homeFeedAdapter.addAll(postData);
         }
-
-
         //homeFeedAdapter.notifyDataSetChanged();
+    }
+    private void callScrollClass(){
+        recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int current_page) {
+                Log.d("scroll listener", "current_page: "+ current_page);
+            }
+        });
     }
     private void logOut(){
         db.resetTables();

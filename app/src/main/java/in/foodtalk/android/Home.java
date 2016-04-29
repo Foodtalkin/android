@@ -18,7 +18,9 @@ import org.json.JSONException;
 
 import in.foodtalk.android.apicall.PostBookmarkApi;
 import in.foodtalk.android.apicall.PostLikeApi;
+import in.foodtalk.android.apicall.PostReportApi;
 import in.foodtalk.android.communicator.PostBookmarkCallback;
+import in.foodtalk.android.communicator.PostDeleteCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.communicator.PostOptionCallback;
 import in.foodtalk.android.fragment.DiscoverFragment;
@@ -30,7 +32,7 @@ import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.Login;
 
 public class Home extends AppCompatActivity implements View.OnClickListener ,
-        PostLikeCallback , PostBookmarkCallback, PostOptionCallback{
+        PostLikeCallback , PostBookmarkCallback, PostOptionCallback, PostDeleteCallback{
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
@@ -53,10 +55,16 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
 
     PostLikeApi postLikeApi;
     PostBookmarkApi postBookmarkApi;
+    PostReportApi postReportApi;
 
     Dialog dialogPost;
     LinearLayout alertReport;
+    LinearLayout alertDelete;
     LinearLayout actionBtns;
+    TextView btnReportAlertNo;
+    TextView btnReportAlertYes;
+    TextView btnDeleteAlertNo;
+    TextView btnDeleteAlertYes;
 
     String sessionId;
     String userId;
@@ -69,12 +77,17 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = new DatabaseHandler(getApplicationContext());
+
+        //-------api init--------------------------
         postLikeApi = new PostLikeApi(this);
         postBookmarkApi = new PostBookmarkApi(this);
+        postReportApi = new PostReportApi(this);
+        //-----------------------------------------
+
+
         setContentView(R.layout.activity_home);
 
         btnLogout = (LinearLayout) findViewById(R.id.btn_logout);
-
         btnLogout.setOnClickListener(this);
 
         btnHome = (LinearLayout) findViewById(R.id.btn_home);
@@ -212,7 +225,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
     public void bookmark(int position, String postId, Boolean bookmark) {
         //Log.d("bookmark", "position"+ position);
         try {
-            postBookmarkApi.postLike(postId, bookmark);
+            postBookmarkApi.postBookmark(postId, bookmark);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -233,9 +246,17 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
         TextView btnCancel = (TextView) dialogPost.findViewById(R.id.btn_cancel_post);
         TextView btnDelete = (TextView) dialogPost.findViewById(R.id.btn_delete_post);
         alertReport = (LinearLayout) dialogPost.findViewById(R.id.alert_report);
+        alertDelete = (LinearLayout) dialogPost.findViewById(R.id.alert_delete);
         actionBtns = (LinearLayout) dialogPost.findViewById(R.id.action_btns_dialog);
 
+        btnReportAlertNo = (TextView) dialogPost.findViewById(R.id.btn_report_alert_no);
+        btnReportAlertYes = (TextView) dialogPost.findViewById(R.id.btn_report_alert_yes);
+
+        btnDeleteAlertNo = (TextView) dialogPost.findViewById(R.id.btn_delete_alert_no);
+        btnDeleteAlertYes = (TextView) dialogPost.findViewById(R.id.btn_delete_alert_yes);
+
         alertReport.setVisibility(View.GONE);
+        alertDelete.setVisibility(View.GONE);
 
         if(this.userId.equals(userId)){
             btnDelete.setVisibility(View.VISIBLE);
@@ -264,8 +285,58 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Log.d("dialog","btn delete click");
+                actionBtns.setVisibility(View.GONE);
+                alertDelete.setVisibility(View.VISIBLE);
             }
         });
+        btnReportAlertNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("btnClick", "reportAlertNo");
+                dialogPost.dismiss();
+            }
+        });
+        btnReportAlertYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("btnClick", "reportAlertYes");
+                dialogPost.dismiss();
+                try {
+                    postReportApi.postReport(sessionId ,currentPostId, "report");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        btnDeleteAlertNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("btnClick","DeleteAlertNo");
+                dialogPost.dismiss();
+            }
+        });
+        btnDeleteAlertYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogPost.dismiss();
+                try {
+                    postReportApi.postReport(sessionId ,currentPostId, "delete");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.d("btnClick", "DeleteAlertYes");
+            }
+        });
+    }
+
+    @Override
+    public void postDelete() {
+        Log.d("postDelete","update recyclerview");
+        try {
+            homeFragment.getPostFeed("refresh");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -134,7 +134,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     // Add a list of items
     public void addAll(List<PostObj> list) {
         Log.d("addAll ",list.get(0).dishName);
-        postObj.addAll(list);
+        //postObj.clear();
+        //postObj.addAll(list);
         notifyDataSetChanged();
     }
 

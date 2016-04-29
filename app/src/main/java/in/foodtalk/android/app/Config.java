@@ -4,7 +4,6 @@ package in.foodtalk.android.app;
  * Created by RetailAdmin on 19-04-2016.
  */
 public class Config {
-
     private static  String IP = "52.74.13.4";
     public static String URL_LOGIN = "http://"+IP+"/index.php/service/auth/signin"; // ----testing url
    // public static String URL_LOGIN = "http://52.74.136.146/index.php/service/auth/signin";
@@ -16,4 +15,7 @@ public class Config {
 
     public static String URL_POST_BOOKMARK = "http://"+IP+"/index.php/service/bookmark/add";
     public static String URL_POST_REMOVE_BOOKMARK = "http://"+IP+"/index.php/service/bookmark/delete";
+
+    public static String URL_POST_REPORT = "http://"+IP+"/index.php/service/flag/add";
+    public static String URL_POST_DELETE = "http://"+IP+"/index.php/service/post/delete";
 }
