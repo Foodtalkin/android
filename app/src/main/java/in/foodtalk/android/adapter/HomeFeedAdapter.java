@@ -14,6 +14,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -47,6 +48,9 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     PostBookmarkCallback bookmarkCallback;
     PostOptionCallback optionCallback;
 
+    private final int VIEW_ITEM = 1;
+    private final int VIEW_PROG = 0;
+
     public HomeFeedAdapter(Context context, List<PostObj> postObj, PostLikeCallback postLikeCallback){
         layoutInflater = LayoutInflater.from(context);
         this.postObj = postObj;
@@ -63,59 +67,79 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.card_view_post, parent, false);
-        PostHolder postHolder = new PostHolder(view);
-        return postHolder;
-    }
 
+
+        PostHolder postHolder;
+        ProgressViewHolder progressViewHolder;
+
+        if(viewType == VIEW_ITEM){
+            View view = layoutInflater.inflate(R.layout.card_view_post, parent, false);
+            postHolder = new PostHolder(view);
+            return postHolder;
+        }else if(viewType == VIEW_PROG) {
+            View view = layoutInflater.inflate(R.layout.progress_load_more, parent, false);
+            progressViewHolder = new ProgressViewHolder(view);
+            return progressViewHolder;
+        }else {
+            return null;
+        }
+    }
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        PostObj current = postObj.get(position);
-        PostHolder postHolder = (PostHolder) holder;
-        //postHolder.txtHeadLine.setText(current.userName+" is having "+current.dishName+" at "+current.restaurantName);
-        String htmlHeadline = "<font color='#0369db'>"+current.userName+"</font> <font color='#1a1a1a'>is having </font><font color='#0369db'> "+current.dishName+"</font><font color='#1a1a1a'> at </font><font color='#369db'>"+current.restaurantName+"</font><font color='#1a1a1a'>.</font>";
-        postHolder.txtHeadLine.setText(Html.fromHtml(htmlHeadline));
-        postHolder.txtTime.setText("4d");
-        postHolder.txtCountLike.setText(current.likeCount);
-        postHolder.txtCountBookmark.setText(current.bookmarkCount);
-        postHolder.txtCountComment.setText(current.commentCount);
 
-        //postHolder.postId = current.id;
-        postHolder.postObj1 = current;
+        if(holder instanceof PostHolder){
+            PostObj current = postObj.get(position);
+            PostHolder postHolder = (PostHolder) holder;
+            //postHolder.txtHeadLine.setText(current.userName+" is having "+current.dishName+" at "+current.restaurantName);
+            String htmlHeadline = "<font color='#0369db'>"+current.userName+"</font> <font color='#1a1a1a'>is having </font><font color='#0369db'> "+current.dishName+"</font><font color='#1a1a1a'> at </font><font color='#369db'>"+current.restaurantName+"</font><font color='#1a1a1a'>.</font>";
+            postHolder.txtHeadLine.setText(Html.fromHtml(htmlHeadline));
+            postHolder.txtTime.setText("4d");
+            postHolder.txtCountLike.setText(current.likeCount);
+            postHolder.txtCountBookmark.setText(current.bookmarkCount);
+            postHolder.txtCountComment.setText(current.commentCount);
 
-        if(current.iLikedIt != null){
-            if (current.iLikedIt.equals("1")){
-                postHolder.likeIconImg.setImageResource(R.drawable.heart_active);
-            }else {
-                postHolder.likeIconImg.setImageResource(R.drawable.heart);
+            //postHolder.postId = current.id;
+            postHolder.postObj1 = current;
+
+            if(current.iLikedIt != null){
+                if (current.iLikedIt.equals("1")){
+                    postHolder.likeIconImg.setImageResource(R.drawable.heart_active);
+                }else {
+                    postHolder.likeIconImg.setImageResource(R.drawable.heart);
+                }
+            }else{
+                Log.e("HomeFeedAdapter","null iLikeIt position: "+ position);
             }
-        }else{
-            Log.e("HomeFeedAdapter","null iLikeIt position: "+ position);
-        }
-        if(current.iBookark != null){
-            if(current.iBookark.equals("1")){
-                postHolder.bookmarImg.setImageResource(R.drawable.bookmark_active);
+            if(current.iBookark != null){
+                if(current.iBookark.equals("1")){
+                    postHolder.bookmarImg.setImageResource(R.drawable.bookmark_active);
+                }else {
+                    postHolder.bookmarImg.setImageResource(R.drawable.bookmark);
+                }
             }else {
-                postHolder.bookmarImg.setImageResource(R.drawable.bookmark);
+                Log.e("HomeFeedAdapter","null iBookark position: "+position);
             }
+
+
+
+
+            Log.d("image url", current.postImage);
+            Picasso.with(context)
+                    .load(current.postImage)
+                    //.fit().centerCrop()
+                    .fit()
+                    .placeholder(R.drawable.placeholder)
+                    .into(postHolder.dishImage);
+            Picasso.with(context)
+                    .load(current.userThumb)
+                    .placeholder(R.drawable.placeholder)
+                    .into(postHolder.userThumbnail);
         }else {
-            Log.e("HomeFeedAdapter","null iBookark position: "+position);
+           // holder.set
+            ProgressViewHolder progressViewHolder = (ProgressViewHolder) holder;
+            progressViewHolder.progressBar.setIndeterminate(true);
         }
 
-
-
-
-        Log.d("image url", current.postImage);
-        Picasso.with(context)
-                .load(current.postImage)
-                //.fit().centerCrop()
-                .fit()
-                .placeholder(R.drawable.placeholder)
-                .into(postHolder.dishImage);
-        Picasso.with(context)
-                .load(current.userThumb)
-                .placeholder(R.drawable.placeholder)
-                .into(postHolder.userThumbnail);
 
     }
     @Override
@@ -130,6 +154,9 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         postObj.clear();
         notifyDataSetChanged();
     }
+    public void addData(int position){
+        notifyItemInserted(position);
+    }
 
     // Add a list of items
     public void addAll(List<PostObj> list) {
@@ -137,6 +164,22 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         //postObj.clear();
         //postObj.addAll(list);
         notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return postObj.get(position) != null ? VIEW_ITEM : VIEW_PROG;
+    }
+
+    class ProgressViewHolder extends RecyclerView.ViewHolder {
+
+        public ProgressBar progressBar;
+
+        public ProgressViewHolder(View itemView) {
+            super(itemView);
+            progressBar = (ProgressBar) itemView.findViewById(R.id.loadmore_progress);
+
+        }
     }
 
 

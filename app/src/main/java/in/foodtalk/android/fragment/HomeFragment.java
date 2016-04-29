@@ -66,6 +66,10 @@ public class HomeFragment extends Fragment{
     LinearLayoutManager linearLayoutManager;
 
 
+    private int pageNo = 0;
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -126,7 +130,7 @@ public class HomeFragment extends Fragment{
         obj.put("includeCount", "1");
         obj.put("includeFollowed","1");
         obj.put("postUserId",db.getUserDetails().get("userId"));
-        obj.put("page","0");
+        obj.put("page",Integer.toString(pageNo));
         obj.put("recordCount","10");
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                 config.URL_POST_LIST, obj,
@@ -230,14 +234,36 @@ public class HomeFragment extends Fragment{
            // homeFeedAdapter.clear();
             Log.d("on update","postData size: " +postData.size());
             homeFeedAdapter.addAll(postData);
+        } else if(tag.equals("loadMore")){
+            //postData.add(postData);
+            //recyclerView.addD
+            homeFeedAdapter.notifyItemInserted(postData.size()-1);
         }
         //homeFeedAdapter.notifyDataSetChanged();
     }
     private void callScrollClass(){
         recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
+
+            Boolean loading = false;
+
             @Override
             public void onLoadMore(int current_page) {
                 Log.d("scroll listener", "current_page: "+ current_page);
+
+                if(!loading){
+
+                    pageNo++;
+                    postData.add(null);
+                    //recyclerView.addD
+                    homeFeedAdapter.notifyItemInserted(postData.size()-1);
+                    loading = true;
+
+                    try {
+                        getPostFeed("loadMore");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
     }
