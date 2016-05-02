@@ -4,16 +4,20 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -66,7 +70,7 @@ public class HomeFragment extends Fragment{
     LinearLayoutManager linearLayoutManager;
 
 
-    private int pageNo = 0;
+    private int pageNo = 1;
 
 
 
@@ -87,16 +91,19 @@ public class HomeFragment extends Fragment{
         recyclerView.setLayoutManager(linearLayoutManager);
 
 
-
-
-
-
+        if(postData != null){
+            Log.d("postData","size: "+ postData);
+        }else {
+            Log.d("postData","null");
+        }
         swipeRefreshHome.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 Log.d("swip to refresh home", "Refreshing");
                 try {
+                    pageNo = 1;
                     getPostFeed("refresh");
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -117,9 +124,52 @@ public class HomeFragment extends Fragment{
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
         super.onActivityCreated(savedInstanceState);
+    }
+    @Override
+    public void onDestroyView() {
+        Log.d("Fragment","onDestryView");
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d("Fragment","onDestroy");
+        super.onDestroy();
+    }
+
+    @Override
+    public void onDetach() {
+        Log.d("Fragment","onDetach");
+        super.onDetach();
+    }
+    Parcelable mListState;
+
+    @Override
+    public void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+
+        // Save list state
+        mListState = mLayoutManager.onSaveInstanceState();
+        state.putParcelable("myState", mListState);
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        // Retrieve list state and list/item positions
+
+        if(savedInstanceState != null)
+            mListState = savedInstanceState.getParcelable("myState");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mListState != null) {
+            mLayoutManager.onRestoreInstanceState(mListState);
+        }
     }
 
     public void getPostFeed(final String tag) throws JSONException {
@@ -130,6 +180,7 @@ public class HomeFragment extends Fragment{
         obj.put("includeCount", "1");
         obj.put("includeFollowed","1");
         obj.put("postUserId",db.getUserDetails().get("userId"));
+        //Log.d("getPostFeed","pageNo: "+pageNo);
         obj.put("page",Integer.toString(pageNo));
         obj.put("recordCount","10");
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
@@ -164,7 +215,17 @@ public class HomeFragment extends Fragment{
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                 VolleyLog.d("Response", "Error: " + error.getMessage());
+                VolleyLog.d("Response", "Error: " + error.getMessage());
+                showToast("Please check your internet connection");
+
+                if(tag.equals("refresh")){
+                    swipeRefreshHome.setRefreshing(false);
+                }
+                if(tag.equals("loadMore")){
+                    remove(null);
+                    //callScrollClass();
+                    pageNo--;
+                }
                 // hideProgressDialog();
             }
         }) {
@@ -193,8 +254,9 @@ public class HomeFragment extends Fragment{
         //String userName = postObject.getString("userName");
         //Log.d("user name from post", userName);
         Log.d("check list array", postData.size()+"");
-        if (postData.size() > 0){
+        if (postData.size() > 0 && !tag.equals("loadMore")){
             postData.clear();
+            Log.d("loadData: ","clear post data");
         }
 
         for (int i=0; postArray.length()>i;i++){
@@ -217,7 +279,7 @@ public class HomeFragment extends Fragment{
             current.postThumb = postArray.getJSONObject(i).getString("postThumb");
             current.iLikedIt = postArray.getJSONObject(i).getString("iLikedIt");
             current.iBookark = postArray.getJSONObject(i).getString("iBookark");
-
+            current.rating = postArray.getJSONObject(i).getString("rating");
            // postData.clear();
             postData.add(current);
             Log.d("dish name", postData.get(i).userId);
@@ -229,35 +291,47 @@ public class HomeFragment extends Fragment{
             recyclerView.setAdapter(homeFeedAdapter);
             callScrollClass();
 
+            Log.d("Response LoadData", "Load");
 
         }else if (tag.equals("refresh")){
            // homeFeedAdapter.clear();
-            Log.d("on update","postData size: " +postData.size());
-            homeFeedAdapter.addAll(postData);
+            //Log.d("on update","postData size: " +postData.size());
+            //homeFeedAdapter.addAll(postData);
+            callScrollClass();
+            homeFeedAdapter.notifyDataSetChanged();
+            Log.d("Response LoadData", "Refresh - size: "+ postData.size());
         } else if(tag.equals("loadMore")){
             //postData.add(postData);
             //recyclerView.addD
-            homeFeedAdapter.notifyItemInserted(postData.size()-1);
+            //homeFeedAdapter.addAll(postData);
+            //postData.remove(postData.size() - 1);
+           // homeFeedAdapter.notifyItemRemoved(postData.size()-1);
+            remove(null);
+            loading = false;
+            Log.d("Response LoadData", "LoadMore: postSize"+postData.size()+" dishname: "+postData.get(0).dishName);
+           // homeFeedAdapter.notifyDataSetChanged();
+            //homeFeedAdapter.notifyItemInserted(postData.size());
         }
         //homeFeedAdapter.notifyDataSetChanged();
     }
+    public void remove(ContactsContract.Contacts.Data data) {
+        int position = postData.indexOf(data);
+        postData.remove(position);
+        homeFeedAdapter.notifyItemRemoved(position);
+    }
+    Boolean loading = false;
     private void callScrollClass(){
         recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
-
-            Boolean loading = false;
-
             @Override
             public void onLoadMore(int current_page) {
                 Log.d("scroll listener", "current_page: "+ current_page);
-
                 if(!loading){
-
                     pageNo++;
                     postData.add(null);
                     //recyclerView.addD
                     homeFeedAdapter.notifyItemInserted(postData.size()-1);
                     loading = true;
-
+                    Log.d("loadMore", "call getPostFeed('loadMore')");
                     try {
                         getPostFeed("loadMore");
                     } catch (JSONException e) {
@@ -273,6 +347,10 @@ public class HomeFragment extends Fragment{
         startActivity(i);
         getActivity().finish();
     }
-
-
+    public void showToast(String msg){
+        Toast toast= Toast.makeText(getActivity(),
+                msg, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 300);
+        toast.show();
+    }
 }

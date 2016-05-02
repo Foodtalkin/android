@@ -18,4 +18,7 @@ public class Config {
 
     public static String URL_POST_REPORT = "http://"+IP+"/index.php/service/flag/add";
     public static String URL_POST_DELETE = "http://"+IP+"/index.php/service/post/delete";
+
+    public static String URL_POST_DISCOVER = "http://"+IP+"/index.php/service/post/getImageCheckInPosts";
+
 }

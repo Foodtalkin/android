@@ -1,7 +1,6 @@
 package in.foodtalk.android.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.CountDownTimer;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -17,17 +16,11 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.ImageRequest;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import in.foodtalk.android.R;
-import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.communicator.PostOptionCallback;
@@ -36,7 +29,7 @@ import in.foodtalk.android.object.PostObj;
 /**
  * Created by RetailAdmin on 25-04-2016.
  */
-public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>   {
+public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>   {
 
     public List<PostObj> postObj;
     private LayoutInflater layoutInflater;
@@ -51,7 +44,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
 
-    public HomeFeedAdapter(Context context, List<PostObj> postObj, PostLikeCallback postLikeCallback){
+    public DiscoverAdapter(Context context, List<PostObj> postObj, PostLikeCallback postLikeCallback){
         layoutInflater = LayoutInflater.from(context);
         this.postObj = postObj;
         this.context = context;

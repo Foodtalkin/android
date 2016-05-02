@@ -57,7 +57,6 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
-
                     <ImageView
                         android:id="@+id/dish_img"
                         android:layout_width="match_parent"
@@ -77,38 +76,33 @@
                         android:orientation="horizontal"
                         android:layout_alignBottom="@+id/dish_img"
                         android:layout_marginBottom="5dp"
-                        android:layout_marginLeft="7dp"
-                        >
+                        android:layout_marginLeft="5dp"
+                       >
                         <ImageView
-                            android:id="@+id/img_rating1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/star_active"
-                            android:padding="5dp"/>
+                            android:padding="6dp"/>
                         <ImageView
-                            android:id="@+id/img_rating2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/star_active"
-                            android:padding="5dp"/>
+                            android:padding="6dp"/>
                         <ImageView
-                            android:id="@+id/img_rating3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/star_active"
-                            android:padding="5dp"/>
+                            android:padding="6dp"/>
                         <ImageView
-                            android:id="@+id/img_rating4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/star_active"
-                            android:padding="5dp"/>
+                            android:padding="6dp"/>
                         <ImageView
-                            android:id="@+id/img_rating5"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/star_passive"
-                            android:padding="5dp"/>
+                            android:src="@drawable/star_active"
+                            android:padding="6dp"/>
                     </LinearLayout>
                 </RelativeLayout>
             </LinearLayout>
@@ -170,43 +164,23 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/margin_txt_icon_card"/>
                 </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/icon_comment_holder"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:paddingTop="@dimen/home_card_padding"
-                    android:paddingBottom="@dimen/home_card_padding">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/comment_icon"
-                        android:clickable="false"/>
-                    <TextView
-                        android:id="@+id/txt_count_comment"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="8"
-                        android:textSize="@dimen/txt_size_card_icon"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/margin_txt_icon_card"/>
-                </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/icon_option_holder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
+                    android:layout_weight="4"
+                    android:gravity="right"
                     android:paddingTop="@dimen/home_card_padding"
-                    android:paddingBottom="@dimen/home_card_padding">
-                    <ImageView
+                    android:paddingBottom="@dimen/home_card_padding"
+                    android:paddingRight="16dp">
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/option"
-                        android:clickable="false"/>
+                        android:text="2.14 KM"
+
+                        android:textSize="@dimen/txt_size_card_icon"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

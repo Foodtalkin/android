@@ -301,7 +301,6 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                         //  10, this);
                     }
                 } else {
-
                     Log.d("permission result","denied permission");
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
@@ -356,7 +355,6 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
     //----------------post to api------------------------------
     public void postLoginInfo(LoginInfo loginInfo, String tag) throws JSONException {
         //showProgressDialog();
-
         //----------
         JSONObject objTest = new JSONObject();
         objTest.put("signInType", "F");
@@ -381,11 +379,9 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         //obj.put("googleId","");
 
         //Log.d("JSon obj",obj+"");
-
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                 config.URL_LOGIN, obj,
                 new Response.Listener<JSONObject>() {
-
                     @Override
                     public void onResponse(JSONObject response) {
 
