@@ -117,7 +117,7 @@ public class HomeFragment extends Fragment{
         config = new Config();
         db = new DatabaseHandler(getActivity().getApplicationContext());
         postObj = new PostObj();
-        Log.d("get user info F", db.getUserDetails().get("sessionId"));
+       Log.d("get user info F", db.getUserDetails().get("sessionId"));
         Log.d("get user info F", db.getUserDetails().get("userId"));
         try {
             getPostFeed("load");
@@ -249,6 +249,8 @@ public class HomeFragment extends Fragment{
 
         swipeRefreshHome.setRefreshing(false);
 
+
+
         JSONArray postArray = response.getJSONArray("posts");
         JSONObject postObject = postArray.getJSONObject(0);
         //String userName = postObject.getString("userName");
@@ -312,6 +314,7 @@ public class HomeFragment extends Fragment{
            // homeFeedAdapter.notifyDataSetChanged();
             //homeFeedAdapter.notifyItemInserted(postData.size());
         }
+
         //homeFeedAdapter.notifyDataSetChanged();
     }
     public void remove(ContactsContract.Contacts.Data data) {

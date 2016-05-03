@@ -30,6 +30,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_UID = "uId";
     private static final String KEY_NAME = "name";
     private static final String KEY_USER_NAME = "userName";
+
     //private static final String KEY_PH_NO = "phone_number";
 
     public DatabaseHandler(Context context) {

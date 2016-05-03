@@ -209,6 +209,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
         Intent i = new Intent(this, FbLogin.class);
         startActivity(i);
         finish();
+
     }
 
     @Override
@@ -219,6 +220,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
         } catch (JSONException e) {
             e.printStackTrace();
         }
+       // discoverFragment.recyclerView.smoothScrollToPosition(5);
+
     }
 
     @Override

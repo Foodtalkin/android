@@ -27,4 +27,5 @@ public class PostObj {
     public String restaurantIsActive;
     public String postImage;
     public String postThumb;
+    public String restaurantDistance;
 }

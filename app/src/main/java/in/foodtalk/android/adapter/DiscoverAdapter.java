@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import in.foodtalk.android.R;
@@ -63,7 +64,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ProgressViewHolder progressViewHolder;
 
         if(viewType == VIEW_ITEM){
-            View view = layoutInflater.inflate(R.layout.card_view_post, parent, false);
+            View view = layoutInflater.inflate(R.layout.card_discover_post, parent, false);
             postHolder = new PostHolder(view);
             return postHolder;
         }else if(viewType == VIEW_PROG) {
@@ -85,7 +86,19 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             postHolder.txtTime.setText("4d");
             postHolder.txtCountLike.setText(current.likeCount);
             postHolder.txtCountBookmark.setText(current.bookmarkCount);
-            postHolder.txtCountComment.setText(current.commentCount);
+//            postHolder.txtCountComment.setText(current.commentCount);
+
+
+            double distance = Double.parseDouble(current.restaurantDistance);
+            String km = new DecimalFormat("##.##").format(distance/1000);
+
+            postHolder.txtKm.setText(km+" KM");
+
+            //Log.d("distance m", distance+"");
+            //new DecimalFormat("##.##").format(i2)
+           // Log.d("distance km", new DecimalFormat("##.##").format(km)+"");
+
+            //postHolder.txtKm.setText(Double.valueOf(current.restaurantDistance)/1000+" KM");
 
             setStarRating(current.rating, postHolder);
             //postHolder.postId = current.id;
@@ -109,7 +122,9 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }else {
                 Log.e("HomeFeedAdapter","null iBookark position: "+position);
             }
+
             //Log.d("image url", current.postImage);
+          //  Log.d("cardholder height",postHolder.cardHolder.getHeight()+"");
             Picasso.with(context)
                     .load(current.postImage)
                     //.fit().centerCrop()
@@ -227,12 +242,16 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ImageView imgRating4;
         ImageView imgRating5;
 
+        LinearLayout cardHolder;
+
+        TextView txtKm;
+
 
 
         //String postId;
         PostObj postObj1;
 
-        LinearLayout iconLike, iconBookmark, iconComment, iconOption;
+        LinearLayout iconLike, iconBookmark, iconOption;
 
         public PostHolder(final View itemView) {
             super(itemView);
@@ -245,6 +264,9 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             txtCountComment = (TextView) itemView.findViewById(R.id.txt_count_comment);
             likeIconImg = (ImageView) itemView.findViewById(R.id.icon_heart_img);
             bookmarImg = (ImageView) itemView.findViewById(R.id.img_icon_bookmark);
+            txtKm = (TextView) itemView.findViewById(R.id.txt_km);
+
+            cardHolder = (LinearLayout) itemView.findViewById(R.id.card_contaner);
 
             likeHeart = (ImageView) itemView.findViewById(R.id.like_heart);
 
@@ -260,14 +282,16 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             iconLike = (LinearLayout) itemView.findViewById(R.id.icon_like_holder);
             iconBookmark = (LinearLayout) itemView.findViewById(R.id.icon_bookmark_holder);
-            iconComment = (LinearLayout) itemView.findViewById(R.id.icon_comment_holder);
             iconOption = (LinearLayout) itemView.findViewById(R.id.icon_option_holder);
+
+
 
             dishImage.setOnTouchListener(this);
             iconLike.setOnTouchListener(this);
             iconBookmark.setOnTouchListener(this);
-            iconComment.setOnTouchListener(this);
             iconOption.setOnTouchListener(this);
+
+
 
 
             mAnimation = AnimationUtils.loadAnimation(context, R.anim.like_anim);
@@ -311,6 +335,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             long thisTime = System.currentTimeMillis();
                             if (thisTime - lastTouchTime < 250) {
                                 Log.d("clicked", "img double");
+
 
                                 likeHeart.setVisibility(View.VISIBLE);
                                 likeHeart.startAnimation(mAnimation);
@@ -384,6 +409,15 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
                 }
                 break;
+                case R.id.icon_option_holder:{
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("clicked", "post user id"+postObj1.userId +"post id: "+postObj1.id );
+                            optionCallback.option(getPosition(),postObj1.id,postObj1.userId);
+                            break;
+                    }
+                }
+                break;
                 case R.id.icon_bookmark_holder:{
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
@@ -413,24 +447,6 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 //------------------------------------------
                                 bookmarkCallback.bookmark(getPosition(),postObj1.id, false);
                             }
-
-                            break;
-                    }
-                }
-                break;
-                case R.id.icon_comment_holder:{
-                    switch (event.getAction()){
-                        case MotionEvent.ACTION_UP:
-                            Log.d("clicked", "icon comment");
-                            break;
-                    }
-                }
-                break;
-                case R.id.icon_option_holder:{
-                    switch (event.getAction()){
-                        case MotionEvent.ACTION_UP:
-                            Log.d("clicked", "post user id"+postObj1.userId +"post id: "+postObj1.id );
-                            optionCallback.option(getPosition(),postObj1.id,postObj1.userId);
                             break;
                     }
                 }
