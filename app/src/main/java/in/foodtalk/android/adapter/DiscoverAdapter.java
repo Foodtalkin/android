@@ -83,7 +83,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             //postHolder.txtHeadLine.setText(current.userName+" is having "+current.dishName+" at "+current.restaurantName);
             String htmlHeadline = "<font color='#0369db'>"+current.userName+"</font> <font color='#1a1a1a'>is having </font><font color='#0369db'> "+current.dishName+"</font><font color='#1a1a1a'> at </font><font color='#369db'>"+current.restaurantName+"</font><font color='#1a1a1a'>.</font>";
             postHolder.txtHeadLine.setText(Html.fromHtml(htmlHeadline));
-            postHolder.txtTime.setText("4d");
+            //postHolder.txtTime.setText("4d");
             postHolder.txtCountLike.setText(current.likeCount);
             postHolder.txtCountBookmark.setText(current.bookmarkCount);
 //            postHolder.txtCountComment.setText(current.commentCount);
@@ -133,6 +133,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .into(postHolder.dishImage);
             Picasso.with(context)
                     .load(current.userThumb)
+                    .fit()
                     .placeholder(R.drawable.placeholder)
                     .into(postHolder.userThumbnail);
         }else {
@@ -257,7 +258,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             super(itemView);
             userThumbnail = (ImageView) itemView.findViewById(R.id.userThumb);
             txtHeadLine = (TextView) itemView.findViewById(R.id.txt_post_headline);
-            txtTime = (TextView) itemView.findViewById(R.id.txt_time);
+            //txtTime = (TextView) itemView.findViewById(R.id.txt_time);
             dishImage = (ImageView) itemView.findViewById(R.id.dish_img);
             txtCountLike = (TextView) itemView.findViewById(R.id.txt_count_like);
             txtCountBookmark = (TextView) itemView.findViewById(R.id.txt_count_bookmark);

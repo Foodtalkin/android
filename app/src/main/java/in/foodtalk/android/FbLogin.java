@@ -109,11 +109,11 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         buildGoogleApiClient();
         FacebookSdk.sdkInitialize(getApplicationContext());
 
-        GetLocation getLocation = new GetLocation(this);
+        /*GetLocation getLocation = new GetLocation(this);
         String latitude = getLocation.getUserLocation().latitude;
         String longitude = getLocation.getUserLocation().longitude;
         String altitude = getLocation.getUserLocation().altitude;
-        String speed = getLocation.getUserLocation().speed;
+        String speed = getLocation.getUserLocation().speed;*/
 
         // Log.d("location", "latitude: " + latitude);
         // Log.d("location", "longitude: " + longitude);
@@ -141,7 +141,14 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                                 try {
                                     String id = object.getString("id");
                                     String email = object.getString("email");
-                                    String birthday = object.getString("birthday"); // 01/31/1980 format
+                                    String birthday;
+                                    if (object.has("birthday")){
+                                        birthday = object.getString("birthday");
+
+                                    }else {
+                                        Log.d("fb birthday", "null");
+                                        birthday = "N/A";
+                                    }
                                     String name = object.getString("name");
                                     String gender = object.getString("gender");
                                     Log.d("fb user info", "id: " + id + "name: " + name + " email: " + email + " gender: " + gender + " birthday: " + birthday);

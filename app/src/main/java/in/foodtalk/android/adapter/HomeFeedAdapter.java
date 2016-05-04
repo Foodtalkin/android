@@ -123,8 +123,10 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .fit()
                     .placeholder(R.drawable.placeholder)
                     .into(postHolder.dishImage);
+
+            //Log.d("userThumb large",current.userThumb);
             Picasso.with(context)
-                    .load(current.userThumb)
+                    .load(current.userImage)
                     .placeholder(R.drawable.placeholder)
                     .into(postHolder.userThumbnail);
         }else {

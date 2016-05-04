@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -69,6 +70,8 @@ public class HomeFragment extends Fragment{
 
     LinearLayoutManager linearLayoutManager;
 
+    ProgressBar homeProgress;
+
 
     private int pageNo = 1;
 
@@ -89,6 +92,8 @@ public class HomeFragment extends Fragment{
 
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        homeProgress = (ProgressBar) layout.findViewById(R.id.home_progress);
 
 
         if(postData != null){
@@ -150,8 +155,8 @@ public class HomeFragment extends Fragment{
         super.onSaveInstanceState(state);
 
         // Save list state
-        mListState = mLayoutManager.onSaveInstanceState();
-        state.putParcelable("myState", mListState);
+//        mListState = mLayoutManager.onSaveInstanceState();
+      //  state.putParcelable("myState", mListState);
     }
 
     @Override
@@ -159,8 +164,8 @@ public class HomeFragment extends Fragment{
         super.onViewStateRestored(savedInstanceState);
         // Retrieve list state and list/item positions
 
-        if(savedInstanceState != null)
-            mListState = savedInstanceState.getParcelable("myState");
+       // if(savedInstanceState != null)
+          //  mListState = savedInstanceState.getParcelable("myState");
     }
 
     @Override
@@ -251,6 +256,8 @@ public class HomeFragment extends Fragment{
 
 
 
+        homeProgress.setVisibility(View.GONE);
+
         JSONArray postArray = response.getJSONArray("posts");
         JSONObject postObject = postArray.getJSONObject(0);
         //String userName = postObject.getString("userName");
@@ -275,7 +282,7 @@ public class HomeFragment extends Fragment{
             current.likeCount = postArray.getJSONObject(i).getString("likeCount");
             current.bookmarkCount = postArray.getJSONObject(i).getString("bookmarkCount");
             current.commentCount = postArray.getJSONObject(i).getString("commentCount");
-            current.userThumb = postArray.getJSONObject(i).getString("userThumb");
+            current.userThumb = postArray.getJSONObject(i).getString("userThumb")+"?type=large";
             current.userImage = postArray.getJSONObject(i).getString("userImage");
             current.postImage = postArray.getJSONObject(i).getString("postImage");
             current.postThumb = postArray.getJSONObject(i).getString("postThumb");
@@ -341,6 +348,11 @@ public class HomeFragment extends Fragment{
                         e.printStackTrace();
                     }
                 }
+            }
+
+            @Override
+            public void onScrolled1(int dx, int dy, int firstVisibleItem, int lastVisibleItem) {
+
             }
         });
     }

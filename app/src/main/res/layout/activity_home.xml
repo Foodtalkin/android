@@ -26,20 +26,14 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/title_home"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#fff"
                     android:text="Home"
                     android:textSize="25sp"
                     android:layout_centerInParent="true"/>
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/search"
-                    android:background="@null"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="6dp"/>
+
             </RelativeLayout>
 
         </LinearLayout>

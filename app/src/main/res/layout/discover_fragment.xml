@@ -10,13 +10,26 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             />
-        <ProgressBar
+        <LinearLayout
             android:id="@+id/progress_bar"
-
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:indeterminateTint="#fff"
-            android:progressDrawable="@drawable/progress_bar"
-            />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_centerInParent="true">
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:indeterminateTint="#fff"
+                    android:progressDrawable="@drawable/progress_bar"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/discover_loader_copy"
+                    android:textColor="#fff"
+                    android:layout_marginTop="10dp"/>
+        </LinearLayout>
+
 </RelativeLayout>

@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import in.foodtalk.android.app.AppController;
+import in.foodtalk.android.app.Config;
 import in.foodtalk.android.object.LoginInfo;
 
 /**
@@ -31,7 +32,7 @@ public class Login {
     private String TAG = Login.class.getSimpleName();
 
 
-
+    public Config config;
     // These tags will be used to cancel the requests
     private String tag_json_obj;
 
@@ -41,6 +42,10 @@ public class Login {
         pDialog = new ProgressDialog(context);
         pDialog.setMessage("Loading...");
         pDialog.setCancelable(false);
+
+        config = new Config();
+
+
     }
 
 
@@ -62,7 +67,7 @@ public class Login {
         //obj.put("googleId","");
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                "http://52.74.13.4/index.php/service/auth/signin", obj,
+                config.URL_LOGIN, obj,
                 new Response.Listener<JSONObject>() {
 
                     @Override

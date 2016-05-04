@@ -71,6 +71,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
     String currentPostUserId;
     String currentPostId;
 
+    TextView titleHome;
+
 
     int pageNo;
     @Override
@@ -107,6 +109,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
         txtNewpostIcon = (TextView) findViewById(R.id.newpost_txt_icon);
         txtNotiIcon = (TextView) findViewById(R.id.noti_txt_icon);
         txtMoreIcon = (TextView) findViewById(R.id.more_txt_icon);
+
+        titleHome = (TextView) findViewById(R.id.title_home);
 
         //-----------
         icons = new ImageView[]{homeIcon, discoverIcon, newpostIcon, notiIcon, moreIcon};
@@ -149,6 +153,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
                 Log.d("onClick","btn home");
                 if(pageNo != 0){
                     setFragmentView(homeFragment , 0);
+                    titleHome.setText("Home");
                     pageNo = 0;
                 }
                 break;
@@ -156,12 +161,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
                 Log.d("onClick", "btn discover");
                 if (pageNo != 1){
                     setFragmentView (discoverFragment , 1);
+                    titleHome.setText("Discover");
                     pageNo = 1;
                 }
                 break;
             case R.id.btn_newpost:
                 if(pageNo != 2){
                     setFragmentView (newpostFragment, 2);
+                    titleHome.setText("New Post");
                     pageNo = 2;
                 }
                 Log.d("onClick","btn newpost");
@@ -169,6 +176,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
             case R.id.btn_notification:
                 if (pageNo != 3){
                     setFragmentView (notiFragment, 3);
+                    titleHome.setText("Notification");
                     pageNo = 3;
                 }
 
@@ -177,6 +185,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
             case R.id.btn_more:
                 if (pageNo != 4){
                     setFragmentView (moreFragment, 4);
+                    titleHome.setText("More");
                     pageNo = 4;
                 }
                 Log.d("onClick", "btn more");

@@ -2,17 +2,22 @@ package in.foodtalk.android.fragment;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -23,6 +28,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,15 +47,17 @@ import in.foodtalk.android.adapter.DiscoverAdapter;
 import in.foodtalk.android.adapter.HomeFeedAdapter;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.LatLonCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.EndlessRecyclerOnScrollListener;
+import in.foodtalk.android.module.GetLocation;
 import in.foodtalk.android.object.PostObj;
 
 /**
  * Created by RetailAdmin on 21-04-2016.
  */
-public class DiscoverFragment extends Fragment {
+public class DiscoverFragment extends Fragment implements View.OnTouchListener, LatLonCallback {
 
 
     View layout;
@@ -72,9 +82,22 @@ public class DiscoverFragment extends Fragment {
     LinearLayoutManager linearLayoutManager;
 
 
+
+
     private int pageNo = 1;
 
-    ProgressBar progressBar;
+    LinearLayout progressBar;
+
+    int dx1;
+    int firstVItem;
+    int lastVItem;
+
+    GetLocation getLocation;
+
+    LatLonCallback latLonCallback;
+
+    String lat, lon;
+
 
 
 
@@ -83,7 +106,10 @@ public class DiscoverFragment extends Fragment {
 
         layout = inflater.inflate(R.layout.discover_fragment, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_discover);
-        progressBar = (ProgressBar) layout.findViewById(R.id.progress_bar);
+        progressBar = (LinearLayout) layout.findViewById(R.id.progress_bar);
+        recyclerView.setOnTouchListener(this);
+
+
         //--swipeRefreshHome = (SwipeRefreshLayout) layout.findViewById(R.id.swipeRefreshHome);
         // use a linear layout manager
        // linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL);
@@ -94,11 +120,20 @@ public class DiscoverFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
+
+
+        latLonCallback = this;
+        getLocation = new GetLocation(getActivity(), latLonCallback);
+
+        getLocation.onStart();
+
         if(postData != null){
             Log.d("postData","size: "+ postData);
         }else {
             Log.d("postData","null");
         }
+
+
         /*--swipeRefreshHome.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -125,16 +160,14 @@ public class DiscoverFragment extends Fragment {
 
 //        Log.d("get user info lat", db.getUserDetails().get("lat"));
         //Log.d("get user info lon", db.getUserDetails().get("lon"));
-       try {
-            getPostFeed("load");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
         super.onActivityCreated(savedInstanceState);
     }
     @Override
     public void onDestroyView() {
         Log.d("Fragment","onDestryView");
+        getActivity().getFragmentManager().beginTransaction().remove(this).commit();
+        getLocation.onStop();
         super.onDestroyView();
     }
 
@@ -160,8 +193,10 @@ public class DiscoverFragment extends Fragment {
         //Log.d("getPostFeed","pageNo: "+pageNo);
         obj.put("page",Integer.toString(pageNo));
         obj.put("recordCount","10");
-        obj.put("latitude","28.478833");
-        obj.put("longitude","77.076096");
+        obj.put("latitude",lat);
+        obj.put("longitude",lon);
+
+        Log.d("post page number param", pageNo+"");
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                 config.URL_POST_DISCOVER, obj,
                 new Response.Listener<JSONObject>() {
@@ -319,6 +354,21 @@ public class DiscoverFragment extends Fragment {
                     }
                 }
             }
+
+            @Override
+            public void onScrolled1(int dx, int dy, int firstVisibleItem, int lastVisibleItem) {
+
+
+                dx1 = dx;
+                firstVItem = firstVisibleItem;
+                lastVItem = lastVisibleItem;
+               // Log.d("onScrolled called",dx+"");
+                if (dx > 0){
+                   // recyclerView.smoothScrollToPosition(lastVisibleItem);
+                }else if(dx < 0){
+                   // recyclerView.smoothScrollToPosition(firstVisibleItem);
+                }
+            }
         });
     }
     private void logOut(){
@@ -332,5 +382,53 @@ public class DiscoverFragment extends Fragment {
                 msg, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 300);
         toast.show();
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (v.getId()){
+            case R.id.recycler_view_discover:
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        Log.d("recycler view","action down");
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        Log.d("recycler view", "action up");
+                        if (dx1 > 0){
+                             recyclerView.smoothScrollToPosition(lastVItem);
+                            int vl = lastVItem*280;
+                            Log.d("value scrol", vl+"");
+                           //recyclerView.scrollTo(vl, 0);
+                        }else if(dx1 < 0){
+                            int vl = firstVItem*280;
+                          // recyclerView.scrollTo(vl, 0);
+                             recyclerView.smoothScrollToPosition(firstVItem);
+                        }else if (dx1 == 0){
+                            int vl = lastVItem*280;
+                            //recyclerView.scrollTo(vl, 0);
+                            recyclerView.smoothScrollToPosition(lastVItem);
+                        }
+                        break;
+                }
+                break;
+        }
+        return false;
+    }
+
+    @Override
+    public void location(String lat, String lon) {
+        //Log.d("location", "lat: "+ lat+" lon: "+lon);
+        Log.d("GPS location","Latitude "+lat);
+        Log.d("GPS location","Longitude "+lon);
+        this.lat = lat;
+        this.lon = lon;
+
+        try {
+            pageNo = 1;
+            getPostFeed("load");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
