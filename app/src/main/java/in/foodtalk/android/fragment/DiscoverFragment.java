@@ -166,7 +166,7 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
     @Override
     public void onDestroyView() {
         Log.d("Fragment","onDestryView");
-        getActivity().getFragmentManager().beginTransaction().remove(this).commit();
+        //getActivity().getFragmentManager().beginTransaction().remove(this).commit();
         getLocation.onStop();
         super.onDestroyView();
     }
@@ -414,7 +414,6 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         }
         return false;
     }
-
     @Override
     public void location(String lat, String lon) {
         //Log.d("location", "lat: "+ lat+" lon: "+lon);
@@ -422,7 +421,6 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         Log.d("GPS location","Longitude "+lon);
         this.lat = lat;
         this.lon = lon;
-
         try {
             pageNo = 1;
             getPostFeed("load");

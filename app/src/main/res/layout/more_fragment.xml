@@ -3,12 +3,15 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="@color/bg_color">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/more_recycler_view"
         android:layout_height="wrap_content"
-        android:text="MoreScreen"
-        android:textSize="20dp"
-        android:textColor="@color/colorText1"
-        android:layout_centerInParent="true"/>
-
+        android:layout_width="match_parent"
+        android:scrollbars="none"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:overScrollMode="never">
+    </android.support.v7.widget.RecyclerView>
 </RelativeLayout>

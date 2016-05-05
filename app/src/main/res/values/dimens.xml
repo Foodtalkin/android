@@ -8,6 +8,7 @@
     <dimen name="txt_icon_margin">4dp</dimen>
     <dimen name="icon_padding">10dp</dimen>
     <dimen name="home_card_padding">16dp</dimen>
+    <dimen name="txt_size_more">14sp</dimen>
 
 
 

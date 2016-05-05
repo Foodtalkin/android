@@ -24,7 +24,6 @@
                     android:layout_height="52dp"
                     android:src="@drawable/placeholder"
                     android:id="@+id/userThumb"
-
                     />
                 <TextView
                     android:id="@+id/txt_post_headline"

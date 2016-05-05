@@ -132,7 +132,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .placeholder(R.drawable.placeholder)
                     .into(postHolder.dishImage);
             Picasso.with(context)
-                    .load(current.userThumb)
+                    .load(current.userThumb+"?type=large")
                     .fit()
                     .placeholder(R.drawable.placeholder)
                     .into(postHolder.userThumbnail);

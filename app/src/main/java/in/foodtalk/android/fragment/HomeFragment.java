@@ -81,9 +81,6 @@ public class HomeFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.home_fragment, container, false);
-
-
-
         //postLikeCallback = this;
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_home);
         swipeRefreshHome = (SwipeRefreshLayout) layout.findViewById(R.id.swipeRefreshHome);
@@ -94,7 +91,6 @@ public class HomeFragment extends Fragment{
         recyclerView.setLayoutManager(linearLayoutManager);
 
         homeProgress = (ProgressBar) layout.findViewById(R.id.home_progress);
-
 
         if(postData != null){
             Log.d("postData","size: "+ postData);
