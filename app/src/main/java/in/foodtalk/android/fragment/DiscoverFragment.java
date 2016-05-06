@@ -1,6 +1,7 @@
 package in.foodtalk.android.fragment;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -98,6 +99,7 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
 
     String lat, lon;
 
+    Context context;
 
 
 
@@ -114,18 +116,7 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         // use a linear layout manager
        // linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL);
 
-        linearLayoutManager
-                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
 
-        mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        recyclerView.setLayoutManager(linearLayoutManager);
-
-
-
-        latLonCallback = this;
-        getLocation = new GetLocation(getActivity(), latLonCallback);
-
-        getLocation.onStart();
 
         if(postData != null){
             Log.d("postData","size: "+ postData);
@@ -152,6 +143,19 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         //recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+
+        linearLayoutManager
+                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+
+        mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+
+
+        latLonCallback = this;
+        getLocation = new GetLocation(getActivity(), latLonCallback);
+
+        getLocation.onStart();
         config = new Config();
         db = new DatabaseHandler(getActivity().getApplicationContext());
         postObj = new PostObj();
@@ -303,9 +307,15 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         }
         //postData = (List<PostObj>) postObj;
         if (tag.equals("load")){
-            discoverAdapter = new DiscoverAdapter(getActivity(), postData, postLikeCallback);
+            if(getActivity() != null){
+                discoverAdapter = new DiscoverAdapter(getActivity(), postData, postLikeCallback);
+                recyclerView.setAdapter(discoverAdapter);
+            }else {
+                Log.d("DiscoverAdapter call", "getActivity null");
+            }
+
             // recyclerView.invalidate();
-            recyclerView.setAdapter(discoverAdapter);
+
             callScrollClass();
             Log.d("Response LoadData", "Load");
         }else if (tag.equals("refresh")){

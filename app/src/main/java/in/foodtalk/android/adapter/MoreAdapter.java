@@ -16,6 +16,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.communicator.MoreBtnCallback;
 import in.foodtalk.android.object.FavoritesObj;
 import in.foodtalk.android.object.UserProfileObj;
 
@@ -31,6 +32,8 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     String userName, fullName, userImage;
 
+    MoreBtnCallback moreBtnCallback;
+
 
     public MoreAdapter(Context context, UserProfileObj userProfile, List<FavoritesObj> favorites ){
         layoutInflater = LayoutInflater.from(context);
@@ -41,6 +44,8 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         userName = userProfile.userName;
         userImage = userProfile.userImage;
         fullName = userProfile.fullName;
+
+        moreBtnCallback = (MoreBtnCallback) context;
     }
 
     @Override
@@ -107,9 +112,11 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     switch (event.getAction()){
                         case MotionEvent.ACTION_DOWN:
                             Log.d("profile", "down");
+
                             break;
                         case MotionEvent.ACTION_UP:
                             Log.d("profile", "up");
+                            moreBtnCallback.btnClick("profile", getPosition());
                             break;
                     }
                 }

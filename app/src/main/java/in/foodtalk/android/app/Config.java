@@ -21,4 +21,6 @@ public class Config {
 
     public static String URL_POST_DISCOVER = "http://"+IP+"/index.php/service/post/getImageCheckInPosts";
 
+    public static String URL_USER_PROFILE = "http://"+IP+"/index.php/service/user/getProfile";
+
 }

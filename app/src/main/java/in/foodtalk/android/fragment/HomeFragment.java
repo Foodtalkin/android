@@ -85,10 +85,7 @@ public class HomeFragment extends Fragment{
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_home);
         swipeRefreshHome = (SwipeRefreshLayout) layout.findViewById(R.id.swipeRefreshHome);
         // use a linear layout manager
-        linearLayoutManager = new LinearLayoutManager(getActivity());
 
-        mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        recyclerView.setLayoutManager(linearLayoutManager);
 
         homeProgress = (ProgressBar) layout.findViewById(R.id.home_progress);
 
@@ -115,6 +112,10 @@ public class HomeFragment extends Fragment{
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         //recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+
+        mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
         config = new Config();
         db = new DatabaseHandler(getActivity().getApplicationContext());
         postObj = new PostObj();
@@ -291,9 +292,17 @@ public class HomeFragment extends Fragment{
         }
         //postData = (List<PostObj>) postObj;
         if (tag.equals("load")){
-            homeFeedAdapter = new HomeFeedAdapter(getActivity(), postData, postLikeCallback);
+
+            if(getActivity() != null){
+                homeFeedAdapter = new HomeFeedAdapter(getActivity(), postData, postLikeCallback);
+                recyclerView.setAdapter(homeFeedAdapter);
+            }
+            else {
+                Log.d("homefeedadapter call", "getActivity null");
+            }
+
             // recyclerView.invalidate();
-            recyclerView.setAdapter(homeFeedAdapter);
+
             callScrollClass();
 
             Log.d("Response LoadData", "Load");

@@ -32,14 +32,15 @@
                     android:text="MANDY"
                     android:textAllCaps="true"
                     android:textColor="#fff"
-                    android:textSize="@dimen/txt_size_more"/>
+                    android:textSize="@dimen/txt_size_more"
+                    android:clickable="false"/>
                 <TextView
                     android:id="@+id/txt_username_full_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
                     android:capitalize = "words"
-
+                    android:clickable="false"
                     android:textSize="10sp"
                     android:textColor="@color/icon_txt"
                     />

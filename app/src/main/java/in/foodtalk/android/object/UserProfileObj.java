@@ -7,4 +7,7 @@ public class UserProfileObj {
     public String userName;
     public String fullName;
     public String userImage;
+    public String checkins;
+    public String followers;
+    public String following;
 }
