@@ -336,7 +336,7 @@ public class HomeFragment extends Fragment{
     }
     Boolean loading = false;
     private void callScrollClass(){
-        recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
+        recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager, null) {
             @Override
             public void onLoadMore(int current_page) {
                 Log.d("scroll listener", "current_page: "+ current_page);

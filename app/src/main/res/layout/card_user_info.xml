@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
     android:background="@color/bg_color">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:layout_marginTop="14dp">
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        >
         <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/user_img_profile"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:src="@drawable/fb_user_thumb"
-            android:id="@+id/userThumb_more"
-            android:scaleX=".9"
-            android:scaleY=".9"
             />
         <TextView
+            android:id="@+id/full_name_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Mandeep Singh"
@@ -28,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             >
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -38,6 +39,7 @@
                 android:padding="8dp"
                 android:layout_weight="1">
                 <TextView
+                    android:id="@+id/txt_checkins_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="25"
@@ -58,6 +60,7 @@
                 android:padding="8dp"
                 android:layout_weight="1">
                 <TextView
+                    android:id="@+id/txt_followers_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="265"
@@ -78,6 +81,7 @@
                 android:padding="8dp"
                 android:layout_weight="1">
                 <TextView
+                    android:id="@+id/txt_following_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1026"

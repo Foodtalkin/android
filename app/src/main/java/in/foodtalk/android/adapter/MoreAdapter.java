@@ -17,6 +17,7 @@ import java.util.List;
 
 import in.foodtalk.android.R;
 import in.foodtalk.android.communicator.MoreBtnCallback;
+import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.object.FavoritesObj;
 import in.foodtalk.android.object.UserProfileObj;
 
@@ -33,6 +34,7 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     String userName, fullName, userImage;
 
     MoreBtnCallback moreBtnCallback;
+    StringCase stringCase;
 
 
     public MoreAdapter(Context context, UserProfileObj userProfile, List<FavoritesObj> favorites ){
@@ -42,10 +44,12 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.userProfile = userProfile;
 
         userName = userProfile.userName;
-        userImage = userProfile.userImage;
+        userImage = userProfile.image;
         fullName = userProfile.fullName;
 
         moreBtnCallback = (MoreBtnCallback) context;
+
+        stringCase = new StringCase();
     }
 
     @Override
@@ -60,13 +64,11 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ProfileHolder profileHolder = (ProfileHolder) holder;
         profileHolder.txtUserName.setText(userName);
-        String upperString = fullName.substring(0,1).toUpperCase() + fullName.substring(1);
+       // String upperString = fullName.substring(0,1).toUpperCase() + fullName.substring(1);
 
-        Log.d("position of space name", fullName.indexOf(" ")+"");
-        profileHolder.txtUserNameFull.setText(upperString);
-
+       // Log.d("position of space name", fullName.indexOf(" ")+"");
+        profileHolder.txtUserNameFull.setText(stringCase.caseSensitive(fullName));
         Log.d("userImage",userImage);
-
         Picasso.with(context)
                 .load(userImage)
                 .placeholder(R.drawable.more_legal)
@@ -112,7 +114,6 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     switch (event.getAction()){
                         case MotionEvent.ACTION_DOWN:
                             Log.d("profile", "down");
-
                             break;
                         case MotionEvent.ACTION_UP:
                             Log.d("profile", "up");

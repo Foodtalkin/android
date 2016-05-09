@@ -60,7 +60,7 @@ public class MoreFragment extends Fragment {
 
         userProfile.fullName = fullName;
         userProfile.userName = userName;
-        userProfile.userImage = "https://graph.facebook.com/"+fId+"/picture?type=large";
+        userProfile.image = "https://graph.facebook.com/"+fId+"/picture?type=large";
 
         moreAdapter = new MoreAdapter(getActivity(), userProfile, favorites);
         recyclerView.setAdapter(moreAdapter);

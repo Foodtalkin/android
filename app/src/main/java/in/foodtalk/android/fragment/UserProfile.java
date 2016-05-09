@@ -1,8 +1,10 @@
 package in.foodtalk.android.fragment;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,10 +28,13 @@ import java.util.List;
 import java.util.Map;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.adapter.UserProfileAdapter;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.module.DatabaseHandler;
+import in.foodtalk.android.module.EndlessRecyclerOnScrollListener;
 import in.foodtalk.android.object.UserPostObj;
+import in.foodtalk.android.object.UserProfileObj;
 
 /**
  * Created by RetailAdmin on 06-05-2016.
@@ -41,10 +46,19 @@ public class UserProfile extends Fragment {
     RecyclerView recyclerView;
     Config config;
     DatabaseHandler db;
+    UserProfileAdapter userProfileAdapter;
 
     UserPostObj userPost;
+    UserProfileObj userProfile;
+
+    Context context;
 
     List<UserPostObj> postList = new ArrayList<>();
+
+    Boolean loading = false;
+
+    StaggeredGridLayoutManager staggeredGridLayoutManager;
+    private int pageNo = 1;
 
 
     @Override
@@ -58,11 +72,20 @@ public class UserProfile extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         config = new Config();
+        userPost = new UserPostObj();
+        userProfile = new UserProfileObj();
+
+        staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(staggeredGridLayoutManager);
+
+        if (getActivity() != null){
+            context = getActivity();
+        }
 
         db = new DatabaseHandler(getActivity());
 
         try {
-            getUserProfile("own");
+            getUserProfile("myProfile");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -73,8 +96,16 @@ public class UserProfile extends Fragment {
     public void onDestroy() {
         super.onDestroy();
     }
-
     public void getUserProfile(final String tag) throws JSONException {
+
+        String url = "";
+
+        if (tag.equals("myProfile")){
+            url = config.URL_USER_PROFILE;
+
+        }else if (tag.equals("myProfilePost")){
+            url = config.URL_USER_POST_IMAGE;
+        }
 
         Log.d("getUserProfile", "call");
 
@@ -84,12 +115,12 @@ public class UserProfile extends Fragment {
         obj.put("selectedUserId", "2");
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                config.URL_USER_PROFILE,
+                url,
                 obj,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        //Log.d("Responsne", response+"");
+                        Log.d("Responsne", response+"");
                         try {
                             loadDataIntoView(response, tag);
                         } catch (JSONException e) {
@@ -102,7 +133,6 @@ public class UserProfile extends Fragment {
                 VolleyLog.d("Response","Error: "+ error.getMessage());
             }
         }){
-
             //--Passing some request headers--
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -112,19 +142,70 @@ public class UserProfile extends Fragment {
             }
         };
         final int DEFAULT_TIMEOUT = 6000;
-        // Adding request to request queue
+        //Adding request to request queue
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         AppController.getInstance().addToRequestQueue(jsonObjectRequest,"getUserProfile");
     }
 
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
+
+        if (tag.equals("myProfile")){
+            JSONObject profile = response.getJSONObject("profile");
+            userProfile.userName = profile.getString("userName");
+            userProfile.fullName = profile.getString("fullName");
+            userProfile.checkInCount = profile.getString("checkInCount");
+            userProfile.followersCount = profile.getString("followersCount");
+            userProfile.followingCount = profile.getString("followingCount");
+            userProfile.iFollowedIt = profile.getString("iFollowedIt");
+            userProfile.image = profile.getString("image");
+            UserPostObj userPostObj = new UserPostObj();
+            userPostObj.viewType = "profileInfo";
+            postList.add(userPostObj);
+        }
         JSONArray postArray = response.getJSONArray("imagePosts");
         //Log.d("Image post", postArray.getJSONObject(0).getString("postImage")+"");
+
         for(int i=0; postArray.length() > i; i++){
             UserPostObj current = new UserPostObj();
+            current.viewType = "postImg";
             current.postImage = postArray.getJSONObject(i).getString("postImage");
-            Log.d("postImage", current.postImage);
+            //Log.d("postImage", current.postImage);
             postList.add(current);
         }
+
+        if (tag.equals("myProfilePost")){
+            userProfileAdapter.notifyDataSetChanged();
+        }else {
+            userProfileAdapter = new UserProfileAdapter(context, postList , userProfile);
+            recyclerView.setAdapter(userProfileAdapter);
+        }
+
+        callScrollClass();
+
+    }
+    private void callScrollClass(){
+        recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(null, staggeredGridLayoutManager) {
+            @Override
+            public void onLoadMore(int current_page) {
+                Log.d("scroll listener", "current_page: "+ current_page);
+                if(!loading){
+                    pageNo++;
+                    //postList.add(null);
+                    //recyclerView.addD
+                    //--homeFeedAdapter.notifyItemInserted(postData.size()-1);
+                    loading = true;
+                    Log.d("loadMore", "call getPostFeed('loadMore')");
+                    try {
+                        getUserProfile("myProfilePost");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            @Override
+            public void onScrolled1(int dx, int dy, int firstVisibleItem, int lastVisibleItem) {
+
+            }
+        });
     }
 }

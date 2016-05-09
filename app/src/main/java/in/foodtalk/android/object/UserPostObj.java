@@ -4,6 +4,7 @@ package in.foodtalk.android.object;
  * Created by RetailAdmin on 06-05-2016.
  */
 public class UserPostObj {
+    public String viewType;
     public String id;
     public String userId;
     public String checkinId;

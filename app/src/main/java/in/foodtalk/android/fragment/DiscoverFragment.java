@@ -152,6 +152,7 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
 
 
 
+
         latLonCallback = this;
         getLocation = new GetLocation(getActivity(), latLonCallback);
 
@@ -313,7 +314,6 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
             }else {
                 Log.d("DiscoverAdapter call", "getActivity null");
             }
-
             // recyclerView.invalidate();
 
             callScrollClass();
@@ -346,7 +346,7 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
     }
     Boolean loading = false;
     private void callScrollClass(){
-        recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
+        recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager, null) {
             @Override
             public void onLoadMore(int current_page) {
                 Log.d("scroll listener", "current_page: "+ current_page);
@@ -367,8 +367,6 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
 
             @Override
             public void onScrolled1(int dx, int dy, int firstVisibleItem, int lastVisibleItem) {
-
-
                 dx1 = dx;
                 firstVItem = firstVisibleItem;
                 lastVItem = lastVisibleItem;
