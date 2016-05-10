@@ -50,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#fff"
-                    android:text="User Profile"
+                    android:text=""
                     android:textSize="18sp"
                     android:layout_centerHorizontal="true" />
                 <TextView

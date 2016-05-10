@@ -48,7 +48,7 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
                     previousTotal = totalItemCount;
                 }
             }
-            Log.d("scrolled", "totalItemCount:"+totalItemCount+" visibleItemCount:"+ visibleItemCount+" firstVisibleItem:"+ firstVisibleItem+" visibleThreshold:"+visibleThreshold);
+            //Log.d("scrolled", "totalItemCount:"+totalItemCount+" visibleItemCount:"+ visibleItemCount+" firstVisibleItem:"+ firstVisibleItem+" visibleThreshold:"+visibleThreshold);
             if (!loading && (totalItemCount - visibleItemCount)
                     <= (firstVisibleItem + visibleThreshold)) {
                 // End has been reached
@@ -81,7 +81,7 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
                 current_page++;
                 onLoadMore(current_page);
                 loading = true;
-                Log.d("scroll last","call");
+                //Log.d("scroll last","call");
             }
             //Log.d("scrolled", "totalItemCount:"+totalItemCount+" visibleItemCount:"+ visibleItemCount+" firstVisibleItem:"+ firstVisibleItem+" visibleThreshold:"+visibleThreshold);
         }

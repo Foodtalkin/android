@@ -129,8 +129,8 @@ public class UserProfile extends Fragment {
 
         JSONObject obj = new JSONObject();
         obj.put("sessionId",db.getUserDetails().get("sessionId"));
-        //obj.put("selectedUserId", db.getUserDetails().get("userId"));
-        obj.put("selectedUserId", "2");
+        obj.put("selectedUserId", db.getUserDetails().get("userId"));
+        //obj.put("selectedUserId", "2");
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
                 url,
@@ -168,7 +168,6 @@ public class UserProfile extends Fragment {
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
 
         if (tag.equals("myProfile")){
-
             JSONObject profile = response.getJSONObject("profile");
             userProfile.userName = profile.getString("userName");
             userProfile.fullName = profile.getString("fullName");
@@ -192,9 +191,9 @@ public class UserProfile extends Fragment {
         if (postArray.length() == 0){
             loadMoreData = false;
 
-            /*UserPostObj userPostObj = new UserPostObj();
+            UserPostObj userPostObj = new UserPostObj();
             userPostObj.viewType = "errorCopy";
-            postList.add(userPostObj);*/
+            postList.add(userPostObj);
 
             Log.d("postArray length", "0");
         }else if (postArray.length() < 15){

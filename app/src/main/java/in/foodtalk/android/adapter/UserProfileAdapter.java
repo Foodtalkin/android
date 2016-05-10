@@ -38,6 +38,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private final int VIEW_PROFILE = 0;
     private final int VIEW_POST = 1;
     private final int VIEW_PROGRESS = 2;
+    private final int VIEW_ERROR = 3;
 
     private StringCase stringCase;
     public UserProfileAdapter (Context context, List<UserPostObj> postList, UserProfileObj userProfile){
@@ -64,6 +65,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         ProfileHolder profileHolder;
         PostHolderProfile postHolder;
         ProgressViewHolder progressViewHolder;
+        ErrorCopyHolder errorCopyHolder;
         if (viewType == VIEW_PROFILE){
             View view = layoutInflater.inflate(R.layout.card_user_info, parent, false);
             profileHolder = new ProfileHolder(view);
@@ -76,6 +78,10 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             View view = layoutInflater.inflate(R.layout.progress_load_more, parent,false);
             progressViewHolder = new ProgressViewHolder(view);
             return progressViewHolder;
+        }else if(viewType == VIEW_ERROR){
+            View view = layoutInflater.inflate(R.layout.error_copy, parent,false);
+            errorCopyHolder = new ErrorCopyHolder(view);
+            return errorCopyHolder;
         }else {
             return null;
         }
@@ -127,6 +133,18 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 sglp.setFullSpan(true);
                 holder.itemView.setLayoutParams(sglp);
             }
+        }else if (holder instanceof ErrorCopyHolder){
+            ErrorCopyHolder errorCopyHolder = (ErrorCopyHolder) holder;
+            errorCopyHolder.txtErrorCopy.setText(R.string.user_profile_copy);
+            spanItem(holder);
+        }
+    }
+    public void spanItem(RecyclerView.ViewHolder holder){
+        final ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
+        if (lp instanceof StaggeredGridLayoutManager.LayoutParams) {
+            StaggeredGridLayoutManager.LayoutParams sglp = (StaggeredGridLayoutManager.LayoutParams) lp;
+            sglp.setFullSpan(true);
+            holder.itemView.setLayoutParams(sglp);
         }
     }
     @Override
@@ -141,6 +159,8 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 viewType = VIEW_PROFILE;
             }else if(postList.get(position).viewType.equals("postImg")){
                 viewType = VIEW_POST;
+            }else if(postList.get(position).viewType.equals("errorCopy")){
+                viewType = VIEW_ERROR;
             }
         } else  {
             viewType = VIEW_PROGRESS;
@@ -174,6 +194,13 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         public ProgressViewHolder(View itemView) {
             super(itemView);
             progressBar = (ProgressBar) itemView.findViewById(R.id.loadmore_progress);
+        }
+    }
+    class ErrorCopyHolder extends RecyclerView.ViewHolder{
+        public TextView txtErrorCopy;
+        public ErrorCopyHolder(View itemView) {
+            super(itemView);
+            txtErrorCopy = (TextView) itemView.findViewById(R.id.txt_error_copy);
         }
     }
 }
