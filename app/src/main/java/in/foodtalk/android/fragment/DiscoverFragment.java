@@ -364,7 +364,6 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
                     }
                 }
             }
-
             @Override
             public void onScrolled1(int dx, int dy, int firstVisibleItem, int lastVisibleItem) {
                 dx1 = dx;

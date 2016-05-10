@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -36,6 +37,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private final int VIEW_PROFILE = 0;
     private final int VIEW_POST = 1;
+    private final int VIEW_PROGRESS = 2;
 
     private StringCase stringCase;
     public UserProfileAdapter (Context context, List<UserPostObj> postList, UserProfileObj userProfile){
@@ -61,6 +63,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ProfileHolder profileHolder;
         PostHolderProfile postHolder;
+        ProgressViewHolder progressViewHolder;
         if (viewType == VIEW_PROFILE){
             View view = layoutInflater.inflate(R.layout.card_user_info, parent, false);
             profileHolder = new ProfileHolder(view);
@@ -69,6 +72,10 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             View view = layoutInflater.inflate(R.layout.card_user_post_holder, parent,false);
             postHolder = new PostHolderProfile(view);
             return postHolder;
+        }else if(viewType == VIEW_PROGRESS){
+            View view = layoutInflater.inflate(R.layout.progress_load_more, parent,false);
+            progressViewHolder = new ProgressViewHolder(view);
+            return progressViewHolder;
         }else {
             return null;
         }
@@ -105,29 +112,38 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             postHolderProfile.postImg.getLayoutParams().width = width/3-200;
             postHolderProfile.postImg.getLayoutParams().height = width/3-200;
-
             Picasso.with(context)
                     .load(current.postImage)
                     //.fit().centerCrop()
                     .fit()
                     .placeholder(R.drawable.placeholder)
                     .into(postHolderProfile.postImg);
+        } else if(holder instanceof ProgressViewHolder){
+            ProgressViewHolder progressViewHolder = (ProgressViewHolder) holder;
+            progressViewHolder.progressBar.setIndeterminate(true);
+            final ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
+            if (lp instanceof StaggeredGridLayoutManager.LayoutParams) {
+                StaggeredGridLayoutManager.LayoutParams sglp = (StaggeredGridLayoutManager.LayoutParams) lp;
+                sglp.setFullSpan(true);
+                holder.itemView.setLayoutParams(sglp);
+            }
         }
     }
     @Override
     public int getItemCount() {
         return postList.size();
     }
-
     @Override
     public int getItemViewType(int position) {
-        int viewType;
-        if(postList.get(position).viewType.equals("profileInfo")){
-            viewType = VIEW_PROFILE;
-        }else if(postList.get(position).viewType.equals("postImg")){
-            viewType = VIEW_POST;
-        } else {
-            viewType = 1;
+        int viewType = 1;
+        if(postList.get(position)!= null){
+            if(postList.get(position).viewType.equals("profileInfo")){
+                viewType = VIEW_PROFILE;
+            }else if(postList.get(position).viewType.equals("postImg")){
+                viewType = VIEW_POST;
+            }
+        } else  {
+            viewType = VIEW_PROGRESS;
         }
         return viewType;
     }
@@ -151,6 +167,13 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         public PostHolderProfile(View itemView) {
             super(itemView);
             postImg = (ImageView) itemView.findViewById(R.id.img_user_post);
+        }
+    }
+    class ProgressViewHolder extends RecyclerView.ViewHolder {
+        public ProgressBar progressBar;
+        public ProgressViewHolder(View itemView) {
+            super(itemView);
+            progressBar = (ProgressBar) itemView.findViewById(R.id.loadmore_progress);
         }
     }
 }

@@ -3,6 +3,7 @@ package in.foodtalk.android.fragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -56,6 +57,7 @@ public class UserProfile extends Fragment {
     List<UserPostObj> postList = new ArrayList<>();
 
     Boolean loading = false;
+    Boolean loadMoreData = true;
 
     StaggeredGridLayoutManager staggeredGridLayoutManager;
     private int pageNo = 1;
@@ -66,6 +68,13 @@ public class UserProfile extends Fragment {
 
         layout = inflater.inflate(R.layout.user_profile_fragment, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.user_profile_recycler_view);
+        if (postList.size() > 0){
+            postList.clear();
+
+            Log.d("loadData: ","clear post data");
+        }
+        pageNo = 1;
+        loading = false;
         return layout;
     }
 
@@ -165,6 +174,16 @@ public class UserProfile extends Fragment {
         JSONArray postArray = response.getJSONArray("imagePosts");
         //Log.d("Image post", postArray.getJSONObject(0).getString("postImage")+"");
 
+        //----if array length 0 or less then 15 then ignore loadmore next time------------
+        if (postArray.length() == 0){
+            loadMoreData = false;
+            Log.d("postArray length", "0");
+        }else if (postArray.length() < 15){
+            Log.d("postArray length", postArray.length()+"");
+            loadMoreData = false;
+        }
+        //--------------------------------------------------------------------------------
+
         for(int i=0; postArray.length() > i; i++){
             UserPostObj current = new UserPostObj();
             current.viewType = "postImg";
@@ -174,7 +193,9 @@ public class UserProfile extends Fragment {
         }
 
         if (tag.equals("myProfilePost")){
-            userProfileAdapter.notifyDataSetChanged();
+            remove(null);
+            loading = false;
+            //userProfileAdapter.notifyDataSetChanged();
         }else {
             userProfileAdapter = new UserProfileAdapter(context, postList , userProfile);
             recyclerView.setAdapter(userProfileAdapter);
@@ -183,15 +204,27 @@ public class UserProfile extends Fragment {
         callScrollClass();
 
     }
+
+    //-----remove function is used to remove progress bar using indexOf position of null objevt--------
+    public void remove(ContactsContract.Contacts.Data data) {
+        int position = postList.indexOf(data);
+        Log.d("position for remove", position+"");
+        postList.remove(position);
+        userProfileAdapter.notifyItemRemoved(position);
+    }
+    //------------------------------------------------------------------------------------------------
     private void callScrollClass(){
         recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(null, staggeredGridLayoutManager) {
             @Override
             public void onLoadMore(int current_page) {
                 Log.d("scroll listener", "current_page: "+ current_page);
-                if(!loading){
+                if(!loading && loadMoreData == true){
                     pageNo++;
-                    //postList.add(null);
+                   // UserPostObj userPostObj = new UserPostObj();
+                    //userPostObj.viewType = "progress";
+                    postList.add(null);
                     //recyclerView.addD
+                    userProfileAdapter.notifyItemInserted(postList.size()-1);
                     //--homeFeedAdapter.notifyItemInserted(postData.size()-1);
                     loading = true;
                     Log.d("loadMore", "call getPostFeed('loadMore')");
