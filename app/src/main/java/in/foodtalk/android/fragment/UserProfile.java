@@ -32,6 +32,7 @@ import in.foodtalk.android.R;
 import in.foodtalk.android.adapter.UserProfileAdapter;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.UserProfileCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.EndlessRecyclerOnScrollListener;
 import in.foodtalk.android.object.UserPostObj;
@@ -62,6 +63,10 @@ public class UserProfile extends Fragment {
     StaggeredGridLayoutManager staggeredGridLayoutManager;
     private int pageNo = 1;
 
+    UserProfileCallback userProfileCallback;
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -84,12 +89,16 @@ public class UserProfile extends Fragment {
         userPost = new UserPostObj();
         userProfile = new UserProfileObj();
 
+
+
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
 
         if (getActivity() != null){
             context = getActivity();
         }
+
+        userProfileCallback = (UserProfileCallback) context;
 
         db = new DatabaseHandler(getActivity());
 
@@ -159,6 +168,7 @@ public class UserProfile extends Fragment {
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
 
         if (tag.equals("myProfile")){
+
             JSONObject profile = response.getJSONObject("profile");
             userProfile.userName = profile.getString("userName");
             userProfile.fullName = profile.getString("fullName");
@@ -167,9 +177,13 @@ public class UserProfile extends Fragment {
             userProfile.followingCount = profile.getString("followingCount");
             userProfile.iFollowedIt = profile.getString("iFollowedIt");
             userProfile.image = profile.getString("image");
+            userProfile.totalPoints = profile.getString("totalPoints");
+            userProfile.score = profile.getString("score");
             UserPostObj userPostObj = new UserPostObj();
             userPostObj.viewType = "profileInfo";
             postList.add(userPostObj);
+
+            userProfileCallback.getUserInfo(userProfile.score, userProfile.userName);
         }
         JSONArray postArray = response.getJSONArray("imagePosts");
         //Log.d("Image post", postArray.getJSONObject(0).getString("postImage")+"");
@@ -177,6 +191,11 @@ public class UserProfile extends Fragment {
         //----if array length 0 or less then 15 then ignore loadmore next time------------
         if (postArray.length() == 0){
             loadMoreData = false;
+
+            /*UserPostObj userPostObj = new UserPostObj();
+            userPostObj.viewType = "errorCopy";
+            postList.add(userPostObj);*/
+
             Log.d("postArray length", "0");
         }else if (postArray.length() < 15){
             Log.d("postArray length", postArray.length()+"");
@@ -200,9 +219,7 @@ public class UserProfile extends Fragment {
             userProfileAdapter = new UserProfileAdapter(context, postList , userProfile);
             recyclerView.setAdapter(userProfileAdapter);
         }
-
         callScrollClass();
-
     }
 
     //-----remove function is used to remove progress bar using indexOf position of null objevt--------

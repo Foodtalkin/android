@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -24,6 +25,7 @@ import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostDeleteCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.communicator.PostOptionCallback;
+import in.foodtalk.android.communicator.UserProfileCallback;
 import in.foodtalk.android.fragment.DiscoverFragment;
 import in.foodtalk.android.fragment.HomeFragment;
 import in.foodtalk.android.fragment.MoreFragment;
@@ -35,7 +37,7 @@ import in.foodtalk.android.module.Login;
 
 public class Home extends AppCompatActivity implements View.OnClickListener ,
         PostLikeCallback , PostBookmarkCallback, PostOptionCallback, PostDeleteCallback,
-        MoreBtnCallback{
+        MoreBtnCallback, UserProfileCallback{
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
@@ -46,7 +48,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
     private TextView[] txtIcons;
     private int[] imgR;
     private int[] imgRA;
-
     private LinearLayout btnLogout;
 
 
@@ -77,8 +78,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
     String currentPostId;
 
     TextView titleHome;
+    TextView subTitleHome;
+    TextView titleHome1;
 
-
+    RelativeLayout header;
+    RelativeLayout header1;
     int pageNo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +97,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
 
 
         setContentView(R.layout.activity_home);
+
+        header = (RelativeLayout) findViewById(R.id.header);
+        header1 = (RelativeLayout) findViewById(R.id.header1);
+
+
+        subTitleHome = (TextView) findViewById(R.id.subtitle);
+        titleHome1 = (TextView) findViewById(R.id.title_home1);
 
         btnLogout = (LinearLayout) findViewById(R.id.btn_logout);
         btnLogout.setOnClickListener(this);
@@ -205,8 +216,24 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
     private void setFragmentView(Fragment newFragment, int pageN, boolean bStack){
         String backStateName = newFragment.getClass().getName();
 
-        Log.d("backStatename", backStateName);
+        if(newFragment == userProfile){
+            header.setVisibility(View.GONE);
+            header1.setVisibility(View.VISIBLE);
+        }else {
+            header.setVisibility(View.VISIBLE);
+            header1.setVisibility(View.GONE);
+        }
+        //-------set Header-------
+        /*if (backStateName.equals("userProfile")){
+            header.setVisibility(View.GONE);
+            header1.setVisibility(View.VISIBLE);
+        }else {
+            header1.setVisibility(View.VISIBLE);
+            header.setVisibility(View.GONE);
+        }*/
+        //---------------------------
 
+        Log.d("backStatename", backStateName);
         icons[pageNo].setImageResource(imgR[pageNo]);
         icons[pageN].setImageResource(imgRA[pageN]);
         txtIcons[pageN].setTextColor(getResources().getColor(R.color.icon_txt_active));
@@ -229,7 +256,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() > 0 ){
             getFragmentManager().popBackStack();
-            //Log.d("backstack", ""+"");
+            Fragment f = this.getFragmentManager().findFragmentById(R.id.container);
+            String fName = f.getClass().getSimpleName();
+            if(fName.equals("UserProfile")){
+                header.setVisibility(View.VISIBLE);
+                header1.setVisibility(View.GONE);
+            }
+            Log.d("backstack", f.getClass().getSimpleName());
         } else {
             super.onBackPressed();
         }
@@ -362,7 +395,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
             }
         });
     }
-
     @Override
     public void postDelete() {
         Log.d("postDelete","update recyclerview");
@@ -372,12 +404,18 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
             e.printStackTrace();
         }
     }
-
     @Override
     public void btnClick(String type, int position) {
         Log.d("more btn clicked", type+" position: "+ position);
         if(type.equals("profile")){
             setFragmentView(userProfile, 4, true);
         }
+    }
+    @Override
+    public void getUserInfo(String points, String userName) {
+        //subTitleHome.setText(points);
+        subTitleHome.setText(points+" Points");
+        titleHome1.setText(userName);
+        //Log.d("points", points);
     }
 }

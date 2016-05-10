@@ -6,44 +6,69 @@
     tools:context="in.foodtalk.android.Home"
     android:background="@color/bg_color">
     <LinearLayout
+        android:id="@+id/btn_logout"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <LinearLayout
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:background="#10151f">
+            android:layout_height="55dp"
+            android:background="#10151f"
+
+            >
             <RelativeLayout
+                android:id="@+id/header"
+
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <LinearLayout
-                    android:id="@+id/btn_logout"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:orientation="horizontal">
-
-                </LinearLayout>
-
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
                 <TextView
                     android:id="@+id/title_home"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#fff"
                     android:text="Home"
-                    android:textSize="25sp"
+                    android:textSize="22sp"
                     android:layout_centerInParent="true"/>
-
             </RelativeLayout>
+            <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/header1"
+                android:layout_centerInParent="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
 
-        </LinearLayout>
+                >
+                <TextView
+                    android:id="@+id/title_home1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#fff"
+                    android:text="User Profile"
+                    android:textSize="18sp"
+                    android:layout_centerHorizontal="true" />
+                <TextView
+                    android:id="@+id/subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/title_home1"
+                    android:textColor="@color/subtitle_color"/>
+            </RelativeLayout>
+        </RelativeLayout>
         <LinearLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
-
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -76,7 +101,6 @@
                     android:layout_marginTop="@dimen/txt_icon_margin"
                     android:layout_gravity="center_horizontal"/>
             </LinearLayout>
-
             <LinearLayout
                 android:id="@+id/btn_discover"
                 android:layout_width="wrap_content"
