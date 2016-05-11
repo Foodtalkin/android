@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 
+import java.util.List;
+
 import in.foodtalk.android.apicall.PostBookmarkApi;
 import in.foodtalk.android.apicall.PostLikeApi;
 import in.foodtalk.android.apicall.PostReportApi;
@@ -25,19 +27,22 @@ import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostDeleteCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.communicator.PostOptionCallback;
+import in.foodtalk.android.communicator.ProfilePostOpenCallback;
 import in.foodtalk.android.communicator.UserProfileCallback;
 import in.foodtalk.android.fragment.DiscoverFragment;
 import in.foodtalk.android.fragment.HomeFragment;
 import in.foodtalk.android.fragment.MoreFragment;
 import in.foodtalk.android.fragment.NewpostFragment;
 import in.foodtalk.android.fragment.NotiFragment;
+import in.foodtalk.android.fragment.OpenPostFragment;
 import in.foodtalk.android.fragment.UserProfile;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.Login;
+import in.foodtalk.android.object.UserPostObj;
 
 public class Home extends AppCompatActivity implements View.OnClickListener ,
         PostLikeCallback , PostBookmarkCallback, PostOptionCallback, PostDeleteCallback,
-        MoreBtnCallback, UserProfileCallback{
+        MoreBtnCallback, UserProfileCallback, ProfilePostOpenCallback{
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
@@ -56,6 +61,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
     NewpostFragment newpostFragment;
     NotiFragment notiFragment;
     MoreFragment moreFragment;
+    OpenPostFragment openPostFragment;
 
     UserProfile userProfile;
 
@@ -158,6 +164,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
         moreFragment = new MoreFragment();
         userProfile = new UserProfile();
 
+
         // Add the fragment to the 'fragment_container' FrameLayout
         getFragmentManager().beginTransaction()
                 .add(R.id.container, homeFragment).commit();
@@ -169,7 +176,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
             case R.id.btn_home:
                 Log.d("onClick","btn home");
                 if(pageNo != 0){
-                    setFragmentView(homeFragment , 0, false);
+                    setFragmentView(homeFragment, R.id.container , 0, false);
                     titleHome.setText("Home");
                     pageNo = 0;
                 }
@@ -177,14 +184,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
             case R.id.btn_discover:
                 Log.d("onClick", "btn discover");
                 if (pageNo != 1){
-                    setFragmentView (discoverFragment , 1, false);
+                    setFragmentView (discoverFragment, R.id.container , 1, false);
                     titleHome.setText("Discover");
                     pageNo = 1;
                 }
                 break;
             case R.id.btn_newpost:
                 if(pageNo != 2){
-                    setFragmentView (newpostFragment, 2, false);
+                    setFragmentView (newpostFragment, R.id.container, 2, false);
                     titleHome.setText("New Post");
                     pageNo = 2;
                 }
@@ -192,7 +199,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
                 break;
             case R.id.btn_notification:
                 if (pageNo != 3){
-                    setFragmentView (notiFragment, 3, false);
+                    setFragmentView (notiFragment, R.id.container, 3, false);
                     titleHome.setText("Notification");
                     pageNo = 3;
                 }
@@ -201,7 +208,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
                 break;
             case R.id.btn_more:
                 if (pageNo != 4){
-                    setFragmentView (moreFragment, 4, false);
+                    setFragmentView (moreFragment, R.id.container, 4, false);
                     titleHome.setText("More");
                     pageNo = 4;
                 }
@@ -213,10 +220,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
                 break;
         }
     }
-    private void setFragmentView(Fragment newFragment, int pageN, boolean bStack){
+    private void setFragmentView(Fragment newFragment, int container, int pageN, boolean bStack){
         String backStateName = newFragment.getClass().getName();
 
         if(newFragment == userProfile){
+            header.setVisibility(View.GONE);
+            header1.setVisibility(View.VISIBLE);
+        }else if(newFragment == openPostFragment) {
             header.setVisibility(View.GONE);
             header1.setVisibility(View.VISIBLE);
         }else {
@@ -233,6 +243,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
         }*/
         //---------------------------
 
+
+
+
         Log.d("backStatename", backStateName);
         icons[pageNo].setImageResource(imgR[pageNo]);
         icons[pageN].setImageResource(imgRA[pageN]);
@@ -244,7 +257,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
         android.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack if needed
-        transaction.replace(R.id.container, newFragment);
+
+        transaction.replace(container, newFragment);
         if (bStack){
             transaction.addToBackStack(backStateName);
         }
@@ -408,7 +422,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
     public void btnClick(String type, int position) {
         Log.d("more btn clicked", type+" position: "+ position);
         if(type.equals("profile")){
-            setFragmentView(userProfile, 4, true);
+            setFragmentView(userProfile, R.id.container, 4, true);
         }
     }
     @Override
@@ -417,5 +431,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
         subTitleHome.setText(points+" Points");
         titleHome1.setText(userName);
         //Log.d("points", points);
+    }
+    @Override
+    public void postOpen(List<UserPostObj> postObj, String postId) {
+
+        openPostFragment = new OpenPostFragment(postObj, postId);
+        setFragmentView (openPostFragment, R.id.container1, 4, true);
+        Log.d("postOpen","userId: "+userId+" postId: "+postId);
     }
 }

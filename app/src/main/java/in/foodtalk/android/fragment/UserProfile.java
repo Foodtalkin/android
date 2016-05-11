@@ -129,9 +129,8 @@ public class UserProfile extends Fragment {
 
         JSONObject obj = new JSONObject();
         obj.put("sessionId",db.getUserDetails().get("sessionId"));
-        obj.put("selectedUserId", db.getUserDetails().get("userId"));
-        //obj.put("selectedUserId", "2");
-
+        //obj.put("selectedUserId", db.getUserDetails().get("userId"));
+        obj.put("selectedUserId", "2");
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
                 url,
                 obj,
@@ -166,7 +165,6 @@ public class UserProfile extends Fragment {
     }
 
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
-
         if (tag.equals("myProfile")){
             JSONObject profile = response.getJSONObject("profile");
             userProfile.userName = profile.getString("userName");
@@ -178,10 +176,10 @@ public class UserProfile extends Fragment {
             userProfile.image = profile.getString("image");
             userProfile.totalPoints = profile.getString("totalPoints");
             userProfile.score = profile.getString("score");
+
             UserPostObj userPostObj = new UserPostObj();
             userPostObj.viewType = "profileInfo";
             postList.add(userPostObj);
-
             userProfileCallback.getUserInfo(userProfile.score, userProfile.userName);
         }
         JSONArray postArray = response.getJSONArray("imagePosts");
@@ -206,6 +204,36 @@ public class UserProfile extends Fragment {
             UserPostObj current = new UserPostObj();
             current.viewType = "postImg";
             current.postImage = postArray.getJSONObject(i).getString("postImage");
+            current.userId = postArray.getJSONObject(i).getString("userId");
+            current.id = postArray.getJSONObject(i).getString("id");
+            current.checkinId = postArray.getJSONObject(i).getString("checkinId");
+            current.checkedInRestaurantId = postArray.getJSONObject(i).getString("checkedInRestaurantId");
+            current.tip = postArray.getJSONObject(i).getString("tip");
+            current.dishName = postArray.getJSONObject(i).getString("dishName");
+            current.rating = postArray.getJSONObject(i).getString("rating");
+            current.createDate = postArray.getJSONObject(i).getString("createDate");
+            current.currentDate = postArray.getJSONObject(i).getString("currentDate");
+            current.userName = postArray.getJSONObject(i).getString("userName");
+            current.email = postArray.getJSONObject(i).getString("email");
+            current.country = postArray.getJSONObject(i).getString("country");
+            current.state = postArray.getJSONObject(i).getString("state");
+            current.city = postArray.getJSONObject(i).getString("city");
+            current.address = postArray.getJSONObject(i).getString("address");
+            current.postcode = postArray.getJSONObject(i).getString("postcode");
+            current.userImage = postArray.getJSONObject(i).getString("userImage");
+            current.facebookId = postArray.getJSONObject(i).getString("facebookId");
+            current.userImage = postArray.getJSONObject(i).getString("userImage");
+            current.restaurantName = postArray.getJSONObject(i).getString("restaurantName");
+            current.restaurantIsActive = postArray.getJSONObject(i).getString("restaurantIsActive");
+            current.followersCount = postArray.getJSONObject(i).getString("followersCount");
+            current.likeCount = postArray.getJSONObject(i).getString("likeCount");
+            current.commentCount = postArray.getJSONObject(i).getString("commentCount");
+            current.flagCount = postArray.getJSONObject(i).getString("flagCount");
+            current.bookmarkCount = postArray.getJSONObject(i).getString("bookmarkCount");
+            current.iLikedIt = postArray.getJSONObject(i).getString("iLikedIt");
+            current.iFlaggedIt = postArray.getJSONObject(i).getString("iFlaggedIt");
+            current.iBookark = postArray.getJSONObject(i).getString("iBookark");
+            current.timeElapsed = postArray.getJSONObject(i).getString("timeElapsed");
             //Log.d("postImage", current.postImage);
             postList.add(current);
         }

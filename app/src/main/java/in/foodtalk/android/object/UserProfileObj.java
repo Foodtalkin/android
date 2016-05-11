@@ -20,5 +20,6 @@ public class UserProfileObj {
     public String avilablePoints;
     public String totalPoints;
     public String score;
+    public String userId;
 
 }

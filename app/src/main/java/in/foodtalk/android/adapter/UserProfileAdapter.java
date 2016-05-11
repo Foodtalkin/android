@@ -7,6 +7,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -19,6 +20,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.communicator.ProfilePostOpenCallback;
 import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.object.UserPostObj;
 import in.foodtalk.android.object.UserProfileObj;
@@ -41,12 +43,16 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private final int VIEW_ERROR = 3;
 
     private StringCase stringCase;
+
+    private ProfilePostOpenCallback postOpenCallback;
     public UserProfileAdapter (Context context, List<UserPostObj> postList, UserProfileObj userProfile){
         layoutInflater = LayoutInflater.from(context);
         this.postList = postList;
         this.context = context;
         this.userProfileObj = userProfile;
 
+
+        postOpenCallback = (ProfilePostOpenCallback) context;
         //Log.d("profile data", postList.size()+"");
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 
@@ -55,10 +61,8 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         display.getSize(size);
         width = size.x;
         width = size.y;
-
         stringCase = new StringCase();
         //Log.d("get screen size", "width: "+size.x +" height: "+size.y);
-
     }
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -100,7 +104,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     .load(userProfileObj.image)
                     //.fit().centerCrop()
                     .fit()
-                    .placeholder(R.drawable.placeholder)
+                    .placeholder(R.drawable.user_placeholder)
                     .into(profileHolder.profileImg);
             final ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
             if (lp instanceof StaggeredGridLayoutManager.LayoutParams) {
@@ -115,6 +119,8 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             //float scale = context.getResources().getDisplayMetrics().density;
             //px = dp_that_you_want * (scale / 160);
+
+            postHolderProfile.userId = current.userId;
 
             postHolderProfile.postImg.getLayoutParams().width = width/3-200;
             postHolderProfile.postImg.getLayoutParams().height = width/3-200;
@@ -182,11 +188,27 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             following = (TextView) itemView.findViewById(R.id.txt_following_profile);
         }
     }
-    class PostHolderProfile extends RecyclerView.ViewHolder {
+    class PostHolderProfile extends RecyclerView.ViewHolder implements View.OnTouchListener {
         ImageView postImg;
+        String userId;
         public PostHolderProfile(View itemView) {
             super(itemView);
             postImg = (ImageView) itemView.findViewById(R.id.img_user_post);
+            postImg.setOnTouchListener(this);
+        }
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch (v.getId()){
+                case R.id.img_user_post:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("image clicked",getPosition()+"");
+                            postOpenCallback.postOpen(postList, String.valueOf(getPosition()));
+                            break;
+                    }
+                    break;
+            }
+            return true;
         }
     }
     class ProgressViewHolder extends RecyclerView.ViewHolder {
