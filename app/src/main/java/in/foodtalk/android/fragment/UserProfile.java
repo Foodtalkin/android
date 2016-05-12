@@ -32,16 +32,18 @@ import in.foodtalk.android.R;
 import in.foodtalk.android.adapter.UserProfileAdapter;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.LatLonCallback;
 import in.foodtalk.android.communicator.UserProfileCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.EndlessRecyclerOnScrollListener;
+import in.foodtalk.android.module.GetLocation;
 import in.foodtalk.android.object.UserPostObj;
 import in.foodtalk.android.object.UserProfileObj;
 
 /**
  * Created by RetailAdmin on 06-05-2016.
  */
-public class UserProfile extends Fragment {
+public class UserProfile extends Fragment implements LatLonCallback {
 
     View layout;
 
@@ -53,7 +55,7 @@ public class UserProfile extends Fragment {
     UserPostObj userPost;
     UserProfileObj userProfile;
 
-    Context context;
+
 
     List<UserPostObj> postList = new ArrayList<>();
 
@@ -65,6 +67,13 @@ public class UserProfile extends Fragment {
 
     UserProfileCallback userProfileCallback;
 
+    GetLocation getLocation;
+
+    LatLonCallback latLonCallback;
+
+    String lat, lon;
+
+    Context context;
 
 
 
@@ -75,7 +84,7 @@ public class UserProfile extends Fragment {
         recyclerView = (RecyclerView) layout.findViewById(R.id.user_profile_recycler_view);
         if (postList.size() > 0){
             postList.clear();
-
+            loadMoreData = true;
             Log.d("loadData: ","clear post data");
         }
         pageNo = 1;
@@ -88,6 +97,13 @@ public class UserProfile extends Fragment {
         config = new Config();
         userPost = new UserPostObj();
         userProfile = new UserProfileObj();
+
+
+        //------for gps location----------------
+        latLonCallback = this;
+        //getLocation = new GetLocation(getActivity(), latLonCallback);
+
+       // getLocation.onStart();
 
 
 
@@ -112,6 +128,8 @@ public class UserProfile extends Fragment {
 
     @Override
     public void onDestroy() {
+        //------for gps location----------------
+        // getLocation.onStop();
         super.onDestroy();
     }
     public void getUserProfile(final String tag) throws JSONException {
@@ -125,12 +143,15 @@ public class UserProfile extends Fragment {
             url = config.URL_USER_POST_IMAGE;
         }
 
-        Log.d("getUserProfile", "call");
+        //Log.d("getUserProfile", "call");
 
         JSONObject obj = new JSONObject();
         obj.put("sessionId",db.getUserDetails().get("sessionId"));
         //obj.put("selectedUserId", db.getUserDetails().get("userId"));
+        obj.put("page",Integer.toString(pageNo));
         obj.put("selectedUserId", "2");
+        //obj.put("latitude",lat);
+        //obj.put("longitude",lon);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
                 url,
                 obj,
@@ -193,9 +214,9 @@ public class UserProfile extends Fragment {
             userPostObj.viewType = "errorCopy";
             postList.add(userPostObj);
 
-            Log.d("postArray length", "0");
+            //Log.d("postArray length", "0");
         }else if (postArray.length() < 15){
-            Log.d("postArray length", postArray.length()+"");
+            //Log.d("postArray length", postArray.length()+"");
             loadMoreData = false;
         }
         //--------------------------------------------------------------------------------
@@ -234,6 +255,7 @@ public class UserProfile extends Fragment {
             current.iFlaggedIt = postArray.getJSONObject(i).getString("iFlaggedIt");
             current.iBookark = postArray.getJSONObject(i).getString("iBookark");
             current.timeElapsed = postArray.getJSONObject(i).getString("timeElapsed");
+            //current.restaurantDistance = postArray.getJSONObject(i).getString("restaurantDistance");
             //Log.d("postImage", current.postImage);
             postList.add(current);
         }
@@ -252,7 +274,7 @@ public class UserProfile extends Fragment {
     //-----remove function is used to remove progress bar using indexOf position of null objevt--------
     public void remove(ContactsContract.Contacts.Data data) {
         int position = postList.indexOf(data);
-        Log.d("position for remove", position+"");
+        //Log.d("position for remove", position+"");
         postList.remove(position);
         userProfileAdapter.notifyItemRemoved(position);
     }
@@ -261,7 +283,8 @@ public class UserProfile extends Fragment {
         recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(null, staggeredGridLayoutManager) {
             @Override
             public void onLoadMore(int current_page) {
-                Log.d("scroll listener", "current_page: "+ current_page);
+                //Log.d("scroll listener", "loading: "+ loading+" loadMoreData: "+loadMoreData);
+
                 if(!loading && loadMoreData == true){
                     pageNo++;
                    // UserPostObj userPostObj = new UserPostObj();
@@ -271,7 +294,7 @@ public class UserProfile extends Fragment {
                     userProfileAdapter.notifyItemInserted(postList.size()-1);
                     //--homeFeedAdapter.notifyItemInserted(postData.size()-1);
                     loading = true;
-                    Log.d("loadMore", "call getPostFeed('loadMore')");
+                    //Log.d("loadMore", "call getPostFeed('loadMore')");
                     try {
                         getUserProfile("myProfilePost");
                     } catch (JSONException e) {
@@ -284,5 +307,21 @@ public class UserProfile extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void location(String lat, String lon) {
+        //Log.d("location", "lat: "+ lat+" lon: "+lon);
+        Log.d("GPS location","Latitude "+lat);
+        Log.d("GPS location","Longitude "+lon);
+        this.lat = lat;
+        this.lon = lon;
+        try {
+            pageNo = 1;
+            getUserProfile("myProfile");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

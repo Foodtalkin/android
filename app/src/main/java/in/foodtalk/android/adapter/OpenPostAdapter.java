@@ -89,11 +89,17 @@ public class OpenPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             postHolder.txtCountBookmark.setText(current.bookmarkCount);
 //            postHolder.txtCountComment.setText(current.commentCount);
 
+            if (current.restaurantDistance != null){
+                double distance = Double.parseDouble(current.restaurantDistance);
+                String km = new DecimalFormat("##.##").format(distance/1000);
 
-           // double distance = Double.parseDouble(current.restaurantDistance);
-           // String km = new DecimalFormat("##.##").format(distance/1000);
+                postHolder.txtKm.setText(km+" KM");
+            }else {
+                postHolder.txtKm.setText("");
+            }
 
-            //postHolder.txtKm.setText(km+" KM");
+
+
 
             //Log.d("distance m", distance+"");
             //new DecimalFormat("##.##").format(i2)

@@ -37,4 +37,5 @@ public class UserPostObj {
     public String iFlaggedIt;
     public String iBookark;
     public String timeElapsed;
+    public String restaurantDistance;
 }

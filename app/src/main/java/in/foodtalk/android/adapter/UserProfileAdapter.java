@@ -43,6 +43,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private final int VIEW_ERROR = 3;
 
     private StringCase stringCase;
+    private String userId;
 
     private ProfilePostOpenCallback postOpenCallback;
     public UserProfileAdapter (Context context, List<UserPostObj> postList, UserProfileObj userProfile){
@@ -99,7 +100,8 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             profileHolder.checkins.setText(userProfileObj.checkInCount);
             profileHolder.followers.setText(userProfileObj.followersCount);
             profileHolder.following.setText(userProfileObj.followingCount);
-            Log.d("profile img", userProfileObj.image);
+            userId = userProfileObj.userId;
+            //Log.d("profile img", userProfileObj.image);
             Picasso.with(context)
                     .load(userProfileObj.image)
                     //.fit().centerCrop()
@@ -202,8 +204,8 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 case R.id.img_user_post:
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
-                            Log.d("image clicked",getPosition()+"");
-                            postOpenCallback.postOpen(postList, String.valueOf(getPosition()));
+                            //Log.d("image clicked",getPosition()+"");
+                            postOpenCallback.postOpen(postList, String.valueOf(getPosition()), userId);
                             break;
                     }
                     break;

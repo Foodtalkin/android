@@ -71,7 +71,7 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         Log.d("userImage",userImage);
         Picasso.with(context)
                 .load(userImage)
-                .placeholder(R.drawable.more_legal)
+                .placeholder(R.drawable.user_placeholder)
                 .fit()
                 .into(profileHolder.userThumb);
     }

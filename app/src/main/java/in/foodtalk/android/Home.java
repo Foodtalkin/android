@@ -2,6 +2,7 @@ package in.foodtalk.android;
 
 import android.app.Dialog;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
 
@@ -42,7 +43,7 @@ import in.foodtalk.android.object.UserPostObj;
 
 public class Home extends AppCompatActivity implements View.OnClickListener ,
         PostLikeCallback , PostBookmarkCallback, PostOptionCallback, PostDeleteCallback,
-        MoreBtnCallback, UserProfileCallback, ProfilePostOpenCallback{
+        MoreBtnCallback, UserProfileCallback, ProfilePostOpenCallback, FragmentManager.OnBackStackChangedListener{
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
@@ -165,16 +166,26 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
         userProfile = new UserProfile();
 
 
+
+
         // Add the fragment to the 'fragment_container' FrameLayout
         getFragmentManager().beginTransaction()
                 .add(R.id.container, homeFragment).commit();
         pageNo = 0;
+
+        getFragmentManager().addOnBackStackChangedListener(this);
+
+
+
+
+
     }
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_home:
                 Log.d("onClick","btn home");
+
                 if(pageNo != 0){
                     setFragmentView(homeFragment, R.id.container , 0, false);
                     titleHome.setText("Home");
@@ -264,6 +275,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
         }
         // Commit the transaction
         transaction.commit();
+
+
+
+
     }
 
     @Override
@@ -272,15 +287,23 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
             getFragmentManager().popBackStack();
             Fragment f = this.getFragmentManager().findFragmentById(R.id.container);
             String fName = f.getClass().getSimpleName();
-            if(fName.equals("UserProfile")){
-                header.setVisibility(View.VISIBLE);
-                header1.setVisibility(View.GONE);
-            }
-            Log.d("backstack", f.getClass().getSimpleName());
+
         } else {
             super.onBackPressed();
         }
     }
+    @Override
+    public void onBackStackChanged() {
+        Fragment f = this.getFragmentManager().findFragmentById(R.id.container);
+        String fName = f.getClass().getSimpleName();
+        Log.d("onBackStackChanged",f.getClass().getSimpleName());
+        if(!fName.equals("UserProfile")){
+            header.setVisibility(View.VISIBLE);
+            header1.setVisibility(View.GONE);
+        }
+    }
+
+
 
     private void logOut(){
         db.resetTables();
@@ -433,10 +456,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
         //Log.d("points", points);
     }
     @Override
-    public void postOpen(List<UserPostObj> postObj, String postId) {
-
-        openPostFragment = new OpenPostFragment(postObj, postId);
+    public void postOpen(List<UserPostObj> postObj, String postId, String userId) {
+        openPostFragment = new OpenPostFragment(postObj, postId, userId);
         setFragmentView (openPostFragment, R.id.container1, 4, true);
         Log.d("postOpen","userId: "+userId+" postId: "+postId);
     }
+
+
 }

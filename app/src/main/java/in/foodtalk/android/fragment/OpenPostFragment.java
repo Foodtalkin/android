@@ -64,7 +64,7 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
 
     DiscoverAdapter discoverAdapter;
     OpenPostAdapter openPostAdapter;
-    List<UserPostObj> postData = new ArrayList<>();
+    List<UserPostObj> postData;
 
     private RecyclerView.LayoutManager mLayoutManager;
 
@@ -80,6 +80,9 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
 
     private int pageNo = 1;
 
+    String selectedUserId;
+    String selectedPostId;
+
     LinearLayout progressBar;
 
     int dx1;
@@ -87,13 +90,14 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
     int lastVItem;
     Context context;
 
-    List<UserPostObj> postList;
-
-
-
-    public OpenPostFragment(List<UserPostObj> postList, String postId){
-        postList.remove(0);
-        this.postData = postList;
+    //List<UserPostObj> postList;
+    public OpenPostFragment(List<UserPostObj> postList, String postId, String userId){
+        //postList.remove(0);
+        //this.postData = postList;
+        this.postData =  new ArrayList<UserPostObj>(postList);
+        this.selectedPostId = postId;
+        selectedUserId = userId;
+        this.postData.remove(0);
         Log.d("postList data length", postList.size()+"");
     }
     @Override
@@ -101,10 +105,9 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
         layout = inflater.inflate(R.layout.open_post_fragment, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_open_post);
         progressBar = (LinearLayout) layout.findViewById(R.id.progress_bar);
+
+
         recyclerView.setOnTouchListener(this);
-
-
-
 
         //--swipeRefreshHome = (SwipeRefreshLayout) layout.findViewById(R.id.swipeRefreshHome);
         // use a linear layout manager
@@ -158,9 +161,13 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
 
 //        Log.d("get user info lat", db.getUserDetails().get("lat"));
         //Log.d("get user info lon", db.getUserDetails().get("lon"));
+        //postData.remove(0);
 
         openPostAdapter = new OpenPostAdapter(getActivity(), postData, postLikeCallback);
         recyclerView.setAdapter(openPostAdapter);
+
+        //recyclerView.smoothScrollToPosition(2*280);
+        recyclerView.scrollToPosition(Integer.parseInt(selectedPostId)-1);
 
         super.onActivityCreated(savedInstanceState);
     }
@@ -168,7 +175,6 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
     public void onDestroyView() {
         Log.d("Fragment","onDestryView");
         //getActivity().getFragmentManager().beginTransaction().remove(this).commit();
-
         super.onDestroyView();
     }
 
@@ -177,7 +183,6 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
         Log.d("Fragment","onDestroy");
         super.onDestroy();
     }
-
     @Override
     public void onDetach() {
         Log.d("Fragment","onDetach");
@@ -193,12 +198,13 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
         obj.put("postUserId",db.getUserDetails().get("userId"));
         //Log.d("getPostFeed","pageNo: "+pageNo);
         obj.put("page",Integer.toString(pageNo));
-        obj.put("recordCount","10");
+        obj.put("recordCount","15");
+        obj.put("selectedUserId",selectedUserId);
 
 
         Log.d("post page number param", pageNo+"");
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                config.URL_POST_DISCOVER, obj,
+                config.URL_USER_POST_IMAGE, obj,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -261,11 +267,11 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
     }
     private void loadDataIntoView(JSONObject response , String tag) throws JSONException {
 
-        progressBar.setVisibility(View.GONE);
+       // progressBar.setVisibility(View.GONE);
 
         //--swipeRefreshHome.setRefreshing(false);
 
-        JSONArray postArray = response.getJSONArray("posts");
+        JSONArray postArray = response.getJSONArray("imagePosts");
        // JSONObject postObject = postArray.getJSONObject(0);
         //String userName = postObject.getString("userName");
         //Log.d("user name from post", userName);
@@ -298,8 +304,7 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
             //current.restaurantDistance = postArray.getJSONObject(i).getString("restaurantDistance");
             // postData.clear();
             postData.add(current);
-            Log.d("dish name", postData.get(i).userId);
-
+           //Log.d("dish name", postData.get(i).userId);
         }
         //postData = (List<PostObj>) postObj;
         if (tag.equals("load")){
@@ -336,7 +341,7 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
     public void remove(ContactsContract.Contacts.Data data) {
         int position = postData.indexOf(data);
         postData.remove(position);
-        discoverAdapter.notifyItemRemoved(position);
+        openPostAdapter.notifyItemRemoved(position);
     }
     Boolean loading = false;
     private void callScrollClass(){
@@ -348,7 +353,7 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
                     pageNo++;
                     postData.add(null);
                     //recyclerView.addD
-                    discoverAdapter.notifyItemInserted(postData.size()-1);
+                    openPostAdapter.notifyItemInserted(postData.size()-1);
                     loading = true;
                     Log.d("loadMore", "call getPostFeed('loadMore')");
                     try {
@@ -387,9 +392,12 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        Log.d("onTouch","call");
         switch (v.getId()){
-            case R.id.recycler_view_discover:
+            case R.id.recycler_view_open_post:
+                Log.d("clicked","recycler view");
                 switch (event.getAction()){
+
                     case MotionEvent.ACTION_DOWN:
                         Log.d("recycler view","action down");
                         break;
