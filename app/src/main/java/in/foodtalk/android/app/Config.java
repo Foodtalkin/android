@@ -24,4 +24,6 @@ public class Config {
     public static String URL_USER_PROFILE = "http://"+IP+"/index.php/service/user/getProfile";
     public static String URL_USER_POST_IMAGE = "http://"+IP+"/index.php/service/user/getImagePosts";
 
+    public static String URL_FAVOURITES = "http://"+IP+"/index.php/service/bookmark/list";
+
 }

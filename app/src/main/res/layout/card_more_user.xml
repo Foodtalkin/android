@@ -91,7 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Delhi NCR"
-                android:textColor="#fff"
+                android:textColor="@color/blackText1"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="12dp"
                 android:textSize="@dimen/txt_size_more"/>
@@ -116,32 +116,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Options"
-                android:textColor="#fff"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="12dp"
-                android:textSize="@dimen/txt_size_more"/>
-
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.33dp"
-            android:alpha=".5"
-            android:background="#000"/>
-        <LinearLayout
-            android:id="@+id/btn_report_more"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/more_report"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Report a Problem"
                 android:textColor="#fff"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="12dp"

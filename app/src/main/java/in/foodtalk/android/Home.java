@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -31,12 +32,15 @@ import in.foodtalk.android.communicator.PostOptionCallback;
 import in.foodtalk.android.communicator.ProfilePostOpenCallback;
 import in.foodtalk.android.communicator.UserProfileCallback;
 import in.foodtalk.android.fragment.DiscoverFragment;
+import in.foodtalk.android.fragment.FavouritesFragment;
 import in.foodtalk.android.fragment.HomeFragment;
 import in.foodtalk.android.fragment.MoreFragment;
 import in.foodtalk.android.fragment.NewpostFragment;
 import in.foodtalk.android.fragment.NotiFragment;
 import in.foodtalk.android.fragment.OpenPostFragment;
+import in.foodtalk.android.fragment.OptionsFragment;
 import in.foodtalk.android.fragment.UserProfile;
+import in.foodtalk.android.fragment.WebViewFragment;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.Login;
 import in.foodtalk.android.object.UserPostObj;
@@ -63,6 +67,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
     NotiFragment notiFragment;
     MoreFragment moreFragment;
     OpenPostFragment openPostFragment;
+    OptionsFragment optionsFragment;
+    WebViewFragment webViewFragment;
+    FavouritesFragment favouritesFragment;
 
     UserProfile userProfile;
 
@@ -164,6 +171,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
         notiFragment = new NotiFragment();
         moreFragment = new MoreFragment();
         userProfile = new UserProfile();
+        optionsFragment = new OptionsFragment();
+        favouritesFragment = new FavouritesFragment();
+
 
 
 
@@ -301,6 +311,18 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
             header.setVisibility(View.VISIBLE);
             header1.setVisibility(View.GONE);
         }
+        switch (fName){
+            case "UserProfile":
+                header.setVisibility(View.VISIBLE);
+                header1.setVisibility(View.GONE);
+                break;
+            case "MoreFragment":
+                titleHome.setText("More");
+                break;
+            case "FavouritesFragment":
+                titleHome.setText("Favourites");
+                break;
+        }
     }
 
 
@@ -321,7 +343,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
             e.printStackTrace();
         }
        // discoverFragment.recyclerView.smoothScrollToPosition(5);
-
     }
 
     @Override
@@ -444,9 +465,30 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
     @Override
     public void btnClick(String type, int position) {
         Log.d("more btn clicked", type+" position: "+ position);
-        if(type.equals("profile")){
+        /*if(type.equals("profile")){
             setFragmentView(userProfile, R.id.container, 4, true);
         }
+        if(type.equals("options")){
+            setFragmentView(optionsFragment, R.id.container, 4, true);
+        }*/
+       switch (type){
+           case "profile":
+               setFragmentView(userProfile, R.id.container, 4, true);
+               break;
+           case "options":
+               setFragmentView(optionsFragment, R.id.container, 4, true);
+               break;
+           case "legal":
+               Log.d("btn click","setFragment webview");
+               webViewFragment = new WebViewFragment("http://www.foodtalkindia.com/document.html");
+               setFragmentView (webViewFragment, R.id.container, 4, true);
+               titleHome.setText("Legal");
+               break;
+           case "favourites":
+               setFragmentView(favouritesFragment, R.id.container, 4, true);
+               break;
+       }
+
     }
     @Override
     public void getUserInfo(String points, String userName) {
@@ -461,6 +503,4 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
         setFragmentView (openPostFragment, R.id.container1, 4, true);
         Log.d("postOpen","userId: "+userId+" postId: "+postId);
     }
-
-
 }

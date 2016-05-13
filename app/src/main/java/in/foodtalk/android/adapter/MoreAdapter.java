@@ -90,8 +90,8 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             btnProfile = (LinearLayout) itemView.findViewById(R.id.btn_profile_more);
             btnFav = (LinearLayout) itemView.findViewById(R.id.btn_fav_more);
             btnLoc = (LinearLayout) itemView.findViewById(R.id.btn_loc_more);
-            btnReport = (LinearLayout) itemView.findViewById(R.id.btn_report_more);
-            btnOpt = (LinearLayout) itemView.findViewById(R.id.btn_loc_more);
+            //btnReport = (LinearLayout) itemView.findViewById(R.id.btn_report_more);
+            btnOpt = (LinearLayout) itemView.findViewById(R.id.btn_option_more);
             btnLegal = (LinearLayout) itemView.findViewById(R.id.btn_legal_more);
 
             userThumb = (ImageView) itemView.findViewById(R.id.userThumb_more);
@@ -103,7 +103,7 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             btnFav.setOnTouchListener(this);
             btnLoc.setOnTouchListener(this);
             btnOpt.setOnTouchListener(this);
-            btnReport.setOnTouchListener(this);
+//            btnReport.setOnTouchListener(this);
             btnLegal.setOnTouchListener(this);
         }
 
@@ -123,19 +123,32 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 }
                     break;
                 case R.id.btn_fav_more:
-                    Log.d("btnClick", "Fav");
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("btnClick", "Fav");
+                            moreBtnCallback.btnClick("favourites", getPosition());
+                            break;
+                    }
+
                     break;
                 case R.id.btn_loc_more:
                     Log.d("btnClick", "location");
                     break;
                 case R.id.btn_option_more:
-                    Log.d("btnClick", "option");
-                    break;
-                case R.id.btn_report_more:
-                    Log.d("btnClick", "report");
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("btnClick", "option");
+                            moreBtnCallback.btnClick("options", getPosition());
+                            break;
+                    }
                     break;
                 case R.id.btn_legal_more:
-                    Log.d("btnClick", "legal");
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("btnClick", "legal");
+                            moreBtnCallback.btnClick("legal", getPosition());
+                            break;
+                    }
                     break;
             }
             return true;

@@ -34,5 +34,4 @@
                     android:progressDrawable="@drawable/progress_bar"
                     />
         </LinearLayout>
-
 </RelativeLayout>
