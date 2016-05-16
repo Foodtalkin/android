@@ -8,6 +8,7 @@ public class PostObj {
     public String userName;
     public String userId;
     public String restaurantName;
+    public String checkedInRestaurantId;
     public String dishName;
     public String createDate;
     public String currentDate;

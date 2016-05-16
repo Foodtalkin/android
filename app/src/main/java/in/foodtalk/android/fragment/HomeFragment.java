@@ -274,6 +274,7 @@ public class HomeFragment extends Fragment{
             current.userId = postArray.getJSONObject(i).getString("userId");
             current.dishName = postArray.getJSONObject(i).getString("dishName");
             current.restaurantName = postArray.getJSONObject(i).getString("restaurantName");
+            current.checkedInRestaurantId = postArray.getJSONObject(i).getString("checkedInRestaurantId");
             current.createDate = postArray.getJSONObject(i).getString("createDate");
             current.currentDate = postArray.getJSONObject(i).getString("currentDate");
             current.likeCount = postArray.getJSONObject(i).getString("likeCount");

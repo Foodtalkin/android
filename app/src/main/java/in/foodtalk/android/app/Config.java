@@ -26,4 +26,7 @@ public class Config {
 
     public static String URL_FAVOURITES = "http://"+IP+"/index.php/service/bookmark/list";
 
+    public static String URL_FOLLOW = "http://"+IP+"/index.php/service/follower/follow";
+    public static String URL_UNFOLLOW = "http://"+IP+"/index.php/service/follower/unfollow";
+
 }

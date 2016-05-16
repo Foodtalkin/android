@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -62,6 +63,8 @@ public class UserProfile extends Fragment implements LatLonCallback {
     Boolean loading = false;
     Boolean loadMoreData = true;
 
+    Boolean followBtnVisible;
+
     StaggeredGridLayoutManager staggeredGridLayoutManager;
     private int pageNo = 1;
 
@@ -74,6 +77,15 @@ public class UserProfile extends Fragment implements LatLonCallback {
     String lat, lon;
 
     Context context;
+    String userIdOther;
+    String userId;
+    Button btnFollow;
+
+
+
+    public UserProfile (String userId){
+           this.userIdOther = userId;
+    }
 
 
 
@@ -89,6 +101,14 @@ public class UserProfile extends Fragment implements LatLonCallback {
         }
         pageNo = 1;
         loading = false;
+
+
+
+
+
+        //btnFollow = (Button) layout.findViewById(R.id.btn_follow_profile);
+
+
         return layout;
     }
 
@@ -114,9 +134,26 @@ public class UserProfile extends Fragment implements LatLonCallback {
             context = getActivity();
         }
 
+
+
         userProfileCallback = (UserProfileCallback) context;
 
-        db = new DatabaseHandler(getActivity());
+        db = new DatabaseHandler(context);
+
+        userId = db.getUserDetails().get("userId");
+
+        Log.d("check user ids","userId: "+userId+ " userIdOther: "+userIdOther);
+        if (userIdOther.equals(userId)){
+            Log.d("userIds","Match");
+            followBtnVisible = false;
+           // btnFollow.setVisibility(View.GONE);
+        }else {
+           // btnFollow.setVisibility(View.VISIBLE);
+            followBtnVisible = true;
+            Log.d("userIds", "not match");
+        }
+
+
 
         try {
             getUserProfile("myProfile");
@@ -149,7 +186,7 @@ public class UserProfile extends Fragment implements LatLonCallback {
         obj.put("sessionId",db.getUserDetails().get("sessionId"));
         //obj.put("selectedUserId", db.getUserDetails().get("userId"));
         obj.put("page",Integer.toString(pageNo));
-        obj.put("selectedUserId", "2");
+        obj.put("selectedUserId", userIdOther);
         //obj.put("latitude",lat);
         //obj.put("longitude",lon);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
@@ -197,6 +234,7 @@ public class UserProfile extends Fragment implements LatLonCallback {
             userProfile.image = profile.getString("image");
             userProfile.totalPoints = profile.getString("totalPoints");
             userProfile.score = profile.getString("score");
+            userProfile.userId = profile.getString("id");
 
             UserPostObj userPostObj = new UserPostObj();
             userPostObj.viewType = "profileInfo";
@@ -265,7 +303,7 @@ public class UserProfile extends Fragment implements LatLonCallback {
             loading = false;
             //userProfileAdapter.notifyDataSetChanged();
         }else {
-            userProfileAdapter = new UserProfileAdapter(context, postList , userProfile);
+            userProfileAdapter = new UserProfileAdapter(context, postList , userProfile ,followBtnVisible);
             recyclerView.setAdapter(userProfileAdapter);
         }
         callScrollClass();

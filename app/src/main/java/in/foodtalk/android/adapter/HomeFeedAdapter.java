@@ -31,6 +31,7 @@ import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.communicator.PostOptionCallback;
+import in.foodtalk.android.module.HeadSpannable;
 import in.foodtalk.android.object.PostObj;
 
 /**
@@ -51,6 +52,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
 
+    HeadSpannable headSpannable;
+
     public HomeFeedAdapter(Context context, List<PostObj> postObj, PostLikeCallback postLikeCallback){
         layoutInflater = LayoutInflater.from(context);
         this.postObj = postObj;
@@ -61,6 +64,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         likeCallback = (PostLikeCallback) context;
         bookmarkCallback = (PostBookmarkCallback) context;
         optionCallback = (PostOptionCallback) context;
+
+        headSpannable = new HeadSpannable(context);
         //likeCallback = postLikeCallback;
 
     }
@@ -88,11 +93,14 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             PostHolder postHolder = (PostHolder) holder;
             //postHolder.txtHeadLine.setText(current.userName+" is having "+current.dishName+" at "+current.restaurantName);
             String htmlHeadline = "<font color='#0369db'>"+current.userName+"</font> <font color='#1a1a1a'>is having </font><font color='#0369db'> "+current.dishName+"</font><font color='#1a1a1a'> at </font><font color='#369db'>"+current.restaurantName+"</font><font color='#1a1a1a'>.</font>";
-            postHolder.txtHeadLine.setText(Html.fromHtml(htmlHeadline));
+            //postHolder.txtHeadLine.setText(Html.fromHtml(htmlHeadline));
             postHolder.txtTime.setText("4d");
             postHolder.txtCountLike.setText(current.likeCount);
             postHolder.txtCountBookmark.setText(current.bookmarkCount);
             postHolder.txtCountComment.setText(current.commentCount);
+
+            headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId);
+
 
             setStarRating(current.rating, postHolder);
             //postHolder.postId = current.id;
@@ -135,6 +143,12 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             progressViewHolder.progressBar.setIndeterminate(true);
         }
     }
+
+
+
+
+
+
     @Override
     public int getItemCount() {
         return postObj.size();

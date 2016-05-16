@@ -24,6 +24,7 @@ import java.util.List;
 import in.foodtalk.android.apicall.PostBookmarkApi;
 import in.foodtalk.android.apicall.PostLikeApi;
 import in.foodtalk.android.apicall.PostReportApi;
+import in.foodtalk.android.communicator.HeadSpannableCallback;
 import in.foodtalk.android.communicator.MoreBtnCallback;
 import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostDeleteCallback;
@@ -47,7 +48,8 @@ import in.foodtalk.android.object.UserPostObj;
 
 public class Home extends AppCompatActivity implements View.OnClickListener ,
         PostLikeCallback , PostBookmarkCallback, PostOptionCallback, PostDeleteCallback,
-        MoreBtnCallback, UserProfileCallback, ProfilePostOpenCallback, FragmentManager.OnBackStackChangedListener{
+        MoreBtnCallback, UserProfileCallback, ProfilePostOpenCallback, FragmentManager.OnBackStackChangedListener,
+        HeadSpannableCallback{
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
@@ -98,6 +100,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
     RelativeLayout header;
     RelativeLayout header1;
     int pageNo;
+
+    private final int USER_PROFILE = 1;
+    private final int DISH = 2;
+    private final int RESTAURANT_PROFILE = 3;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -170,7 +179,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
         newpostFragment = new NewpostFragment();
         notiFragment = new NotiFragment();
         moreFragment = new MoreFragment();
-        userProfile = new UserProfile();
+
         optionsFragment = new OptionsFragment();
         favouritesFragment = new FavouritesFragment();
 
@@ -473,6 +482,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
         }*/
        switch (type){
            case "profile":
+               userProfile = new UserProfile(userId);
                setFragmentView(userProfile, R.id.container, 4, true);
                break;
            case "options":
@@ -502,5 +512,21 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
         openPostFragment = new OpenPostFragment(postObj, postId, userId);
         setFragmentView (openPostFragment, R.id.container1, 4, true);
         Log.d("postOpen","userId: "+userId+" postId: "+postId);
+    }
+
+    @Override
+    public void spannableTxt(String userId, String checkinRestaurantId, String dishName, int viewType) {
+        switch (viewType){
+            case USER_PROFILE:
+                userProfile = new UserProfile(userId);
+                setFragmentView(userProfile, R.id.container, 0, true);
+                break;
+            case RESTAURANT_PROFILE:
+                Log.d("clicked","for restaurant");
+                break;
+            case DISH:
+                Log.d("clicked","for Dish");
+                break;
+        }
     }
 }

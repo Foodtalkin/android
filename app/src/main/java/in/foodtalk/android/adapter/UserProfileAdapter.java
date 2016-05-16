@@ -11,15 +11,19 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+
 import java.util.List;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.apicall.UserFollow;
 import in.foodtalk.android.communicator.ProfilePostOpenCallback;
 import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.object.UserPostObj;
@@ -45,12 +49,17 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private StringCase stringCase;
     private String userId;
 
+    private Boolean followBtnVisible;
+
+    UserFollow userFollow;
+
     private ProfilePostOpenCallback postOpenCallback;
-    public UserProfileAdapter (Context context, List<UserPostObj> postList, UserProfileObj userProfile){
+    public UserProfileAdapter (Context context, List<UserPostObj> postList, UserProfileObj userProfile, Boolean followBtnVisible){
         layoutInflater = LayoutInflater.from(context);
         this.postList = postList;
         this.context = context;
         this.userProfileObj = userProfile;
+        this.followBtnVisible = followBtnVisible;
 
 
         postOpenCallback = (ProfilePostOpenCallback) context;
@@ -63,6 +72,8 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         width = size.x;
         width = size.y;
         stringCase = new StringCase();
+
+        userFollow = new UserFollow(context);
         //Log.d("get screen size", "width: "+size.x +" height: "+size.y);
     }
     @Override
@@ -100,7 +111,27 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             profileHolder.checkins.setText(userProfileObj.checkInCount);
             profileHolder.followers.setText(userProfileObj.followersCount);
             profileHolder.following.setText(userProfileObj.followingCount);
+
+            profileHolder.userId = userProfileObj.userId;
+
             userId = userProfileObj.userId;
+
+            if (followBtnVisible == true){
+                Log.d("followBtnV", "visible");
+                profileHolder.btnFollow.setVisibility(View.VISIBLE);
+            }else {
+                Log.d("followBtnV", "gone");
+                profileHolder.btnFollow.setVisibility(View.GONE);
+            }
+            Log.d("iFollowedIt",userProfileObj.iFollowedIt);
+            if(userProfileObj.iFollowedIt.equals("0")){
+                profileHolder.btnFollow.setText("Follow");
+                profileHolder.apiFollow = true;
+            }else if (userProfileObj.iFollowedIt.equals("1")){
+                profileHolder.btnFollow.setText("Following");
+                profileHolder.apiFollow = false;
+                profileHolder.btnFollow.setBackgroundResource(R.drawable.follow_btn_shape);
+            }
             //Log.d("profile img", userProfileObj.image);
             Picasso.with(context)
                     .load(userProfileObj.image)
@@ -114,7 +145,6 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 sglp.setFullSpan(true);
                 holder.itemView.setLayoutParams(sglp);
             }
-
         }else if (holder instanceof PostHolderProfile){
             UserPostObj current = postList.get(position);
             PostHolderProfile postHolderProfile = (PostHolderProfile) holder;
@@ -175,12 +205,17 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
         return viewType;
     }
-    class ProfileHolder extends RecyclerView.ViewHolder{
+    class ProfileHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
         ImageView profileImg;
         TextView fullName;
         TextView checkins;
         TextView followers;
         TextView following;
+        Button btnFollow;
+
+        Boolean apiFollow;
+
+        String userId;
         public ProfileHolder(View itemView) {
             super(itemView);
             profileImg = (ImageView) itemView.findViewById(R.id.user_img_profile);
@@ -188,6 +223,33 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             checkins = (TextView) itemView.findViewById(R.id.txt_checkins_profile);
             followers = (TextView) itemView.findViewById(R.id.txt_followers_profile);
             following = (TextView) itemView.findViewById(R.id.txt_following_profile);
+            btnFollow = (Button) itemView.findViewById(R.id.btn_follow_profile);
+
+            btnFollow.setOnTouchListener(this);
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch (v.getId()){
+                case R.id.btn_follow_profile:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            try {
+                                Log.d("check user Id", userId+"");
+                                if (apiFollow){
+                                    userFollow.follow(true,userId);
+                                }else {
+                                    userFollow.follow(false,userId);
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            break;
+                    }
+                    break;
+            }
+            return true;
         }
     }
     class PostHolderProfile extends RecyclerView.ViewHolder implements View.OnTouchListener {
