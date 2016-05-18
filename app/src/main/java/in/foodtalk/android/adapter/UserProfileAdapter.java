@@ -87,7 +87,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             profileHolder = new ProfileHolder(view);
             return profileHolder;
         }else if (viewType == VIEW_POST){
-            View view = layoutInflater.inflate(R.layout.card_user_post_holder, parent,false);
+            View view = layoutInflater.inflate(R.layout.card_profile_post_holder, parent,false);
             postHolder = new PostHolderProfile(view);
             return postHolder;
         }else if(viewType == VIEW_PROGRESS){
@@ -257,13 +257,13 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         String userId;
         public PostHolderProfile(View itemView) {
             super(itemView);
-            postImg = (ImageView) itemView.findViewById(R.id.img_user_post);
+            postImg = (ImageView) itemView.findViewById(R.id.img_profile_post);
             postImg.setOnTouchListener(this);
         }
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             switch (v.getId()){
-                case R.id.img_user_post:
+                case R.id.img_profile_post:
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             //Log.d("image clicked",getPosition()+"");

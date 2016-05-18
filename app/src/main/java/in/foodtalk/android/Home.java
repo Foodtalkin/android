@@ -31,7 +31,9 @@ import in.foodtalk.android.communicator.PostDeleteCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.communicator.PostOptionCallback;
 import in.foodtalk.android.communicator.ProfilePostOpenCallback;
+import in.foodtalk.android.communicator.ProfileRPostOpenCallback;
 import in.foodtalk.android.communicator.UserProfileCallback;
+import in.foodtalk.android.communicator.UserThumbCallback;
 import in.foodtalk.android.fragment.DiscoverFragment;
 import in.foodtalk.android.fragment.FavouritesFragment;
 import in.foodtalk.android.fragment.HomeFragment;
@@ -39,17 +41,21 @@ import in.foodtalk.android.fragment.MoreFragment;
 import in.foodtalk.android.fragment.NewpostFragment;
 import in.foodtalk.android.fragment.NotiFragment;
 import in.foodtalk.android.fragment.OpenPostFragment;
+import in.foodtalk.android.fragment.OpenRPostFragment;
 import in.foodtalk.android.fragment.OptionsFragment;
+import in.foodtalk.android.fragment.RestaurantProfileFragment;
 import in.foodtalk.android.fragment.UserProfile;
 import in.foodtalk.android.fragment.WebViewFragment;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.Login;
+import in.foodtalk.android.object.RestaurantPostObj;
 import in.foodtalk.android.object.UserPostObj;
 
 public class Home extends AppCompatActivity implements View.OnClickListener ,
         PostLikeCallback , PostBookmarkCallback, PostOptionCallback, PostDeleteCallback,
         MoreBtnCallback, UserProfileCallback, ProfilePostOpenCallback, FragmentManager.OnBackStackChangedListener,
-        HeadSpannableCallback{
+        HeadSpannableCallback, UserThumbCallback, ProfileRPostOpenCallback
+        {
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
@@ -72,6 +78,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
     OptionsFragment optionsFragment;
     WebViewFragment webViewFragment;
     FavouritesFragment favouritesFragment;
+    RestaurantProfileFragment restaurantProfileFragment;
+    OpenRPostFragment openRPostFragment;
 
     UserProfile userProfile;
 
@@ -522,11 +530,26 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
                 setFragmentView(userProfile, R.id.container, 0, true);
                 break;
             case RESTAURANT_PROFILE:
+                restaurantProfileFragment = new RestaurantProfileFragment(checkinRestaurantId);
+                setFragmentView(restaurantProfileFragment, R.id.container, 0, true);
                 Log.d("clicked","for restaurant");
                 break;
             case DISH:
                 Log.d("clicked","for Dish");
                 break;
         }
+    }
+
+    @Override
+    public void thumbClick(String userId) {
+        userProfile = new UserProfile(userId);
+        setFragmentView(userProfile, R.id.container, 0, true);
+    }
+
+    @Override
+    public void rPostOpen(List<RestaurantPostObj> postObj, String postId, String restaurantId) {
+        openRPostFragment = new OpenRPostFragment(postObj, postId, restaurantId);
+        setFragmentView (openRPostFragment, R.id.container1, 4, true);
+        Log.d("postOpen","userId: "+userId+" postId: "+postId);
     }
 }

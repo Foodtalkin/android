@@ -1,23 +1,21 @@
 package in.foodtalk.android.fragment;
 
-import android.app.Dialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.ContactsContract;
-import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ProgressBar;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -39,30 +37,40 @@ import java.util.Map;
 
 import in.foodtalk.android.FbLogin;
 import in.foodtalk.android.R;
+import in.foodtalk.android.adapter.DiscoverAdapter;
 import in.foodtalk.android.adapter.HomeFeedAdapter;
+import in.foodtalk.android.adapter.OpenPostAdapter;
+import in.foodtalk.android.adapter.OpenRPostAdapter;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.EndlessRecyclerOnScrollListener;
 import in.foodtalk.android.object.PostObj;
+import in.foodtalk.android.object.RestaurantPostObj;
+import in.foodtalk.android.object.UserPostObj;
 
 /**
  * Created by RetailAdmin on 21-04-2016.
  */
-public class HomeFragment extends Fragment{
+public class OpenRPostFragment extends Fragment implements View.OnTouchListener {
+
+
     View layout;
     DatabaseHandler db;
     Config config;
     PostObj postObj;
     HomeFeedAdapter homeFeedAdapter;
-    List<PostObj> postData = new ArrayList<>();
+
+    DiscoverAdapter discoverAdapter;
+    OpenRPostAdapter openPostAdapter;
+    List<RestaurantPostObj> postData;
 
     private RecyclerView.LayoutManager mLayoutManager;
 
     PostLikeCallback likeCallback;
 
-    RecyclerView recyclerView;
+    public RecyclerView recyclerView;
 
     PostLikeCallback postLikeCallback;
 
@@ -70,31 +78,53 @@ public class HomeFragment extends Fragment{
 
     LinearLayoutManager linearLayoutManager;
 
-    ProgressBar homeProgress;
-
-
     private int pageNo = 1;
 
+    String selectedUserId;
+    String selectedPostId;
 
+    String restaurantId;
 
+    LinearLayout progressBar;
 
+    int dx1;
+    int firstVItem;
+    int lastVItem;
+    Context context;
+
+    //List<UserPostObj> postList;
+    public OpenRPostFragment(List<RestaurantPostObj> postList, String postId, String restaurantId){
+        //postList.remove(0);
+        //this.postData = postList;
+        this.postData =  new ArrayList<RestaurantPostObj>(postList);
+        this.selectedPostId = postId;
+        this.restaurantId = restaurantId;
+        this.postData.remove(0);
+        Log.d("postList data length", postList.size()+"");
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        layout = inflater.inflate(R.layout.home_fragment, container, false);
-        //postLikeCallback = this;
-        recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_home);
-        swipeRefreshHome = (SwipeRefreshLayout) layout.findViewById(R.id.swipeRefreshHome);
+        layout = inflater.inflate(R.layout.open_post_fragment, container, false);
+        recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_open_post);
+        progressBar = (LinearLayout) layout.findViewById(R.id.progress_bar);
+
+
+        recyclerView.setOnTouchListener(this);
+
+        //--swipeRefreshHome = (SwipeRefreshLayout) layout.findViewById(R.id.swipeRefreshHome);
         // use a linear layout manager
+       // linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL);
 
 
-        homeProgress = (ProgressBar) layout.findViewById(R.id.home_progress);
 
         if(postData != null){
             Log.d("postData","size: "+ postData);
         }else {
             Log.d("postData","null");
         }
-        swipeRefreshHome.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+
+        /*--swipeRefreshHome.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 Log.d("swip to refresh home", "Refreshing");
@@ -106,31 +136,47 @@ public class HomeFragment extends Fragment{
                     e.printStackTrace();
                 }
             }
-        });
+        });*/
         return layout;
     }
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         //recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
-        linearLayoutManager = new LinearLayoutManager(getActivity());
+
+        linearLayoutManager
+                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
 
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
+        callScrollClass();
+
+
+
+
+
+
         config = new Config();
         db = new DatabaseHandler(getActivity().getApplicationContext());
         postObj = new PostObj();
-       Log.d("get user info F", db.getUserDetails().get("sessionId"));
+        Log.d("get user info F", db.getUserDetails().get("sessionId"));
         Log.d("get user info F", db.getUserDetails().get("userId"));
-        try {
-            getPostFeed("load");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
+//        Log.d("get user info lat", db.getUserDetails().get("lat"));
+        //Log.d("get user info lon", db.getUserDetails().get("lon"));
+        //postData.remove(0);
+
+        openPostAdapter = new OpenRPostAdapter(getActivity(), postData, postLikeCallback);
+        recyclerView.setAdapter(openPostAdapter);
+
+        //recyclerView.smoothScrollToPosition(2*280);
+        recyclerView.scrollToPosition(Integer.parseInt(selectedPostId)-1);
+
         super.onActivityCreated(savedInstanceState);
     }
     @Override
     public void onDestroyView() {
         Log.d("Fragment","onDestryView");
+        //getActivity().getFragmentManager().beginTransaction().remove(this).commit();
         super.onDestroyView();
     }
 
@@ -139,54 +185,27 @@ public class HomeFragment extends Fragment{
         Log.d("Fragment","onDestroy");
         super.onDestroy();
     }
-
     @Override
     public void onDetach() {
         Log.d("Fragment","onDetach");
         super.onDetach();
     }
     Parcelable mListState;
-
-    @Override
-    public void onSaveInstanceState(Bundle state) {
-        super.onSaveInstanceState(state);
-
-        // Save list state
-//        mListState = mLayoutManager.onSaveInstanceState();
-      //  state.putParcelable("myState", mListState);
-    }
-
-    @Override
-    public void onViewStateRestored(Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        // Retrieve list state and list/item positions
-
-       // if(savedInstanceState != null)
-          //  mListState = savedInstanceState.getParcelable("myState");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (mListState != null) {
-            mLayoutManager.onRestoreInstanceState(mListState);
-        }
-    }
-
     public void getPostFeed(final String tag) throws JSONException {
-
         Log.d("getPostFeed", "post data");
         JSONObject obj = new JSONObject();
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
-        obj.put("includeCount", "1");
-        obj.put("includeFollowed","1");
+       // obj.put("includeCount", "1");
+        //obj.put("includeFollowed","1");
         obj.put("postUserId",db.getUserDetails().get("userId"));
         //Log.d("getPostFeed","pageNo: "+pageNo);
         obj.put("page",Integer.toString(pageNo));
-        obj.put("recordCount","10");
+        obj.put("recordCount","15");
+        obj.put("restaurantId", restaurantId);
+
+        Log.d("post page number param", pageNo+"");
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                config.URL_POST_LIST, obj,
+                config.URL_RESTAURANT_PROFILE, obj,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -196,7 +215,7 @@ public class HomeFragment extends Fragment{
                         try {
                             String status = response.getString("status");
                             if (!status.equals("error")){
-                               //-- getAndSave(response);
+                                //-- getAndSave(response);
                                 loadDataIntoView(response , tag);
                             }else {
                                 String errorCode = response.getString("errorCode");
@@ -221,7 +240,7 @@ public class HomeFragment extends Fragment{
                 showToast("Please check your internet connection");
 
                 if(tag.equals("refresh")){
-                    swipeRefreshHome.setRefreshing(false);
+                   //-- swipeRefreshHome.setRefreshing(false);
                 }
                 if(tag.equals("loadMore")){
                     remove(null);
@@ -249,92 +268,81 @@ public class HomeFragment extends Fragment{
     }
     private void loadDataIntoView(JSONObject response , String tag) throws JSONException {
 
-        swipeRefreshHome.setRefreshing(false);
+       // progressBar.setVisibility(View.GONE);
 
+        //--swipeRefreshHome.setRefreshing(false);
 
-
-        homeProgress.setVisibility(View.GONE);
-
-        JSONArray postArray = response.getJSONArray("posts");
-        JSONObject postObject = postArray.getJSONObject(0);
+        JSONArray postArray = response.getJSONArray("images");
+       // JSONObject postObject = postArray.getJSONObject(0);
         //String userName = postObject.getString("userName");
         //Log.d("user name from post", userName);
-        Log.d("check list array", postData.size()+"");
+        //Log.d("check list array", postData.size()+"");
         if (postData.size() > 0 && !tag.equals("loadMore")){
             postData.clear();
-            Log.d("loadData: ","clear post data");
+            //Log.d("loadData: ","clear post data");
         }
-
         for (int i=0; postArray.length()>i;i++){
             //String userName = postArray.getJSONObject(i).getString("userName");
             //PostObj current = new PostObj();
-            PostObj current = new PostObj();
+            RestaurantPostObj current = new RestaurantPostObj();
             current.id = postArray.getJSONObject(i).getString("id");
             current.userName = postArray.getJSONObject(i).getString("userName");
             current.userId = postArray.getJSONObject(i).getString("userId");
             current.dishName = postArray.getJSONObject(i).getString("dishName");
             current.restaurantName = postArray.getJSONObject(i).getString("restaurantName");
-            current.checkedInRestaurantId = postArray.getJSONObject(i).getString("checkedInRestaurantId");
             current.createDate = postArray.getJSONObject(i).getString("createDate");
             current.currentDate = postArray.getJSONObject(i).getString("currentDate");
             current.likeCount = postArray.getJSONObject(i).getString("likeCount");
             current.bookmarkCount = postArray.getJSONObject(i).getString("bookmarkCount");
             current.commentCount = postArray.getJSONObject(i).getString("commentCount");
-            current.userThumb = postArray.getJSONObject(i).getString("userThumb")+"?type=large";
+            //current.userThumb = postArray.getJSONObject(i).getString("userThumb");
             current.userImage = postArray.getJSONObject(i).getString("userImage");
             current.postImage = postArray.getJSONObject(i).getString("postImage");
             current.postThumb = postArray.getJSONObject(i).getString("postThumb");
             current.iLikedIt = postArray.getJSONObject(i).getString("iLikedIt");
             current.iBookark = postArray.getJSONObject(i).getString("iBookark");
             current.rating = postArray.getJSONObject(i).getString("rating");
-            current.restaurantIsActive = postArray.getJSONObject(i).getString("restaurantIsActive");
-           // postData.clear();
+            //current.restaurantDistance = postArray.getJSONObject(i).getString("restaurantDistance");
+            // postData.clear();
             postData.add(current);
-            Log.d("dish name", postData.get(i).userId);
+           //Log.d("dish name", postData.get(i).userId);
         }
         //postData = (List<PostObj>) postObj;
         if (tag.equals("load")){
-
             if(getActivity() != null){
-                homeFeedAdapter = new HomeFeedAdapter(getActivity(), postData, postLikeCallback);
-                recyclerView.setAdapter(homeFeedAdapter);
+                openPostAdapter = new OpenRPostAdapter(getActivity(), postData, postLikeCallback);
+                recyclerView.setAdapter(discoverAdapter);
+            }else {
+                Log.d("DiscoverAdapter call", "getActivity null");
             }
-            else {
-                Log.d("homefeedadapter call", "getActivity null");
-            }
-
             // recyclerView.invalidate();
-
             callScrollClass();
-
             Log.d("Response LoadData", "Load");
-
         }else if (tag.equals("refresh")){
-           // homeFeedAdapter.clear();
+            // discoverAdapter.clear();
             //Log.d("on update","postData size: " +postData.size());
-            //homeFeedAdapter.addAll(postData);
+            //discoverAdapter.addAll(postData);
             callScrollClass();
-            homeFeedAdapter.notifyDataSetChanged();
+            discoverAdapter.notifyDataSetChanged();
             Log.d("Response LoadData", "Refresh - size: "+ postData.size());
         } else if(tag.equals("loadMore")){
             //postData.add(postData);
             //recyclerView.addD
-            //homeFeedAdapter.addAll(postData);
+            //discoverAdapter.addAll(postData);
             //postData.remove(postData.size() - 1);
-           // homeFeedAdapter.notifyItemRemoved(postData.size()-1);
+            // discoverAdapter.notifyItemRemoved(postData.size()-1);
             remove(null);
             loading = false;
             Log.d("Response LoadData", "LoadMore: postSize"+postData.size()+" dishname: "+postData.get(0).dishName);
-           // homeFeedAdapter.notifyDataSetChanged();
-            //homeFeedAdapter.notifyItemInserted(postData.size());
+            // discoverAdapter.notifyDataSetChanged();
+            //discoverAdapter.notifyItemInserted(postData.size());
         }
-
-        //homeFeedAdapter.notifyDataSetChanged();
+        //discoverAdapter.notifyDataSetChanged();
     }
     public void remove(ContactsContract.Contacts.Data data) {
         int position = postData.indexOf(data);
         postData.remove(position);
-        homeFeedAdapter.notifyItemRemoved(position);
+        openPostAdapter.notifyItemRemoved(position);
     }
     Boolean loading = false;
     private void callScrollClass(){
@@ -346,7 +354,7 @@ public class HomeFragment extends Fragment{
                     pageNo++;
                     postData.add(null);
                     //recyclerView.addD
-                    homeFeedAdapter.notifyItemInserted(postData.size()-1);
+                    openPostAdapter.notifyItemInserted(postData.size()-1);
                     loading = true;
                     Log.d("loadMore", "call getPostFeed('loadMore')");
                     try {
@@ -356,10 +364,17 @@ public class HomeFragment extends Fragment{
                     }
                 }
             }
-
             @Override
             public void onScrolled1(int dx, int dy, int firstVisibleItem, int lastVisibleItem) {
-
+                dx1 = dx;
+                firstVItem = firstVisibleItem;
+                lastVItem = lastVisibleItem;
+               // Log.d("onScrolled called",dx+"");
+                if (dx > 0){
+                   // recyclerView.smoothScrollToPosition(lastVisibleItem);
+                }else if(dx < 0){
+                   // recyclerView.smoothScrollToPosition(firstVisibleItem);
+                }
             }
         });
     }
@@ -374,5 +389,39 @@ public class HomeFragment extends Fragment{
                 msg, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 300);
         toast.show();
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        Log.d("onTouch","call");
+        switch (v.getId()){
+            case R.id.recycler_view_open_post:
+                Log.d("clicked","recycler view");
+                switch (event.getAction()){
+
+                    case MotionEvent.ACTION_DOWN:
+                        Log.d("recycler view","action down");
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        Log.d("recycler view", "action up");
+                        if (dx1 > 0){
+                             recyclerView.smoothScrollToPosition(lastVItem);
+                            int vl = lastVItem*280;
+                            Log.d("value scrol", vl+"");
+                           //recyclerView.scrollTo(vl, 0);
+                        }else if(dx1 < 0){
+                            int vl = firstVItem*280;
+                          // recyclerView.scrollTo(vl, 0);
+                             recyclerView.smoothScrollToPosition(firstVItem);
+                        }else if (dx1 == 0){
+                            int vl = lastVItem*280;
+                            //recyclerView.scrollTo(vl, 0);
+                            recyclerView.smoothScrollToPosition(lastVItem);
+                        }
+                        break;
+                }
+                break;
+        }
+        return false;
     }
 }

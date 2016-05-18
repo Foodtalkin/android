@@ -29,4 +29,5 @@ public class Config {
     public static String URL_FOLLOW = "http://"+IP+"/index.php/service/follower/follow";
     public static String URL_UNFOLLOW = "http://"+IP+"/index.php/service/follower/unfollow";
 
+    public static String URL_RESTAURANT_PROFILE = "http://"+IP+"/index.php/service/restaurant/getProfile";
 }

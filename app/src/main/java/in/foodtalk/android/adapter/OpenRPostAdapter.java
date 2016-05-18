@@ -1,7 +1,6 @@
 package in.foodtalk.android.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.CountDownTimer;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -17,30 +16,25 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.ImageRequest;
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import in.foodtalk.android.R;
-import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.communicator.PostOptionCallback;
-import in.foodtalk.android.communicator.UserThumbCallback;
-import in.foodtalk.android.module.HeadSpannable;
 import in.foodtalk.android.object.PostObj;
+import in.foodtalk.android.object.RestaurantPostObj;
+import in.foodtalk.android.object.UserPostObj;
 
 /**
  * Created by RetailAdmin on 25-04-2016.
  */
-public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>   {
+public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>   {
 
-    public List<PostObj> postObj;
+    public List<RestaurantPostObj> postObj;
     private LayoutInflater layoutInflater;
     private Context context;
 
@@ -53,10 +47,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
 
-    HeadSpannable headSpannable;
-    UserThumbCallback userThumbCallback;
-
-    public HomeFeedAdapter(Context context, List<PostObj> postObj, PostLikeCallback postLikeCallback){
+    public OpenRPostAdapter(Context context, List<RestaurantPostObj> postObj, PostLikeCallback postLikeCallback){
         layoutInflater = LayoutInflater.from(context);
         this.postObj = postObj;
         this.context = context;
@@ -66,9 +57,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         likeCallback = (PostLikeCallback) context;
         bookmarkCallback = (PostBookmarkCallback) context;
         optionCallback = (PostOptionCallback) context;
-
-        headSpannable = new HeadSpannable(context);
-        userThumbCallback = (UserThumbCallback) context;
         //likeCallback = postLikeCallback;
 
     }
@@ -78,7 +66,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ProgressViewHolder progressViewHolder;
 
         if(viewType == VIEW_ITEM){
-            View view = layoutInflater.inflate(R.layout.card_view_post, parent, false);
+            View view = layoutInflater.inflate(R.layout.card_open_post, parent, false);
             postHolder = new PostHolder(view);
             return postHolder;
         }else if(viewType == VIEW_PROG) {
@@ -92,28 +80,35 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof PostHolder){
-            PostObj current = postObj.get(position);
+            RestaurantPostObj current = postObj.get(position);
             PostHolder postHolder = (PostHolder) holder;
             //postHolder.txtHeadLine.setText(current.userName+" is having "+current.dishName+" at "+current.restaurantName);
             String htmlHeadline = "<font color='#0369db'>"+current.userName+"</font> <font color='#1a1a1a'>is having </font><font color='#0369db'> "+current.dishName+"</font><font color='#1a1a1a'> at </font><font color='#369db'>"+current.restaurantName+"</font><font color='#1a1a1a'>.</font>";
-            //postHolder.txtHeadLine.setText(Html.fromHtml(htmlHeadline));
-            postHolder.txtTime.setText("4d");
+            postHolder.txtHeadLine.setText(Html.fromHtml(htmlHeadline));
+            //postHolder.txtTime.setText("4d");
             postHolder.txtCountLike.setText(current.likeCount);
             postHolder.txtCountBookmark.setText(current.bookmarkCount);
-            postHolder.txtCountComment.setText(current.commentCount);
+//            postHolder.txtCountComment.setText(current.commentCount);
 
-            postHolder.userId = current.userId;
+            /*if (current.restaurantDistance != null){
+                double distance = Double.parseDouble(current.restaurantDistance);
+                String km = new DecimalFormat("##.##").format(distance/1000);
 
-            if (current.restaurantIsActive.equals("1")) {
-                headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, true);
+                postHolder.txtKm.setText(km+" KM");
             }else {
-                headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, false);
-            }
+                postHolder.txtKm.setText("");
+            }*/
 
 
 
 
-            setStarRating(current.rating, postHolder);
+            //Log.d("distance m", distance+"");
+            //new DecimalFormat("##.##").format(i2)
+           // Log.d("distance km", new DecimalFormat("##.##").format(km)+"");
+
+            //postHolder.txtKm.setText(Double.valueOf(current.restaurantDistance)/1000+" KM");
+
+            //--setStarRating(current.rating, postHolder);
             //postHolder.postId = current.id;
             postHolder.postObj1 = current;
 
@@ -135,17 +130,18 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }else {
                 Log.e("HomeFeedAdapter","null iBookark position: "+position);
             }
+
             //Log.d("image url", current.postImage);
+          //  Log.d("cardholder height",postHolder.cardHolder.getHeight()+"");
             Picasso.with(context)
                     .load(current.postImage)
                     //.fit().centerCrop()
                     .fit()
                     .placeholder(R.drawable.placeholder)
                     .into(postHolder.dishImage);
-
-            //Log.d("userThumb large",current.userThumb);
             Picasso.with(context)
                     .load(current.userImage)
+                    .fit()
                     .placeholder(R.drawable.placeholder)
                     .into(postHolder.userThumbnail);
         }else {
@@ -154,12 +150,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             progressViewHolder.progressBar.setIndeterminate(true);
         }
     }
-
-
-
-
-
-
     @Override
     public int getItemCount() {
         return postObj.size();
@@ -261,26 +251,31 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ImageView imgRating4;
         ImageView imgRating5;
 
-        String userId;
+        LinearLayout cardHolder;
+
+        TextView txtKm;
 
 
 
         //String postId;
-        PostObj postObj1;
+        RestaurantPostObj postObj1;
 
-        LinearLayout iconLike, iconBookmark, iconComment, iconOption;
+        LinearLayout iconLike, iconBookmark, iconOption;
 
         public PostHolder(final View itemView) {
             super(itemView);
             userThumbnail = (ImageView) itemView.findViewById(R.id.userThumb);
             txtHeadLine = (TextView) itemView.findViewById(R.id.txt_post_headline);
-            txtTime = (TextView) itemView.findViewById(R.id.txt_time);
+            //txtTime = (TextView) itemView.findViewById(R.id.txt_time);
             dishImage = (ImageView) itemView.findViewById(R.id.dish_img);
             txtCountLike = (TextView) itemView.findViewById(R.id.txt_count_like);
             txtCountBookmark = (TextView) itemView.findViewById(R.id.txt_count_bookmark);
             txtCountComment = (TextView) itemView.findViewById(R.id.txt_count_comment);
             likeIconImg = (ImageView) itemView.findViewById(R.id.icon_heart_img);
             bookmarImg = (ImageView) itemView.findViewById(R.id.img_icon_bookmark);
+            txtKm = (TextView) itemView.findViewById(R.id.txt_km);
+
+            cardHolder = (LinearLayout) itemView.findViewById(R.id.card_contaner);
 
             likeHeart = (ImageView) itemView.findViewById(R.id.like_heart);
 
@@ -296,15 +291,14 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             iconLike = (LinearLayout) itemView.findViewById(R.id.icon_like_holder);
             iconBookmark = (LinearLayout) itemView.findViewById(R.id.icon_bookmark_holder);
-            iconComment = (LinearLayout) itemView.findViewById(R.id.icon_comment_holder);
             iconOption = (LinearLayout) itemView.findViewById(R.id.icon_option_holder);
+
+
 
             dishImage.setOnTouchListener(this);
             iconLike.setOnTouchListener(this);
             iconBookmark.setOnTouchListener(this);
-            iconComment.setOnTouchListener(this);
             iconOption.setOnTouchListener(this);
-            userThumbnail.setOnTouchListener(this);
 
 
 
@@ -350,6 +344,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             long thisTime = System.currentTimeMillis();
                             if (thisTime - lastTouchTime < 250) {
                                 Log.d("clicked", "img double");
+
 
                                 likeHeart.setVisibility(View.VISIBLE);
                                 likeHeart.startAnimation(mAnimation);
@@ -423,6 +418,15 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
                 }
                 break;
+                case R.id.icon_option_holder:{
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("clicked", "post user id"+postObj1.userId +"post id: "+postObj1.id );
+                            optionCallback.option(getPosition(),postObj1.id,postObj1.userId);
+                            break;
+                    }
+                }
+                break;
                 case R.id.icon_bookmark_holder:{
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
@@ -452,36 +456,10 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 //------------------------------------------
                                 bookmarkCallback.bookmark(getPosition(),postObj1.id, false);
                             }
-
                             break;
                     }
                 }
                 break;
-                case R.id.icon_comment_holder:{
-                    switch (event.getAction()){
-                        case MotionEvent.ACTION_UP:
-                            Log.d("clicked", "icon comment");
-                            break;
-                    }
-                }
-                break;
-                case R.id.icon_option_holder:{
-                    switch (event.getAction()){
-                        case MotionEvent.ACTION_UP:
-                            Log.d("clicked", "post user id"+postObj1.userId +"post id: "+postObj1.id );
-                            optionCallback.option(getPosition(),postObj1.id,postObj1.userId);
-                            break;
-                    }
-                }
-                break;
-                case R.id.userThumb:
-                    switch (event.getAction()){
-                        case MotionEvent.ACTION_UP:
-                            Log.d("clicked", "user thumnails");
-                            userThumbCallback.thumbClick(userId);
-                            break;
-                    }
-                    break;
             }
             return true;
         }

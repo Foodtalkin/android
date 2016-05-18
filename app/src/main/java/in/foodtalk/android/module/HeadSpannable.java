@@ -37,7 +37,7 @@ public class HeadSpannable {
         headSpannableCallback = (HeadSpannableCallback) context;
 
     }
-    public void code(TextView txt, String userName, String dishName, String restaurantName, String userId, String checkinRestaurantId){
+    public void code(TextView txt, String userName, String dishName, String restaurantName, String userId, String checkinRestaurantId, Boolean rLink){
         //String mystring = userName;
         SpannableString uName= new SpannableString(userName);
         uName.setSpan(new MyClickableSpan(userName, userId , checkinRestaurantId, USER_PROFILE), 0, uName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -56,13 +56,13 @@ public class HeadSpannable {
         txt.append(" is Having ");
         txt.append(dName);
         txt.append(" at ");
-        txt.append(rName);
-
-
+        if (rLink){
+            txt.append(rName);
+        }else {
+            txt.append(restaurantName);
+        }
         makeLinksFocusable(txt);
     }
-
-
     class MyClickableSpan extends ClickableSpan {// extend ClickableSpan
 
         String clicked;
