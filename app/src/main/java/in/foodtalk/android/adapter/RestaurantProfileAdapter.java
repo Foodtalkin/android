@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.communicator.PhoneCallback;
 import in.foodtalk.android.communicator.ProfilePostOpenCallback;
 import in.foodtalk.android.communicator.ProfileRPostOpenCallback;
 import in.foodtalk.android.object.RestaurantPostObj;
@@ -45,6 +47,8 @@ public class RestaurantProfileAdapter extends RecyclerView.Adapter<RecyclerView.
     private final int VIEW_PROGRESS = 2;
     private final int VIEW_ERROR = 3;
 
+    PhoneCallback phoneCallback;
+
     private ProfileRPostOpenCallback postOpenCallback;
 
     public RestaurantProfileAdapter (Context context, List<RestaurantPostObj> rPostList, RestaurantProfileObj rProfileObj){
@@ -54,6 +58,7 @@ public class RestaurantProfileAdapter extends RecyclerView.Adapter<RecyclerView.
         this.rProfileObj = rProfileObj;
 
         postOpenCallback = (ProfileRPostOpenCallback) context;
+        phoneCallback = (PhoneCallback) context;
 
 
 
@@ -200,19 +205,40 @@ public class RestaurantProfileAdapter extends RecyclerView.Adapter<RecyclerView.
         }
     }
 
-    class RProfileHolder extends RecyclerView.ViewHolder{
+    class RProfileHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
 
         TextView rName;
         TextView rAddress;
         TextView checkinCount;
         String phone1;
         String phone2;
+        Button btnCall;
 
         public RProfileHolder(View itemView) {
             super(itemView);
             rName = (TextView) itemView.findViewById(R.id.txt_name_restaurant);
             rAddress = (TextView) itemView.findViewById(R.id.txt_address_restaurant);
             checkinCount = (TextView) itemView.findViewById(R.id.checkin_view_restaurant);
+            btnCall = (Button) itemView.findViewById(R.id.btn_call_restaurant);
+            btnCall.setOnTouchListener(this);
+
+
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch (v.getId()){
+                case R.id.btn_call_restaurant:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            phoneCallback.phoneBtn(phone1, phone2);
+                            Log.d("clicked","call button");
+
+                            break;
+                    }
+                    break;
+            }
+            return false;
         }
     }
     class ProgressViewHolder extends RecyclerView.ViewHolder{

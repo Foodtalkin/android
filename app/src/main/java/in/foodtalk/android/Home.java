@@ -1,9 +1,13 @@
 package in.foodtalk.android;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +30,7 @@ import in.foodtalk.android.apicall.PostLikeApi;
 import in.foodtalk.android.apicall.PostReportApi;
 import in.foodtalk.android.communicator.HeadSpannableCallback;
 import in.foodtalk.android.communicator.MoreBtnCallback;
+import in.foodtalk.android.communicator.PhoneCallback;
 import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostDeleteCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
@@ -51,15 +56,14 @@ import in.foodtalk.android.module.Login;
 import in.foodtalk.android.object.RestaurantPostObj;
 import in.foodtalk.android.object.UserPostObj;
 
-public class Home extends AppCompatActivity implements View.OnClickListener ,
-        PostLikeCallback , PostBookmarkCallback, PostOptionCallback, PostDeleteCallback,
+public class Home extends AppCompatActivity implements View.OnClickListener,
+        PostLikeCallback, PostBookmarkCallback, PostOptionCallback, PostDeleteCallback,
         MoreBtnCallback, UserProfileCallback, ProfilePostOpenCallback, FragmentManager.OnBackStackChangedListener,
-        HeadSpannableCallback, UserThumbCallback, ProfileRPostOpenCallback
-        {
+        HeadSpannableCallback, UserThumbCallback, ProfileRPostOpenCallback, PhoneCallback {
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
-    ImageView homeIcon, discoverIcon,newpostIcon,notiIcon,moreIcon;
+    ImageView homeIcon, discoverIcon, newpostIcon, notiIcon, moreIcon;
     TextView txtHomeIcon, txtDiscoverIcon, txtNewpostIcon, txtNotiIcon, txtMoreIcon;
 
     private ImageView[] icons;
@@ -114,7 +118,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
     private final int RESTAURANT_PROFILE = 3;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,8 +165,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
         //-----------
         icons = new ImageView[]{homeIcon, discoverIcon, newpostIcon, notiIcon, moreIcon};
         txtIcons = new TextView[]{txtHomeIcon, txtDiscoverIcon, txtNewpostIcon, txtNotiIcon, txtMoreIcon};
-        imgR = new int[]{R.drawable.home,R.drawable.discover,R.drawable.newpost,R.drawable.notifications,R.drawable.more};
-        imgRA = new int[]{R.drawable.home_active,R.drawable.discover_active,R.drawable.newpost_active,R.drawable.notifications_active, R.drawable.more_active};
+        imgR = new int[]{R.drawable.home, R.drawable.discover, R.drawable.newpost, R.drawable.notifications, R.drawable.more};
+        imgRA = new int[]{R.drawable.home_active, R.drawable.discover_active, R.drawable.newpost_active, R.drawable.notifications_active, R.drawable.more_active};
         //----
 
         btnDiscover.setOnClickListener(this);
@@ -171,28 +174,25 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
         btnNotifications.setOnClickListener(this);
         btnMore.setOnClickListener(this);
         btnHome.setOnClickListener(this);
-       // Log.d("getInfo",db.getRowCount()+"");
-       // Log.d("get user info", db.getUserDetails().get("userName")+"");
+        // Log.d("getInfo",db.getRowCount()+"");
+        // Log.d("get user info", db.getUserDetails().get("userName")+"");
 
-       // Log.d("get user info", "session id: "+db.getUserDetails().get("sessionId"));
-       // Log.d("get user info", "user id: "+db.getUserDetails().get("userId"));
+        // Log.d("get user info", "session id: "+db.getUserDetails().get("sessionId"));
+        // Log.d("get user info", "user id: "+db.getUserDetails().get("userId"));
         //Log.d("get user info", "full name: "+db.getUserDetails().get("fullName"));
-       //Log.d("get user info", "user name: "+db.getUserDetails().get("userName"));
+        //Log.d("get user info", "user name: "+db.getUserDetails().get("userName"));
 
         userId = db.getUserDetails().get("userId");
         sessionId = db.getUserDetails().get("sessionId");
 
         homeFragment = new HomeFragment();
-        discoverFragment =  new DiscoverFragment();
+        discoverFragment = new DiscoverFragment();
         newpostFragment = new NewpostFragment();
         notiFragment = new NotiFragment();
         moreFragment = new MoreFragment();
 
         optionsFragment = new OptionsFragment();
         favouritesFragment = new FavouritesFragment();
-
-
-
 
 
         // Add the fragment to the 'fragment_container' FrameLayout
@@ -203,41 +203,39 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
         getFragmentManager().addOnBackStackChangedListener(this);
 
 
-
-
-
     }
+
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_home:
-                Log.d("onClick","btn home");
+                Log.d("onClick", "btn home");
 
-                if(pageNo != 0){
-                    setFragmentView(homeFragment, R.id.container , 0, false);
+                if (pageNo != 0) {
+                    setFragmentView(homeFragment, R.id.container, 0, false);
                     titleHome.setText("Home");
                     pageNo = 0;
                 }
                 break;
             case R.id.btn_discover:
                 Log.d("onClick", "btn discover");
-                if (pageNo != 1){
-                    setFragmentView (discoverFragment, R.id.container , 1, false);
+                if (pageNo != 1) {
+                    setFragmentView(discoverFragment, R.id.container, 1, false);
                     titleHome.setText("Discover");
                     pageNo = 1;
                 }
                 break;
             case R.id.btn_newpost:
-                if(pageNo != 2){
-                    setFragmentView (newpostFragment, R.id.container, 2, false);
+                if (pageNo != 2) {
+                    setFragmentView(newpostFragment, R.id.container, 2, false);
                     titleHome.setText("New Post");
                     pageNo = 2;
                 }
-                Log.d("onClick","btn newpost");
+                Log.d("onClick", "btn newpost");
                 break;
             case R.id.btn_notification:
-                if (pageNo != 3){
-                    setFragmentView (notiFragment, R.id.container, 3, false);
+                if (pageNo != 3) {
+                    setFragmentView(notiFragment, R.id.container, 3, false);
                     titleHome.setText("Notification");
                     pageNo = 3;
                 }
@@ -245,8 +243,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
                 Log.d("onClick", "btn notification");
                 break;
             case R.id.btn_more:
-                if (pageNo != 4){
-                    setFragmentView (moreFragment, R.id.container, 4, false);
+                if (pageNo != 4) {
+                    setFragmentView(moreFragment, R.id.container, 4, false);
                     titleHome.setText("More");
                     pageNo = 4;
                 }
@@ -258,16 +256,17 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
                 break;
         }
     }
-    private void setFragmentView(Fragment newFragment, int container, int pageN, boolean bStack){
+
+    private void setFragmentView(Fragment newFragment, int container, int pageN, boolean bStack) {
         String backStateName = newFragment.getClass().getName();
 
-        if(newFragment == userProfile){
+        if (newFragment == userProfile) {
             header.setVisibility(View.GONE);
             header1.setVisibility(View.VISIBLE);
-        }else if(newFragment == openPostFragment) {
+        } else if (newFragment == openPostFragment) {
             header.setVisibility(View.GONE);
             header1.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             header.setVisibility(View.VISIBLE);
             header1.setVisibility(View.GONE);
         }
@@ -280,8 +279,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
             header.setVisibility(View.GONE);
         }*/
         //---------------------------
-
-
 
 
         Log.d("backStatename", backStateName);
@@ -297,20 +294,18 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
         // and add the transaction to the back stack if needed
 
         transaction.replace(container, newFragment);
-        if (bStack){
+        if (bStack) {
             transaction.addToBackStack(backStateName);
         }
         // Commit the transaction
         transaction.commit();
 
 
-
-
     }
 
     @Override
     public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() > 0 ){
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
             getFragmentManager().popBackStack();
             Fragment f = this.getFragmentManager().findFragmentById(R.id.container);
             String fName = f.getClass().getSimpleName();
@@ -319,16 +314,17 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
             super.onBackPressed();
         }
     }
+
     @Override
     public void onBackStackChanged() {
         Fragment f = this.getFragmentManager().findFragmentById(R.id.container);
         String fName = f.getClass().getSimpleName();
-        Log.d("onBackStackChanged",f.getClass().getSimpleName());
-        if(!fName.equals("UserProfile")){
+        Log.d("onBackStackChanged", f.getClass().getSimpleName());
+        if (!fName.equals("UserProfile")) {
             header.setVisibility(View.VISIBLE);
             header1.setVisibility(View.GONE);
         }
-        switch (fName){
+        switch (fName) {
             case "UserProfile":
                 header.setVisibility(View.VISIBLE);
                 header1.setVisibility(View.GONE);
@@ -343,8 +339,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
     }
 
 
-
-    private void logOut(){
+    private void logOut() {
         db.resetTables();
         Intent i = new Intent(this, FbLogin.class);
         startActivity(i);
@@ -353,13 +348,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
 
     @Override
     public void like(int position, String postId, Boolean like) {
-        Log.d("likeResponse",position+" postid: "+ postId);
+        Log.d("likeResponse", position + " postid: " + postId);
         try {
             postLikeApi.postLike(postId, like);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-       // discoverFragment.recyclerView.smoothScrollToPosition(5);
+        // discoverFragment.recyclerView.smoothScrollToPosition(5);
     }
 
     @Override
@@ -371,10 +366,65 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
             e.printStackTrace();
         }
     }
+
     @Override
     public void option(int position, String postId, String userId) {
-        Log.d("option callback","post id: "+ postId);
+        Log.d("option callback", "post id: " + postId);
         showDialog(postId, userId);
+    }
+
+    //String phone1;
+    // String phone2;
+    private void callDialog(final String phone1, final String phone2) {
+        final Dialog dialogCall = new Dialog(this);
+        dialogCall.setContentView(R.layout.dialog_call);
+
+        //this.phone1 = phone1;
+        // this.phone2 = phone2;
+
+        final TextView txtPhone1 = (TextView) dialogCall.findViewById(R.id.txt_phone1);
+        TextView txtPhone2 = (TextView) dialogCall.findViewById(R.id.txt_phone2);
+
+        TextView btnClose = (TextView) dialogCall.findViewById(R.id.btn_call_dialog_close);
+
+
+        if (!phone1.equals("")) {
+            txtPhone1.setText(phone1);
+        } else {
+            txtPhone1.setVisibility(View.GONE);
+        }
+        if (!phone2.equals("")) {
+            txtPhone2.setText(phone2);
+        } else {
+            txtPhone2.setVisibility(View.GONE);
+        }
+
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogCall.dismiss();
+            }
+        });
+
+        txtPhone1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("call", phone1);
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:"+phone1));
+                //startActivity(callIntent);
+            }
+        });
+        txtPhone2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("call", phone2);
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:"+phone2));
+               // startActivity(callIntent);
+            }
+        });
+        dialogCall.show();
     }
     private void showDialog(String postId, final String userId){
 
@@ -479,6 +529,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
             e.printStackTrace();
         }
     }
+
+
     @Override
     public void btnClick(String type, int position) {
         Log.d("more btn clicked", type+" position: "+ position);
@@ -551,5 +603,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener ,
         openRPostFragment = new OpenRPostFragment(postObj, postId, restaurantId);
         setFragmentView (openRPostFragment, R.id.container1, 4, true);
         Log.d("postOpen","userId: "+userId+" postId: "+postId);
+    }
+
+    @Override
+    public void phoneBtn(String phone1, String phone2) {
+        Log.d("phone numbers", phone1+" : "+phone2);
+        callDialog(phone1, phone2);
     }
 }
