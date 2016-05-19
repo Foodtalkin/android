@@ -1,24 +1,18 @@
 package in.foodtalk.android;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentTransaction;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -43,7 +37,7 @@ import in.foodtalk.android.fragment.DiscoverFragment;
 import in.foodtalk.android.fragment.FavouritesFragment;
 import in.foodtalk.android.fragment.HomeFragment;
 import in.foodtalk.android.fragment.MoreFragment;
-import in.foodtalk.android.fragment.NewpostFragment;
+import in.foodtalk.android.fragment.newpost.CheckIn;
 import in.foodtalk.android.fragment.NotiFragment;
 import in.foodtalk.android.fragment.OpenPostFragment;
 import in.foodtalk.android.fragment.OpenRPostFragment;
@@ -52,7 +46,6 @@ import in.foodtalk.android.fragment.RestaurantProfileFragment;
 import in.foodtalk.android.fragment.UserProfile;
 import in.foodtalk.android.fragment.WebViewFragment;
 import in.foodtalk.android.module.DatabaseHandler;
-import in.foodtalk.android.module.Login;
 import in.foodtalk.android.object.RestaurantPostObj;
 import in.foodtalk.android.object.UserPostObj;
 
@@ -75,7 +68,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
     HomeFragment homeFragment;
     DiscoverFragment discoverFragment;
-    NewpostFragment newpostFragment;
+    CheckIn newpostFragment;
     NotiFragment notiFragment;
     MoreFragment moreFragment;
     OpenPostFragment openPostFragment;
@@ -187,7 +180,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         homeFragment = new HomeFragment();
         discoverFragment = new DiscoverFragment();
-        newpostFragment = new NewpostFragment();
+        newpostFragment = new CheckIn();
         notiFragment = new NotiFragment();
         moreFragment = new MoreFragment();
 
@@ -227,9 +220,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 break;
             case R.id.btn_newpost:
                 if (pageNo != 2) {
-                    setFragmentView(newpostFragment, R.id.container, 2, false);
-                    titleHome.setText("New Post");
-                    pageNo = 2;
+                    setFragmentView(newpostFragment, R.id.container1, 2, true);
+                    //titleHome.setText("New Post");
+                    //pageNo = 2;
                 }
                 Log.d("onClick", "btn newpost");
                 break;
@@ -282,10 +275,21 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
 
         Log.d("backStatename", backStateName);
-        icons[pageNo].setImageResource(imgR[pageNo]);
-        icons[pageN].setImageResource(imgRA[pageN]);
-        txtIcons[pageN].setTextColor(getResources().getColor(R.color.icon_txt_active));
-        txtIcons[pageNo].setTextColor(getResources().getColor(R.color.icon_txt));
+
+
+        if (newFragment != newpostFragment){
+            icons[pageNo].setImageResource(imgR[pageNo]);
+            icons[pageN].setImageResource(imgRA[pageN]);
+            txtIcons[pageN].setTextColor(getResources().getColor(R.color.icon_txt_active));
+            txtIcons[pageNo].setTextColor(getResources().getColor(R.color.icon_txt));
+        }
+        else {
+            Log.d("fragment","newpostFragment");
+        }
+
+
+
+
         //icons[pageN].setImageResource(R.drawable.home);
         // Create new fragment and transaction
         Fragment discoverF = new DiscoverFragment();
