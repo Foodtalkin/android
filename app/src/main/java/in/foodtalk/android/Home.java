@@ -22,6 +22,7 @@ import java.util.List;
 import in.foodtalk.android.apicall.PostBookmarkApi;
 import in.foodtalk.android.apicall.PostLikeApi;
 import in.foodtalk.android.apicall.PostReportApi;
+import in.foodtalk.android.communicator.CheckInCallback;
 import in.foodtalk.android.communicator.HeadSpannableCallback;
 import in.foodtalk.android.communicator.MoreBtnCallback;
 import in.foodtalk.android.communicator.PhoneCallback;
@@ -37,6 +38,7 @@ import in.foodtalk.android.fragment.DiscoverFragment;
 import in.foodtalk.android.fragment.FavouritesFragment;
 import in.foodtalk.android.fragment.HomeFragment;
 import in.foodtalk.android.fragment.MoreFragment;
+import in.foodtalk.android.fragment.newpost.CameraFragment;
 import in.foodtalk.android.fragment.newpost.CheckIn;
 import in.foodtalk.android.fragment.NotiFragment;
 import in.foodtalk.android.fragment.OpenPostFragment;
@@ -52,7 +54,8 @@ import in.foodtalk.android.object.UserPostObj;
 public class Home extends AppCompatActivity implements View.OnClickListener,
         PostLikeCallback, PostBookmarkCallback, PostOptionCallback, PostDeleteCallback,
         MoreBtnCallback, UserProfileCallback, ProfilePostOpenCallback, FragmentManager.OnBackStackChangedListener,
-        HeadSpannableCallback, UserThumbCallback, ProfileRPostOpenCallback, PhoneCallback {
+        HeadSpannableCallback, UserThumbCallback, ProfileRPostOpenCallback, PhoneCallback,
+        CheckInCallback{
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
@@ -77,6 +80,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     FavouritesFragment favouritesFragment;
     RestaurantProfileFragment restaurantProfileFragment;
     OpenRPostFragment openRPostFragment;
+    CameraFragment cameraFragment;
 
     UserProfile userProfile;
 
@@ -254,6 +258,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         String backStateName = newFragment.getClass().getName();
 
         if (newFragment == userProfile) {
+            //Log.d("userProfile","header1 visible");
             header.setVisibility(View.GONE);
             header1.setVisibility(View.VISIBLE);
         } else if (newFragment == openPostFragment) {
@@ -613,5 +618,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     public void phoneBtn(String phone1, String phone2) {
         Log.d("phone numbers", phone1+" : "+phone2);
         callDialog(phone1, phone2);
+    }
+    @Override
+    public void checkInRestaurant(String restaurantId) {
+        Log.d("checkInRestarant","rId"+restaurantId);
+        cameraFragment = new CameraFragment();
+        setFragmentView (cameraFragment, R.id.container1, 4, true);
     }
 }

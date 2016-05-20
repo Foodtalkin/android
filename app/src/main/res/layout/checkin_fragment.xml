@@ -28,7 +28,7 @@
                     android:layout_centerInParent="true"
                     android:textStyle="bold"/>
                 <TextView
-                    android:id="@+id/title_home"
+                    android:id="@+id/btn_skip_checkin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/blackText1"
@@ -62,7 +62,7 @@
                     android:textColor="@color/subtitle_color"/>
             </RelativeLayout>
             <SearchView
-                android:id="@+id/search_view1"
+                android:id="@+id/search_view"
                 android:layout_height="42dp"
                 android:layout_width="match_parent"
                 android:queryHint="Search"
@@ -82,11 +82,11 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view_checkin"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
             </android.support.v7.widget.RecyclerView>
 
@@ -94,13 +94,4 @@
 
 
     </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="NewPostScreen"
-        android:textSize="20dp"
-        android:textColor="@color/colorText1"
-        android:layout_centerInParent="true"/>
-
 </RelativeLayout>

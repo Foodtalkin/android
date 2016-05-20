@@ -6,8 +6,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -36,7 +39,7 @@ import in.foodtalk.android.object.RestaurantListObj;
 /**
  * Created by RetailAdmin on 21-04-2016.
  */
-public class CheckIn extends Fragment {
+public class CheckIn extends Fragment implements SearchView.OnQueryTextListener {
 
     View layout;
     DatabaseHandler db;
@@ -48,12 +51,37 @@ public class CheckIn extends Fragment {
 
     List<RestaurantListObj> restaurantList = new ArrayList<>();
 
+    JSONObject response;
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.checkin_fragment, container, false);
 
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_checkin);
+
+        final SearchView searchView = (SearchView) layout.findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(this);
+
+        TextView btnSkip = (TextView) layout.findViewById(R.id.btn_skip_checkin);
+
+        btnSkip.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (v.getId()){
+                    case R.id.btn_skip_checkin:
+                        switch (event.getAction()){
+                            case MotionEvent.ACTION_UP:
+                                Log.d("clicked","skip btn");
+                                break;
+                        }
+                    break;
+                }
+                return true;
+            }
+        });
         return layout;
     }
     @Override
@@ -101,6 +129,7 @@ public class CheckIn extends Fragment {
                             String status = response.getString("status");
                             if (!status.equals("error")){
                                 //-- getAndSave(response);
+
                                 loadDataIntoView(response , tag);
                             }else {
                                 String errorCode = response.getString("errorCode");
@@ -154,20 +183,68 @@ public class CheckIn extends Fragment {
 
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
 
-        JSONArray rListArray = response.getJSONArray("restaurants");
+        this.response = response;
 
-        for (int i=0;i>rListArray.length();i++){
+        JSONArray rListArray = response.getJSONArray("restaurants");
+       // Log.d("rListArray", "total: "+ rListArray.length());
+        for (int i=0;i<rListArray.length();i++){
             RestaurantListObj current = new RestaurantListObj();
             current.id = rListArray.getJSONObject(i).getString("id");
             current.area = rListArray.getJSONObject(i).getString("area");
             current.restaurantName = rListArray.getJSONObject(i).getString("restaurantName");
-
             restaurantList.add(current);
         }
-
+        //Log.d("send list", "total: "+restaurantList.size());
         checkInAdapter = new CheckInAdapter(getActivity(),restaurantList);
         recyclerView.setAdapter(checkInAdapter);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        Log.d("onQueryTextSubmit",query);
+        return false;
+    }
+    List<RestaurantListObj> tempList;
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        Log.d("onTextchange search", newText);
+        Log.d("restaurantList","size: "+ restaurantList.size());
 
 
+        try {
+            JSONArray rListArray = response.getJSONArray("restaurants");
+            restaurantList.clear();
+            for (int i=0;i<rListArray.length();i++){
+                RestaurantListObj current = new RestaurantListObj();
+                current.id = rListArray.getJSONObject(i).getString("id");
+                current.area = rListArray.getJSONObject(i).getString("area");
+                current.restaurantName = rListArray.getJSONObject(i).getString("restaurantName");
+                restaurantList.add(current);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        // Log.d("rListArray", "total: "+ rListArray.length());
+
+       // tempList = new ArrayList<RestaurantListObj>(restaurantList);
+
+        final List<RestaurantListObj> filteredModelList = filter(restaurantList, newText);
+        checkInAdapter.animateTo(filteredModelList);
+        recyclerView.scrollToPosition(0);
+        return true;
+    }
+
+    private List<RestaurantListObj> filter(List<RestaurantListObj> models, String query) {
+        query = query.toLowerCase();
+        //this.postData =  new ArrayList<RestaurantPostObj>(postList);
+        final List<RestaurantListObj> filteredModelList = new ArrayList<>();
+        for (RestaurantListObj model : models) {
+            final String text = model.restaurantName.toLowerCase();
+            if (text.contains(query)) {
+                filteredModelList.add(model);
+            }
+        }
+        return filteredModelList;
     }
 }
