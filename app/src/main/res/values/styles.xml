@@ -1,6 +1,6 @@
 <resources>
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <!-- Base application theme.  Theme.AppCompat.Light.NoActionBar-->
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
 
 
@@ -11,7 +11,11 @@
 
 
     </style>
-    <!-- Style for facebook. -->
+
+    <style name="NoActionBarTheam" parent="Theme.AppCompat.Light.NoActionBar">
+
+    </style>
+    <!-- Style for facebook.  -->
     <style name="FullyTranslucent" parent="android:Theme.Translucent.NoTitleBar">
         <item name="android:progressBarStyle">@style/InvisibleProgress</item>
     </style>

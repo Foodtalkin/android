@@ -159,6 +159,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         titleHome = (TextView) findViewById(R.id.title_home);
 
+        //getSupportActionBar().setDisplayShowTitleEnabled(false);
+        //getSupportActionBar().setDisplayUseLogoEnabled(false);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
         //-----------
         icons = new ImageView[]{homeIcon, discoverIcon, newpostIcon, notiIcon, moreIcon};
         txtIcons = new TextView[]{txtHomeIcon, txtDiscoverIcon, txtNewpostIcon, txtNotiIcon, txtMoreIcon};

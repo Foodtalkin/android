@@ -127,7 +127,6 @@ public class CheckInAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
         }
     }
-
     private void applyAndAnimateMovedItems(List<RestaurantListObj> newModels) {
         for (int toPosition = newModels.size() - 1; toPosition >= 0; toPosition--) {
             final RestaurantListObj model = newModels.get(toPosition);
