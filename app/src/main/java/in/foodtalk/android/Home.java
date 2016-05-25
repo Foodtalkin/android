@@ -4,12 +4,15 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -22,6 +25,7 @@ import java.util.List;
 import in.foodtalk.android.apicall.PostBookmarkApi;
 import in.foodtalk.android.apicall.PostLikeApi;
 import in.foodtalk.android.apicall.PostReportApi;
+import in.foodtalk.android.communicator.CamBitmapCallback;
 import in.foodtalk.android.communicator.CheckInCallback;
 import in.foodtalk.android.communicator.HeadSpannableCallback;
 import in.foodtalk.android.communicator.MoreBtnCallback;
@@ -47,6 +51,7 @@ import in.foodtalk.android.fragment.OptionsFragment;
 import in.foodtalk.android.fragment.RestaurantProfileFragment;
 import in.foodtalk.android.fragment.UserProfile;
 import in.foodtalk.android.fragment.WebViewFragment;
+import in.foodtalk.android.fragment.newpost.DishTagging;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.object.RestaurantPostObj;
 import in.foodtalk.android.object.UserPostObj;
@@ -55,7 +60,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         PostLikeCallback, PostBookmarkCallback, PostOptionCallback, PostDeleteCallback,
         MoreBtnCallback, UserProfileCallback, ProfilePostOpenCallback, FragmentManager.OnBackStackChangedListener,
         HeadSpannableCallback, UserThumbCallback, ProfileRPostOpenCallback, PhoneCallback,
-        CheckInCallback{
+        CheckInCallback, CamBitmapCallback{
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
@@ -81,6 +86,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     RestaurantProfileFragment restaurantProfileFragment;
     OpenRPostFragment openRPostFragment;
     CameraFragment cameraFragment;
+    DishTagging dishTagging;
 
     UserProfile userProfile;
 
@@ -628,5 +634,30 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         Log.d("checkInRestarant","rId"+restaurantId);
         cameraFragment = new CameraFragment();
         setFragmentView (cameraFragment, R.id.container1, 4, true);
+        hideSoftKeyboard();
     }
+
+    @Override
+    public void capturedBitmap(Bitmap photo) {
+
+        Log.d("capuredBitmap", "call");
+        dishTagging = new DishTagging(photo);
+        setFragmentView(dishTagging, R.id.container1, 4, true);
+
+        //showSoftKeyboard(layout);
+    }
+
+    public void hideSoftKeyboard() {
+        if(getCurrentFocus()!=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+    }
+
+    public void showSoftKeyboard(EditText txt) {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        txt.requestFocus();
+        inputMethodManager.showSoftInput(txt, 0);
+    }
+
 }

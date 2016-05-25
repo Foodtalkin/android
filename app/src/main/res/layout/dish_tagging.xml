@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+android:background="@color/bg_color"
+   >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="#10151f"
+        android:id="@+id/headerroot"
+
+        >
+        <RelativeLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+            <TextView
+                android:id="@+id/title_new_post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:text="Dish Tagging"
+                android:textSize="22sp"
+                android:layout_centerInParent="true"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/btn_skip_checkin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/blackText1"
+                android:text="Next"
+                android:textSize="20sp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:padding="4dp"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/header1"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <TextView
+                android:id="@+id/title_home1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:text=""
+                android:textSize="18sp"
+                android:layout_centerHorizontal="true" />
+            <TextView
+                android:id="@+id/subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/title_home1"
+                android:textColor="@color/subtitle_color"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        android:layout_below="@+id/headerroot">
+
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/img_dish_tagging"
+            android:padding="0dp"
+            android:src="@drawable/placeholder"
+            android:adjustViewBounds="true"
+            />
+    </ScrollView>
+    <!--<SearchView
+        android:id="@+id/search_view"
+        android:layout_height="42dp"
+        android:layout_width="match_parent"
+        android:queryHint="Dish Name"
+        android:queryBackground="@android:color/transparent"
+        android:iconifiedByDefault="false"
+        android:background="@drawable/round_bg_white"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentBottom="true"
+        />-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_dish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/edit_dish_name">
+
+    </android.support.v7.widget.RecyclerView>
+    <EditText
+        android:id="@+id/edit_dish_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:hint="Dish Name"
+        android:background="@color/bg_color"
+        android:padding="12dp"
+        android:textSize="18dp"
+        android:textColor="#fff"
+        android:textColorHint="@color/blackText1"
+        android:backgroundTint="@color/bg_color"
+        android:focusableInTouchMode="true"/>
+</RelativeLayout>

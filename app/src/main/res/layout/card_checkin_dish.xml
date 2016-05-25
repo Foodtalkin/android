@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:background="@color/bg_color">
+    <LinearLayout
+        android:id="@+id/btn_dish_tagging"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="10dp"
+        android:padding="4dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp">
+            <TextView
+                android:id="@+id/txt_dname_tagging"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Yo China"
+                android:textColor="#fff"
+                android:clickable="false"
+                android:textSize="16sp"
+                android:padding="6dp"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

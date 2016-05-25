@@ -26,6 +26,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.communicator.CamBitmapCallback;
 
 /**
  * Created by RetailAdmin on 20-05-2016.
@@ -42,6 +43,8 @@ public class CameraFragment extends Fragment {
 
     String mCurrentPhotoPath;
 
+    CamBitmapCallback camBitmapCallback;
+
     CropImageView cropedImg;
 
     private static final int CAMERA_REQUEST = 1888;
@@ -52,6 +55,8 @@ public class CameraFragment extends Fragment {
         imVCature_pic = (ImageView) layout.findViewById(R.id.picture_holder);
 
         cropedImg = (CropImageView) layout.findViewById(R.id.cropImageView);
+
+        camBitmapCallback = (CamBitmapCallback) getActivity();
 
 
         initializeControls();
@@ -77,6 +82,7 @@ public class CameraFragment extends Fragment {
 				 * as argument to launch camera
 				 */
                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+                //MediaStore.ACTION_IMAGE_CAPTURE
 				/*create instance of File with name img.jpg*/
                 //File file = new File(Environment.getExternalStorageDirectory()+File.separator + "img.jpg");
 				/*put uri as extra in intent object*/
@@ -94,10 +100,16 @@ public class CameraFragment extends Fragment {
 
         Log.d("onAcrivitiresult", requestCode+"");
         //if request code is same we pass as argument in startActivityForResult
-        if(requestCode==1){
+        if(requestCode==1 && resultCode == getActivity().RESULT_OK){
             //create instance of File with same name we created before to get image from storage
             //File file = new File(Environment.getExternalStorageDirectory()+File.separator + "img.jpg");
             //Crop the captured image using an other intent
+
+           // Bundle extras = data.getExtras();
+           // Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+            Log.d("data", data+" ");
+
             try {
 				/*the user's device may not support cropping*/
                 //--cropCapturedImage(Uri.fromFile(file));
@@ -140,6 +152,8 @@ public class CameraFragment extends Fragment {
                 Bitmap photo = decodeFile(new File(result.getUri().getPath()));
 
                 imVCature_pic.setImageBitmap(photo);
+
+                camBitmapCallback.capturedBitmap(photo);
 
                // cropedImg.setImageUriAsync(resultUri);
 

@@ -66,10 +66,7 @@
                 android:layout_height="42dp"
                 android:layout_width="match_parent"
                 android:queryHint="Search"
-
                 android:queryBackground="@android:color/transparent"
-
-
                 android:iconifiedByDefault="false"
                 android:background="@drawable/round_bg_white"
                 android:layout_below="@+id/header"
