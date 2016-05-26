@@ -660,4 +660,17 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         inputMethodManager.showSoftInput(txt, 0);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        hideSoftKeyboard();
+        Log.d("onDestroy", "distroy");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        hideSoftKeyboard();
+        Log.d("onPause", "activity pause");
+    }
 }

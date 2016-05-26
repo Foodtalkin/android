@@ -94,13 +94,17 @@ android:background="@color/bg_color"
         android:layout_marginBottom="10dp"
         android:layout_alignParentBottom="true"
         />-->
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_dish"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/edit_dish_name">
-
-    </android.support.v7.widget.RecyclerView>
+        android:layout_above="@+id/edit_dish_name"
+        android:background="#CC000000">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_dish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ></android.support.v7.widget.RecyclerView>
+    </LinearLayout>
     <EditText
         android:id="@+id/edit_dish_name"
         android:layout_width="match_parent"
@@ -113,5 +117,6 @@ android:background="@color/bg_color"
         android:textColor="#fff"
         android:textColorHint="@color/blackText1"
         android:backgroundTint="@color/bg_color"
-        android:focusableInTouchMode="true"/>
+        android:focusableInTouchMode="true"
+        android:singleLine="true"/>
 </RelativeLayout>

@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -41,6 +42,7 @@ import in.foodtalk.android.adapter.newpost.CheckInAdapter;
 import in.foodtalk.android.adapter.newpost.DishTaggingAdapter;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.DishTaggingCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.object.DishListObj;
 import in.foodtalk.android.object.RestaurantListObj;
@@ -48,7 +50,7 @@ import in.foodtalk.android.object.RestaurantListObj;
 /**
  * Created by RetailAdmin on 25-05-2016.
  */
-public class DishTagging extends Fragment {
+public class DishTagging extends Fragment implements DishTaggingCallback {
 
     View layout;
 
@@ -56,6 +58,8 @@ public class DishTagging extends Fragment {
 
     ImageView picHolder;
     EditText inputDishName;
+
+    Boolean dishNameLoaded = false;
 
     RelativeLayout relativeLayout;
 
@@ -65,6 +69,9 @@ public class DishTagging extends Fragment {
     JSONObject response;
     DishTaggingAdapter dishTaggingAdapter;
     RecyclerView recyclerView;
+    LinearLayoutManager linearLayoutManager;
+
+    DishTaggingCallback dishTaggingCallback;
 
     List<DishListObj> dishList = new ArrayList<>();
 
@@ -81,6 +88,11 @@ public class DishTagging extends Fragment {
         picHolder = (ImageView) layout.findViewById(R.id.img_dish_tagging);
         inputDishName = (EditText) layout.findViewById(R.id.edit_dish_name);
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_dish);
+
+        linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        dishTaggingCallback = this;
 
        //relativeLayout = (RelativeLayout) layout.findViewById(R.id.root_dish);
 
@@ -114,11 +126,22 @@ public class DishTagging extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.d("onTextChanged", s+"");
+                if (count == 0){
+                    recyclerView.setVisibility(View.GONE);
+                }else {
+                    if (dishNameLoaded){
+                        onTexChange(s.toString());
+                    }
+
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 Log.d("afterTextChange", s+"");
+
+
             }
         });
     }
@@ -155,7 +178,7 @@ public class DishTagging extends Fragment {
                             if (!status.equals("error")){
                                 //-- getAndSave(response);
 
-                                //--loadDataIntoView(response , tag);
+                                loadDataIntoView(response , tag);
                             }else {
                                 String errorCode = response.getString("errorCode");
                                 if(errorCode.equals("6")){
@@ -209,7 +232,7 @@ public class DishTagging extends Fragment {
 
         this.response = response;
 
-        JSONArray rListArray = response.getJSONArray("restaurants");
+        JSONArray rListArray = response.getJSONArray("result");
         // Log.d("rListArray", "total: "+ rListArray.length());
         for (int i=0;i<rListArray.length();i++){
             DishListObj current = new DishListObj();
@@ -219,7 +242,50 @@ public class DishTagging extends Fragment {
             dishList.add(current);
         }
         //Log.d("send list", "total: "+restaurantList.size());
-        dishTaggingAdapter = new DishTaggingAdapter(getActivity(),dishList);
+        dishTaggingAdapter = new DishTaggingAdapter(getActivity(),dishList , dishTaggingCallback);
         recyclerView.setAdapter(dishTaggingAdapter);
+        dishNameLoaded = true;
+    }
+
+    private void onTexChange(String newText){
+        try {
+            JSONArray rListArray = response.getJSONArray("result");
+            dishList.clear();
+            for (int i=0;i<rListArray.length();i++){
+                DishListObj current = new DishListObj();
+                current.id = rListArray.getJSONObject(i).getString("id");
+                current.name = rListArray.getJSONObject(i).getString("name");
+                current.postCount = rListArray.getJSONObject(i).getString("postCount");
+                dishList.add(current);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        // Log.d("rListArray", "total: "+ rListArray.length());
+        // tempList = new ArrayList<RestaurantListObj>(restaurantList);
+        final List<DishListObj> filteredModelList = filter(dishList, newText);
+        dishTaggingAdapter.animateTo(filteredModelList);
+        recyclerView.scrollToPosition(0);
+    }
+    private List<DishListObj> filter(List<DishListObj> models, String query) {
+        query = query.toLowerCase();
+        //this.postData =  new ArrayList<RestaurantPostObj>(postList);
+        final List<DishListObj> filteredModelList = new ArrayList<>();
+        for (DishListObj model : models) {
+            final String text = model.name.toLowerCase();
+            if (text.contains(query)) {
+                filteredModelList.add(model);
+            }
+        }
+        return filteredModelList;
+    }
+
+    @Override
+    public void dishNameSelected(String dishName) {
+        Log.d("dish name", dishName);
+        inputDishName.setText(dishName);
+        recyclerView.setVisibility(View.GONE);
+        inputDishName.setSelection(dishName.length());
+
     }
 }
