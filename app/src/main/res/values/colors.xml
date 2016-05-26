@@ -17,6 +17,11 @@
     <color name="card_head_highlight">#0369db</color>
 
 
+    <!-- new post section -->
+    <color name="btn_disable">#4b4f54</color>
+    <color name="btn_enable">#317ff4</color>
+
+
 
 
 

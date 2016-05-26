@@ -5,4 +5,5 @@ package in.foodtalk.android.communicator;
  */
 public interface DishTaggingCallback {
     public void dishNameSelected(String dishName);
+    public void startRating(String dishName);
 }

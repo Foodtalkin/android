@@ -13,12 +13,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -50,7 +52,7 @@ import in.foodtalk.android.object.RestaurantListObj;
 /**
  * Created by RetailAdmin on 25-05-2016.
  */
-public class DishTagging extends Fragment implements DishTaggingCallback {
+public class DishTagging extends Fragment implements DishTaggingCallback, View.OnTouchListener {
 
     View layout;
 
@@ -59,9 +61,13 @@ public class DishTagging extends Fragment implements DishTaggingCallback {
     ImageView picHolder;
     EditText inputDishName;
 
+    TextView btnNext;
+
     Boolean dishNameLoaded = false;
 
     RelativeLayout relativeLayout;
+
+    Boolean btnNextEnable = false;
 
     DatabaseHandler db;
     Config config;
@@ -72,6 +78,7 @@ public class DishTagging extends Fragment implements DishTaggingCallback {
     LinearLayoutManager linearLayoutManager;
 
     DishTaggingCallback dishTaggingCallback;
+    DishTaggingCallback dishTaggingCallback1;
 
     List<DishListObj> dishList = new ArrayList<>();
 
@@ -89,10 +96,15 @@ public class DishTagging extends Fragment implements DishTaggingCallback {
         inputDishName = (EditText) layout.findViewById(R.id.edit_dish_name);
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_dish);
 
+        btnNext = (TextView) layout.findViewById(R.id.btn_next_dishtagging);
+
+        btnNext.setOnTouchListener(this);
+
         linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
         dishTaggingCallback = this;
+        dishTaggingCallback1 = (DishTaggingCallback) getActivity();
 
        //relativeLayout = (RelativeLayout) layout.findViewById(R.id.root_dish);
 
@@ -106,7 +118,7 @@ public class DishTagging extends Fragment implements DishTaggingCallback {
         config = new Config();
 
         try {
-            getRestaurantList("load");
+            getDishList("load");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -120,26 +132,30 @@ public class DishTagging extends Fragment implements DishTaggingCallback {
         inputDishName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                Log.d("beforeTextChange", s+"");
+                //Log.d("beforeTextChange", s+"");
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.d("onTextChanged", s+"");
+                //Log.d("onTextChanged", s+"");
                 if (count == 0){
                     recyclerView.setVisibility(View.GONE);
+                    btnNext.setTextColor(getResources().getColor(R.color.btn_disable));
+                    btnNextEnable = false;
                 }else {
                     if (dishNameLoaded){
                         onTexChange(s.toString());
                     }
 
                     recyclerView.setVisibility(View.VISIBLE);
+                    btnNext.setTextColor(getResources().getColor(R.color.btn_enable));
+                    btnNextEnable = true;
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                Log.d("afterTextChange", s+"");
+                //Log.d("afterTextChange", s+"");
 
 
             }
@@ -152,9 +168,9 @@ public class DishTagging extends Fragment implements DishTaggingCallback {
         inputMethodManager.showSoftInput(txt, 0);
     }
 
-    public void getRestaurantList(final String tag) throws JSONException {
+    public void getDishList(final String tag) throws JSONException {
 
-        Log.d("getPostFeed", "post data");
+        //Log.d("getPostFeed", "post data");
         JSONObject obj = new JSONObject();
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
         //obj.put("latitude","28.4820495");
@@ -287,5 +303,27 @@ public class DishTagging extends Fragment implements DishTaggingCallback {
         recyclerView.setVisibility(View.GONE);
         inputDishName.setSelection(dishName.length());
 
+    }
+
+    @Override
+    public void startRating(String dishName) {
+        Log.d("startRating fragment", dishName);
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (v.getId()){
+            case R.id.btn_next_dishtagging:
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_UP:
+                        if (btnNextEnable){
+                            Log.d("onTouch", "next btn clicked");
+                            dishTaggingCallback1.startRating(inputDishName.getText().toString());
+                        }
+                        break;
+                }
+                break;
+        }
+        return true;
     }
 }

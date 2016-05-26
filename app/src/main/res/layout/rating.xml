@@ -22,7 +22,7 @@ android:background="@color/bg_color"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#fff"
-                android:text="Dish Tagging"
+                android:text="Rating"
                 android:textSize="22sp"
                 android:layout_centerInParent="true"
                 android:textStyle="bold"/>
@@ -31,7 +31,7 @@ android:background="@color/bg_color"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/blackText1"
-                android:text="Next"
+                android:text="Rate Later"
                 android:textSize="20sp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
@@ -63,14 +63,12 @@ android:background="@color/bg_color"
         </RelativeLayout>
     </RelativeLayout>
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="true"
-        android:scrollbars="none"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         android:layout_below="@+id/headerroot">
-
-
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -79,7 +77,62 @@ android:background="@color/bg_color"
             android:src="@drawable/placeholder"
             android:adjustViewBounds="true"
             />
-    </ScrollView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rate this dish"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/blackText1"
+            android:layout_weight="1"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/star_passive"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/star_passive"
+                android:layout_marginLeft="10dp"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/star_passive"
+                android:layout_marginLeft="10dp"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/star_passive"
+                android:layout_marginLeft="10dp"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/star_passive"
+                android:layout_marginLeft="10dp"/>
+
+        </LinearLayout>
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dish rating are used to provide a batter experiance \nwe use your ratings to customize the way you discover."
+            android:layout_gravity="center"
+
+            android:layout_marginTop="20dp"
+            android:textAlignment="center"
+            android:textColor="@color/blackText1"
+            android:textSize="13sp"/>
+
+
+    </LinearLayout>
+
+
+
     <!--<SearchView
         android:id="@+id/search_view"
         android:layout_height="42dp"
@@ -93,30 +146,6 @@ android:background="@color/bg_color"
         android:layout_marginBottom="10dp"
         android:layout_alignParentBottom="true"
         />-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/edit_dish_name"
-        android:background="#CC000000">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view_dish"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            ></android.support.v7.widget.RecyclerView>
-    </LinearLayout>
-    <EditText
-        android:id="@+id/edit_dish_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:hint="Dish Name"
-        android:background="@color/bg_color"
-        android:padding="12dp"
-        android:textSize="18dp"
-        android:textColor="#fff"
-        android:textColorHint="@color/blackText1"
-        android:backgroundTint="@color/bg_color"
-        android:focusableInTouchMode="true"
-        android:singleLine="true"/>
+
+
 </RelativeLayout>

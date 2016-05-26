@@ -27,6 +27,7 @@ import in.foodtalk.android.apicall.PostLikeApi;
 import in.foodtalk.android.apicall.PostReportApi;
 import in.foodtalk.android.communicator.CamBitmapCallback;
 import in.foodtalk.android.communicator.CheckInCallback;
+import in.foodtalk.android.communicator.DishTaggingCallback;
 import in.foodtalk.android.communicator.HeadSpannableCallback;
 import in.foodtalk.android.communicator.MoreBtnCallback;
 import in.foodtalk.android.communicator.PhoneCallback;
@@ -60,7 +61,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         PostLikeCallback, PostBookmarkCallback, PostOptionCallback, PostDeleteCallback,
         MoreBtnCallback, UserProfileCallback, ProfilePostOpenCallback, FragmentManager.OnBackStackChangedListener,
         HeadSpannableCallback, UserThumbCallback, ProfileRPostOpenCallback, PhoneCallback,
-        CheckInCallback, CamBitmapCallback{
+        CheckInCallback, CamBitmapCallback, DishTaggingCallback{
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
@@ -672,5 +673,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         super.onPause();
         hideSoftKeyboard();
         Log.d("onPause", "activity pause");
+    }
+
+    @Override
+    public void dishNameSelected(String dishName) {
+
+    }
+    @Override
+    public void startRating(String dishName) {
+        Log.d("startRating", dishName);
     }
 }
