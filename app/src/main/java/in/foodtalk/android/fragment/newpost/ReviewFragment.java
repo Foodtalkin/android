@@ -15,6 +15,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import in.foodtalk.android.R;
 
 /**
@@ -53,6 +56,15 @@ public class ReviewFragment extends Fragment implements View.OnTouchListener {
         editReview.requestFocus();
         return layout;
     }
+
+    private void cl(){
+        Map config = new HashMap();
+        config.put("cloud_name", "n07t21i7");
+        config.put("api_key", "123456789012345");
+        config.put("api_secret", "abcdeghijklmnopqrstuvwxyz12");
+      //  Cloudinary cloudinary = new Cloudinary(config);
+    }
+
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {

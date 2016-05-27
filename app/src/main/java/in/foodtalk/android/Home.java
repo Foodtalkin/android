@@ -18,9 +18,16 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+
 import org.json.JSONException;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import in.foodtalk.android.apicall.PostBookmarkApi;
 import in.foodtalk.android.apicall.PostLikeApi;
@@ -702,4 +709,22 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         reviewFragment = new ReviewFragment(photo);
         setFragmentView(reviewFragment, R.id.container1, 4, true);
     }
+
+
+    private void uploadImage(){
+        Map config = new HashMap();
+        config.put("cloud_name", "digital-food-talk-pvt-ltd");
+        config.put("api_key", "849964931992422");
+        config.put("api_secret", "xG26XxqmqCVcpl0l9-5TJs77Qc");
+        Cloudinary cloudinary = new Cloudinary(config);
+
+       // cloudinary.uploader().upload(inputStream, ObjectUtils.emptyMap())
+
+        //cloudinary.uploader().unsignedUpload(getAssetStream("sample.jpg"), "zcudy0uz", Cloudinary.emptyMap());
+    }
+    //InputStream getAssetStream(String filename) throws IOException {
+      //  return getInstrumentation().getContext().getAssets().open(filename);
+    //}
+
+
 }
