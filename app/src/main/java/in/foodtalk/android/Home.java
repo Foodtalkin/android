@@ -37,6 +37,7 @@ import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.communicator.PostOptionCallback;
 import in.foodtalk.android.communicator.ProfilePostOpenCallback;
 import in.foodtalk.android.communicator.ProfileRPostOpenCallback;
+import in.foodtalk.android.communicator.RatingCallback;
 import in.foodtalk.android.communicator.UserProfileCallback;
 import in.foodtalk.android.communicator.UserThumbCallback;
 import in.foodtalk.android.fragment.DiscoverFragment;
@@ -53,6 +54,8 @@ import in.foodtalk.android.fragment.RestaurantProfileFragment;
 import in.foodtalk.android.fragment.UserProfile;
 import in.foodtalk.android.fragment.WebViewFragment;
 import in.foodtalk.android.fragment.newpost.DishTagging;
+import in.foodtalk.android.fragment.newpost.RatingFragment;
+import in.foodtalk.android.fragment.newpost.ReviewFragment;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.object.RestaurantPostObj;
 import in.foodtalk.android.object.UserPostObj;
@@ -61,7 +64,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         PostLikeCallback, PostBookmarkCallback, PostOptionCallback, PostDeleteCallback,
         MoreBtnCallback, UserProfileCallback, ProfilePostOpenCallback, FragmentManager.OnBackStackChangedListener,
         HeadSpannableCallback, UserThumbCallback, ProfileRPostOpenCallback, PhoneCallback,
-        CheckInCallback, CamBitmapCallback, DishTaggingCallback{
+        CheckInCallback, CamBitmapCallback, DishTaggingCallback , RatingCallback{
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
@@ -88,6 +91,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     OpenRPostFragment openRPostFragment;
     CameraFragment cameraFragment;
     DishTagging dishTagging;
+    RatingFragment ratingFragment;
+    ReviewFragment reviewFragment;
 
     UserProfile userProfile;
 
@@ -120,6 +125,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     private final int USER_PROFILE = 1;
     private final int DISH = 2;
     private final int RESTAURANT_PROFILE = 3;
+
+
+    Bitmap photo;
 
 
     @Override
@@ -641,6 +649,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     @Override
     public void capturedBitmap(Bitmap photo) {
 
+        this.photo = photo;
+
         Log.d("capuredBitmap", "call");
         dishTagging = new DishTagging(photo);
         setFragmentView(dishTagging, R.id.container1, 4, true);
@@ -682,5 +692,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     @Override
     public void startRating(String dishName) {
         Log.d("startRating", dishName);
+        hideSoftKeyboard();
+        ratingFragment = new RatingFragment(photo);
+        setFragmentView(ratingFragment, R.id.container1, 4, true);
+    }
+    @Override
+    public void goforReview(String rate) {
+        Log.d("goforReview", rate);
+        reviewFragment = new ReviewFragment(photo);
+        setFragmentView(reviewFragment, R.id.container1, 4, true);
     }
 }

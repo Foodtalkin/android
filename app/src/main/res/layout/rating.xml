@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
 android:background="@color/bg_color"
+    android:clickable="true"
    >
 
     <RelativeLayout
@@ -62,8 +63,6 @@ android:background="@color/bg_color"
                 android:textColor="@color/subtitle_color"/>
         </RelativeLayout>
     </RelativeLayout>
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -72,7 +71,7 @@ android:background="@color/bg_color"
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/img_dish_tagging"
+            android:id="@+id/img_dish_rating"
             android:padding="0dp"
             android:src="@drawable/placeholder"
             android:adjustViewBounds="true"
@@ -91,48 +90,48 @@ android:background="@color/bg_color"
             android:orientation="horizontal"
             android:layout_gravity="center">
             <ImageView
+                android:id="@+id/btn_star_rating1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/star_passive"/>
+                android:src="@drawable/star_rating_p"
+                android:padding="6dp"/>
             <ImageView
+                android:id="@+id/btn_star_rating2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/star_passive"
-                android:layout_marginLeft="10dp"/>
+                android:src="@drawable/star_rating_p"
+                android:padding="6dp"/>
             <ImageView
+                android:id="@+id/btn_star_rating3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/star_passive"
-                android:layout_marginLeft="10dp"/>
+                android:src="@drawable/star_rating_p"
+                android:padding="6dp"/>
             <ImageView
+                android:id="@+id/btn_star_rating4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/star_passive"
-                android:layout_marginLeft="10dp"/>
+                android:src="@drawable/star_rating_p"
+                android:padding="6dp"/>
             <ImageView
+                android:id="@+id/btn_star_rating5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/star_passive"
-                android:layout_marginLeft="10dp"/>
+                android:src="@drawable/star_rating_p"
+                android:padding="6dp"/>
 
         </LinearLayout>
         <TextView
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Dish rating are used to provide a batter experiance \nwe use your ratings to customize the way you discover."
+            android:text="Dish rating are used to provide a better experiance \nwe use your ratings to customize the way you discover."
             android:layout_gravity="center"
-
             android:layout_marginTop="20dp"
             android:textAlignment="center"
             android:textColor="@color/blackText1"
             android:textSize="13sp"/>
-
-
     </LinearLayout>
-
-
-
     <!--<SearchView
         android:id="@+id/search_view"
         android:layout_height="42dp"
@@ -146,6 +145,4 @@ android:background="@color/bg_color"
         android:layout_marginBottom="10dp"
         android:layout_alignParentBottom="true"
         />-->
-
-
 </RelativeLayout>

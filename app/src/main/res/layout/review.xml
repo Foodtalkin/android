@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
 android:background="@color/bg_color"
+    android:clickable="true"
 
    >
 
@@ -23,16 +24,16 @@ android:background="@color/bg_color"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#fff"
-                android:text="Dish Tagging"
+                android:text="Review"
                 android:textSize="22sp"
                 android:layout_centerInParent="true"
                 android:textStyle="bold"/>
             <TextView
-                android:id="@+id/btn_next_dishtagging"
+                android:id="@+id/btn_post_review"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/blackText1"
-                android:text="Next"
+                android:textColor="@color/btn_enable"
+                android:text="Post"
                 android:textSize="20sp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
@@ -63,7 +64,6 @@ android:background="@color/bg_color"
                 android:textColor="@color/subtitle_color"/>
         </RelativeLayout>
     </RelativeLayout>
-
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -75,7 +75,7 @@ android:background="@color/bg_color"
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/img_dish_tagging"
+            android:id="@+id/img_dish_review"
             android:padding="0dp"
             android:src="@drawable/placeholder"
             android:adjustViewBounds="true"
@@ -94,24 +94,13 @@ android:background="@color/bg_color"
         android:layout_marginBottom="10dp"
         android:layout_alignParentBottom="true"
         />-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/edit_dish_name"
-        android:background="#CC000000">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view_dish"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            ></android.support.v7.widget.RecyclerView>
-    </LinearLayout>
+
     <EditText
-        android:id="@+id/edit_dish_name"
+        android:id="@+id/edit_dish_review"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:hint="Dish Name"
+        android:hint="Write a review"
         android:background="@color/bg_color"
         android:padding="12dp"
         android:textSize="18dp"
@@ -119,5 +108,5 @@ android:background="@color/bg_color"
         android:textColorHint="@color/blackText1"
         android:backgroundTint="@color/bg_color"
         android:focusableInTouchMode="true"
-        android:singleLine="true"/>
+        android:maxLength="240"/>
 </RelativeLayout>
