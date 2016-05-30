@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.communicator.ReviewCallback;
 
 /**
  * Created by RetailAdmin on 27-05-2016.
@@ -32,9 +33,13 @@ public class ReviewFragment extends Fragment implements View.OnTouchListener {
     EditText editReview;
     TextView btnPost;
 
+    ReviewCallback reviewCallback;
+
 
     public ReviewFragment (Bitmap photo){
         this.photo = photo;
+
+
     }
 
 
@@ -49,7 +54,11 @@ public class ReviewFragment extends Fragment implements View.OnTouchListener {
         editReview = (EditText) layout.findViewById(R.id.edit_dish_review);
         btnPost = (TextView) layout.findViewById(R.id.btn_post_review);
 
+        btnPost.setOnTouchListener(this);
+
         dishPic.setImageBitmap(photo);
+
+        reviewCallback = (ReviewCallback) getActivity();
 
         InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
@@ -64,13 +73,20 @@ public class ReviewFragment extends Fragment implements View.OnTouchListener {
         config.put("api_secret", "abcdeghijklmnopqrstuvwxyz12");
       //  Cloudinary cloudinary = new Cloudinary(config);
     }
-
-
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         switch (v.getId()){
             case R.id.btn_post_review:
-                Log.d("onTouch","clicked post");
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_UP:
+                        //Log.d("onTouch",editReview.getText().toString()+"");
+                        if (editReview.getText().length() != 0){
+                            reviewCallback.postData(editReview.getText().toString());
+                        }else {
+                            reviewCallback.postData("na");
+                        }
+                        break;
+                }
                 break;
         }
         return true;

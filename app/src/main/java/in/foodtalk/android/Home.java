@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ import com.cloudinary.utils.ObjectUtils;
 
 import org.json.JSONException;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -34,6 +36,7 @@ import in.foodtalk.android.apicall.PostLikeApi;
 import in.foodtalk.android.apicall.PostReportApi;
 import in.foodtalk.android.communicator.CamBitmapCallback;
 import in.foodtalk.android.communicator.CheckInCallback;
+import in.foodtalk.android.communicator.CloudinaryCallback;
 import in.foodtalk.android.communicator.DishTaggingCallback;
 import in.foodtalk.android.communicator.HeadSpannableCallback;
 import in.foodtalk.android.communicator.MoreBtnCallback;
@@ -45,6 +48,7 @@ import in.foodtalk.android.communicator.PostOptionCallback;
 import in.foodtalk.android.communicator.ProfilePostOpenCallback;
 import in.foodtalk.android.communicator.ProfileRPostOpenCallback;
 import in.foodtalk.android.communicator.RatingCallback;
+import in.foodtalk.android.communicator.ReviewCallback;
 import in.foodtalk.android.communicator.UserProfileCallback;
 import in.foodtalk.android.communicator.UserThumbCallback;
 import in.foodtalk.android.fragment.DiscoverFragment;
@@ -63,6 +67,7 @@ import in.foodtalk.android.fragment.WebViewFragment;
 import in.foodtalk.android.fragment.newpost.DishTagging;
 import in.foodtalk.android.fragment.newpost.RatingFragment;
 import in.foodtalk.android.fragment.newpost.ReviewFragment;
+import in.foodtalk.android.module.CloudinaryUpload;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.object.RestaurantPostObj;
 import in.foodtalk.android.object.UserPostObj;
@@ -71,7 +76,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         PostLikeCallback, PostBookmarkCallback, PostOptionCallback, PostDeleteCallback,
         MoreBtnCallback, UserProfileCallback, ProfilePostOpenCallback, FragmentManager.OnBackStackChangedListener,
         HeadSpannableCallback, UserThumbCallback, ProfileRPostOpenCallback, PhoneCallback,
-        CheckInCallback, CamBitmapCallback, DishTaggingCallback , RatingCallback{
+        CheckInCallback, CamBitmapCallback, DishTaggingCallback , RatingCallback , ReviewCallback{
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
@@ -83,6 +88,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     private int[] imgR;
     private int[] imgRA;
     private LinearLayout btnLogout;
+
+    ProgressBar progressBarUpload;
 
 
     HomeFragment homeFragment;
@@ -135,6 +142,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
 
     Bitmap photo;
+    File file;
 
 
     @Override
@@ -150,6 +158,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
 
         setContentView(R.layout.activity_home);
+
+
+       // ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        //progressBar.setIndeterminate(false);
+
+        progressBarUpload = (ProgressBar) findViewById(R.id.progress_bar_upload);
 
         header = (RelativeLayout) findViewById(R.id.header);
         header1 = (RelativeLayout) findViewById(R.id.header1);
@@ -654,13 +668,17 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     }
 
     @Override
-    public void capturedBitmap(Bitmap photo) {
+    public void capturedBitmap(Bitmap photo , File file) {
 
         this.photo = photo;
+
+        this.file = file;
 
         Log.d("capuredBitmap", "call");
         dishTagging = new DishTagging(photo);
         setFragmentView(dishTagging, R.id.container1, 4, true);
+
+
 
         //showSoftKeyboard(layout);
     }
@@ -710,7 +728,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         setFragmentView(reviewFragment, R.id.container1, 4, true);
     }
 
-
     private void uploadImage(){
         Map config = new HashMap();
         config.put("cloud_name", "digital-food-talk-pvt-ltd");
@@ -722,9 +739,28 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         //cloudinary.uploader().unsignedUpload(getAssetStream("sample.jpg"), "zcudy0uz", Cloudinary.emptyMap());
     }
+
+    CloudinaryCallback cloudinaryCallback = new CloudinaryCallback() {
+        @Override
+        public void uploaded(Map result) {
+            Log.d("uploaded", result+"");
+            progressBarUpload.setVisibility(View.GONE);
+        }
+    };
+
+
+    @Override
+    public void postData(String review) {
+        Log.d("review call back", review);
+        getFragmentManager().beginTransaction().remove(reviewFragment).commit();
+        hideSoftKeyboard();
+        //new GetApiContent(getContext(), apiAsyncCallback).execute("http://www.circuitmagic.com/api/get_posts/");
+        new CloudinaryUpload(this, cloudinaryCallback).execute(file);
+
+       // progressBarUpload.setIndeterminate(true);
+        progressBarUpload.setVisibility(View.VISIBLE);
+    }
     //InputStream getAssetStream(String filename) throws IOException {
       //  return getInstrumentation().getContext().getAssets().open(filename);
     //}
-
-
 }

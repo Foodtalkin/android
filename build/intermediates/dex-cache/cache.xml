@@ -23,6 +23,13 @@
         <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-appindexing-8.4.0_5d70083b92036a88db6b59ef1aed73df855d3459\classes.dex" />
     </item>
     <item
+        jar="C:\Users\RetailAdmin\.gradle\caches\modules-2\files-2.1\com.cloudinary\cloudinary-core\1.4.1\d87143bee9c1a85867674ce65518231283a2d5fa\cloudinary-core-1.4.1.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="d87143bee9c1a85867674ce65518231283a2d5fa">
+        <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\cloudinary-core-1.4.1_8ff286954064e1d85dd0991fd700772d3c7dc06e\classes.dex" />
+    </item>
+    <item
         jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.3.0\jars\classes.jar"
         jumboMode="true"
         revision="23.0.3"
@@ -128,6 +135,13 @@
         <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-vision-8.4.0_816527dedee8f50c3983146fff37f2c35bb723f8\classes.dex" />
     </item>
     <item
+        jar="C:\Users\RetailAdmin\.gradle\caches\modules-2\files-2.1\com.cloudinary\cloudinary-android\1.4.1\9795b0a3cae8c2e9d7ae2da34e777e51aca46ee8\cloudinary-android-1.4.1.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="9795b0a3cae8c2e9d7ae2da34e777e51aca46ee8">
+        <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\cloudinary-android-1.4.1_78bee993799a6a3483b451607d7352ad390fb014\classes.dex" />
+    </item>
+    <item
         jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-fitness\8.4.0\jars\classes.jar"
         jumboMode="true"
         revision="23.0.3"
@@ -173,7 +187,7 @@
         jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
         jumboMode="true"
         revision="23.0.3"
-        sha1="4c7d0b2ffd4364f620b8d8c43168a47360dc1c6c">
+        sha1="d1b10288662239cff0fa33dd97b38f9d0ccf2080">
         <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_3ab2cc360096cb3d341c6dc79881dd2fa2c96c82\classes.dex" />
     </item>
     <item
@@ -306,7 +320,7 @@
         jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
         jumboMode="true"
         revision="23.0.3"
-        sha1="11a00278cde4935c955c13fa88019cf03bfd36d9">
+        sha1="434bda1f207c7d9cb374468b246023dabb142c97">
         <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_50551e3d423cc16aefa57e10625a63808043196a\classes.dex" />
     </item>
 

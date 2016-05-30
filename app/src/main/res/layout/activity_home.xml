@@ -60,7 +60,19 @@
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/title_home1"
                     android:textColor="@color/subtitle_color"/>
+
+
             </RelativeLayout>
+            <ProgressBar
+                android:id="@+id/progress_bar_upload"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:visibility="gone"
+                android:layout_marginBottom="-6dp"
+                android:layout_alignParentBottom="true"
+                />
         </RelativeLayout>
         <LinearLayout
             android:id="@+id/container"

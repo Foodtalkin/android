@@ -153,7 +153,7 @@ public class CameraFragment extends Fragment {
 
                 imVCature_pic.setImageBitmap(photo);
 
-                camBitmapCallback.capturedBitmap(photo);
+                camBitmapCallback.capturedBitmap(photo , new File(result.getUri().getPath()));
 
                // cropedImg.setImageUriAsync(resultUri);
 
@@ -171,7 +171,6 @@ public class CameraFragment extends Fragment {
             //--imVCature_pic.setImageBitmap(thePic);
 
             //Log.d("get extras", extras.getParcelable("data")+"");
-
             try {
                 if(file.exists()){
 
@@ -182,7 +181,7 @@ public class CameraFragment extends Fragment {
 
                     Bitmap croppedBmp = Bitmap.createBitmap(photo, 0, 0,
                             photo.getWidth() / 2, photo.getHeight());
-                    imVCature_pic.setImageBitmap(croppedBmp);
+                   // imVCature_pic.setImageBitmap(croppedBmp);
                 }
                 else {
                     Toast.makeText(getActivity(), "Error while save image", Toast.LENGTH_SHORT).show();
