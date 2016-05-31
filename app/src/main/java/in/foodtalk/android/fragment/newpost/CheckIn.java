@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -65,6 +66,8 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
 
     CheckInCallback checkInCallback;
 
+    LinearLayout progressBarCheckin;
+
 
 
 
@@ -79,6 +82,8 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
 
         TextView btnSkip = (TextView) layout.findViewById(R.id.btn_skip_checkin);
 
+        progressBarCheckin = (LinearLayout) layout.findViewById(R.id.progress_bar_checkin);
+
         latLonCallback = this;
 
         getLocation = new GetLocation(getActivity(), latLonCallback);
@@ -92,9 +97,7 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
                         switch (event.getAction()){
                             case MotionEvent.ACTION_UP:
                                 Log.d("clicked","skip btn");
-
                                 checkInCallback.checkInRestaurant("","");
-
                                 break;
                         }
                     break;
@@ -128,7 +131,6 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
 
         super.onActivityCreated(savedInstanceState);
     }
-
     public void getRestaurantList(final String tag) throws JSONException {
 
         Log.d("getPostFeed", "post data");
@@ -199,7 +201,6 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
                 return headers;
             }
         };
-
         final int DEFAULT_TIMEOUT = 6000;
         // Adding request to request queue
         jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
@@ -208,8 +209,9 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
 
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
 
-        this.response = response;
+        progressBarCheckin.setVisibility(View.GONE);
 
+        this.response = response;
         JSONArray rListArray = response.getJSONArray("restaurants");
        // Log.d("rListArray", "total: "+ rListArray.length());
         for (int i=0;i<rListArray.length();i++){
@@ -251,7 +253,6 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
             e.printStackTrace();
         }
         // Log.d("rListArray", "total: "+ rListArray.length());
-
        // tempList = new ArrayList<RestaurantListObj>(restaurantList);
 
         final List<RestaurantListObj> filteredModelList = filter(restaurantList, newText);
@@ -272,13 +273,11 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
         }
         return filteredModelList;
     }
-
     @Override
     public void location(String lat, String lon) {
         //Log.d("location",lat+" : "+lon);
         this.lat = lat;
         this.lon = lon;
-
         try {
             getRestaurantList("load");
         } catch (JSONException e) {
