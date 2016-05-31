@@ -34,4 +34,6 @@ public class Config {
     public static String URL_NEAR_BY_RESTAURANT = "http://"+IP+"/index.php/service/restaurant/list";
 
     public static String URL_DISH_NAME = "http://"+IP+"/index.php/service/dish/list";
+
+    public static String URL_POST_CREATE = "http://"+IP+"/index.php/service/post/create";
 }

@@ -33,13 +33,16 @@ import in.foodtalk.android.R;
 import in.foodtalk.android.adapter.newpost.CheckInAdapter;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.CheckInCallback;
+import in.foodtalk.android.communicator.LatLonCallback;
 import in.foodtalk.android.module.DatabaseHandler;
+import in.foodtalk.android.module.GetLocation;
 import in.foodtalk.android.object.RestaurantListObj;
 
 /**
  * Created by RetailAdmin on 21-04-2016.
  */
-public class CheckIn extends Fragment implements SearchView.OnQueryTextListener {
+public class CheckIn extends Fragment implements SearchView.OnQueryTextListener, LatLonCallback {
 
     View layout;
     DatabaseHandler db;
@@ -52,6 +55,15 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener 
     List<RestaurantListObj> restaurantList = new ArrayList<>();
 
     JSONObject response;
+
+    LatLonCallback latLonCallback;
+
+    GetLocation getLocation;
+
+    String lat;
+    String lon;
+
+    CheckInCallback checkInCallback;
 
 
 
@@ -67,6 +79,11 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener 
 
         TextView btnSkip = (TextView) layout.findViewById(R.id.btn_skip_checkin);
 
+        latLonCallback = this;
+
+        getLocation = new GetLocation(getActivity(), latLonCallback);
+        getLocation.onStart();
+
         btnSkip.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -75,6 +92,9 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener 
                         switch (event.getAction()){
                             case MotionEvent.ACTION_UP:
                                 Log.d("clicked","skip btn");
+
+                                checkInCallback.checkInRestaurant("","");
+
                                 break;
                         }
                     break;
@@ -85,9 +105,18 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener 
         return layout;
     }
     @Override
+    public void onDestroyView() {
+        Log.d("Fragment","onDestryView");
+        //getActivity().getFragmentManager().beginTransaction().remove(this).commit();
+        getLocation.onStop();
+        super.onDestroyView();
+    }
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         //recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         linearLayoutManager = new LinearLayoutManager(getActivity());
+
+        checkInCallback = (CheckInCallback) getActivity();
 
         linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -96,11 +125,7 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener 
 
         Log.d("get user info F", db.getUserDetails().get("sessionId"));
         Log.d("get user info F", db.getUserDetails().get("userId"));
-        try {
-            getRestaurantList("load");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -109,8 +134,8 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener 
         Log.d("getPostFeed", "post data");
         JSONObject obj = new JSONObject();
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
-        obj.put("latitude","28.4820495");
-        obj.put("longitude","77.0832561");
+        obj.put("latitude",lat);
+        obj.put("longitude",lon);
         //obj.put("includeCount", "1");
         //obj.put("includeFollowed","1");
         obj.put("postUserId",db.getUserDetails().get("userId"));
@@ -246,5 +271,18 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener 
             }
         }
         return filteredModelList;
+    }
+
+    @Override
+    public void location(String lat, String lon) {
+        //Log.d("location",lat+" : "+lon);
+        this.lat = lat;
+        this.lon = lon;
+
+        try {
+            getRestaurantList("load");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

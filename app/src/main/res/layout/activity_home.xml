@@ -63,17 +63,35 @@
 
 
             </RelativeLayout>
+
+
+
+        </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/progress_bar_upload"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#10151f"
+            android:visibility="gone">
+            <TextView
+                android:id="@+id/txt_uploading_dish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_gravity="center"
+                android:layout_margin="0dp"
+                android:textColor="@color/blackText1"/>
             <ProgressBar
-                android:id="@+id/progress_bar_upload"
+
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:indeterminate="true"
-                android:visibility="gone"
                 android:layout_marginBottom="-6dp"
                 android:layout_alignParentBottom="true"
                 />
-        </RelativeLayout>
+        </LinearLayout>
         <LinearLayout
             android:id="@+id/container"
             android:layout_width="match_parent"

@@ -69,6 +69,8 @@ import in.foodtalk.android.fragment.newpost.RatingFragment;
 import in.foodtalk.android.fragment.newpost.ReviewFragment;
 import in.foodtalk.android.module.CloudinaryUpload;
 import in.foodtalk.android.module.DatabaseHandler;
+import in.foodtalk.android.module.NewPostUpload;
+import in.foodtalk.android.object.CreatePostObj;
 import in.foodtalk.android.object.RestaurantPostObj;
 import in.foodtalk.android.object.UserPostObj;
 
@@ -89,7 +91,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     private int[] imgRA;
     private LinearLayout btnLogout;
 
-    ProgressBar progressBarUpload;
+    LinearLayout progressBarUpload;
 
 
     HomeFragment homeFragment;
@@ -143,6 +145,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
     Bitmap photo;
     File file;
+    String restaurantNameNewPost;
+    String rating;
+    String review;
+    String restaurantIdNewPost;
+    String dishName;
+
+    CreatePostObj createPostObj;
+    TextView txtUploadingDish;
 
 
     @Override
@@ -159,11 +169,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         setContentView(R.layout.activity_home);
 
+        createPostObj = new CreatePostObj();
+
 
        // ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         //progressBar.setIndeterminate(false);
 
-        progressBarUpload = (ProgressBar) findViewById(R.id.progress_bar_upload);
+        progressBarUpload = (LinearLayout) findViewById(R.id.progress_bar_upload);
+        txtUploadingDish = (TextView) findViewById(R.id.txt_uploading_dish);
 
         header = (RelativeLayout) findViewById(R.id.header);
         header1 = (RelativeLayout) findViewById(R.id.header1);
@@ -660,9 +673,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         callDialog(phone1, phone2);
     }
     @Override
-    public void checkInRestaurant(String restaurantId) {
-        Log.d("checkInRestarant","rId"+restaurantId);
+    public void checkInRestaurant(String restaurantId, String restaurantName) {
+
+        this.restaurantIdNewPost = restaurantId;
+
+        Log.d("checkInRestarant","rId"+restaurantId+" rName: "+restaurantName);
         cameraFragment = new CameraFragment();
+        restaurantNameNewPost = restaurantName;
         setFragmentView (cameraFragment, R.id.container1, 4, true);
         hideSoftKeyboard();
     }
@@ -677,8 +694,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         Log.d("capuredBitmap", "call");
         dishTagging = new DishTagging(photo);
         setFragmentView(dishTagging, R.id.container1, 4, true);
-
-
 
         //showSoftKeyboard(layout);
     }
@@ -717,6 +732,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     @Override
     public void startRating(String dishName) {
         Log.d("startRating", dishName);
+        this.dishName = dishName;
         hideSoftKeyboard();
         ratingFragment = new RatingFragment(photo);
         setFragmentView(ratingFragment, R.id.container1, 4, true);
@@ -724,43 +740,49 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     @Override
     public void goforReview(String rate) {
         Log.d("goforReview", rate);
+        rating = rate;
         reviewFragment = new ReviewFragment(photo);
         setFragmentView(reviewFragment, R.id.container1, 4, true);
     }
-
-    private void uploadImage(){
-        Map config = new HashMap();
-        config.put("cloud_name", "digital-food-talk-pvt-ltd");
-        config.put("api_key", "849964931992422");
-        config.put("api_secret", "xG26XxqmqCVcpl0l9-5TJs77Qc");
-        Cloudinary cloudinary = new Cloudinary(config);
-
-       // cloudinary.uploader().upload(inputStream, ObjectUtils.emptyMap())
-
-        //cloudinary.uploader().unsignedUpload(getAssetStream("sample.jpg"), "zcudy0uz", Cloudinary.emptyMap());
-    }
-
     CloudinaryCallback cloudinaryCallback = new CloudinaryCallback() {
         @Override
         public void uploaded(Map result) {
             Log.d("uploaded", result+"");
-            progressBarUpload.setVisibility(View.GONE);
+            //progressBarUpload.setVisibility(View.GONE);
+            Log.d("result img url", result.get("url").toString());
+
+            createPostObj.sessionId= sessionId;
+            createPostObj.checkedInRestaurantId = restaurantIdNewPost;
+            createPostObj.image = result.get("url").toString();
+            createPostObj.tip = review;
+            createPostObj.rating = rating;
+            createPostObj.dishName = dishName;
+            createPostObj.sendPushNotification = "1";
+            createPostObj.shareOnFacebook = "1";
+            createPostObj.shareOnTwitter = "1";
+            createPostObj.shareOnInstagram = "1";
+            NewPostUpload newPostUpload = new NewPostUpload(createPostObj , homeFragment.newPostCallback, progressBarUpload);
+            try {
+                newPostUpload.uploadNewPost();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     };
-
-
     @Override
     public void postData(String review) {
         Log.d("review call back", review);
+        this.review = review;
         getFragmentManager().beginTransaction().remove(reviewFragment).commit();
         hideSoftKeyboard();
         //new GetApiContent(getContext(), apiAsyncCallback).execute("http://www.circuitmagic.com/api/get_posts/");
         new CloudinaryUpload(this, cloudinaryCallback).execute(file);
-
-       // progressBarUpload.setIndeterminate(true);
+       //progressBarUpload.setIndeterminate(true);
         progressBarUpload.setVisibility(View.VISIBLE);
+        if (restaurantNameNewPost.equals("")){
+            txtUploadingDish.setText("Posting "+dishName);
+        }else {
+            txtUploadingDish.setText("Posting "+dishName+" at "+restaurantNameNewPost);
+        }
     }
-    //InputStream getAssetStream(String filename) throws IOException {
-      //  return getInstrumentation().getContext().getAssets().open(filename);
-    //}
 }

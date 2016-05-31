@@ -55,7 +55,10 @@ public class HeadSpannable {
         txt.setText(uName);
         txt.append(" is Having ");
         txt.append(dName);
-        txt.append(" at ");
+        if (!restaurantName.equals("")){
+            txt.append(" at ");
+        }
+
         if (rLink){
             txt.append(rName);
         }else {

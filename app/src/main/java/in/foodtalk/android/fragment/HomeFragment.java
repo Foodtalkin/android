@@ -42,6 +42,7 @@ import in.foodtalk.android.R;
 import in.foodtalk.android.adapter.HomeFeedAdapter;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.NewPostCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.EndlessRecyclerOnScrollListener;
@@ -50,7 +51,7 @@ import in.foodtalk.android.object.PostObj;
 /**
  * Created by RetailAdmin on 21-04-2016.
  */
-public class HomeFragment extends Fragment{
+public class HomeFragment extends Fragment {
     View layout;
     DatabaseHandler db;
     Config config;
@@ -375,4 +376,18 @@ public class HomeFragment extends Fragment{
         toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 300);
         toast.show();
     }
+
+   public NewPostCallback newPostCallback = new NewPostCallback() {
+       @Override
+       public void onPostCreated(String status) {
+            Log.d("onPostCreated", status);
+           try {
+               pageNo = 1;
+               getPostFeed("refresh");
+
+           } catch (JSONException e) {
+               e.printStackTrace();
+           }
+       }
+   };
 }

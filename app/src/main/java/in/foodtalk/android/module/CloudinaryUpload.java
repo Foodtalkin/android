@@ -66,7 +66,9 @@ public class CloudinaryUpload extends AsyncTask<File, Void, Map> {
     protected void onPostExecute(Map s) {
         super.onPostExecute(s);
 
-        cloudinaryCallback.uploaded(s);
+        if (s != null){
+            cloudinaryCallback.uploaded(s);
+        }
         Log.d("onPostExecute", s+"");
     }
 }

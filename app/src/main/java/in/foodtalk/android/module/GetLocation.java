@@ -47,6 +47,8 @@ public class GetLocation  implements GoogleApiClient.ConnectionCallbacks,
         this.latLonCallback = latLonCallback;
         buildGoogleApiClient();
 
+        //Log.d("GetLocation","call");
+
     }
     public LocationGps getUserLocation(){
         LocationGps location = new LocationGps();
@@ -148,7 +150,7 @@ public class GetLocation  implements GoogleApiClient.ConnectionCallbacks,
     }
     void updateUI() {
        // Log.d("GPS location","Latitude"+lat);
-        //Log.d("GPS location","Longitude"+lon);
+        Log.d("GPS location","Longitude"+lon);
 
 
         latLonCallback.location(lat,lon);
