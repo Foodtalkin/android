@@ -3,32 +3,34 @@ package in.foodtalk.android;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.json.JSONException;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Map;
 
@@ -156,10 +158,15 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     TextView txtUploadingDish;
 
 
+   // ImageCapture imageCapture;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = new DatabaseHandler(getApplicationContext());
+
+       // imageCapture = new ImageCapture(this);
+
 
         //-------api init--------------------------
         postLikeApi = new PostLikeApi(this);
@@ -490,8 +497,16 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         dialogCall.show();
     }
 
+    File file1 = new File(Environment.getExternalStorageDirectory()+File.separator + "img.jpg");
+
+    String mCurrentPhotoPath;
+
+    CamBitmapCallback camBitmapCallback;
+
+    CropImageView cropedImg;
+
     private void dialogImgFrom(){
-        Dialog dialogImgFrom = new Dialog(this);
+        final Dialog dialogImgFrom = new Dialog(this);
         dialogImgFrom.setContentView(R.layout.dialog_img_from);
 
         TextView btnCamera = (TextView) dialogImgFrom.findViewById(R.id.btn_camera_imgfrom);
@@ -501,7 +516,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("dialogImgFrom","btn Camera");
+                dialogImgFrom.dismiss();
+                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file1));
+                startActivityForResult(intent, 1);
             }
         });
         btnGallery.setOnClickListener(new View.OnClickListener() {
@@ -721,6 +739,18 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         //showSoftKeyboard(layout);
     }
+    public void capturedBitmap1(Bitmap photo , File file) {
+
+        this.photo = photo;
+
+        this.file = file;
+
+        Log.d("capuredBitmap", "call");
+        dishTagging = new DishTagging(photo);
+        setFragmentView(dishTagging, R.id.container1, 4, true);
+
+        //showSoftKeyboard(layout);
+    }
 
     public void hideSoftKeyboard() {
         if(getCurrentFocus()!=null) {
@@ -809,4 +839,135 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             txtUploadingDish.setText("Posting "+dishName+" at "+restaurantNameNewPost);
         }
     }
+
+
+    //---------camera and crop intent----------------------------
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.d("onAcrivitiresult", requestCode+"");
+        //if request code is same we pass as argument in startActivityForResult
+        if(requestCode==1 && resultCode == RESULT_OK){
+            //create instance of File with same name we created before to get image from storage
+            //File file = new File(Environment.getExternalStorageDirectory()+File.separator + "img.jpg");
+            //Crop the captured image using an other intent
+
+            // Bundle extras = data.getExtras();
+            // Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+            Log.d("data", data+" ");
+
+            try {
+				/*the user's device may not support cropping*/
+                //--cropCapturedImage(Uri.fromFile(file));
+                Bitmap photo = decodeFile(file1);
+                //Bitmap photo = setPic(file);
+                //Bitmap photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(String.valueOf(file)));
+
+//                Bitmap croppedBmp = Bitmap.createBitmap(photo, 0, 0,
+                //     photo.getWidth() / 2, photo.getHeight());
+                //imVCature_pic.setImageBitmap(photo);
+
+                //-------
+                startCropImageActivity(Uri.fromFile(file1));
+                Log.d("onActivityResult","call cropimage activity");
+
+                //--------
+            }
+            catch(ActivityNotFoundException aNFE){
+                //display an error message if user device doesn't support
+                String errorMessage = "Sorry - your device doesn't support the crop action!";
+                Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
+                toast.show();
+            }
+            // Log.d("result code",CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE+" : "
+            // + CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE+ ": "
+            // + CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE);
+        }
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+
+            Log.d("crop img","cropd");
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                Log.d("Log","crop image activity request"+result.getUri());
+
+                Bitmap photo = decodeFile(new File(result.getUri().getPath()));
+
+               //-- imVCature_pic.setImageBitmap(photo);
+
+               //-- camBitmapCallback.capturedBitmap(photo , new File(result.getUri().getPath()));
+                capturedBitmap1(photo , new File(result.getUri().getPath()));
+                // cropedImg.setImageUriAsync(resultUri);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+        if(requestCode==2){
+            //Create an instance of bundle and get the returned data
+            //Bundle extras = data.getExtras();
+            //get the cropped bitmap from extras
+            //--Bitmap thePic = extras.getParcelable("data");
+            //set image bitmap to image view
+            //--imVCature_pic.setImageBitmap(thePic);
+            //Log.d("get extras", extras.getParcelable("data")+"");
+            try {
+                if(file.exists()){
+
+                    Log.d("onActivityResult", "try to load image");
+                    Bitmap photo = decodeFile(file1);
+                    //Bitmap photo = setPic(file);
+                    //Bitmap photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(String.valueOf(file)));
+                    Bitmap croppedBmp = Bitmap.createBitmap(photo, 0, 0,
+                            photo.getWidth() / 2, photo.getHeight());
+                    // imVCature_pic.setImageBitmap(croppedBmp);
+                }
+                else {
+                    Toast.makeText(this, "Error while save image", Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void startCropImageActivity(Uri imageUri) {
+        // CropImage.activity(imageUri)
+        //  .setGuidelines(CropImageView.Guidelines.ON)
+        //  .setFixAspectRatio(true)
+        //     .start(getActivity());
+//
+        Intent intent = CropImage.activity(imageUri).setFixAspectRatio(true).getIntent(this);
+        startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+
+    }
+
+    private Bitmap decodeFile(File f) {
+        try {
+            // decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
+
+            // Find the correct scale value. It should be the power of 2.
+            final int REQUIRED_SIZE = 512;
+            int width_tmp = o.outWidth, height_tmp = o.outHeight;
+            int scale = 1;
+            while (true) {
+                if (width_tmp / 2 < REQUIRED_SIZE || height_tmp / 2 < REQUIRED_SIZE)
+                    break;
+                width_tmp /= 2;
+                height_tmp /= 2;
+                scale *= 2;
+            }
+            // decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+        } catch (FileNotFoundException e) {
+        }
+        return null;
+    }
+    //-------------------------------------------------------------
 }

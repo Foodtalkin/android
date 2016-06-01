@@ -34,12 +34,10 @@ import in.foodtalk.android.communicator.CamBitmapCallback;
 public class CameraFragment extends Fragment {
 
     View layout;
-
     ImageView imVCature_pic;
     Button btnCapture;
 
     File file = new File(Environment.getExternalStorageDirectory()+File.separator + "img.jpg");
-
 
     String mCurrentPhotoPath;
 
@@ -57,8 +55,6 @@ public class CameraFragment extends Fragment {
         cropedImg = (CropImageView) layout.findViewById(R.id.cropImageView);
 
         camBitmapCallback = (CamBitmapCallback) getActivity();
-
-
         initializeControls();
         return layout;
     }
@@ -133,10 +129,6 @@ public class CameraFragment extends Fragment {
                 Toast toast = Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
                 toast.show();
             }
-
-
-
-
            // Log.d("result code",CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE+" : "
            // + CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE+ ": "
            // + CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE);
@@ -156,8 +148,6 @@ public class CameraFragment extends Fragment {
                 camBitmapCallback.capturedBitmap(photo , new File(result.getUri().getPath()));
 
                // cropedImg.setImageUriAsync(resultUri);
-
-
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
@@ -169,7 +159,6 @@ public class CameraFragment extends Fragment {
             //--Bitmap thePic = extras.getParcelable("data");
             //set image bitmap to image view
             //--imVCature_pic.setImageBitmap(thePic);
-
             //Log.d("get extras", extras.getParcelable("data")+"");
             try {
                 if(file.exists()){
@@ -178,7 +167,6 @@ public class CameraFragment extends Fragment {
                     Bitmap photo = decodeFile(file);
                     //Bitmap photo = setPic(file);
                     //Bitmap photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(String.valueOf(file)));
-
                     Bitmap croppedBmp = Bitmap.createBitmap(photo, 0, 0,
                             photo.getWidth() / 2, photo.getHeight());
                    // imVCature_pic.setImageBitmap(croppedBmp);
@@ -199,13 +187,9 @@ public class CameraFragment extends Fragment {
           //     .start(getActivity());
 //
         Intent intent = CropImage.activity(imageUri).setFixAspectRatio(true).getIntent(getActivity());
-
         startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
 
-
     }
-
-
 
     private Bitmap decodeFile(File f) {
         try {
