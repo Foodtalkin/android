@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -488,6 +489,28 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         });
         dialogCall.show();
     }
+
+    private void dialogImgFrom(){
+        Dialog dialogImgFrom = new Dialog(this);
+        dialogImgFrom.setContentView(R.layout.dialog_img_from);
+
+        TextView btnCamera = (TextView) dialogImgFrom.findViewById(R.id.btn_camera_imgfrom);
+        TextView btnGallery = (TextView) dialogImgFrom.findViewById(R.id.btn_gallery_imgfrom);
+
+        dialogImgFrom.show();
+        btnCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("dialogImgFrom","btn Camera");
+            }
+        });
+        btnGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("dialogImgFrom", "bt Gallery");
+            }
+        });
+    }
     private void showDialog(String postId, final String userId){
 
         currentPostUserId = userId;
@@ -680,7 +703,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         Log.d("checkInRestarant","rId"+restaurantId+" rName: "+restaurantName);
         cameraFragment = new CameraFragment();
         restaurantNameNewPost = restaurantName;
-        setFragmentView (cameraFragment, R.id.container1, 4, true);
+        dialogImgFrom();
+        //setFragmentView (cameraFragment, R.id.container1, 4, true);
         hideSoftKeyboard();
     }
 

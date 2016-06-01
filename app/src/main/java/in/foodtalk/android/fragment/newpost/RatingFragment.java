@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import in.foodtalk.android.R;
 import in.foodtalk.android.communicator.RatingCallback;
@@ -29,6 +30,8 @@ public class RatingFragment extends Fragment implements View.OnTouchListener {
     ImageView dishPic;
 
     RatingCallback ratingCallback;
+
+    TextView btnRateLater;
 
     public RatingFragment (Bitmap photo){
         this.photo = photo;
@@ -53,12 +56,15 @@ public class RatingFragment extends Fragment implements View.OnTouchListener {
 
         ratingCallback = (RatingCallback) getActivity();
 
+        btnRateLater = (TextView) layout.findViewById(R.id.btn_rate_later);
+
 
         btnStar1.setOnTouchListener(this);
         btnStar2.setOnTouchListener(this);
         btnStar3.setOnTouchListener(this);
         btnStar4.setOnTouchListener(this);
         btnStar5.setOnTouchListener(this);
+        btnRateLater.setOnTouchListener(this);
         return layout;
     }
     @Override
@@ -104,6 +110,14 @@ public class RatingFragment extends Fragment implements View.OnTouchListener {
                         break;
                 }
                 break;
+            case R.id.btn_rate_later:
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_UP:
+                        Log.d("btn press", "rate later");
+                        ratingCallback.goforReview("");
+                        break;
+                }
+                break;
         }
         return true;
     }
@@ -146,7 +160,6 @@ public class RatingFragment extends Fragment implements View.OnTouchListener {
                 btnStar5.setImageResource(R.drawable.star_rating_a);
                 break;
         }
-
         ratingCallback.goforReview(Integer.toString(rate));
     }
 }

@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -52,7 +53,7 @@ import in.foodtalk.android.object.RestaurantListObj;
 /**
  * Created by RetailAdmin on 25-05-2016.
  */
-public class DishTagging extends Fragment implements DishTaggingCallback, View.OnTouchListener {
+public class DishTagging extends Fragment implements DishTaggingCallback, View.OnTouchListener, View.OnKeyListener {
 
     View layout;
 
@@ -122,6 +123,8 @@ public class DishTagging extends Fragment implements DishTaggingCallback, View.O
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        inputDishName.setOnKeyListener(this);
 
         //showSoftKeyboard(inputDishName);
         textListener();
@@ -325,5 +328,18 @@ public class DishTagging extends Fragment implements DishTaggingCallback, View.O
                 break;
         }
         return true;
+    }
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        Log.d("key down", keyCode+"");
+        if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP){
+            //Log.d("key press", "enter key");
+            if (btnNextEnable){
+                Log.d("onTouch", "next btn clicked");
+                dishTaggingCallback1.startRating(inputDishName.getText().toString());
+            }
+        }
+        return false;
     }
 }

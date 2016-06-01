@@ -28,7 +28,7 @@ android:background="@color/bg_color"
                 android:layout_centerInParent="true"
                 android:textStyle="bold"/>
             <TextView
-                android:id="@+id/btn_next_dishtagging"
+                android:id="@+id/btn_rate_later"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/blackText1"

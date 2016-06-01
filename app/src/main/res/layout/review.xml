@@ -94,7 +94,6 @@ android:background="@color/bg_color"
         android:layout_marginBottom="10dp"
         android:layout_alignParentBottom="true"
         />-->
-
     <EditText
         android:id="@+id/edit_dish_review"
         android:layout_width="match_parent"
@@ -108,5 +107,7 @@ android:background="@color/bg_color"
         android:textColorHint="@color/blackText1"
         android:backgroundTint="@color/bg_color"
         android:focusableInTouchMode="true"
-        android:maxLength="240"/>
+        android:maxLength="240"
+
+        />
 </RelativeLayout>

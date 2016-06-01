@@ -67,10 +67,6 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
     CheckInCallback checkInCallback;
 
     LinearLayout progressBarCheckin;
-
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.checkin_fragment, container, false);

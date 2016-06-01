@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,7 +25,7 @@ import in.foodtalk.android.communicator.ReviewCallback;
 /**
  * Created by RetailAdmin on 27-05-2016.
  */
-public class ReviewFragment extends Fragment implements View.OnTouchListener {
+public class ReviewFragment extends Fragment implements View.OnTouchListener, View.OnKeyListener {
 
     View layout;
     Bitmap photo;
@@ -60,6 +61,8 @@ public class ReviewFragment extends Fragment implements View.OnTouchListener {
 
         reviewCallback = (ReviewCallback) getActivity();
 
+        editReview.setOnKeyListener(this);
+
         InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         editReview.requestFocus();
@@ -83,12 +86,25 @@ public class ReviewFragment extends Fragment implements View.OnTouchListener {
                         if (editReview.getText().length() != 0){
                             reviewCallback.postData(editReview.getText().toString());
                         }else {
-                            reviewCallback.postData("na");
+                            reviewCallback.postData("");
                         }
                         break;
                 }
                 break;
         }
         return true;
+    }
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP){
+            //Log.d("key press", "enter key");
+            if (editReview.getText().length() != 0){
+                reviewCallback.postData(editReview.getText().toString());
+            }else {
+                reviewCallback.postData("");
+            }
+        }
+        return false;
     }
 }
