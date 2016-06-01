@@ -504,6 +504,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     CamBitmapCallback camBitmapCallback;
 
     CropImageView cropedImg;
+    final static int FROM_GALLERY = 55;
 
     private void dialogImgFrom(){
         final Dialog dialogImgFrom = new Dialog(this);
@@ -525,7 +526,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         btnGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialogImgFrom.dismiss();
                 Log.d("dialogImgFrom", "bt Gallery");
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(intent, FROM_GALLERY);
             }
         });
     }
@@ -930,6 +935,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 e.printStackTrace();
             }
         }
+
+        if (requestCode == FROM_GALLERY && resultCode == RESULT_OK && null != data){
+            Uri selectedImage = data.getData();
+            startCropImageActivity(selectedImage);
+            Log.d("get result","from gallery"+ selectedImage);
+        }
     }
 
     private void startCropImageActivity(Uri imageUri) {
@@ -937,7 +948,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         //  .setGuidelines(CropImageView.Guidelines.ON)
         //  .setFixAspectRatio(true)
         //     .start(getActivity());
-//
+        //
         Intent intent = CropImage.activity(imageUri).setFixAspectRatio(true).getIntent(this);
         startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
 

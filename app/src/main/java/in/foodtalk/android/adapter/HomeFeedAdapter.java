@@ -53,6 +53,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
 
+    LinearLayout starHolder;
+
     HeadSpannable headSpannable;
     UserThumbCallback userThumbCallback;
 
@@ -182,6 +184,9 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public void setStarRating(String rating, PostHolder holder){
+        if (rating.equals("0")){
+            starHolder.setVisibility(View.GONE);
+        }
         if(rating.equals("1")){
             holder.imgRating1.setImageResource(R.drawable.star_active);
             holder.imgRating2.setImageResource(R.drawable.star_passive);
@@ -295,8 +300,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             imgRating4 = (ImageView) itemView.findViewById(R.id.img_rating4);
             imgRating5 = (ImageView) itemView.findViewById(R.id.img_rating5);
 
-
-
+            starHolder = (LinearLayout) itemView.findViewById(R.id.star_rating_holder);
 
 
             iconLike = (LinearLayout) itemView.findViewById(R.id.icon_like_holder);

@@ -71,6 +71,7 @@
                         android:layout_centerInParent="true"
                         android:visibility="gone"/>
                     <LinearLayout
+                        android:id="@+id/star_rating_holder"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"

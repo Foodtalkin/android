@@ -87,9 +87,7 @@ public class CameraFragment extends Fragment {
                 startActivityForResult(intent, 1);
             }
         });
-
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -179,7 +177,6 @@ public class CameraFragment extends Fragment {
             }
         }
     }
-
     private void startCropImageActivity(Uri imageUri) {
      // CropImage.activity(imageUri)
              //  .setGuidelines(CropImageView.Guidelines.ON)
@@ -188,9 +185,7 @@ public class CameraFragment extends Fragment {
 //
         Intent intent = CropImage.activity(imageUri).setFixAspectRatio(true).getIntent(getActivity());
         startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
-
     }
-
     private Bitmap decodeFile(File f) {
         try {
             // decode image size
@@ -217,6 +212,4 @@ public class CameraFragment extends Fragment {
         }
         return null;
     }
-
-
 }
