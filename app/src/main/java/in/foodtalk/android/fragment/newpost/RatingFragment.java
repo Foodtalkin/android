@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import in.foodtalk.android.R;
@@ -33,6 +34,8 @@ public class RatingFragment extends Fragment implements View.OnTouchListener {
 
     TextView btnRateLater;
 
+    RatingBar ratingBar;
+
     public RatingFragment (Bitmap photo){
         this.photo = photo;
     }
@@ -52,12 +55,25 @@ public class RatingFragment extends Fragment implements View.OnTouchListener {
 
         dishPic = (ImageView) layout.findViewById(R.id.img_dish_rating);
 
+        ratingBar = (RatingBar) layout.findViewById(R.id.ratingBar1);
+
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                Log.d("onRating", (int)rating+" : "+ ratingBar.getRating());
+
+                if ((int)rating != 0){
+                    ratingCallback.goforReview(Integer.toString((int)rating));
+                }
+
+            }
+        });
+
         dishPic.setImageBitmap(photo);
 
         ratingCallback = (RatingCallback) getActivity();
 
         btnRateLater = (TextView) layout.findViewById(R.id.btn_rate_later);
-
 
         btnStar1.setOnTouchListener(this);
         btnStar2.setOnTouchListener(this);
@@ -70,11 +86,21 @@ public class RatingFragment extends Fragment implements View.OnTouchListener {
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         switch (v.getId()){
+
             case R.id.btn_star_rating1:
                 switch(event.getAction()){
                     case MotionEvent.ACTION_UP:
-                        Log.d("start clicked", "s1");
+                        Log.d("star clicked", "s1");
                         rate(1);
+                        break;
+                    case MotionEvent.ACTION_DOWN:
+                        Log.d("star down","s1");
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        Log.d("star move","s1");
+                        break;
+                    case MotionEvent.ACTION_HOVER_MOVE:
+                        Log.d("star hover move", "s1");
                         break;
                 }
                 break;
@@ -84,6 +110,9 @@ public class RatingFragment extends Fragment implements View.OnTouchListener {
                         Log.d("start clicked", "s2");
                         rate(2);
                         break;
+                    case MotionEvent.ACTION_MOVE:
+                        Log.d("star move","s2");
+                        break;
                 }
                 break;
             case R.id.btn_star_rating3:
@@ -92,13 +121,20 @@ public class RatingFragment extends Fragment implements View.OnTouchListener {
                         Log.d("start clicked", "s3");
                         rate(3);
                         break;
+                    case MotionEvent.ACTION_MOVE:
+                        Log.d("star move","s3");
+                        break;
                 }
                 break;
             case R.id.btn_star_rating4:
                 switch(event.getAction()){
                     case MotionEvent.ACTION_UP:
                         Log.d("start clicked", "s4");
+
                         rate(4);
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        Log.d("star move","s4");
                         break;
                 }
                 break;
@@ -107,6 +143,9 @@ public class RatingFragment extends Fragment implements View.OnTouchListener {
                     case MotionEvent.ACTION_UP:
                         Log.d("start clicked", "s5");
                         rate(5);
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        Log.d("star move","s5");
                         break;
                 }
                 break;

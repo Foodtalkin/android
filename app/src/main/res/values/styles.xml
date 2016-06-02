@@ -24,6 +24,12 @@
         <item name="android:progressBarStyle">@android:style/Widget.Holo.ProgressBar</item>
     </style>
 
+    <style name="customRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/rating_custom_bar</item>
+        <item name="android:minHeight">40dip</item>
+        <item name="android:maxHeight">40dip</item>
+    </style>
+
 
 
 
