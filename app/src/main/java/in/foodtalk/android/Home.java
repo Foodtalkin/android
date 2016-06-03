@@ -37,6 +37,7 @@ import java.util.Map;
 import in.foodtalk.android.apicall.PostBookmarkApi;
 import in.foodtalk.android.apicall.PostLikeApi;
 import in.foodtalk.android.apicall.PostReportApi;
+import in.foodtalk.android.communicator.AddRestaurantCallback;
 import in.foodtalk.android.communicator.CamBitmapCallback;
 import in.foodtalk.android.communicator.CheckInCallback;
 import in.foodtalk.android.communicator.CloudinaryCallback;
@@ -58,6 +59,7 @@ import in.foodtalk.android.fragment.DiscoverFragment;
 import in.foodtalk.android.fragment.FavouritesFragment;
 import in.foodtalk.android.fragment.HomeFragment;
 import in.foodtalk.android.fragment.MoreFragment;
+import in.foodtalk.android.fragment.newpost.AddRestaurant;
 import in.foodtalk.android.fragment.newpost.CameraFragment;
 import in.foodtalk.android.fragment.newpost.CheckIn;
 import in.foodtalk.android.fragment.NotiFragment;
@@ -81,7 +83,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         PostLikeCallback, PostBookmarkCallback, PostOptionCallback, PostDeleteCallback,
         MoreBtnCallback, UserProfileCallback, ProfilePostOpenCallback, FragmentManager.OnBackStackChangedListener,
         HeadSpannableCallback, UserThumbCallback, ProfileRPostOpenCallback, PhoneCallback,
-        CheckInCallback, CamBitmapCallback, DishTaggingCallback , RatingCallback , ReviewCallback{
+        CheckInCallback, CamBitmapCallback, DishTaggingCallback , RatingCallback , ReviewCallback, AddRestaurantCallback{
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
@@ -112,6 +114,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     DishTagging dishTagging;
     RatingFragment ratingFragment;
     ReviewFragment reviewFragment;
+    AddRestaurant addRestaurant;
 
     UserProfile userProfile;
 
@@ -315,62 +318,46 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }
     }
 
+
+
     private void setFragmentView(Fragment newFragment, int container, int pageN, boolean bStack) {
         String backStateName = newFragment.getClass().getName();
 
-        if (newFragment == userProfile) {
-            //Log.d("userProfile","header1 visible");
-            header.setVisibility(View.GONE);
-            header1.setVisibility(View.VISIBLE);
-        } else if (newFragment == openPostFragment) {
-            header.setVisibility(View.GONE);
-            header1.setVisibility(View.VISIBLE);
-        } else {
-            header.setVisibility(View.VISIBLE);
-            header1.setVisibility(View.GONE);
-        }
-        //-------set Header-------
-        /*if (backStateName.equals("userProfile")){
-            header.setVisibility(View.GONE);
-            header1.setVisibility(View.VISIBLE);
-        }else {
-            header1.setVisibility(View.VISIBLE);
-            header.setVisibility(View.GONE);
-        }*/
-        //---------------------------
 
+            Log.d("setFragmentView","call function");
+            if (newFragment == userProfile) {
+                //Log.d("userProfile","header1 visible");
+                header.setVisibility(View.GONE);
+                header1.setVisibility(View.VISIBLE);
+            } else if (newFragment == openPostFragment) {
+                header.setVisibility(View.GONE);
+                header1.setVisibility(View.VISIBLE);
+            } else {
+                header.setVisibility(View.VISIBLE);
+                header1.setVisibility(View.GONE);
+            }
 
-        Log.d("backStatename", backStateName);
+            Log.d("New fragment", backStateName+"");
+            if (newFragment != newpostFragment){
+                icons[pageNo].setImageResource(imgR[pageNo]);
+                icons[pageN].setImageResource(imgRA[pageN]);
+                txtIcons[pageN].setTextColor(getResources().getColor(R.color.icon_txt_active));
+                txtIcons[pageNo].setTextColor(getResources().getColor(R.color.icon_txt));
+            }
+            else {
+                Log.d("fragment","newpostFragment");
+            }
+            android.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack if needed
 
-
-        if (newFragment != newpostFragment){
-            icons[pageNo].setImageResource(imgR[pageNo]);
-            icons[pageN].setImageResource(imgRA[pageN]);
-            txtIcons[pageN].setTextColor(getResources().getColor(R.color.icon_txt_active));
-            txtIcons[pageNo].setTextColor(getResources().getColor(R.color.icon_txt));
-        }
-        else {
-            Log.d("fragment","newpostFragment");
-        }
-
-
-
-
-        //icons[pageN].setImageResource(R.drawable.home);
-        // Create new fragment and transaction
-        Fragment discoverF = new DiscoverFragment();
-        android.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        // Replace whatever is in the fragment_container view with this fragment,
-        // and add the transaction to the back stack if needed
-
-        transaction.replace(container, newFragment);
-        if (bStack) {
-            transaction.addToBackStack(backStateName);
-        }
-        // Commit the transaction
-        transaction.commit();
-
-
+            transaction.replace(container, newFragment);
+            if (bStack) {
+                transaction.addToBackStack(backStateName);
+                Log.d("addtobackstack", backStateName);
+            }
+            // Commit the transaction
+            transaction.commit();
     }
 
     @Override
@@ -845,6 +832,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }
     }
 
+    @Override
+    public void addNewRestaurant() {
+        addRestaurant = new AddRestaurant();
+        setFragmentView(addRestaurant, R.id.container1, 4, true);
+    }
+
 
     //---------camera and crop intent----------------------------
     @Override
@@ -980,5 +973,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }
         return null;
     }
+
+
     //-------------------------------------------------------------
 }

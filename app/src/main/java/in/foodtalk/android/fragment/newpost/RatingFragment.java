@@ -53,25 +53,17 @@ public class RatingFragment extends Fragment implements View.OnTouchListener {
         btnStar4 = (ImageView) layout.findViewById(R.id.btn_star_rating4);
         btnStar5 = (ImageView) layout.findViewById(R.id.btn_star_rating5);
 
+        ratingCallback = (RatingCallback) getActivity();
+
         dishPic = (ImageView) layout.findViewById(R.id.img_dish_rating);
 
         ratingBar = (RatingBar) layout.findViewById(R.id.ratingBar1);
 
-        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                Log.d("onRating", (int)rating+" : "+ ratingBar.getRating());
 
-                if ((int)rating != 0){
-                    ratingCallback.goforReview(Integer.toString((int)rating));
-                }
-
-            }
-        });
 
         dishPic.setImageBitmap(photo);
 
-        ratingCallback = (RatingCallback) getActivity();
+
 
         btnRateLater = (TextView) layout.findViewById(R.id.btn_rate_later);
 
@@ -81,6 +73,19 @@ public class RatingFragment extends Fragment implements View.OnTouchListener {
         btnStar4.setOnTouchListener(this);
         btnStar5.setOnTouchListener(this);
         btnRateLater.setOnTouchListener(this);
+
+
+
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            Boolean a = false;
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+
+                if ((int)rating != 0 && fromUser){
+                    ratingCallback.goforReview(Integer.toString((int)rating));
+                }
+            }
+        });
         return layout;
     }
     @Override

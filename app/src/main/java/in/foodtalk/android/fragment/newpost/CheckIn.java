@@ -34,6 +34,7 @@ import in.foodtalk.android.R;
 import in.foodtalk.android.adapter.newpost.CheckInAdapter;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.AddRestaurantCallback;
 import in.foodtalk.android.communicator.CheckInCallback;
 import in.foodtalk.android.communicator.LatLonCallback;
 import in.foodtalk.android.module.DatabaseHandler;
@@ -61,10 +62,14 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
 
     GetLocation getLocation;
 
+    LinearLayout btnAddRestaurant;
+
     String lat;
     String lon;
 
     CheckInCallback checkInCallback;
+
+    AddRestaurantCallback addRestaurantCallback;
 
     LinearLayout progressBarCheckin;
     @Override
@@ -76,15 +81,35 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
         final SearchView searchView = (SearchView) layout.findViewById(R.id.search_view);
         searchView.setOnQueryTextListener(this);
 
-        TextView btnSkip = (TextView) layout.findViewById(R.id.btn_skip_checkin);
+        btnAddRestaurant = (LinearLayout) layout.findViewById(R.id.btn_add_restaurant);
+
+        final TextView btnSkip = (TextView) layout.findViewById(R.id.btn_skip_checkin);
 
         progressBarCheckin = (LinearLayout) layout.findViewById(R.id.progress_bar_checkin);
 
         latLonCallback = this;
 
+        addRestaurantCallback = (AddRestaurantCallback) getActivity();
+
         getLocation = new GetLocation(getActivity(), latLonCallback);
         getLocation.onStart();
 
+        btnAddRestaurant.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (v.getId()){
+                    case R.id.btn_add_restaurant:
+                        switch (event.getAction()){
+                            case MotionEvent.ACTION_UP:
+                                Log.d("onClick", "add restaurant");
+                                addRestaurantCallback.addNewRestaurant();
+                                break;
+                        }
+                        break;
+                }
+                return true;
+            }
+        });
         btnSkip.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
