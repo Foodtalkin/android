@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@color/bg_color">
+    android:background="@color/bg_color"
+    android:clickable="true">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,7 +16,6 @@
                 android:id="@+id/header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp">
                 <TextView
@@ -28,7 +28,7 @@
                     android:layout_centerInParent="true"
                     android:textStyle="bold"/>
                 <TextView
-                    android:id="@+id/btn_skip_checkin"
+                    android:id="@+id/btn_add_restaurant"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/blackText1"
@@ -87,6 +87,7 @@
                     android:layout_height="wrap_content"
                     android:text="Restaurant Name"/>
                 <EditText
+                    android:id="@+id/input_name_add_restaurant"
                     android:layout_marginTop="6dp"
                     android:padding="6dp"
                     android:layout_width="match_parent"
@@ -112,19 +113,18 @@
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/switch1"
+                    android:id="@+id/switch_add_restaurant"
                     android:checked="false" />
             </LinearLayout>
+
+
+
             <LinearLayout
+                android:id="@+id/location_add_restaurant"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="20dp">
-                <TextView
-                    android:textColor="#fff"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Delhi"/>
+                >
                 <TextView
                     android:textColor="#fff"
                     android:layout_width="wrap_content"
@@ -132,13 +132,36 @@
                     android:text="Address or Area"
                     android:layout_marginTop="20dp"/>
                 <EditText
-                    android:id="@+id/input_address"
+                    android:id="@+id/input_address_add_restaurant"
                     android:layout_marginTop="6dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Address or Area"
                     android:background="@drawable/round_bg_white"
                     android:padding="6dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/btn_city_add_restaurant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+                <TextView
+                    android:id="@+id/txt_city_add_restaurant"
+                    android:padding="6dp"
+                    android:textColor="#fff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Delhi"
+                    android:textSize="18dp"
+                    />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
+                    android:tint="#fff"
+                    android:layout_gravity="center_vertical"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -160,11 +183,6 @@
                     android:layout_height="wrap_content"
                     android:text="We use your current location to determine the address of the establishment."/>
             </LinearLayout>
-
         </LinearLayout>
-
-
-
     </LinearLayout>
-
 </RelativeLayout>

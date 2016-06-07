@@ -22,8 +22,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         >
-
-
         <activity
             android:name=".SplashScreen"
             android:screenOrientation="portrait"
@@ -56,7 +54,7 @@
             android:name=".Home"
             android:screenOrientation="portrait"
             android:theme="@style/NoActionBarTheam"
-           />
+            />
         <activity android:name=".ShareApp" />
         <activity android:name=".Test"></activity>
 
