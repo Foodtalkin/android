@@ -13,7 +13,9 @@
     </style>
 
     <style name="NoActionBarTheam" parent="Theme.AppCompat.Light.NoActionBar">
-
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
     <!-- Style for facebook.  -->
     <style name="FullyTranslucent" parent="android:Theme.Translucent.NoTitleBar">

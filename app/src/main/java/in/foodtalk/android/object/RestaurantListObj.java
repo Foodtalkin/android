@@ -7,4 +7,5 @@ public class RestaurantListObj {
     public String id;
     public String restaurantName;
     public String area;
+    public String restaurantIsActive;
 }

@@ -3,186 +3,190 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="@color/bg_color"
     android:clickable="true">
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#10151f"
-            >
-            <RelativeLayout
-                android:id="@+id/header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
-                <TextView
-                    android:id="@+id/title_new_post"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#fff"
-                    android:text="Add Restaurant"
-                    android:textSize="22sp"
-                    android:layout_centerInParent="true"
-                    android:textStyle="bold"/>
-                <TextView
-                    android:id="@+id/btn_add_restaurant"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/blackText1"
-                    android:text="CheckIn"
-                    android:textSize="20sp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"/>
-            </RelativeLayout>
-            <RelativeLayout
-                android:visibility="gone"
-                android:id="@+id/header1"
-                android:layout_centerInParent="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-                <TextView
-                    android:id="@+id/title_home1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#fff"
-                    android:text=""
-                    android:textSize="18sp"
-                    android:layout_centerHorizontal="true" />
-                <TextView
-                    android:id="@+id/subtitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:layout_centerHorizontal="true"
-                    android:layout_below="@+id/title_home1"
-                    android:textColor="@color/subtitle_color"/>
-            </RelativeLayout>
-
-        </RelativeLayout>
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="16dp">
-            <TextView
+            android:orientation="vertical">
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Thanks you for the update, \n We are always hungry for more"
-                android:textAlignment="center"
-                android:textColor="#fff"
-                android:gravity="center_horizontal"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="20dp"
+                android:background="#10151f"
                 >
-                <TextView
-                    android:textColor="#fff"
+                <RelativeLayout
+                    android:id="@+id/header"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Restaurant Name"/>
-                <EditText
-                    android:id="@+id/input_name_add_restaurant"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp">
+                    <TextView
+                        android:id="@+id/title_new_post"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#fff"
+                        android:text="Add Restaurant"
+                        android:textSize="22sp"
+                        android:layout_centerInParent="true"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/btn_add_restaurant"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/blackText1"
+                        android:text="CheckIn"
+                        android:textSize="20sp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:visibility="gone"
+                    android:id="@+id/header1"
+                    android:layout_centerInParent="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <TextView
+                        android:id="@+id/title_home1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#fff"
+                        android:text=""
+                        android:textSize="18sp"
+                        android:layout_centerHorizontal="true" />
+                    <TextView
+                        android:id="@+id/subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/title_home1"
+                        android:textColor="@color/subtitle_color"/>
+                </RelativeLayout>
+
+            </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/add_restaurant_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Thanks you for the update, \n We are always hungry for more"
+                    android:textAlignment="center"
+                    android:textColor="#fff"
+                    android:gravity="center_horizontal"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp"
+                    >
+                    <TextView
+                        android:textColor="#fff"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Restaurant Name"/>
+                    <EditText
+                        android:id="@+id/input_name_add_restaurant"
+                        android:layout_marginTop="6dp"
+                        android:padding="6dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Restaurant Name"
+                        android:background="@drawable/round_bg_white"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"
                     android:padding="6dp"
+                    >
+                    <TextView
+                        android:textColor="#fff"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="I'm here at the moment"/>
+                    <Switch
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/switch_add_restaurant"
+                        android:checked="false" />
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:id="@+id/location_add_restaurant"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Restaurant Name"
-                    android:background="@drawable/round_bg_white"/>
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
-                android:padding="6dp"
-                >
-                <TextView
-                    android:textColor="#fff"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:textColor="#fff"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Address or Area"
+                        android:layout_marginTop="20dp"/>
+                    <EditText
+                        android:id="@+id/input_address_add_restaurant"
+                        android:layout_marginTop="6dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Address or Area"
+                        android:background="@drawable/round_bg_white"
+                        android:padding="6dp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/btn_city_add_restaurant"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="I'm here at the moment"/>
-                <Switch
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/switch_add_restaurant"
-                    android:checked="false" />
-            </LinearLayout>
-
-
-
-            <LinearLayout
-                android:id="@+id/location_add_restaurant"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
-                <TextView
-                    android:textColor="#fff"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Address or Area"
-                    android:layout_marginTop="20dp"/>
-                <EditText
-                    android:id="@+id/input_address_add_restaurant"
-                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp">
+                    <TextView
+                        android:id="@+id/txt_city_add_restaurant"
+                        android:padding="6dp"
+                        android:textColor="#fff"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Delhi"
+                        android:textSize="18dp"
+                        />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
+                        android:tint="#fff"
+                        android:layout_gravity="center_vertical"
+                        />
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Address or Area"
-                    android:background="@drawable/round_bg_white"
-                    android:padding="6dp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/btn_city_add_restaurant"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="20dp">
-                <TextView
-                    android:id="@+id/txt_city_add_restaurant"
-                    android:padding="6dp"
-                    android:textColor="#fff"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Delhi"
-                    android:textSize="18dp"
-                    />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
-                    android:tint="#fff"
-                    android:layout_gravity="center_vertical"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="bottom">
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.33dp"
-                    android:alpha=".5"
-                    android:background="#fff"
-                    android:layout_below="@+id/btn_restaurant_checkin"/>
-                <TextView
-                    android:textColor="#fff"
-                    android:layout_marginTop="8dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="We use your current location to determine the address of the establishment."/>
+                    android:orientation="vertical"
+                    android:gravity="bottom"
+                    android:layout_marginTop="90dp">
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.33dp"
+                        android:alpha=".5"
+                        android:background="#fff"
+                        android:layout_below="@+id/btn_restaurant_checkin"/>
+                    <TextView
+                        android:textColor="#fff"
+                        android:layout_marginTop="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="We use your current location to determine the address of the establishment."/>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 </RelativeLayout>

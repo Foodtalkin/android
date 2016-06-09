@@ -1,6 +1,7 @@
 package in.foodtalk.android.adapter.newpost;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -59,9 +60,18 @@ public class CheckInAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         RestaurantHolder restaurantHolder = (RestaurantHolder) holder;
 
         restaurantHolder.txtRName.setText(stringCase.caseSensitive(current.restaurantName));
-        restaurantHolder.txtAria.setText(current.area);
-        restaurantHolder.id = current.id;
+        Log.d("restaurantIsActive", current.restaurantIsActive+"");
+        if (current.restaurantIsActive != null){
+            if (current.restaurantIsActive.equals("1")){
+                restaurantHolder.txtAria.setText(current.area);
+                restaurantHolder.txtAria.setTextColor(context.getResources().getColor(R.color.blackText1));
+            }else {
+                restaurantHolder.txtAria.setText("Unverified");
+                restaurantHolder.txtAria.setTextColor(Color.RED);
+            }
+        }
 
+        restaurantHolder.id = current.id;
     }
 
     @Override

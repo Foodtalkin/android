@@ -94,6 +94,7 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
         getLocation = new GetLocation(getActivity(), latLonCallback);
         getLocation.onStart();
 
+
         btnAddRestaurant.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -141,6 +142,15 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
         linearLayoutManager = new LinearLayoutManager(getActivity());
 
         checkInCallback = (CheckInCallback) getActivity();
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            String rId = bundle.getString("rId");
+            Log.d("rId in checkin", rId);
+            checkInCallback.checkInRestaurant(rId,"");
+        }else {
+            Log.d("bundle","null");
+        }
 
         linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -240,6 +250,7 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
             current.id = rListArray.getJSONObject(i).getString("id");
             current.area = rListArray.getJSONObject(i).getString("area");
             current.restaurantName = rListArray.getJSONObject(i).getString("restaurantName");
+            current.restaurantIsActive = rListArray.getJSONObject(i).getString("restaurantIsActive");
             restaurantList.add(current);
         }
         //Log.d("send list", "total: "+restaurantList.size());
@@ -261,24 +272,30 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
 
 
         try {
-            JSONArray rListArray = response.getJSONArray("restaurants");
-            restaurantList.clear();
-            for (int i=0;i<rListArray.length();i++){
-                RestaurantListObj current = new RestaurantListObj();
-                current.id = rListArray.getJSONObject(i).getString("id");
-                current.area = rListArray.getJSONObject(i).getString("area");
-                current.restaurantName = rListArray.getJSONObject(i).getString("restaurantName");
-                restaurantList.add(current);
+            if (response != null){
+                JSONArray rListArray = response.getJSONArray("restaurants");
+                restaurantList.clear();
+                for (int i=0;i<rListArray.length();i++){
+                    RestaurantListObj current = new RestaurantListObj();
+                    current.id = rListArray.getJSONObject(i).getString("id");
+                    current.area = rListArray.getJSONObject(i).getString("area");
+                    current.restaurantName = rListArray.getJSONObject(i).getString("restaurantName");
+                    current.restaurantIsActive = rListArray.getJSONObject(i).getString("restaurantIsActive");
+                    restaurantList.add(current);
+                }
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
         // Log.d("rListArray", "total: "+ rListArray.length());
        // tempList = new ArrayList<RestaurantListObj>(restaurantList);
 
-        final List<RestaurantListObj> filteredModelList = filter(restaurantList, newText);
-        checkInAdapter.animateTo(filteredModelList);
-        recyclerView.scrollToPosition(0);
+        if (checkInAdapter != null){
+            final List<RestaurantListObj> filteredModelList = filter(restaurantList, newText);
+            checkInAdapter.animateTo(filteredModelList);
+            recyclerView.scrollToPosition(0);
+        }
         return true;
     }
 

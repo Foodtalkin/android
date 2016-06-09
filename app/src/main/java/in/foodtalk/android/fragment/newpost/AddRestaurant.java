@@ -2,6 +2,7 @@ package in.foodtalk.android.fragment.newpost;
 
 import android.app.Dialog;
 import android.app.Fragment;
+import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -44,6 +46,7 @@ import in.foodtalk.android.adapter.newpost.CheckInAdapter;
 import in.foodtalk.android.adapter.newpost.CityListAdapter;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.AddedRestaurantCallback;
 import in.foodtalk.android.communicator.CityListCallback;
 import in.foodtalk.android.communicator.LatLonCallback;
 import in.foodtalk.android.module.DatabaseHandler;
@@ -91,7 +94,11 @@ public class AddRestaurant extends Fragment implements LatLonCallback {
     EditText inputRAddress;
     TextView btnAddRestaurant;
 
+    LinearLayout addRestaurantContainer;
+
     Boolean btnAddRestaurantEnable = false;
+
+    AddedRestaurantCallback addedRestaurantCallback;
 
     //Boolean iAmHere = false;
 
@@ -108,10 +115,21 @@ public class AddRestaurant extends Fragment implements LatLonCallback {
         txtCity = (TextView) layout.findViewById(R.id.txt_city_add_restaurant);
         btnCity = (LinearLayout) layout.findViewById(R.id.btn_city_add_restaurant);
 
+        addRestaurantContainer = (LinearLayout) layout.findViewById(R.id.add_restaurant_container);
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+
+        //addRestaurantContainer.setMinimumHeight(height);
+
         inputRName = (EditText) layout.findViewById(R.id.input_name_add_restaurant);
         inputRAddress = (EditText) layout.findViewById(R.id.input_address_add_restaurant);
 
         latLonCallback = this;
+
+        addedRestaurantCallback = (AddedRestaurantCallback) getActivity();
         textListener();
 
         btnAddRestaurant = (TextView) layout.findViewById(R.id.btn_add_restaurant);
@@ -137,20 +155,11 @@ public class AddRestaurant extends Fragment implements LatLonCallback {
                 return true;
             }
         });
-
-
         stringCase = new StringCase();
-
-
-
-
-
         switchIamHere = (Switch) layout.findViewById(R.id.switch_add_restaurant);
 
         db = new DatabaseHandler(getActivity());
         config = new Config();
-
-
 
         try {
             getCityList("load");
@@ -245,13 +254,17 @@ public class AddRestaurant extends Fragment implements LatLonCallback {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        getLocation.onStop();
+        Log.d("AddRestaurant","onDestroyView");
+        if (getLocation != null){
+            getLocation.onStop();
+        }
+
     }
 
     CityListCallback cityListCallback = new CityListCallback() {
@@ -424,6 +437,8 @@ public class AddRestaurant extends Fragment implements LatLonCallback {
                         try {
                             String status = response.getString("status");
                             if (!status.equals("error")){
+                                //Log.d("api call","restaurant added"+ response.getString("restaurantId"));
+                                addedRestaurantCallback.restaurantAdded(response.getString("restaurantId"));
                                 //-- getAndSave(response);
                                 //loadDataIntoView(response , tag);
                             }else {

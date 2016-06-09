@@ -38,6 +38,7 @@ import in.foodtalk.android.apicall.PostBookmarkApi;
 import in.foodtalk.android.apicall.PostLikeApi;
 import in.foodtalk.android.apicall.PostReportApi;
 import in.foodtalk.android.communicator.AddRestaurantCallback;
+import in.foodtalk.android.communicator.AddedRestaurantCallback;
 import in.foodtalk.android.communicator.CamBitmapCallback;
 import in.foodtalk.android.communicator.CheckInCallback;
 import in.foodtalk.android.communicator.CloudinaryCallback;
@@ -83,7 +84,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         PostLikeCallback, PostBookmarkCallback, PostOptionCallback, PostDeleteCallback,
         MoreBtnCallback, UserProfileCallback, ProfilePostOpenCallback, FragmentManager.OnBackStackChangedListener,
         HeadSpannableCallback, UserThumbCallback, ProfileRPostOpenCallback, PhoneCallback,
-        CheckInCallback, CamBitmapCallback, DishTaggingCallback , RatingCallback , ReviewCallback, AddRestaurantCallback{
+        CheckInCallback, CamBitmapCallback, DishTaggingCallback , RatingCallback , ReviewCallback, AddRestaurantCallback,
+        AddedRestaurantCallback {
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
@@ -248,7 +250,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         homeFragment = new HomeFragment();
         discoverFragment = new DiscoverFragment();
-        newpostFragment = new CheckIn();
+
         notiFragment = new NotiFragment();
         moreFragment = new MoreFragment();
 
@@ -288,6 +290,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 break;
             case R.id.btn_newpost:
                 if (pageNo != 2) {
+                    newpostFragment = new CheckIn();
                     setFragmentView(newpostFragment, R.id.container1, 2, true);
                     //titleHome.setText("New Post");
                     //pageNo = 2;
@@ -350,6 +353,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             android.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back stack if needed
+            if(newFragment == newpostFragment){
+                transaction.remove(newpostFragment);
+            }
 
             transaction.replace(container, newFragment);
             if (bStack) {
@@ -708,6 +714,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     @Override
     public void checkInRestaurant(String restaurantId, String restaurantName) {
 
+        pickImage(restaurantId, restaurantName);
+    }
+    private void pickImage(String restaurantId, String restaurantName){
         this.restaurantIdNewPost = restaurantId;
 
         Log.d("checkInRestarant","rId"+restaurantId+" rName: "+restaurantName);
@@ -727,7 +736,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         Log.d("capuredBitmap", "call");
         dishTagging = new DishTagging(photo);
-        setFragmentView(dishTagging, R.id.container1, 4, true);
+        setFragmentView(dishTagging, R.id.container1, 0, true);
 
         //showSoftKeyboard(layout);
     }
@@ -739,7 +748,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         Log.d("capuredBitmap", "call");
         dishTagging = new DishTagging(photo);
-        setFragmentView(dishTagging, R.id.container1, 4, true);
+        setFragmentView(dishTagging, R.id.container1, 0, true);
 
         //showSoftKeyboard(layout);
     }
@@ -781,14 +790,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         this.dishName = dishName;
         hideSoftKeyboard();
         ratingFragment = new RatingFragment(photo);
-        setFragmentView(ratingFragment, R.id.container1, 4, true);
+        setFragmentView(ratingFragment, R.id.container1, 0, true);
     }
     @Override
     public void goforReview(String rate) {
         Log.d("goforReview", rate);
         rating = rate;
         reviewFragment = new ReviewFragment(photo);
-        setFragmentView(reviewFragment, R.id.container1, 4, true);
+        setFragmentView(reviewFragment, R.id.container1, 0, true);
     }
     CloudinaryCallback cloudinaryCallback = new CloudinaryCallback() {
         @Override
@@ -835,7 +844,18 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     @Override
     public void addNewRestaurant() {
         addRestaurant = new AddRestaurant();
-        setFragmentView(addRestaurant, R.id.container1, 4, true);
+        setFragmentView(addRestaurant, R.id.container1, 0, true);
+    }
+
+    @Override
+    public void restaurantAdded(String rId) {
+        Log.d("restaurant added", "Rid: "+rId);
+
+        newpostFragment = new CheckIn();
+        Bundle bundle = new Bundle();
+        bundle.putString("rId", rId);
+        newpostFragment.setArguments(bundle);
+        setFragmentView(newpostFragment, R.id.container1, 0, true);
     }
 
 
@@ -973,6 +993,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }
         return null;
     }
+
+
 
 
     //-------------------------------------------------------------

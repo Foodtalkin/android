@@ -26,9 +26,7 @@ public class CityListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     StringCase stringCase;
 
     CityListCallback cityListCallback;
-
     ArrayList<String> cityList = new ArrayList<String>();
-
     public CityListAdapter(Context context, ArrayList<String> cityList, CityListCallback cityListCallback){
         this.context = context;
         layoutInflater = LayoutInflater.from(context);

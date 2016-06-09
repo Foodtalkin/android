@@ -87,8 +87,6 @@ public class UserProfile extends Fragment implements LatLonCallback {
            this.userIdOther = userId;
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -102,13 +100,10 @@ public class UserProfile extends Fragment implements LatLonCallback {
         pageNo = 1;
         loading = false;
 
-
-
-
+        staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(staggeredGridLayoutManager);
 
         //btnFollow = (Button) layout.findViewById(R.id.btn_follow_profile);
-
-
         return layout;
     }
 
@@ -127,8 +122,7 @@ public class UserProfile extends Fragment implements LatLonCallback {
 
 
 
-        staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(staggeredGridLayoutManager);
+
 
         if (getActivity() != null){
             context = getActivity();
@@ -223,6 +217,7 @@ public class UserProfile extends Fragment implements LatLonCallback {
     }
 
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
+
         if (tag.equals("myProfile")){
             JSONObject profile = response.getJSONObject("profile");
             userProfile.userName = profile.getString("userName");

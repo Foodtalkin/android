@@ -53,6 +53,8 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     UserFollow userFollow;
 
+    int imgWidth;
+
     private ProfilePostOpenCallback postOpenCallback;
     public UserProfileAdapter (Context context, List<UserPostObj> postList, UserProfileObj userProfile, Boolean followBtnVisible){
         layoutInflater = LayoutInflater.from(context);
@@ -70,7 +72,10 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         Point size = new Point();
         display.getSize(size);
         width = size.x;
-        width = size.y;
+        imgWidth = width/3;
+        //width = size.y;
+
+        Log.d("screen size", "width: "+size.x+" height: "+size.y);
         stringCase = new StringCase();
 
         userFollow = new UserFollow(context);
@@ -154,12 +159,19 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             postHolderProfile.userId = current.userId;
 
-            postHolderProfile.postImg.getLayoutParams().width = width/3-200;
-            postHolderProfile.postImg.getLayoutParams().height = width/3-200;
+           // float density = context.getResources().getDisplayMetrics().density;
+            //float px = someDpValue * density;
+           // float dp = width / density;
+
+            //Log.d("px to dp value", (int)dp+" density: "+ density );
+            postHolderProfile.postImg.getLayoutParams().width = imgWidth;
+            postHolderProfile.postImg.getLayoutParams().height = imgWidth;
             Picasso.with(context)
                     .load(current.postImage)
+                    //.resize(imgWidth, imgWidth)
+                    //.centerCrop()
                     //.fit().centerCrop()
-                    .fit()
+                    //.fit()
                     .placeholder(R.drawable.placeholder)
                     .into(postHolderProfile.postImg);
         } else if(holder instanceof ProgressViewHolder){

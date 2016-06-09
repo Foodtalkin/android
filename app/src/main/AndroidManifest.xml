@@ -54,6 +54,7 @@
             android:name=".Home"
             android:screenOrientation="portrait"
             android:theme="@style/NoActionBarTheam"
+            android:windowSoftInputMode="adjustPan|adjustResize"
             />
         <activity android:name=".ShareApp" />
         <activity android:name=".Test"></activity>
