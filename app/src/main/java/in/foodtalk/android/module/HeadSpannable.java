@@ -30,6 +30,8 @@ public class HeadSpannable {
     private final int DISH = 2;
     private final int RESTAURANT_PROFILE = 3;
 
+    private String requestFrom;
+
     HeadSpannableCallback headSpannableCallback;
 
     public HeadSpannable(Context context){
@@ -37,8 +39,10 @@ public class HeadSpannable {
         headSpannableCallback = (HeadSpannableCallback) context;
 
     }
-    public void code(TextView txt, String userName, String dishName, String restaurantName, String userId, String checkinRestaurantId, Boolean rLink){
+    public void code(TextView txt, String userName, String dishName, String restaurantName, String userId, String checkinRestaurantId, Boolean rLink, String requestFrom){
         //String mystring = userName;
+
+        this.requestFrom = requestFrom;
         SpannableString uName= new SpannableString(userName);
         uName.setSpan(new MyClickableSpan(userName, userId , checkinRestaurantId, USER_PROFILE), 0, uName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         uName.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.card_head_highlight)), 0, uName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -82,7 +86,7 @@ public class HeadSpannable {
         }
         public void onClick(View tv) {
             //Toast.makeText(,clicked , Toast.LENGTH_SHORT).show();
-            headSpannableCallback.spannableTxt(userId, checkinRestaurantId, clicked, viewType);
+            headSpannableCallback.spannableTxt(userId, checkinRestaurantId, clicked, viewType, requestFrom);
             Log.d("onTextClick", clicked+" userId: "+userId+" checkinRestaurantId: " +checkinRestaurantId);
         }
         public void updateDrawState(TextPaint ds) {// override updateDrawState

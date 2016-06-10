@@ -171,7 +171,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     //.resize(imgWidth, imgWidth)
                     //.centerCrop()
                     //.fit().centerCrop()
-                    //.fit()
+                    .fit()
                     .placeholder(R.drawable.placeholder)
                     .into(postHolderProfile.postImg);
         } else if(holder instanceof ProgressViewHolder){

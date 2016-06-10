@@ -12,6 +12,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -56,15 +58,35 @@ public class FavouritesFragment extends Fragment {
 
     Boolean loading = false;
     LinearLayoutManager linearLayoutManager;
+
+    ProgressBar progressBar;
+    LinearLayout tapToRetry;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.favourites_fragment, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_fav);
 
+        progressBar = (ProgressBar) layout.findViewById(R.id.progress_bar);
+        tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
+
         db = new DatabaseHandler(getActivity());
         config = new Config();
 
         pageNo = 1;
+
+        tapToRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
+                tapToRetry.setVisibility(View.GONE);
+                try {
+                    pageNo = 1;
+                    getFavList("load");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -91,6 +113,8 @@ public class FavouritesFragment extends Fragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+
+                        progressBar.setVisibility(View.GONE);
                         //Log.d(TAG, "After Sending JsongObj"+response.toString());
                         //msgResponse.setText(response.toString());
                         Log.d("Login Respond", response.toString());
@@ -120,6 +144,11 @@ public class FavouritesFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d("Response", "Error: " + error.getMessage());
                 showToast("Please check your internet connection");
+
+                if (tag.equals("load")){
+                    progressBar.setVisibility(View.GONE);
+                    tapToRetry.setVisibility(View.VISIBLE);
+                }
 
                 if(tag.equals("refresh")){
                     //swipeRefreshHome.setRefreshing(false);

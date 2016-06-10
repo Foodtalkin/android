@@ -118,6 +118,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     ReviewFragment reviewFragment;
     AddRestaurant addRestaurant;
 
+    //-------dummy fragment created for temporary use to set Legal screen title----
+    Fragment legalFragment = new Fragment();
+
     UserProfile userProfile;
 
     PostLikeApi postLikeApi;
@@ -272,19 +275,19 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_home:
-                Log.d("onClick", "btn home");
+                //Log.d("onClick", "btn home");
 
                 if (pageNo != 0) {
                     setFragmentView(homeFragment, R.id.container, 0, false);
-                    titleHome.setText("Home");
+                   // titleHome.setText("Home");
                     pageNo = 0;
                 }
                 break;
             case R.id.btn_discover:
-                Log.d("onClick", "btn discover");
+                //Log.d("onClick", "btn discover");
                 if (pageNo != 1) {
                     setFragmentView(discoverFragment, R.id.container, 1, false);
-                    titleHome.setText("Discover");
+                    //titleHome.setText("Discover");
                     pageNo = 1;
                 }
                 break;
@@ -295,27 +298,27 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                     //titleHome.setText("New Post");
                     //pageNo = 2;
                 }
-                Log.d("onClick", "btn newpost");
+                //Log.d("onClick", "btn newpost");
                 break;
             case R.id.btn_notification:
                 if (pageNo != 3) {
                     setFragmentView(notiFragment, R.id.container, 3, false);
-                    titleHome.setText("Notification");
+                   // titleHome.setText("Notification");
                     pageNo = 3;
                 }
 
-                Log.d("onClick", "btn notification");
+                //Log.d("onClick", "btn notification");
                 break;
             case R.id.btn_more:
                 if (pageNo != 4) {
                     setFragmentView(moreFragment, R.id.container, 4, false);
-                    titleHome.setText("More");
+                    //titleHome.setText("More");
                     pageNo = 4;
                 }
-                Log.d("onClick", "btn more");
+                //Log.d("onClick", "btn more");
                 break;
             case R.id.btn_logout:
-                Log.d("btn clicked", "logout");
+                //Log.d("btn clicked", "logout");
                 logOut();
                 break;
         }
@@ -326,8 +329,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     private void setFragmentView(Fragment newFragment, int container, int pageN, boolean bStack) {
         String backStateName = newFragment.getClass().getName();
 
+            setTitle(newFragment);
 
-            Log.d("setFragmentView","call function");
+
+            //Log.d("setFragmentView","call function");
+
+        //Temp disabled--
+        /*
             if (newFragment == userProfile) {
                 //Log.d("userProfile","header1 visible");
                 header.setVisibility(View.GONE);
@@ -338,17 +346,19 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             } else {
                 header.setVisibility(View.VISIBLE);
                 header1.setVisibility(View.GONE);
-            }
+            }*/
 
-            Log.d("New fragment", backStateName+"");
-            if (newFragment != newpostFragment){
+        //Log.d("pageNo selected", pageN+"");
+
+            //Log.d("New fragment", backStateName+"");
+            if (newFragment != newpostFragment && pageN != -1){
                 icons[pageNo].setImageResource(imgR[pageNo]);
                 icons[pageN].setImageResource(imgRA[pageN]);
                 txtIcons[pageN].setTextColor(getResources().getColor(R.color.icon_txt_active));
                 txtIcons[pageNo].setTextColor(getResources().getColor(R.color.icon_txt));
             }
             else {
-                Log.d("fragment","newpostFragment");
+                //Log.d("fragment","newpostFragment");
             }
             android.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
             // Replace whatever is in the fragment_container view with this fragment,
@@ -360,7 +370,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             transaction.replace(container, newFragment);
             if (bStack) {
                 transaction.addToBackStack(backStateName);
-                Log.d("addtobackstack", backStateName);
+                //Log.d("addtobackstack", backStateName);
             }
             // Commit the transaction
             transaction.commit();
@@ -377,26 +387,27 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             super.onBackPressed();
         }
     }
-
     @Override
     public void onBackStackChanged() {
         Fragment f = this.getFragmentManager().findFragmentById(R.id.container);
         String fName = f.getClass().getSimpleName();
-        Log.d("onBackStackChanged", f.getClass().getSimpleName());
+
+        setTitle(f);
+        //Log.d("onBackStackChanged", f.getClass().getSimpleName());
         if (!fName.equals("UserProfile")) {
-            header.setVisibility(View.VISIBLE);
-            header1.setVisibility(View.GONE);
+           // header.setVisibility(View.VISIBLE);
+           // header1.setVisibility(View.GONE);
         }
         switch (fName) {
             case "UserProfile":
-                header.setVisibility(View.VISIBLE);
-                header1.setVisibility(View.GONE);
+                //header.setVisibility(View.VISIBLE);
+                //header1.setVisibility(View.GONE);
                 break;
             case "MoreFragment":
-                titleHome.setText("More");
+                //titleHome.setText("More");
                 break;
             case "FavouritesFragment":
-                titleHome.setText("Favourites");
+                //titleHome.setText("Favourites");
                 break;
         }
     }
@@ -644,19 +655,23 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
        switch (type){
            case "profile":
                userProfile = new UserProfile(userId);
-               setFragmentView(userProfile, R.id.container, 4, true);
+               setFragmentView(userProfile, R.id.container, -1, true);
                break;
            case "options":
-               setFragmentView(optionsFragment, R.id.container, 4, true);
+               setFragmentView(optionsFragment, R.id.container, -1, true);
                break;
            case "legal":
                Log.d("btn click","setFragment webview");
                webViewFragment = new WebViewFragment("http://www.foodtalkindia.com/document.html");
-               setFragmentView (webViewFragment, R.id.container, 4, true);
-               titleHome.setText("Legal");
+               setFragmentView (webViewFragment, R.id.container, -1, true);
+               //titleHome.setText("Legal");
+
+
+               setTitle(legalFragment);
+
                break;
            case "favourites":
-               setFragmentView(favouritesFragment, R.id.container, 4, true);
+               setFragmentView(favouritesFragment, R.id.container, -1, true);
                break;
        }
 
@@ -671,20 +686,29 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     @Override
     public void postOpen(List<UserPostObj> postObj, String postId, String userId) {
         openPostFragment = new OpenPostFragment(postObj, postId, userId);
-        setFragmentView (openPostFragment, R.id.container1, 4, true);
+        setFragmentView (openPostFragment, R.id.container1, -1, true);
         Log.d("postOpen","userId: "+userId+" postId: "+postId);
     }
 
     @Override
-    public void spannableTxt(String userId, String checkinRestaurantId, String dishName, int viewType) {
+    public void spannableTxt(String userId, String checkinRestaurantId, String dishName, int viewType, String requestFrom) {
         switch (viewType){
             case USER_PROFILE:
-                userProfile = new UserProfile(userId);
-                setFragmentView(userProfile, R.id.container, 0, true);
+                if(!requestFrom.equals("UserProfile")){
+                    userProfile = new UserProfile(userId);
+                    setFragmentView(userProfile, R.id.container, -1, true);
+                }
+
                 break;
             case RESTAURANT_PROFILE:
-                restaurantProfileFragment = new RestaurantProfileFragment(checkinRestaurantId);
-                setFragmentView(restaurantProfileFragment, R.id.container, 0, true);
+
+                if (requestFrom.equals("UserProfile")){
+                    getFragmentManager().beginTransaction().remove(openPostFragment).commit();
+                }
+                    restaurantProfileFragment = new RestaurantProfileFragment(checkinRestaurantId);
+                    setFragmentView(restaurantProfileFragment, R.id.container, -1, true);
+
+
                 Log.d("clicked","for restaurant");
                 break;
             case DISH:
@@ -696,13 +720,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     @Override
     public void thumbClick(String userId) {
         userProfile = new UserProfile(userId);
-        setFragmentView(userProfile, R.id.container, 0, true);
+        setFragmentView(userProfile, R.id.container, -1, true);
     }
 
     @Override
     public void rPostOpen(List<RestaurantPostObj> postObj, String postId, String restaurantId) {
         openRPostFragment = new OpenRPostFragment(postObj, postId, restaurantId);
-        setFragmentView (openRPostFragment, R.id.container1, 4, true);
+        setFragmentView (openRPostFragment, R.id.container1, -1, true);
         Log.d("postOpen","userId: "+userId+" postId: "+postId);
     }
 
@@ -713,7 +737,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     }
     @Override
     public void checkInRestaurant(String restaurantId, String restaurantName) {
-
         pickImage(restaurantId, restaurantName);
     }
     private void pickImage(String restaurantId, String restaurantName){
@@ -994,8 +1017,64 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         return null;
     }
 
+    private void setTitle(Fragment fragment){
+        if (fragment == homeFragment){
+            header.setVisibility(View.VISIBLE);
+            header1.setVisibility(View.GONE);
+            titleHome.setText("Home");
+        }
+        if (fragment == discoverFragment){
+            header.setVisibility(View.VISIBLE);
+            header1.setVisibility(View.GONE);
+            titleHome.setText("Discover");
+        }
+        if (fragment == notiFragment){
+            header.setVisibility(View.VISIBLE);
+            header1.setVisibility(View.GONE);
+            titleHome.setText("Notification");
+        }
+        if (fragment == moreFragment){
+            header.setVisibility(View.VISIBLE);
+            header1.setVisibility(View.GONE);
+            titleHome.setText("More");
+        }
 
+        if(fragment == favouritesFragment){
+            header.setVisibility(View.VISIBLE);
+            header1.setVisibility(View.GONE);
+            titleHome.setText("Favourites");
+        }
+        if(fragment == optionsFragment){
+            header.setVisibility(View.VISIBLE);
+            header1.setVisibility(View.GONE);
+            titleHome.setText("Options");
+        }
+        if(fragment == legalFragment){
+            header.setVisibility(View.VISIBLE);
+            header1.setVisibility(View.GONE);
+            titleHome.setText("Legal");
+        }
 
+        if (fragment == userProfile){
+            header.setVisibility(View.GONE);
+            header1.setVisibility(View.VISIBLE);
+        }
 
+        if (fragment == restaurantProfileFragment){
+            header.setVisibility(View.VISIBLE);
+            header1.setVisibility(View.GONE);
+            titleHome.setText("Restaurant");
+        }
+
+       /* case "UserProfile":
+        header.setVisibility(View.VISIBLE);
+        header1.setVisibility(View.GONE);
+        break;
+        case "MoreFragment":
+        //titleHome.setText("More");
+        break;
+        case "FavouritesFragment":*/
+        //titleHome.setText("Favourites");
+    }
     //-------------------------------------------------------------
 }

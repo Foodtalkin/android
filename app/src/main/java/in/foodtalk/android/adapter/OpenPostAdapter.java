@@ -25,6 +25,7 @@ import in.foodtalk.android.R;
 import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.communicator.PostOptionCallback;
+import in.foodtalk.android.module.HeadSpannable;
 import in.foodtalk.android.object.PostObj;
 import in.foodtalk.android.object.UserPostObj;
 
@@ -45,6 +46,7 @@ public class OpenPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
+    HeadSpannable headSpannable;
 
     public OpenPostAdapter(Context context, List<UserPostObj> postObj, PostLikeCallback postLikeCallback){
         layoutInflater = LayoutInflater.from(context);
@@ -52,6 +54,8 @@ public class OpenPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.context = context;
         //Log.d("from adapter function", postObj.get(0).dishName);
        // Log.d("from adapter function", postObj.get(1).dishName);
+
+        headSpannable = new HeadSpannable(context);
 
         likeCallback = (PostLikeCallback) context;
         bookmarkCallback = (PostBookmarkCallback) context;
@@ -82,8 +86,14 @@ public class OpenPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             UserPostObj current = postObj.get(position);
             PostHolder postHolder = (PostHolder) holder;
             //postHolder.txtHeadLine.setText(current.userName+" is having "+current.dishName+" at "+current.restaurantName);
-            String htmlHeadline = "<font color='#0369db'>"+current.userName+"</font> <font color='#1a1a1a'>is having </font><font color='#0369db'> "+current.dishName+"</font><font color='#1a1a1a'> at </font><font color='#369db'>"+current.restaurantName+"</font><font color='#1a1a1a'>.</font>";
-            postHolder.txtHeadLine.setText(Html.fromHtml(htmlHeadline));
+           // String htmlHeadline = "<font color='#0369db'>"+current.userName+"</font> <font color='#1a1a1a'>is having </font><font color='#0369db'> "+current.dishName+"</font><font color='#1a1a1a'> at </font><font color='#369db'>"+current.restaurantName+"</font><font color='#1a1a1a'>.</font>";
+            if (current.restaurantIsActive.equals("1")) {
+                headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, true, "UserProfile");
+            }else {
+                headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, false, "UserProfile");
+            }
+
+            //postHolder.txtHeadLine.setText(Html.fromHtml(htmlHeadline));
             //postHolder.txtTime.setText("4d");
             postHolder.txtCountLike.setText(current.likeCount);
             postHolder.txtCountBookmark.setText(current.bookmarkCount);

@@ -25,6 +25,7 @@ import in.foodtalk.android.R;
 import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.communicator.PostOptionCallback;
+import in.foodtalk.android.module.HeadSpannable;
 import in.foodtalk.android.object.PostObj;
 
 /**
@@ -45,12 +46,16 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
 
+    HeadSpannable headSpannable;
+
     public DiscoverAdapter(Context context, List<PostObj> postObj, PostLikeCallback postLikeCallback){
         layoutInflater = LayoutInflater.from(context);
         this.postObj = postObj;
         this.context = context;
         //Log.d("from adapter function", postObj.get(0).dishName);
        // Log.d("from adapter function", postObj.get(1).dishName);
+
+        headSpannable = new HeadSpannable(context);
 
         likeCallback = (PostLikeCallback) context;
         bookmarkCallback = (PostBookmarkCallback) context;
@@ -81,8 +86,15 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             PostObj current = postObj.get(position);
             PostHolder postHolder = (PostHolder) holder;
             //postHolder.txtHeadLine.setText(current.userName+" is having "+current.dishName+" at "+current.restaurantName);
-            String htmlHeadline = "<font color='#0369db'>"+current.userName+"</font> <font color='#1a1a1a'>is having </font><font color='#0369db'> "+current.dishName+"</font><font color='#1a1a1a'> at </font><font color='#369db'>"+current.restaurantName+"</font><font color='#1a1a1a'>.</font>";
-            postHolder.txtHeadLine.setText(Html.fromHtml(htmlHeadline));
+            //String htmlHeadline = "<font color='#0369db'>"+current.userName+"</font> <font color='#1a1a1a'>is having </font><font color='#0369db'> "+current.dishName+"</font><font color='#1a1a1a'> at </font><font color='#369db'>"+current.restaurantName+"</font><font color='#1a1a1a'>.</font>";
+           // postHolder.txtHeadLine.setText(Html.fromHtml(htmlHeadline));
+
+
+            if (current.restaurantIsActive.equals("1")) {
+                headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, true, "Discover");
+            }else {
+                headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, false, "Discover");
+            }
             //postHolder.txtTime.setText("4d");
             postHolder.txtCountLike.setText(current.likeCount);
             postHolder.txtCountBookmark.setText(current.bookmarkCount);

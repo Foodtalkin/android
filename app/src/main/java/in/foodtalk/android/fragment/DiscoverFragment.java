@@ -1,5 +1,6 @@
 package in.foodtalk.android.fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -82,6 +83,8 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
 
     LinearLayoutManager linearLayoutManager;
 
+    LinearLayout tapToRetry;
+
 
 
 
@@ -101,6 +104,8 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
 
     Context context;
 
+    Activity activity;
+
 
 
     @Override
@@ -110,6 +115,8 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_discover);
         progressBar = (LinearLayout) layout.findViewById(R.id.progress_bar);
         recyclerView.setOnTouchListener(this);
+
+        tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
 
 
         //--swipeRefreshHome = (SwipeRefreshLayout) layout.findViewById(R.id.swipeRefreshHome);
@@ -123,6 +130,20 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         }else {
             Log.d("postData","null");
         }
+
+        tapToRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tapToRetry.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
+                pageNo = 1;
+                try {
+                    getPostFeed("load");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
 
         /*--swipeRefreshHome.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -144,21 +165,25 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
     public void onActivityCreated(Bundle savedInstanceState) {
         //recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
 
-        linearLayoutManager
-                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        if (getActivity() != null){
+            activity = getActivity();
+        }
 
-        mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        linearLayoutManager
+                = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
+
+        mLayoutManager = new LinearLayoutManager(activity.getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
 
 
 
         latLonCallback = this;
-        getLocation = new GetLocation(getActivity(), latLonCallback);
+        getLocation = new GetLocation(activity, latLonCallback);
 
         getLocation.onStart();
         config = new Config();
-        db = new DatabaseHandler(getActivity().getApplicationContext());
+        db = new DatabaseHandler(activity.getApplicationContext());
         postObj = new PostObj();
         Log.d("get user info F", db.getUserDetails().get("sessionId"));
         Log.d("get user info F", db.getUserDetails().get("userId"));
@@ -237,6 +262,11 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
                 VolleyLog.d("Response", "Error: " + error.getMessage());
                 showToast("Please check your internet connection");
 
+                if (tag.equals("load")){
+                    tapToRetry.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
+                }
+
                 if(tag.equals("refresh")){
                    //-- swipeRefreshHome.setRefreshing(false);
                 }
@@ -301,6 +331,8 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
             current.iBookark = postArray.getJSONObject(i).getString("iBookark");
             current.rating = postArray.getJSONObject(i).getString("rating");
             current.restaurantDistance = postArray.getJSONObject(i).getString("restaurantDistance");
+            current.restaurantIsActive = postArray.getJSONObject(i).getString("restaurantIsActive");
+            current.checkedInRestaurantId = postArray.getJSONObject(i).getString("checkedInRestaurantId");
             // postData.clear();
             postData.add(current);
             Log.d("dish name", postData.get(i).userId);
@@ -380,12 +412,12 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
     }
     private void logOut(){
         db.resetTables();
-        Intent i = new Intent(getActivity().getApplicationContext(), FbLogin.class);
+        Intent i = new Intent(activity.getApplicationContext(), FbLogin.class);
         startActivity(i);
-        getActivity().finish();
+        activity.finish();
     }
     public void showToast(String msg){
-        Toast toast= Toast.makeText(getActivity(),
+        Toast toast= Toast.makeText(activity,
                 msg, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 300);
         toast.show();

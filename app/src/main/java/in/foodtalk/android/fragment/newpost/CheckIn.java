@@ -72,6 +72,8 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
     AddRestaurantCallback addRestaurantCallback;
 
     LinearLayout progressBarCheckin;
+
+    LinearLayout tapToRetry;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.checkin_fragment, container, false);
@@ -80,6 +82,8 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
 
         final SearchView searchView = (SearchView) layout.findViewById(R.id.search_view);
         searchView.setOnQueryTextListener(this);
+
+        tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
 
         btnAddRestaurant = (LinearLayout) layout.findViewById(R.id.btn_add_restaurant);
 
@@ -93,6 +97,19 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
 
         getLocation = new GetLocation(getActivity(), latLonCallback);
         getLocation.onStart();
+
+        tapToRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressBarCheckin.setVisibility(View.VISIBLE);
+                tapToRetry.setVisibility(View.GONE);
+                try {
+                    getRestaurantList("load");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
 
         btnAddRestaurant.setOnTouchListener(new View.OnTouchListener() {
@@ -210,6 +227,9 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d("Response", "Error: " + error.getMessage());
                 //showToast("Please check your internet connection");
+
+                progressBarCheckin.setVisibility(View.GONE);
+                tapToRetry.setVisibility(View.VISIBLE);
 
                 if(tag.equals("refresh")){
                     //swipeRefreshHome.setRefreshing(false);

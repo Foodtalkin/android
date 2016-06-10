@@ -1,7 +1,9 @@
 package in.foodtalk.android.fragment;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -17,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -76,6 +79,10 @@ public class HomeFragment extends Fragment {
 
     private int pageNo = 1;
 
+    LinearLayout tapToRetry;
+
+    Activity activity;
+
 
 
 
@@ -86,6 +93,8 @@ public class HomeFragment extends Fragment {
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_home);
         swipeRefreshHome = (SwipeRefreshLayout) layout.findViewById(R.id.swipeRefreshHome);
         // use a linear layout manager
+
+        tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
 
 
         homeProgress = (ProgressBar) layout.findViewById(R.id.home_progress);
@@ -108,17 +117,38 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+
+        tapToRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    pageNo = 1;
+                    homeProgress.setVisibility(View.VISIBLE);
+                    tapToRetry.setVisibility(View.GONE);
+                    getPostFeed("load");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
         return layout;
     }
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         //recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
-        linearLayoutManager = new LinearLayoutManager(getActivity());
 
-        mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        if (getActivity() != null){
+            activity = getActivity();
+        }
+
+        linearLayoutManager = new LinearLayoutManager(activity);
+
+        mLayoutManager = new LinearLayoutManager(activity.getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         config = new Config();
-        db = new DatabaseHandler(getActivity().getApplicationContext());
+        db = new DatabaseHandler(activity.getApplicationContext());
         postObj = new PostObj();
        Log.d("get user info F", db.getUserDetails().get("sessionId"));
         Log.d("get user info F", db.getUserDetails().get("userId"));
@@ -177,6 +207,8 @@ public class HomeFragment extends Fragment {
 
     public void getPostFeed(final String tag) throws JSONException {
 
+
+
         Log.d("getPostFeed", "post data");
         JSONObject obj = new JSONObject();
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
@@ -221,6 +253,12 @@ public class HomeFragment extends Fragment {
                 VolleyLog.d("Response", "Error: " + error.getMessage());
                 showToast("Please check your internet connection");
 
+                if (tag.equals("load")){
+                    tapToRetry.setVisibility(View.VISIBLE);
+                    homeProgress.setVisibility(View.GONE);
+                }
+
+
                 if(tag.equals("refresh")){
                     swipeRefreshHome.setRefreshing(false);
                 }
@@ -251,8 +289,6 @@ public class HomeFragment extends Fragment {
     private void loadDataIntoView(JSONObject response , String tag) throws JSONException {
 
         swipeRefreshHome.setRefreshing(false);
-
-
 
         homeProgress.setVisibility(View.GONE);
 
@@ -366,12 +402,12 @@ public class HomeFragment extends Fragment {
     }
     private void logOut(){
         db.resetTables();
-        Intent i = new Intent(getActivity().getApplicationContext(), FbLogin.class);
+        Intent i = new Intent(activity.getApplicationContext(), FbLogin.class);
         startActivity(i);
-        getActivity().finish();
+        activity.finish();
     }
     public void showToast(String msg){
-        Toast toast= Toast.makeText(getActivity(),
+        Toast toast= Toast.makeText(activity,
                 msg, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 300);
         toast.show();
