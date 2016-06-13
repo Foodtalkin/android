@@ -60,6 +60,7 @@ import in.foodtalk.android.fragment.DiscoverFragment;
 import in.foodtalk.android.fragment.FavouritesFragment;
 import in.foodtalk.android.fragment.HomeFragment;
 import in.foodtalk.android.fragment.MoreFragment;
+import in.foodtalk.android.fragment.SearchFragment;
 import in.foodtalk.android.fragment.newpost.AddRestaurant;
 import in.foodtalk.android.fragment.newpost.CameraFragment;
 import in.foodtalk.android.fragment.newpost.CheckIn;
@@ -117,6 +118,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     RatingFragment ratingFragment;
     ReviewFragment reviewFragment;
     AddRestaurant addRestaurant;
+    SearchFragment searchFragment;
 
     //-------dummy fragment created for temporary use to set Legal screen title----
     Fragment legalFragment = new Fragment();
@@ -164,6 +166,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
     CreatePostObj createPostObj;
     TextView txtUploadingDish;
+
+    TextView searchBarHome;
+
+    LinearLayout searchHeader;
 
 
    // ImageCapture imageCapture;
@@ -224,6 +230,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         titleHome = (TextView) findViewById(R.id.title_home);
 
+        searchBarHome = (TextView) findViewById(R.id.txt_search_home);
+
+        searchBarHome.setOnClickListener(this);
+
+        searchHeader = (LinearLayout) findViewById(R.id.search_header);
+
         //getSupportActionBar().setDisplayShowTitleEnabled(false);
         //getSupportActionBar().setDisplayUseLogoEnabled(false);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -259,6 +271,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         optionsFragment = new OptionsFragment();
         favouritesFragment = new FavouritesFragment();
+
+
 
 
         // Add the fragment to the 'fragment_container' FrameLayout
@@ -320,6 +334,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             case R.id.btn_logout:
                 //Log.d("btn clicked", "logout");
                 logOut();
+                break;
+            case R.id.txt_search_home:
+                Log.d("clicked","on search box");
+                searchFragment = new SearchFragment();
+                setFragmentView(searchFragment, R.id.container1, -1, true);
                 break;
         }
     }
@@ -1066,6 +1085,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             titleHome.setText("Restaurant");
         }
 
+        if(fragment == homeFragment) {
+            searchHeader.setVisibility(View.VISIBLE);
+            header.setVisibility(View.GONE);
+        }else {
+            header.setVisibility(View.GONE);
+            searchHeader.setVisibility(View.GONE);
+        }
        /* case "UserProfile":
         header.setVisibility(View.VISIBLE);
         header1.setVisibility(View.GONE);
