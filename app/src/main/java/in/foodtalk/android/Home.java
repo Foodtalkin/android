@@ -1088,8 +1088,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         if(fragment == homeFragment) {
             searchHeader.setVisibility(View.VISIBLE);
             header.setVisibility(View.GONE);
-        }else {
-            header.setVisibility(View.GONE);
+        }else if(fragment != searchFragment && fragment != userProfile) {
+            header.setVisibility(View.VISIBLE);
             searchHeader.setVisibility(View.GONE);
         }
        /* case "UserProfile":

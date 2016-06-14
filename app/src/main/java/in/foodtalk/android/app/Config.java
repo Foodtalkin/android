@@ -39,4 +39,8 @@ public class Config {
 
     public static String URL_ADD_RESTAURANT = "http://"+IP+"/index.php/service/restaurant/add";
     public static String URL_REGION_LIST = "http://"+IP+"/index.php/service/region/list";
+
+    public static String URL_USER_LIST = "http://"+IP+"/index.php/service/user/listNames";
+    public static String URL_DISH_LIST = "http://"+IP+"/index.php/service/dish/search";
+    public static String URL_RESTAURANT_LIST = "http://"+IP+"/index.php/service/restaurant/list";
 }
