@@ -40,6 +40,8 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
     SearchCallback searchCallback;
     Pager adapter;
 
+    int tabSeleted = 0;
+
 
 
 
@@ -67,7 +69,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         //Adding adapter to pager
         searchViewPager.setAdapter(adapter);
 
-        searchCallback = (SearchCallback) adapter.tab1;
+        searchCallback = (SearchCallback) adapter.searchResult;
 
 
 
@@ -92,18 +94,9 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
     private void setCallbackRef(int no){
         if (no == 0){
-            searchCallback = (SearchCallback) adapter.tab1;
-            Log.d("searchcall back set to", "tab 1");
+            //searchCallback = (SearchCallback) adapter.searchResult;
+            //Log.d("searchcall back set to", "tab 1");
         }
-        if (no == 1){
-            searchCallback = (SearchCallback) adapter.tab2;
-            Log.d("searchcall back set to", "tab 2");
-        }
-        if (no == 2){
-            searchCallback = (SearchCallback) adapter.tab3;
-            Log.d("searchcall back set to", "tab 3");
-        }
-
     }
 
     private void txtListener(){
@@ -115,12 +108,23 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                 searchCallback.searchKey(s.toString(),"dish");
+
+                if (tabSeleted == 0){
+                    searchCallback.searchKey(s.toString(),"dish");
+                }
+                if (tabSeleted == 1){
+                    searchCallback.searchKey(s.toString(),"user");
+                }
+                if (tabSeleted == 2){
+                    searchCallback.searchKey(s.toString(),"restaurant");
+                }
+
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                Log.d("afterTextChanged", s.toString());
+                //Log.d("afterTextChanged", s.toString());
             }
         });
     }
@@ -140,7 +144,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         searchViewPager.setCurrentItem(tab.getPosition());
-        setCallbackRef(tab.getPosition());
+        //setCallbackRef(tab.getPosition());
 
     }
 
@@ -163,7 +167,8 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
     @Override
     public void onPageSelected(int position) {
         //searchTabLayout.setCurrentTab(position);
-       // Log.d("onPageSeleted", position+"");
+        Log.d("onPageSeleted", position+"");
+        tabSeleted = position;
         searchTabLayout.setScrollPosition(position,0f,true);
         setCallbackRef(position);
     }

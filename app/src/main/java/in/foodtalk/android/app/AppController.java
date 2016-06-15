@@ -3,6 +3,7 @@ package in.foodtalk.android.app;
 
 import android.Manifest;
 import android.app.Application;
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -41,10 +43,19 @@ public class AppController extends Application {
     private static AppController mInstance;
 
 
+    public String sessionId;
+
+    public Context context;
+
+    public RecyclerView recyclerView;
+
+
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        context = getApplicationContext();
         mInstance = this;
         FacebookSdk.sdkInitialize(getApplicationContext());
         try {
