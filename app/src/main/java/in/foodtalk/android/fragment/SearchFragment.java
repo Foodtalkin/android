@@ -37,7 +37,9 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
     private FragmentActivity myContext;
 
-    SearchCallback searchCallback;
+    SearchCallback searchCallback1;
+    SearchCallback searchCallback2;
+    SearchCallback searchCallback3;
     Pager adapter;
 
     int tabSeleted = 0;
@@ -66,10 +68,13 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         searchViewPager = (ViewPager) layout.findViewById(R.id.search_pager);
 
         adapter = new Pager(fm, searchTabLayout.getTabCount());
+        //adapter = new Pager(fm, 1);
         //Adding adapter to pager
         searchViewPager.setAdapter(adapter);
 
-        searchCallback = (SearchCallback) adapter.searchResult;
+        searchCallback1 = (SearchCallback) adapter.searchResult1;
+        searchCallback2 = (SearchCallback) adapter.searchResult2;
+        searchCallback3 = (SearchCallback) adapter.searchResult3;
 
 
 
@@ -110,13 +115,13 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
                 if (tabSeleted == 0){
-                    searchCallback.searchKey(s.toString(),"dish");
+                    searchCallback1.searchKey(s.toString(),"dish");
                 }
                 if (tabSeleted == 1){
-                    searchCallback.searchKey(s.toString(),"user");
+                    searchCallback2.searchKey(s.toString(),"user");
                 }
                 if (tabSeleted == 2){
-                    searchCallback.searchKey(s.toString(),"restaurant");
+                    searchCallback3.searchKey(s.toString(),"restaurant");
                 }
 
 

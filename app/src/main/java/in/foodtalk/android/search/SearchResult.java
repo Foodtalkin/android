@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -72,22 +73,36 @@ public class SearchResult extends Fragment implements SearchCallback {
 
     LinearLayoutManager linearLayoutManager;
 
+    public RelativeLayout progressBar;
+
     Activity activity;
 
-    public static SearchResult create(int pageNumber) {
-        SearchResult fragment = new SearchResult();
-        Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, pageNumber);
-        fragment.setArguments(args);
-        return fragment;
+    public String testString = "First";
+
+    String testString2 = "0000";
+
+    public int pageNumber;
+
+    public void create(int pageNumber) {
+        //SearchResult fragment = new SearchResult();
+        //Bundle args = new Bundle();
+        //args.putInt(ARG_PAGE, pageNumber);
+        //fragment.setArguments(args);
+        //return fragment;
+
+       // this.pageNumber = pageNumber;
     }
+
+    /*public SearchResult(int pageNumber){
+        this.pageNumber = pageNumber;
+    }*/
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPageNumber = getArguments().getInt(ARG_PAGE);
-        Log.d("onCreate tab", getArguments().getInt(ARG_PAGE)+"");
+       // mPageNumber = getArguments().getInt(ARG_PAGE);
+        //Log.d("onCreate tab", getArguments().getInt(ARG_PAGE)+"");
     }
 
     //Overriden method onCreateView
@@ -96,16 +111,23 @@ public class SearchResult extends Fragment implements SearchCallback {
 
         layout = inflater.inflate(R.layout.search_tab1, container, false);
 
+        ViewGroup rootView = (ViewGroup) inflater
+                .inflate(R.layout.search_tab1, container, false);
+
         linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
 
-        AppController.getInstance().recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_search_dish);
+        progressBar = (RelativeLayout) layout.findViewById(R.id.progress_bar_search);
 
-        AppController.getInstance().recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_search_dish);
+
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         imgHolder = (ImageView) layout.findViewById(R.id.img_holder_search);
         txtHolder = (TextView) layout.findViewById(R.id.txt_search);
 
-        Log.d("onCreateview tab", mPageNumber+"");
+
+
+        //Log.d("testString onCreateV", testString);
 
         db = new DatabaseHandler(getActivity());
 
@@ -113,7 +135,7 @@ public class SearchResult extends Fragment implements SearchCallback {
 
         AppController.getInstance().sessionId = sessionId;
 
-        Log.d("session id createView", sessionId);
+       // Log.d("session id createView", sessionId);
 
 
 
@@ -134,18 +156,23 @@ public class SearchResult extends Fragment implements SearchCallback {
             txtHolder.setText("Find best restaurants.");
         }*/
 
+        Log.d("testString onCreate", testString + "pageNo: "+pageNumber);
+
         switch (mPageNumber){
             case TAB_DISH_SEARCH:
                 imgHolder.setImageResource(R.drawable.ic_local_dining_black_48dp);
                 txtHolder.setText("Find awesome dishes.");
+                //testString = "Tab_dish_Search";
                 break;
             case TAB_USER_SEARCH:
                 imgHolder.setImageResource(R.drawable.ic_supervisor_account_black_48dp);
                 txtHolder.setText("Food is fun with friends.");
+                //testString = "Tab_user_Search";
                 break;
             case TAB_RESTAURANT_SEARCH:
                 imgHolder.setImageResource(R.drawable.ic_store_mall_directory_black_48dp);
                 txtHolder.setText("Find best restaurants.");
+                //testString = "Tab_restaurant_Search";
                 break;
         }
 
@@ -169,9 +196,11 @@ public class SearchResult extends Fragment implements SearchCallback {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        Log.d("onAttach","call");
+        //Log.d("onAttach","call");
 
         activity = getActivity();
+
+
 
 
         config = new Config();
@@ -181,9 +210,18 @@ public class SearchResult extends Fragment implements SearchCallback {
     public void searchKey(String keyword, String searchType) {
         this.keyword = keyword;
 
-        //AppController.getInstance().cancelPendingRequests(TAG);
 
-        if (keyword.length()>2){
+
+        //testString2 = "222222";
+
+        Log.d("testString callback", testString);
+
+        if (keyword.length()<2){
+            searchResultLoaded = false;
+        }
+
+        //AppController.getInstance().cancelPendingRequests(TAG);
+        if (keyword.length()>1 && searchResultLoaded == false){
             try {
                 getDishList(TAG, searchType);
             } catch (JSONException e) {
@@ -191,16 +229,21 @@ public class SearchResult extends Fragment implements SearchCallback {
             }
         }
 
+        if (searchResultLoaded){
+            onTexChange(keyword);
+        }
 
-
-
-
-        Log.d("search key", "keyword: "+ keyword+" searchType "+searchType + "session id: "+ sessionId);
+        //Log.d("search key", "keyword: "+ keyword+" searchType "+searchType + "session id: "+ sessionId);
     }
-
     public void getDishList(final String tag, String searchType) throws JSONException {
 
-        Log.d("session Id global", AppController.getInstance().sessionId+"");
+       // testString = "get dish List";
+        Log.d("testString loaded", testString+ "testString2: "+ testString2 +" : "+progressBar);
+        Log.d("pageNo loaded", pageNumber+"");
+
+        progressBar.setVisibility(View.VISIBLE);
+
+        //Log.d("session Id global", AppController.getInstance().sessionId+"");
         //Log.d("getPostFeed", "post data");
         JSONObject obj = new JSONObject();
         obj.put("sessionId", AppController.getInstance().sessionId);
@@ -216,8 +259,18 @@ public class SearchResult extends Fragment implements SearchCallback {
         //Log.d("getPostFeed","pageNo: "+pageNo);
         //obj.put("page",Integer.toString(pageNo));
         // obj.put("recordCount","10");
+        String url;
+        if (searchType.equals("dish")){
+            url = config.URL_DISH_LIST;
+        }else if (searchType.equals("user")){
+            url = config.URL_USER_LIST;
+        }else if (searchType.equals("restaurant")){
+            url = config.URL_RESTAURANT_LIST;
+        }else {
+            url = null;
+        }
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                config.URL_DISH_LIST, obj,
+                url, obj,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -273,7 +326,6 @@ public class SearchResult extends Fragment implements SearchCallback {
                 return headers;
             }
         };
-
         final int DEFAULT_TIMEOUT = 6000;
         // Adding request to request queue
         jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
@@ -281,8 +333,9 @@ public class SearchResult extends Fragment implements SearchCallback {
     }
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
 
-        this.response = response;
+        progressBar.setVisibility(View.GONE);
 
+        this.response = response;
         JSONArray rListArray = response.getJSONArray("result");
         // Log.d("rListArray", "total: "+ rListArray.length());
         for (int i=0;i<rListArray.length();i++){
@@ -293,14 +346,46 @@ public class SearchResult extends Fragment implements SearchCallback {
             searchResultList.add(current);
         }
         searchAdapter = new SearchAdapter(AppController.getInstance().context,searchResultList);
-        AppController.getInstance().recyclerView.setAdapter(searchAdapter);
+        recyclerView.setAdapter(searchAdapter);
         //Log.d("send list", "total: "+restaurantList.size());
         if (getActivity() != null ){
 
         }else {
-            Log.d("getActivity", "null");
+            //Log.d("getActivity", "null");
         }
-
         searchResultLoaded = true;
+    }
+
+    private void onTexChange(String newText){
+        try {
+            JSONArray rListArray = response.getJSONArray("result");
+            searchResultList.clear();
+            for (int i=0;i<rListArray.length();i++){
+                SearchResultObj current = new SearchResultObj();
+                current.id = rListArray.getJSONObject(i).getString("id");
+                current.dishName = rListArray.getJSONObject(i).getString("dishName");
+                current.postCount = rListArray.getJSONObject(i).getString("postCount");
+                searchResultList.add(current);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        // Log.d("rListArray", "total: "+ rListArray.length());
+        // tempList = new ArrayList<RestaurantListObj>(restaurantList);
+        final List<SearchResultObj> filteredModelList = filter(searchResultList, newText);
+        searchAdapter.animateTo(filteredModelList);
+        recyclerView.scrollToPosition(0);
+    }
+    private List<SearchResultObj> filter(List<SearchResultObj> models, String query) {
+        query = query.toLowerCase();
+        //this.postData =  new ArrayList<RestaurantPostObj>(postList);
+        final List<SearchResultObj> filteredModelList = new ArrayList<>();
+        for (SearchResultObj model : models) {
+            final String text = model.dishName.toLowerCase();
+            if (text.contains(query)) {
+                filteredModelList.add(model);
+            }
+        }
+        return filteredModelList;
     }
 }

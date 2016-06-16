@@ -149,7 +149,6 @@ public class DishTagging extends Fragment implements DishTaggingCallback, View.O
                     if (dishNameLoaded){
                         onTexChange(s.toString());
                     }
-
                     recyclerView.setVisibility(View.VISIBLE);
                     btnNext.setTextColor(getResources().getColor(R.color.btn_enable));
                     btnNextEnable = true;

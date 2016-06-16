@@ -14,14 +14,20 @@ public class Pager extends FragmentStatePagerAdapter {
     //integer to count number of tabs
     int tabCount;
 
-    public SearchResult searchResult;
+    public SearchResult searchResult1;
+    public SearchResult searchResult2;
+    public SearchResult searchResult3;
 
 
     //Constructor to the class
     public Pager(FragmentManager fm, int tabCount) {
         super(fm);
 
-        searchResult = new SearchResult();
+        searchResult1 = new SearchResult();
+        searchResult2 = new SearchResult();
+        searchResult3 = new SearchResult();
+
+        //searchResult = new SearchResult(0);
 
         //Initializing tab count
         this.tabCount= tabCount;
@@ -31,21 +37,24 @@ public class Pager extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         //Returning the current tabs
-        /*switch (position) {
+        switch (position) {
             case 0:
-
-                return tab1;
+                //searchResult1 = new SearchResult(position);
+                searchResult1.pageNumber = position;
+                return searchResult1;
             case 1:
-
-                return tab2;
+                searchResult2.pageNumber = position;
+                return searchResult2;
             case 2:
-
-                return tab3;
+                searchResult3.pageNumber = position;
+                return searchResult3;
             default:
                 return null;
-        }*/
-        Log.d("Pager getItem", position+"");
-        return searchResult.create(position);
+        }
+        //searchResult = new SearchResult(position);
+        //searchResult.testString = "from pager class"+ position;
+       // Log.d("Pager getItem", position+"");
+       // return searchResult;
     }
     //Overriden method getCount to get the number of tabs
     @Override
