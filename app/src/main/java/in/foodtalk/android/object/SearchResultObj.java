@@ -8,4 +8,9 @@ public class SearchResultObj {
     public String dishName;
     public String postCount;
     public String score;
+
+    public String txt1;
+    public String txt2;
+    public String image;
+
 }

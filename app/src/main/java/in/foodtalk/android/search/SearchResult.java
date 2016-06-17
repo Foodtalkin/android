@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -61,6 +62,8 @@ public class SearchResult extends Fragment implements SearchCallback {
 
     private int mPageNumber;
 
+
+
     List<SearchResultObj> searchResultList = new ArrayList<>();
 
     String sessionId;
@@ -77,11 +80,17 @@ public class SearchResult extends Fragment implements SearchCallback {
 
     Activity activity;
 
-    public String testString = "First";
+    LinearLayout iconHolder;
 
-    String testString2 = "0000";
+
+
+
 
     public int pageNumber;
+
+    static final int DISH_SEARCH = 0;
+    static final int USER_SEARCH = 1;
+    static final int RESTAURANT_SEARCH = 2;
 
     public void create(int pageNumber) {
         //SearchResult fragment = new SearchResult();
@@ -125,6 +134,9 @@ public class SearchResult extends Fragment implements SearchCallback {
         imgHolder = (ImageView) layout.findViewById(R.id.img_holder_search);
         txtHolder = (TextView) layout.findViewById(R.id.txt_search);
 
+        iconHolder = (LinearLayout) layout.findViewById(R.id.icon_copy_holder);
+
+
 
 
         //Log.d("testString onCreateV", testString);
@@ -143,35 +155,28 @@ public class SearchResult extends Fragment implements SearchCallback {
 
 
 
-        /*if (mPageNumber == TAB_DISH_SEARCH){
-            imgHolder.setImageResource(R.drawable.ic_local_dining_black_48dp);
-            txtHolder.setText("Find awesome dishes.");
-        }
-        if (mPageNumber == TAB_USER_SEARCH){
-            imgHolder.setImageResource(R.drawable.ic_supervisor_account_black_48dp);
-            txtHolder.setText("Food is fun with friends.");
-        }
-        if (mPageNumber == TAB_RESTAURANT_SEARCH){
-            imgHolder.setImageResource(R.drawable.ic_store_mall_directory_black_48dp);
-            txtHolder.setText("Find best restaurants.");
-        }*/
 
-        Log.d("testString onCreate", testString + "pageNo: "+pageNumber);
 
-        switch (mPageNumber){
-            case TAB_DISH_SEARCH:
+        //Log.d("testString onCreate", testString + "pageNo: "+pageNumber);
+
+        switch (pageNumber){
+            case DISH_SEARCH:
                 imgHolder.setImageResource(R.drawable.ic_local_dining_black_48dp);
                 txtHolder.setText("Find awesome dishes.");
+                //userThumb.setVisibility(View.GONE);
                 //testString = "Tab_dish_Search";
                 break;
-            case TAB_USER_SEARCH:
+            case USER_SEARCH:
                 imgHolder.setImageResource(R.drawable.ic_supervisor_account_black_48dp);
                 txtHolder.setText("Food is fun with friends.");
+                //userThumb.setVisibility(View.VISIBLE);
+
                 //testString = "Tab_user_Search";
                 break;
-            case TAB_RESTAURANT_SEARCH:
+            case RESTAURANT_SEARCH:
                 imgHolder.setImageResource(R.drawable.ic_store_mall_directory_black_48dp);
                 txtHolder.setText("Find best restaurants.");
+               // userThumb.setVisibility(View.GONE);
                 //testString = "Tab_restaurant_Search";
                 break;
         }
@@ -209,15 +214,14 @@ public class SearchResult extends Fragment implements SearchCallback {
     @Override
     public void searchKey(String keyword, String searchType) {
         this.keyword = keyword;
+        if (keyword.length()<2 && searchResultLoaded == true){
+            searchAdapter.notifyDataSetChanged();
 
-
-
-        //testString2 = "222222";
-
-        Log.d("testString callback", testString);
-
-        if (keyword.length()<2){
             searchResultLoaded = false;
+            searchResultList.clear();
+            iconHolder.setVisibility(View.VISIBLE);
+
+
         }
 
         //AppController.getInstance().cancelPendingRequests(TAG);
@@ -233,13 +237,14 @@ public class SearchResult extends Fragment implements SearchCallback {
             onTexChange(keyword);
         }
 
+        Log.d("status on searchKey","keyword: "+keyword+" searchResultLoaded: "+ searchResultLoaded);
         //Log.d("search key", "keyword: "+ keyword+" searchType "+searchType + "session id: "+ sessionId);
     }
     public void getDishList(final String tag, String searchType) throws JSONException {
 
        // testString = "get dish List";
-        Log.d("testString loaded", testString+ "testString2: "+ testString2 +" : "+progressBar);
-        Log.d("pageNo loaded", pageNumber+"");
+        //Log.d("testString loaded", testString+ "testString2: "+ testString2 +" : "+progressBar);
+        //Log.d("pageNo loaded", pageNumber+"");
 
         progressBar.setVisibility(View.VISIBLE);
 
@@ -247,18 +252,8 @@ public class SearchResult extends Fragment implements SearchCallback {
         //Log.d("getPostFeed", "post data");
         JSONObject obj = new JSONObject();
         obj.put("sessionId", AppController.getInstance().sessionId);
-        obj.put("search", keyword);
+        obj.put(pageNumber == RESTAURANT_SEARCH ? "searchText" : "search", keyword);
         obj.put("region", "delhi");
-
-        Log.d("obj", sessionId+" : "+obj+"");
-        //obj.put("latitude","28.4820495");
-        // obj.put("longitude","77.0832561");
-        //obj.put("includeCount", "1");
-        //obj.put("includeFollowed","1");
-        // obj.put("postUserId",db.getUserDetails().get("userId"));
-        //Log.d("getPostFeed","pageNo: "+pageNo);
-        //obj.put("page",Integer.toString(pageNo));
-        // obj.put("recordCount","10");
         String url;
         if (searchType.equals("dish")){
             url = config.URL_DISH_LIST;
@@ -282,7 +277,12 @@ public class SearchResult extends Fragment implements SearchCallback {
                             if (!status.equals("error")){
                                 //-- getAndSave(response);
 
-                                loadDataIntoView(response , tag);
+                                if (!searchResultLoaded){
+                                    loadDataIntoView(response , tag);
+                                    Log.d("respons","loadDataIntoView");
+                                }
+
+
                             }else {
                                 String errorCode = response.getString("errorCode");
                                 if(errorCode.equals("6")){
@@ -335,17 +335,15 @@ public class SearchResult extends Fragment implements SearchCallback {
 
         progressBar.setVisibility(View.GONE);
 
+        iconHolder.setVisibility(View.GONE);
+
         this.response = response;
-        JSONArray rListArray = response.getJSONArray("result");
-        // Log.d("rListArray", "total: "+ rListArray.length());
-        for (int i=0;i<rListArray.length();i++){
-            SearchResultObj current = new SearchResultObj();
-            current.id = rListArray.getJSONObject(i).getString("id");
-            current.dishName = rListArray.getJSONObject(i).getString("dishName");
-            current.postCount = rListArray.getJSONObject(i).getString("postCount");
-            searchResultList.add(current);
-        }
-        searchAdapter = new SearchAdapter(AppController.getInstance().context,searchResultList);
+
+
+
+        setListArray(response);
+
+        searchAdapter = new SearchAdapter(getActivity(),searchResultList, pageNumber);
         recyclerView.setAdapter(searchAdapter);
         //Log.d("send list", "total: "+restaurantList.size());
         if (getActivity() != null ){
@@ -353,35 +351,70 @@ public class SearchResult extends Fragment implements SearchCallback {
         }else {
             //Log.d("getActivity", "null");
         }
+        if (keyword.length()>2 && !searchResultLoaded){
+            onTexChange(keyword);
+        }
         searchResultLoaded = true;
     }
-
     private void onTexChange(String newText){
-        try {
-            JSONArray rListArray = response.getJSONArray("result");
-            searchResultList.clear();
-            for (int i=0;i<rListArray.length();i++){
-                SearchResultObj current = new SearchResultObj();
-                current.id = rListArray.getJSONObject(i).getString("id");
-                current.dishName = rListArray.getJSONObject(i).getString("dishName");
-                current.postCount = rListArray.getJSONObject(i).getString("postCount");
-                searchResultList.add(current);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        // Log.d("rListArray", "total: "+ rListArray.length());
-        // tempList = new ArrayList<RestaurantListObj>(restaurantList);
+
+        setListArray(response);
         final List<SearchResultObj> filteredModelList = filter(searchResultList, newText);
         searchAdapter.animateTo(filteredModelList);
         recyclerView.scrollToPosition(0);
+    }
+
+    private void setListArray(JSONObject response){
+
+        try {
+            switch (pageNumber){
+                case DISH_SEARCH:
+                    JSONArray rListArray = response.getJSONArray("result");
+                    searchResultList.clear();
+                    for (int i=0;i<rListArray.length();i++){
+                        SearchResultObj current = new SearchResultObj();
+                        current.id = rListArray.getJSONObject(i).getString("id");
+                        current.txt1 = rListArray.getJSONObject(i).getString("dishName");
+                        current.txt2 = rListArray.getJSONObject(i).getString("postCount")+" Dishes";
+
+                        searchResultList.add(current);
+                    }
+                    break;
+                case USER_SEARCH:
+                    JSONArray rListArray1 = response.getJSONArray("users");
+                    searchResultList.clear();
+                    for (int i=0;i<rListArray1.length();i++){
+                        SearchResultObj current = new SearchResultObj();
+                        current.id = rListArray1.getJSONObject(i).getString("id");
+                        current.txt1 = rListArray1.getJSONObject(i).getString("userName");
+                        current.txt2 = rListArray1.getJSONObject(i).getString("fullName");
+                        current.image = rListArray1.getJSONObject(i).getString("image");
+                        searchResultList.add(current);
+                    }
+                    break;
+                case RESTAURANT_SEARCH:
+                    JSONArray rListArray2 = response.getJSONArray("restaurants");
+                    searchResultList.clear();
+                    for (int i=0;i<rListArray2.length();i++){
+                        SearchResultObj current = new SearchResultObj();
+                        current.id = rListArray2.getJSONObject(i).getString("id");
+                        current.txt1 = rListArray2.getJSONObject(i).getString("restaurantName");
+                        current.txt2 = rListArray2.getJSONObject(i).getString("area");
+                        searchResultList.add(current);
+                    }
+                    break;
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
     private List<SearchResultObj> filter(List<SearchResultObj> models, String query) {
         query = query.toLowerCase();
         //this.postData =  new ArrayList<RestaurantPostObj>(postList);
         final List<SearchResultObj> filteredModelList = new ArrayList<>();
         for (SearchResultObj model : models) {
-            final String text = model.dishName.toLowerCase();
+            final String text = model.txt1.toLowerCase();
             if (text.contains(query)) {
                 filteredModelList.add(model);
             }

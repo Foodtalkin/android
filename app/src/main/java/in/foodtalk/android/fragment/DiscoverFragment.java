@@ -106,6 +106,10 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
 
     Activity activity;
 
+    public int pageType = 0;
+    private static final int DISH_RESULT = 1;
+    public String dishName;
+
 
 
     @Override
@@ -225,6 +229,10 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         obj.put("recordCount","10");
         obj.put("latitude",lat);
         obj.put("longitude",lon);
+        if (pageType == DISH_RESULT){
+            obj.put("dishId",dishName);
+            obj.put("search",dishName);
+        }
 
         Log.d("post page number param", pageNo+"");
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,

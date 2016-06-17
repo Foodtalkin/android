@@ -2,14 +2,21 @@ package in.foodtalk.android.adapter.newpost;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.communicator.SearchResultCallback;
 import in.foodtalk.android.object.SearchResultObj;
 import in.foodtalk.android.search.SearchResult;
 
@@ -22,11 +29,20 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     LayoutInflater layoutInflater;
 
     List<SearchResultObj> searchResultList;
+    int pageNumber;
 
-    public SearchAdapter(Context context, List<SearchResultObj> searchResultList){
+    static final int DISH_SEARCH = 0;
+    static final int USER_SEARCH = 1;
+    static final int RESTAURANT_SEARCH = 2;
+
+    SearchResultCallback searchResultCallback;
+
+    public SearchAdapter(Context context, List<SearchResultObj> searchResultList, int pageNumber){
         this.context = context;
         layoutInflater = LayoutInflater.from(context);
         this.searchResultList = searchResultList;
+        this.pageNumber = pageNumber;
+        searchResultCallback = (SearchResultCallback) context;
     }
 
 
@@ -43,8 +59,33 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         SearchResultObj current = searchResultList.get(position);
         ResultHolder resultHolder = (ResultHolder) holder;
 
-        resultHolder.txtName.setText(current.dishName);
-        resultHolder.txtSub.setText(current.postCount+" Dishes");
+        switch (pageNumber){
+            case DISH_SEARCH:
+                resultHolder.userThumb.setVisibility(View.GONE);
+                resultHolder.dishName = current.txt1;
+                break;
+            case USER_SEARCH:
+                resultHolder.userThumb.setVisibility(View.VISIBLE);
+                //resultHolder.userThumb.setImageResource();
+                Picasso.with(context)
+                        .load(current.image)
+                        //.fit().centerCrop()
+                        .fit()
+                        .placeholder(R.drawable.user_placeholder)
+                        .into(resultHolder.userThumb);
+                break;
+            case RESTAURANT_SEARCH:
+                resultHolder.userThumb.setVisibility(View.GONE);
+                break;
+        }
+
+        resultHolder.id = current.id;
+
+
+
+
+        resultHolder.txtName.setText(current.txt1);
+        resultHolder.txtSub.setText(current.txt2);
     }
 
     @Override
@@ -52,15 +93,38 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return searchResultList.size();
     }
 
-    class ResultHolder extends RecyclerView.ViewHolder {
+    class ResultHolder extends RecyclerView.ViewHolder implements View.OnTouchListener {
         TextView txtName;
         TextView txtSub;
+        ImageView userThumb;
+        String id;
+        LinearLayout btnCard;
+        String dishName;
 
         public ResultHolder(View itemView) {
             super(itemView);
             txtName = (TextView) itemView.findViewById(R.id.txt_name_result);
             txtSub = (TextView) itemView.findViewById(R.id.txt_sub_result);
+            userThumb = (ImageView) itemView.findViewById(R.id.userThumb_search);
+            btnCard = (LinearLayout) itemView.findViewById(R.id.card_search_result);
 
+            btnCard.setOnTouchListener(this);
+
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch (v.getId()){
+                case R.id.card_search_result:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("clicked on result","call");
+                            searchResultCallback.resultClick(pageNumber, id, dishName);
+                            break;
+                    }
+                    break;
+            }
+            return true;
         }
     }
 

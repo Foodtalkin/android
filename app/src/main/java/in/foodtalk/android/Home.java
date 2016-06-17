@@ -54,6 +54,7 @@ import in.foodtalk.android.communicator.ProfilePostOpenCallback;
 import in.foodtalk.android.communicator.ProfileRPostOpenCallback;
 import in.foodtalk.android.communicator.RatingCallback;
 import in.foodtalk.android.communicator.ReviewCallback;
+import in.foodtalk.android.communicator.SearchResultCallback;
 import in.foodtalk.android.communicator.UserProfileCallback;
 import in.foodtalk.android.communicator.UserThumbCallback;
 import in.foodtalk.android.fragment.DiscoverFragment;
@@ -86,7 +87,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         MoreBtnCallback, UserProfileCallback, ProfilePostOpenCallback, FragmentManager.OnBackStackChangedListener,
         HeadSpannableCallback, UserThumbCallback, ProfileRPostOpenCallback, PhoneCallback,
         CheckInCallback, CamBitmapCallback, DishTaggingCallback , RatingCallback , ReviewCallback, AddRestaurantCallback,
-        AddedRestaurantCallback {
+        AddedRestaurantCallback, SearchResultCallback {
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
@@ -300,6 +301,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             case R.id.btn_discover:
                 //Log.d("onClick", "btn discover");
                 if (pageNo != 1) {
+                    discoverFragment.pageType = 0;
                     setFragmentView(discoverFragment, R.id.container, 1, false);
                     //titleHome.setText("Discover");
                     pageNo = 1;
@@ -1077,11 +1079,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         if (fragment == userProfile){
             header.setVisibility(View.GONE);
             header1.setVisibility(View.VISIBLE);
+            searchHeader.setVisibility(View.GONE);
         }
 
         if (fragment == restaurantProfileFragment){
             header.setVisibility(View.VISIBLE);
             header1.setVisibility(View.GONE);
+            searchHeader.setVisibility(View.GONE);
             titleHome.setText("Restaurant");
         }
 
@@ -1101,6 +1105,35 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         break;
         case "FavouritesFragment":*/
         //titleHome.setText("Favourites");
+    }
+
+    static final int DISH_SEARCH = 0;
+    static final int USER_SEARCH = 1;
+    static final int RESTAURANT_SEARCH = 2;
+
+    @Override
+    public void resultClick(int resultType, String id, String dishName) {
+        switch (resultType){
+            case USER_SEARCH:
+                userProfile = new UserProfile(id);
+                setFragmentView(userProfile, R.id.container, -1, true);
+                getFragmentManager().beginTransaction().remove(searchFragment).commit();
+                break;
+            case RESTAURANT_SEARCH:
+                restaurantProfileFragment = new RestaurantProfileFragment(id);
+                setFragmentView(restaurantProfileFragment, R.id.container, -1, true);
+                getFragmentManager().beginTransaction().remove(searchFragment).commit();
+                break;
+            case DISH_SEARCH:
+                discoverFragment.pageType = 1;
+                discoverFragment.dishName = dishName;
+                setFragmentView(discoverFragment, R.id.container, -1, true);
+                getFragmentManager().beginTransaction().remove(searchFragment).commit();
+                break;
+        }
+        hideSoftKeyboard();
+
+        Log.d("result click", "resutlType: "+ resultType+" id:"+id);
     }
     //-------------------------------------------------------------
 }
