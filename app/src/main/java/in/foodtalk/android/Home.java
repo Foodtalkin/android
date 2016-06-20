@@ -42,6 +42,7 @@ import in.foodtalk.android.communicator.AddedRestaurantCallback;
 import in.foodtalk.android.communicator.CamBitmapCallback;
 import in.foodtalk.android.communicator.CheckInCallback;
 import in.foodtalk.android.communicator.CloudinaryCallback;
+import in.foodtalk.android.communicator.CommentCallback;
 import in.foodtalk.android.communicator.DishTaggingCallback;
 import in.foodtalk.android.communicator.HeadSpannableCallback;
 import in.foodtalk.android.communicator.MoreBtnCallback;
@@ -57,6 +58,7 @@ import in.foodtalk.android.communicator.ReviewCallback;
 import in.foodtalk.android.communicator.SearchResultCallback;
 import in.foodtalk.android.communicator.UserProfileCallback;
 import in.foodtalk.android.communicator.UserThumbCallback;
+import in.foodtalk.android.fragment.CommentFragment;
 import in.foodtalk.android.fragment.DiscoverFragment;
 import in.foodtalk.android.fragment.FavouritesFragment;
 import in.foodtalk.android.fragment.HomeFragment;
@@ -87,7 +89,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         MoreBtnCallback, UserProfileCallback, ProfilePostOpenCallback, FragmentManager.OnBackStackChangedListener,
         HeadSpannableCallback, UserThumbCallback, ProfileRPostOpenCallback, PhoneCallback,
         CheckInCallback, CamBitmapCallback, DishTaggingCallback , RatingCallback , ReviewCallback, AddRestaurantCallback,
-        AddedRestaurantCallback, SearchResultCallback {
+        AddedRestaurantCallback, SearchResultCallback, CommentCallback {
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
@@ -105,6 +107,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
     HomeFragment homeFragment;
     DiscoverFragment discoverFragment;
+    DiscoverFragment dishResultFragment;
     CheckIn newpostFragment;
     NotiFragment notiFragment;
     MoreFragment moreFragment;
@@ -120,6 +123,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     ReviewFragment reviewFragment;
     AddRestaurant addRestaurant;
     SearchFragment searchFragment;
+    CommentFragment commentFragment;
 
     //-------dummy fragment created for temporary use to set Legal screen title----
     Fragment legalFragment = new Fragment();
@@ -1096,6 +1100,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             header.setVisibility(View.VISIBLE);
             searchHeader.setVisibility(View.GONE);
         }
+
+        if(fragment == dishResultFragment){
+
+            searchHeader.setVisibility(View.GONE);
+            header.setVisibility(View.VISIBLE);
+            header1.setVisibility(View.GONE);
+            titleHome.setText("Dishes");
+        }
        /* case "UserProfile":
         header.setVisibility(View.VISIBLE);
         header1.setVisibility(View.GONE);
@@ -1125,15 +1137,25 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 getFragmentManager().beginTransaction().remove(searchFragment).commit();
                 break;
             case DISH_SEARCH:
-                discoverFragment.pageType = 1;
-                discoverFragment.dishName = dishName;
-                setFragmentView(discoverFragment, R.id.container, -1, true);
+                dishResultFragment = new DiscoverFragment();
+                dishResultFragment.pageType = 1;
+                dishResultFragment.dishName = dishName;
+                setFragmentView(dishResultFragment, R.id.container, -1, true);
                 getFragmentManager().beginTransaction().remove(searchFragment).commit();
                 break;
         }
         hideSoftKeyboard();
 
         Log.d("result click", "resutlType: "+ resultType+" id:"+id);
+    }
+
+    @Override
+    public void openComment(String postId) {
+        Log.d("callback open comment", postId);
+
+
+        commentFragment = new CommentFragment();
+        setFragmentView(commentFragment, R.id.container, -1, true);
     }
     //-------------------------------------------------------------
 }

@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 
 import in.foodtalk.android.R;
 import in.foodtalk.android.app.AppController;
+import in.foodtalk.android.communicator.CommentCallback;
 import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.communicator.PostOptionCallback;
@@ -58,6 +59,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     HeadSpannable headSpannable;
     UserThumbCallback userThumbCallback;
 
+    CommentCallback commentCallback;
+
     public HomeFeedAdapter(Context context, List<PostObj> postObj, PostLikeCallback postLikeCallback){
         layoutInflater = LayoutInflater.from(context);
         this.postObj = postObj;
@@ -71,6 +74,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         headSpannable = new HeadSpannable(context);
         userThumbCallback = (UserThumbCallback) context;
+
+        commentCallback = (CommentCallback) context;
         //likeCallback = postLikeCallback;
 
     }
@@ -470,6 +475,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("clicked", "icon comment");
+                            commentCallback.openComment(postObj1.id);
                             break;
                     }
                 }
