@@ -29,4 +29,11 @@ public class PostObj {
     public String postImage;
     public String postThumb;
     public String restaurantDistance;
+
+    public String tip;
+    public String next;
+    public String previous;
+    public String comment_count;
+    public String like_count;
+    public String timeElapsed;
 }

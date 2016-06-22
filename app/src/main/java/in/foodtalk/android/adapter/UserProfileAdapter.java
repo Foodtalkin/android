@@ -118,7 +118,6 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             profileHolder.following.setText(userProfileObj.followingCount);
 
             profileHolder.userId = userProfileObj.userId;
-
             userId = userProfileObj.userId;
 
             if (followBtnVisible == true){

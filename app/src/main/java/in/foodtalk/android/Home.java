@@ -1154,8 +1154,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         Log.d("callback open comment", postId);
 
 
-        commentFragment = new CommentFragment();
-        setFragmentView(commentFragment, R.id.container, -1, true);
+        commentFragment = new CommentFragment(postId);
+        setFragmentView(commentFragment, R.id.container1, -1, true);
     }
     //-------------------------------------------------------------
 }
