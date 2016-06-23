@@ -906,7 +906,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         setFragmentView(newpostFragment, R.id.container1, 0, true);
     }
 
-
     //---------camera and crop intent----------------------------
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

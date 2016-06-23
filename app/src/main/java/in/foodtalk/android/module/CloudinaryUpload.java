@@ -28,9 +28,6 @@ public class CloudinaryUpload extends AsyncTask<File, Void, Map> {
         this.cloudinaryCallback = cloudinaryCallback;
       //  this.cloudinaryCallback = (CloudinaryCallback) context;
 
-
-
-
     }
 
 

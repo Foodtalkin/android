@@ -70,12 +70,15 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         PostHolder postHolder;
+        CommentHolder commentHolder;
         if (viewType == VIEW_POST){
             View view = layoutInflater.inflate(R.layout.card_view_post_comment, parent, false);
             postHolder = new PostHolder(view);
             return postHolder;
         }else {
-            return null;
+            View view = layoutInflater.inflate(R.layout.card_comment, parent, false);
+            commentHolder = new CommentHolder(view);
+            return commentHolder;
         }
     }
 
@@ -137,6 +140,18 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     .load(postObj.userImage)
                     .placeholder(R.drawable.placeholder)
                     .into(postHolder.userThumbnail);
+        } else if (holder instanceof CommentHolder){
+            CommentHolder commentHolder = (CommentHolder) holder;
+            CommentObj current = postDataList.get(position);
+            commentHolder.userName.setText(current.userName);
+            commentHolder.fullUserName.setText(current.fullName);
+            commentHolder.txtComment.setText(current.comment);
+            Picasso.with(context)
+                    .load(current.userImage)
+                    //.fit().centerCrop()
+                    .fit()
+                    .placeholder(R.drawable.user_placeholder)
+                    .into(commentHolder.userThumb);
         }
     }
 
@@ -352,7 +367,6 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                 //------------------------------------------
                                 bookmarkCallback.bookmark(getPosition(),postObj.id, false);
                             }
-
                             break;
                     }
                 }
@@ -385,6 +399,26 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     break;
             }
             return true;
+        }
+    }
+    private class CommentHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
+
+        ImageView userThumb;
+        TextView userName;
+        TextView fullUserName;
+        TextView txtComment;
+
+        public CommentHolder(View itemView) {
+            super(itemView);
+            userThumb = (ImageView) itemView.findViewById(R.id.user_thumb);
+            fullUserName = (TextView) itemView.findViewById(R.id.txt_username_full);
+            userName = (TextView) itemView.findViewById(R.id.txt_username);
+            txtComment = (TextView) itemView.findViewById(R.id.txt_comment);
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            return false;
         }
     }
 }
