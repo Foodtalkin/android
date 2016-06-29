@@ -51,6 +51,6 @@ dependencies {
 
     compile 'com.cloudinary:cloudinary-core:1.4.1'
     compile 'com.cloudinary:cloudinary-android:1.4.1'
-
-
+    compile files('libs/Parse-1.9.1.jar')
+    compile 'com.parse.bolts:bolts-tasks:1.4.0'
 }

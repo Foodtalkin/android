@@ -3,6 +3,9 @@
     <string name="text_username">You are almost done, Just one last step. Select a unique username by which all food talkers will identify you in the app. It should be unique and can not be changed.</string>
     <string name="text_username_taken">This username is already taken!</string>
 
+    <string name="parseAppID">RBOZIK8Vti138uqPIucaBherLAB16JFa3ITi4kDu</string>
+    <string name="parseClientID">Kavc924t4PGsZzQdwUoLS6nz3q3Wm5PfRUjEDj9a</string>
+
     <string name="text_share_heading">Lets get food talking</string>
     <string name="text_share_copy">Food is fun when shared. Share Food Talk with your friends.</string>
 

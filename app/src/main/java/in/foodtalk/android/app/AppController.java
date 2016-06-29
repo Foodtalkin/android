@@ -26,10 +26,15 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.parse.Parse;
+import com.parse.ParseUser;
+import com.parse.PushService;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import in.foodtalk.android.Home;
+import in.foodtalk.android.R;
 import in.foodtalk.android.module.LruBitmapCache;
 
 public class AppController extends Application {
@@ -54,6 +59,10 @@ public class AppController extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Parse.initialize(this, getString(R.string.parseAppID), getString(R.string.parseClientID));
+        ParseUser.enableAutomaticUser();
+        PushService.setDefaultPushCallback(this, Home.class);
 
         context = getApplicationContext();
         mInstance = this;

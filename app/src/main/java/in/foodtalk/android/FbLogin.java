@@ -38,6 +38,10 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.parse.ParseException;
+import com.parse.ParseInstallation;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -414,6 +418,7 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                             String userName = jObj.getString("userName");
                             String uId = response.getString("userId");
                             String sessionId = response.getString("sessionId");
+                            parseInst(uId);
 
                             LoginValue loginValue = new LoginValue();
                             loginValue.fbId = fId;
@@ -468,5 +473,24 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         AppController.getInstance().addToRequestQueue(jsonObjReq,tag);
         // Cancelling request
         // ApplicationController.getInstance().getRequestQueue().cancelAll(tag_json_obj);
+    }
+
+    private void parseInst(String userId){
+        if (ParseUser.getCurrentUser() == null) {
+            ParseUser.enableAutomaticUser();
+            Log.d("getCurrentUser","currentuser null");
+        }
+        ParseInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                String deviceToken = (String) ParseInstallation.getCurrentInstallation().get("deviceToken");
+                Log.d("deviceToken callback", deviceToken+"");
+            }
+        });
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put("userId", userId);
+        installation.put("work", "development");
+        installation.put("localeIdentifier","en-IN");
+        installation.saveInBackground();
     }
 }
