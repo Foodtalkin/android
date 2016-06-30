@@ -47,11 +47,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.helper.ParseUtils;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.GetLocation;
 import in.foodtalk.android.module.Login;
@@ -67,6 +70,8 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
     private String TAG = Login.class.getSimpleName();
 
     private Config config;
+
+    private ParseUtils parseUtils;
 
 
     //--location provider vars----------
@@ -88,6 +93,8 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fb_login);
         config = new Config();
+
+        parseUtils = new ParseUtils();
 
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
@@ -418,7 +425,31 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                             String userName = jObj.getString("userName");
                             String uId = response.getString("userId");
                             String sessionId = response.getString("sessionId");
-                            parseInst(uId);
+                            String channels = jObj.getString("channels");
+
+                            String str = "android,ios,web,desktop";
+
+
+
+
+
+
+
+
+                           // parseInst(uId);
+                            //subscribeWithInfo(String userId,String locationIdentifire, String work, String channels);
+                            parseUtils.subscribeWithInfo(uId,"en-IN","development");
+                            List<String> items = Arrays.asList(channels.split("\\s*,\\s*"));
+
+                            for (int i=0;i<items.size();i++){
+                                Log.d("items", items.get(i));
+                                parseUtils.subscribeToChannels(items.get(i));
+                            }
+                            //parseUtils.subscribeToChannels("Android");
+                           // parseUtils.subscribeToChannels("Web");
+                           // parseUtils.subscribeToChannels("Ios");
+                           // parseUtils.unSubscribeToChannels(channels);
+                           // parseUtils.unSubscribeToChannels("channels");
 
                             LoginValue loginValue = new LoginValue();
                             loginValue.fbId = fId;

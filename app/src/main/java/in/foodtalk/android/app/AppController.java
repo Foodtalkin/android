@@ -35,6 +35,7 @@ import java.security.NoSuchAlgorithmException;
 
 import in.foodtalk.android.Home;
 import in.foodtalk.android.R;
+import in.foodtalk.android.helper.ParseUtils;
 import in.foodtalk.android.module.LruBitmapCache;
 
 public class AppController extends Application {
@@ -54,15 +55,19 @@ public class AppController extends Application {
 
     public RecyclerView recyclerView;
 
+    private ParseUtils parseUtils;
+
 
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        Parse.initialize(this, getString(R.string.parseAppID), getString(R.string.parseClientID));
+        /*Parse.initialize(this, getString(R.string.parseAppID), getString(R.string.parseClientID));
         ParseUser.enableAutomaticUser();
-        PushService.setDefaultPushCallback(this, Home.class);
+        PushService.setDefaultPushCallback(this, Home.class);*/
+
+        parseUtils.registerParse(this);
 
         context = getApplicationContext();
         mInstance = this;

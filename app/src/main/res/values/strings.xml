@@ -5,6 +5,7 @@
 
     <string name="parseAppID">RBOZIK8Vti138uqPIucaBherLAB16JFa3ITi4kDu</string>
     <string name="parseClientID">Kavc924t4PGsZzQdwUoLS6nz3q3Wm5PfRUjEDj9a</string>
+    <string name="notificationID">100</string>
 
     <string name="text_share_heading">Lets get food talking</string>
     <string name="text_share_copy">Food is fun when shared. Share Food Talk with your friends.</string>
