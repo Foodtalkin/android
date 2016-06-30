@@ -65,10 +65,10 @@ public class NotificationUtils {
             NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(mNotificationId, notification);
         } else {
-            intent.putExtra("title", title);
-            intent.putExtra("message", message);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            mContext.startActivity(intent);
+            //intent.putExtra("title", title);
+           // intent.putExtra("message", message);
+            //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+           // mContext.startActivity(intent);
         }
     }
     /**

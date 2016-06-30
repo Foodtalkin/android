@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import in.foodtalk.android.Home;
+import in.foodtalk.android.ResultNotification;
 import in.foodtalk.android.helper.NotificationUtils;
 
 /**
@@ -32,9 +33,12 @@ public class CustomPushReceiver extends ParsePushBroadcastReceiver {
 
             Log.e(TAG, "Push received: " + json);
 
-            //parseIntent = intent;
+           // parseIntent = intent;
+            Intent resultIntent = new Intent(context, ResultNotification.class);
+            //showNotificationMessage(context, json.getString("alert"), "", resultIntent);
+            showNotificationMessage(context, "Title set android", "Description", resultIntent);
 
-            // parsePushJson(context, json);
+            //parsePushJson(context, json);
 
         } catch (JSONException e) {
             Log.e(TAG, "Push message json exception: " + e.getMessage());
@@ -65,7 +69,7 @@ public class CustomPushReceiver extends ParsePushBroadcastReceiver {
             String message = data.getString("message");
 
             if (!isBackground) {
-                Intent resultIntent = new Intent(context, Home.class);
+                Intent resultIntent = new Intent(context, ResultNotification.class);
                 showNotificationMessage(context, title, message, resultIntent);
             }
 
@@ -87,7 +91,7 @@ public class CustomPushReceiver extends ParsePushBroadcastReceiver {
 
         notificationUtils = new NotificationUtils(context);
 
-        intent.putExtras(parseIntent.getExtras());
+       // intent.putExtras(parseIntent.getExtras());
 
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 

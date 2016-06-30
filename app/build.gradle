@@ -44,13 +44,11 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.3.0'
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
-
     compile 'com.theartofdev.edmodo:android-image-cropper:2.1.+'
-
     compile 'com.android.support:multidex:1.0.0'
-
     compile 'com.cloudinary:cloudinary-core:1.4.1'
     compile 'com.cloudinary:cloudinary-android:1.4.1'
-    compile files('libs/Parse-1.9.1.jar')
+    // compile files('libs/Parse-1.9.1.jar')
     compile 'com.parse.bolts:bolts-tasks:1.4.0'
+    compile 'com.parse:parse-android:1.13.1'
 }

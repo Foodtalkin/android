@@ -10,6 +10,7 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
+import com.parse.ParsePushBroadcastReceiver;
 import com.parse.ParseUser;
 import com.parse.PushService;
 import com.parse.SaveCallback;
@@ -26,7 +27,8 @@ public class ParseUtils {
         // initializing parse library
         Parse.initialize(context, context.getString(R.string.parseAppID), context.getString(R.string.parseClientID));
         ParseUser.enableAutomaticUser();
-        PushService.setDefaultPushCallback(context, Home.class);
+
+        //PushService.setDefaultPushCallback(context, Home.class);
         ParseInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -75,7 +77,7 @@ public class ParseUtils {
         ParseInstallation installation = ParseInstallation.getCurrentInstallation();
         installation.put("userId", userId);
         installation.put("work", work);
-        installation.put("localeIdentifier","en-IN");
+//        installation.put("localeIdentifier","en-IN");
        // installation.put("channels",channels);
         installation.saveInBackground();
         /*ParsePush.subscribeInBackground(channels, new SaveCallback() {
