@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.parse.ParseAnalytics;
 import com.parse.ParsePushBroadcastReceiver;
+import com.parse.PushService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,9 +24,18 @@ public class CustomPushReceiver extends ParsePushBroadcastReceiver {
     private NotificationUtils notificationUtils;
 
     private Intent parseIntent;
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+        PushService.startServiceIfRequired(context);
+    }
+
     @Override
     protected void onPushReceive(Context context, Intent intent) {
         super.onPushReceive(context, intent);
+
+
         if (intent == null)
             return;
 
@@ -34,9 +45,9 @@ public class CustomPushReceiver extends ParsePushBroadcastReceiver {
             Log.e(TAG, "Push received: " + json);
 
            // parseIntent = intent;
-            Intent resultIntent = new Intent(context, ResultNotification.class);
+           // Intent resultIntent = new Intent(context, ResultNotification.class);
             //showNotificationMessage(context, json.getString("alert"), "", resultIntent);
-            showNotificationMessage(context, "Title set android", "Description", resultIntent);
+            //showNotificationMessage(context, "Title set android", "Description", resultIntent);
 
             //parsePushJson(context, json);
 
@@ -53,6 +64,18 @@ public class CustomPushReceiver extends ParsePushBroadcastReceiver {
     @Override
     protected void onPushOpen(Context context, Intent intent) {
         super.onPushOpen(context, intent);
+        try {
+            //super.onPushOpen(context, intent);
+            ParseAnalytics.trackAppOpenedInBackground(intent);
+            PushService.setDefaultPushCallback(context, ResultNotification.class);
+            ParseAnalytics.trackAppOpenedInBackground(intent);
+            Intent i = new Intent(context, ResultNotification.class);
+            i.putExtras(intent.getExtras());
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(i);
+        } catch (Exception e) {
+            Log.d("Tag parse", "onPushOpen Error : " + e);
+        }
     }
 
     /**
