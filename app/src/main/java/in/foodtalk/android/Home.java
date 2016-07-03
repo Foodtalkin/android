@@ -27,6 +27,7 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -187,6 +188,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
        // imageCapture = new ImageCapture(this);
 
 
+
+
         //-------api init--------------------------
         postLikeApi = new PostLikeApi(this);
         postBookmarkApi = new PostBookmarkApi(this);
@@ -277,17 +280,55 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         optionsFragment = new OptionsFragment();
         favouritesFragment = new FavouritesFragment();
 
+        //----------get extra------
+        String newString;
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                newString= null;
+                Log.d("Get extras", "null--1");
+                // Add the fragment to the 'fragment_container' FrameLayout
+                getFragmentManager().beginTransaction()
+                        .add(R.id.container, homeFragment).commit();
+                pageNo = 0;
+
+                getFragmentManager().addOnBackStackChangedListener(this);
+            } else {
+                //newString= extras.getString("STRING_I_NEED");
+                Log.d("Get extras", extras.getString("com.parse.Data")+"");
+                String jsonData = extras.getString("com.parse.Data");
+                try {
+                    JSONObject jsonObject = new JSONObject(jsonData);
+                    String screenName = jsonObject.getString("class");
+                    String elementId = jsonObject.getString("elementId");
+                    openNotificationFragment(screenName, elementId);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                //openNotificationFragment();
+            }
+        } else {
+            newString= (String) savedInstanceState.getSerializable("STRING_I_NEED");
+            Log.d("Get extras", "null--");
+        }
+        //----------------------------
 
 
 
-        // Add the fragment to the 'fragment_container' FrameLayout
-        getFragmentManager().beginTransaction()
-                .add(R.id.container, homeFragment).commit();
-        pageNo = 0;
-
-        getFragmentManager().addOnBackStackChangedListener(this);
 
 
+
+
+    }
+
+    private void openNotificationFragment(String fragmentName, String elementId){
+        Log.d("Notification screen", fragmentName);
+        switch (fragmentName){
+            case "OpenPost":
+                commentFragment = new CommentFragment(elementId);
+                setFragmentView(commentFragment, R.id.container1, 0, true);
+                break;
+        }
     }
 
     @Override
@@ -406,7 +447,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         if (getFragmentManager().getBackStackEntryCount() > 0) {
             getFragmentManager().popBackStack();
             Fragment f = this.getFragmentManager().findFragmentById(R.id.container);
-            String fName = f.getClass().getSimpleName();
+           // String fName = f.getClass().getSimpleName();
 
         } else {
             super.onBackPressed();

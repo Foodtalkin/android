@@ -28,7 +28,7 @@ public class CustomPushReceiver extends ParsePushBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        PushService.startServiceIfRequired(context);
+       // PushService.startServiceIfRequired(context);
     }
 
     @Override
@@ -67,9 +67,9 @@ public class CustomPushReceiver extends ParsePushBroadcastReceiver {
         try {
             //super.onPushOpen(context, intent);
             ParseAnalytics.trackAppOpenedInBackground(intent);
-            PushService.setDefaultPushCallback(context, ResultNotification.class);
+            //PushService.setDefaultPushCallback(context, Home.class);
             ParseAnalytics.trackAppOpenedInBackground(intent);
-            Intent i = new Intent(context, ResultNotification.class);
+            Intent i = new Intent(context, Home.class);
             i.putExtras(intent.getExtras());
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
@@ -77,6 +77,8 @@ public class CustomPushReceiver extends ParsePushBroadcastReceiver {
             Log.d("Tag parse", "onPushOpen Error : " + e);
         }
     }
+
+
 
     /**
      * Parses the push notification json
