@@ -60,6 +60,8 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.context = context;
         headSpannable = new HeadSpannable(context);
 
+        userThumbCallback = (UserThumbCallback) context;
+
         likeCallback = (PostLikeCallback) context;
         bookmarkCallback = (PostBookmarkCallback) context;
         optionCallback = (PostOptionCallback) context;

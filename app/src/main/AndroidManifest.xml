@@ -67,7 +67,8 @@
         <activity
             android:name=".Home"
             android:screenOrientation="portrait"
-            android:theme="@style/NoActionBarTheam" />
+            android:launchMode="singleInstance"
+            android:theme="@style/NoActionBarTheam"/>
         <activity android:name=".ShareApp" />
         <activity android:name=".Test" />
         <activity

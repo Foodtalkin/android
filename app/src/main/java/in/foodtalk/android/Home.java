@@ -280,21 +280,22 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         optionsFragment = new OptionsFragment();
         favouritesFragment = new FavouritesFragment();
 
+        openHomeFirst();
+
         //----------get extra------
         String newString;
         if (savedInstanceState == null) {
+            Log.e("SavedInstance", "Null");
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
                 newString= null;
-                Log.d("Get extras", "null--1");
-                // Add the fragment to the 'fragment_container' FrameLayout
-                getFragmentManager().beginTransaction()
-                        .add(R.id.container, homeFragment).commit();
-                pageNo = 0;
+                Log.e("Get extras", "Null");
 
-                getFragmentManager().addOnBackStackChangedListener(this);
+                // Add the fragment to the 'fragment_container' FrameLayout
+
             } else {
                 //newString= extras.getString("STRING_I_NEED");
+                Log.e("Get extras", "is not Null");
                 Log.d("Get extras", extras.getString("com.parse.Data")+"");
                 String jsonData = extras.getString("com.parse.Data");
                 try {
@@ -308,6 +309,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 //openNotificationFragment();
             }
         } else {
+            Log.e("SavedInstance", "is not Null");
             newString= (String) savedInstanceState.getSerializable("STRING_I_NEED");
             Log.d("Get extras", "null--");
         }
@@ -321,12 +323,28 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
     }
 
+    private void openHomeFirst(){
+        getFragmentManager().beginTransaction()
+                .add(R.id.container, homeFragment).commit();
+        pageNo = 0;
+
+        getFragmentManager().addOnBackStackChangedListener(this);
+    }
+
     private void openNotificationFragment(String fragmentName, String elementId){
         Log.d("Notification screen", fragmentName);
         switch (fragmentName){
             case "OpenPost":
                 commentFragment = new CommentFragment(elementId);
                 setFragmentView(commentFragment, R.id.container1, 0, true);
+                break;
+            case "UserProfile":
+                userProfile = new UserProfile(elementId);
+                setFragmentView(userProfile, R.id.container, 0, true);
+                break;
+            case "RestaurantProfile":
+                restaurantProfileFragment = new RestaurantProfileFragment(elementId);
+                setFragmentView(restaurantProfileFragment, R.id.container, 0, true);
                 break;
         }
     }
