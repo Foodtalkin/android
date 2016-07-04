@@ -47,6 +47,7 @@ import in.foodtalk.android.communicator.CommentCallback;
 import in.foodtalk.android.communicator.DishTaggingCallback;
 import in.foodtalk.android.communicator.HeadSpannableCallback;
 import in.foodtalk.android.communicator.MoreBtnCallback;
+import in.foodtalk.android.communicator.NotificationCallback;
 import in.foodtalk.android.communicator.PhoneCallback;
 import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostDeleteCallback;
@@ -90,7 +91,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         MoreBtnCallback, UserProfileCallback, ProfilePostOpenCallback, FragmentManager.OnBackStackChangedListener,
         HeadSpannableCallback, UserThumbCallback, ProfileRPostOpenCallback, PhoneCallback,
         CheckInCallback, CamBitmapCallback, DishTaggingCallback , RatingCallback , ReviewCallback, AddRestaurantCallback,
-        AddedRestaurantCallback, SearchResultCallback, CommentCallback {
+        AddedRestaurantCallback, SearchResultCallback, CommentCallback, NotificationCallback {
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
@@ -1253,6 +1254,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         commentFragment = new CommentFragment(postId);
         setFragmentView(commentFragment, R.id.container1, -1, true);
+    }
+
+    @Override
+    public void notiClicked(String eventType, String raiserId, String raiserThumb, String eventDate) {
+
     }
     //-------------------------------------------------------------
 }

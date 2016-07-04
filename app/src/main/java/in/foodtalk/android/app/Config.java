@@ -48,4 +48,6 @@ public class Config {
     public static String URL_GET_POST = "http://"+IP+"/index.php/service/post/get";
 
     public static String URL_COMMENT_ADD = "http://"+IP+"/index.php/service/comment/add";
+
+    public static String URL_NOTIFICATION = "http://"+IP+"/index.php/service/notification/list";
 }
