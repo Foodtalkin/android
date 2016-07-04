@@ -161,6 +161,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     private final int DISH = 2;
     private final int RESTAURANT_PROFILE = 3;
 
+    private final int DISCOVER_SCREEN = 0;
+    private final int DISH_PROFILE = 1;
+
 
     Bitmap photo;
     File file;
@@ -314,13 +317,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             Log.d("Get extras", "null--");
         }
         //----------------------------
-
-
-
-
-
-
-
     }
 
     private void openHomeFirst(){
@@ -346,9 +342,52 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 restaurantProfileFragment = new RestaurantProfileFragment(elementId);
                 setFragmentView(restaurantProfileFragment, R.id.container, 0, true);
                 break;
+            case "Home":
+                setFragmentView(homeFragment, R.id.container, 0, false);
+                break;
+            case "Discover":
+                discoverFragment.pageType = DISCOVER_SCREEN;
+                setFragmentView(discoverFragment, R.id.container, 1, false);
+                break;
+            case "Search":
+                searchFragment = new SearchFragment();
+                setFragmentView(searchFragment, R.id.container1, -1, true);
+                break;
+            case "CheckIn":
+                newpostFragment = new CheckIn();
+                setFragmentView(newpostFragment, R.id.container1, 2, true);
+                break;
+            case "Notifications":
+                setFragmentView(notiFragment, R.id.container, 3, false);
+                break;
+            case "More":
+                setFragmentView(moreFragment, R.id.container, 4, false);
+                break;
+            case "AddRestaurant":
+                addRestaurant = new AddRestaurant();
+                setFragmentView(addRestaurant, R.id.container1, 0, true);
+                break;
+            case "Options":
+                setFragmentView(optionsFragment, R.id.container, 0, true);
+                break;
+            case "Favorite":
+                setFragmentView(favouritesFragment, R.id.container, 0, true);
+                break;
+            case "DishProfile":
+                dishResultFragment = new DiscoverFragment();
+                dishResultFragment.pageType = DISH_PROFILE;
+                dishResultFragment.dishName = dishName;
+                setFragmentView(dishResultFragment, R.id.container, -1, true);
+                break;
+            case "WebLink":
+                webViewFragment = new WebViewFragment(elementId);
+                setFragmentView (webViewFragment, R.id.container, 0, true);
+                //titleHome.setText("Legal");
+                titleHome.setText("Web");
+                //setTitle(legalFragment);
+                break;
         }
     }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -364,7 +403,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             case R.id.btn_discover:
                 //Log.d("onClick", "btn discover");
                 if (pageNo != 1) {
-                    discoverFragment.pageType = 0;
+                    discoverFragment.pageType = DISCOVER_SCREEN;
                     setFragmentView(discoverFragment, R.id.container, 1, false);
                     //titleHome.setText("Discover");
                     pageNo = 1;

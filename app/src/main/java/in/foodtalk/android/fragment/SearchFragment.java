@@ -84,9 +84,6 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
 
 
-
-
-
         txtSearch = (EditText) layout.findViewById(R.id.txt_search_home);
 
         InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
