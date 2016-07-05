@@ -2,6 +2,8 @@ package in.foodtalk.android.fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.adapter.NotificationAdapter;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.module.DatabaseHandler;
@@ -34,11 +37,12 @@ import in.foodtalk.android.object.NotificationObj;
  * Created by RetailAdmin on 21-04-2016.
  */
 public class NotiFragment extends Fragment {
-
-
     View layout;
     Config config;
     DatabaseHandler db;
+    RecyclerView recyclerView;
+    LinearLayoutManager linearLayoutManager;
+    NotificationAdapter notificationAdapter;
 
     List<NotificationObj> notiList = new ArrayList<>();
 
@@ -46,12 +50,14 @@ public class NotiFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.noti_fragment, container, false);
         config = new Config();
+        recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_notifications);
+
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         if (getActivity() != null){
             db = new DatabaseHandler(getActivity());
         }
-
-
 
         Log.d("notification","open");
         try {
@@ -133,6 +139,9 @@ public class NotiFragment extends Fragment {
     }
     private void loadDataIntoView(JSONObject response , String tag) throws JSONException {
         JSONArray notiArray = response.getJSONArray("notifications");
+        if (notiList.size()>0){
+            notiList.clear();
+        }
         for (int i=0;i<notiArray.length();i++){
             NotificationObj current = new NotificationObj();
             current.elementId = notiArray.getJSONObject(i).getString("elementId");
@@ -141,6 +150,10 @@ public class NotiFragment extends Fragment {
             current.raiserImage = notiArray.getJSONObject(i).getString("raiserImage");
             current.message = notiArray.getJSONObject(i).getString("message");
             current.eventDate = notiArray.getJSONObject(i).getString("eventDate");
+            current.eventType = notiArray.getJSONObject(i).getString("eventType");
+            notiList.add(current);
         }
+        notificationAdapter = new NotificationAdapter(getActivity(), notiList);
+        recyclerView.setAdapter(notificationAdapter);
     }
 }

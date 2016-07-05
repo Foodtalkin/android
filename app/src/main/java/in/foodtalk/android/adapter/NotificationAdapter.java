@@ -2,6 +2,7 @@ package in.foodtalk.android.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -51,7 +52,25 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         NotiHolder notiHolder = (NotiHolder) holder;
         notiHolder.raiserName = current.raiserName;
         notiHolder.eventDate = current.eventDate;
-        notiHolder.message = current.message;
+        String msg = current.message.replace(current.raiserName,"");
+        notiHolder.txtMsg.setText(Html.fromHtml("<font color='#1d6bd5'>"+current.raiserName+"</font>"+msg));
+        if (current.eventType == "2" || current.eventType == "4" || current.eventType == "9"){
+
+        }
+        switch (current.eventType){
+            case "2":
+                notiHolder.notificationIcon.setImageResource(R.drawable.like_icon_noti);
+                break;
+            case "4":
+                notiHolder.notificationIcon.setImageResource(R.drawable.commen_icon_noti);
+                break;
+            case "5":
+                notiHolder.notificationIcon.setImageResource(R.drawable.user_icon_noti);
+                break;
+            case "9":
+                notiHolder.notificationIcon.setImageResource(R.drawable.mentions_icon_noti);
+                break;
+        }
 
         Picasso.with(context)
                 .load(current.raiserImage)
@@ -66,10 +85,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     class NotiHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
-
         ImageView raiserImg, notificationIcon;
         TextView txtNotification;
-        LinearLayout notificatonHolder;
+        LinearLayout notificationHolder;
         String raiserName;
         String eventDate;
         String message;
@@ -79,11 +97,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             raiserImg = (ImageView) itemView.findViewById(R.id.user_img);
             notificationIcon = (ImageView) itemView.findViewById(R.id.noti_icon);
-            notificatonHolder = (LinearLayout) itemView.findViewById(R.id.notification_holder);
+            notificationHolder = (LinearLayout) itemView.findViewById(R.id.notification_holder);
+
+            notificationHolder.setOnTouchListener(this);
 
             txtMsg = (TextView) itemView.findViewById(R.id.txt_message);
-
             txtMsg.setText(message);
+            Log.d("txt noti",": "+message);
         }
 
         @Override
@@ -93,6 +113,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("clicked","notification");
+                            notificationCallback.notiClicked(notiList.get(getPosition()).eventType, notiList.get(getPosition()).raiserImage , notiList.get(getPosition()).raiserId, notiList.get(getPosition()).eventDate, notiList.get(getPosition()).elementId);
                             break;
                     }
                     break;

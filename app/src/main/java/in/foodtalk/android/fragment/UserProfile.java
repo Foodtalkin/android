@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -73,6 +74,7 @@ public class UserProfile extends Fragment implements LatLonCallback {
     GetLocation getLocation;
 
     LatLonCallback latLonCallback;
+
 
     String lat, lon;
 

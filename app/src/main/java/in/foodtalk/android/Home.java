@@ -1257,8 +1257,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     }
 
     @Override
-    public void notiClicked(String eventType, String raiserId, String raiserThumb, String eventDate) {
-
+    public void notiClicked(String eventType, String raiserId, String raiserThumb, String eventDate, String elementId) {
+        if(eventType.equals("2") || eventType.equals("4") || eventType.equals("9")){
+            commentFragment = new CommentFragment(elementId);
+            setFragmentView(commentFragment, R.id.container1, -1, true);
+        }else if (eventType.equals("5")){
+            userProfile = new UserProfile(elementId);
+            setFragmentView(userProfile, R.id.container, -1, true);
+        }
     }
     //-------------------------------------------------------------
 }
