@@ -25,12 +25,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -86,6 +88,7 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
 
     private Button btnPost;
     private ProgressDialog pDialog;
+    AppController appController = new AppController();
     //-----------------------------------
 
     @Override
@@ -120,16 +123,6 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         buildGoogleApiClient();
         FacebookSdk.sdkInitialize(getApplicationContext());
 
-        /*GetLocation getLocation = new GetLocation(this);
-        String latitude = getLocation.getUserLocation().latitude;
-        String longitude = getLocation.getUserLocation().longitude;
-        String altitude = getLocation.getUserLocation().altitude;
-        String speed = getLocation.getUserLocation().speed;*/
-
-        // Log.d("location", "latitude: " + latitude);
-        // Log.d("location", "longitude: " + longitude);
-        // Log.d("location", "altitude: " + altitude);
-        // Log.d("location", "speed: " + speed);
 
         callbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
@@ -138,7 +131,7 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                // System.out.print("Logged in");
+                 System.out.print("Logged in");
                 String userId = loginResult.getAccessToken().getUserId();
                 Log.d("facebook", "Loged in: " + loginResult);
                 //-----graph api---------facebook-------
@@ -203,6 +196,107 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                         errormsg, Toast.LENGTH_LONG).show();
             }
         });
+
+        //----------
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        // App code
+                       // Log.d("df",loginResult.getRecentlyDeniedPermissions());
+                        Log.d("LoginManager","loginResult: "+ loginResult.getRecentlyDeniedPermissions());
+                        Log.d("LoginManager","loginResult: "+ loginResult.getAccessToken());
+                        Log.d("LoginManager","loginResult: "+ loginResult.getRecentlyGrantedPermissions());
+                        if (loginResult.getRecentlyGrantedPermissions().contains("email")) {
+                            System.out.println("email avilable");
+                            getGraphInfo(loginResult.getAccessToken());
+                        } else {
+                            System.out.println("email permission denied");
+                            //LoginManager.getInstance().logOut();
+                            deleteFacebookApplication(loginResult.getAccessToken());
+                            hideProgressDialog();
+                        }
+                    }
+                    @Override
+                    public void onCancel() {
+                        // App code
+                        Log.d("LoginManager","cancel");
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        // App code
+                        Log.d("LoginManager","error: "+ exception);
+                        hideProgressDialog();
+                    }
+                });
+    }
+
+    private void getGraphInfo(AccessToken accessToken){
+        GraphRequest request = GraphRequest.newMeRequest(
+                accessToken.getCurrentAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        Log.v("LoginActivity", response.toString());
+                        // Application code.
+                        try {
+                            String id = object.getString("id");
+                            String email = object.getString("email");
+                            String birthday;
+                            if (object.has("birthday")){
+                                birthday = object.getString("birthday");
+
+                            }else {
+                                Log.d("fb birthday", "null");
+                                birthday = "N/A";
+                            }
+                            String name = object.getString("name");
+                            String gender = object.getString("gender");
+                            Log.d("fb user info", "id: " + id + "name: " + name + " email: " + email + " gender: " + gender + " birthday: " + birthday);
+
+                            loginInfo.fullName = name;
+                            loginInfo.email = email;
+                            loginInfo.gender = gender;
+                            loginInfo.facebookId = id;
+                            loginInfo.latitude = ((lat == null) ? "N/A" : lat);
+                            loginInfo.longitude = ((lon == null) ? "N/A" : lon);
+                            loginInfo.signInType = "F";
+                            loginInfo.deviceToken = "548698784";
+                            loginInfo.image = "https://graph.facebook.com/" + id + "/picture?type=large";
+
+                            // Login login = new Login(getApplicationContext());
+                            postLoginInfo(loginInfo, "login");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,email,gender, birthday");
+        request.setParameters(parameters);
+        request.executeAsync();
+    }
+    private void deleteFacebookApplication(AccessToken accessToken){
+        new GraphRequest(accessToken.getCurrentAccessToken(), "/me/permissions", null, HttpMethod.DELETE, new GraphRequest.Callback() {
+            @Override
+            public void onCompleted(GraphResponse response) {
+                boolean isSuccess = false;
+                System.out.println("response: delete app "+ response);
+                LoginManager.getInstance().logOut();
+                /*try {
+                    isSuccess = response.getJSONObject().getBoolean("success");
+                    System.out.println("response"+ response);
+                    System.out.println("issuccess"+ isSuccess);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (isSuccess && response.getError()==null){
+                    // Application deleted from Facebook account
+                }*/
+
+            }
+        }).executeAsync();
     }
 
     private void fblogin() {
@@ -374,17 +468,6 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
     //----------------post to api------------------------------
     public void postLoginInfo(LoginInfo loginInfo, String tag) throws JSONException {
         //showProgressDialog();
-
-        //----------
-        JSONObject objTest = new JSONObject();
-        objTest.put("signInType", "F");
-        objTest.put("fullName", "Mandeep Singh");
-        objTest.put("email","mandeep11@yahoo.com");
-        objTest.put("facebookId","10209122833009011");
-        objTest.put("latitude","28.6753863");
-        objTest.put("longitude","77.180826");
-        objTest.put("deviceToken","12344566776");
-        objTest.put("image","https:\\/\\/graph.facebook.com\\/10209122833009021\\/picture?type=large");
         //---------------
         JSONObject obj = new JSONObject();
         obj.put("signInType", loginInfo.signInType);
@@ -393,17 +476,22 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         obj.put("facebookId",loginInfo.facebookId);
         obj.put("latitude",loginInfo.latitude);
         obj.put("longitude",loginInfo.longitude);
-        obj.put("deviceToken","12344566776");
+        obj.put("deviceToken",loginInfo.deviceToken);
+        /*if (appController.deviceToken != null){
+            obj.put("deviceToken",appController.deviceToken);
+            Log.d("fblg devicetoken", appController.deviceToken);
+        }else {
+            obj.put("deviceToken","0");
+            Log.d("fblg devicetoken", ""+ appController.deviceToken);
+        }*/
         obj.put("image",loginInfo.image);
+
         //obj.put("twitterId","");
         //obj.put("googleId","");
-
         //Log.d("JSon obj",obj+"");
-
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                 config.URL_LOGIN, obj,
                 new Response.Listener<JSONObject>() {
-
                     @Override
                     public void onResponse(JSONObject response) {
 

@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -539,6 +540,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
     private void logOut() {
         db.resetTables();
+        LoginManager.getInstance().logOut();
         Intent i = new Intent(this, FbLogin.class);
         startActivity(i);
         finish();

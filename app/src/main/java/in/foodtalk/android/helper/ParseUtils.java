@@ -17,12 +17,15 @@ import com.parse.SaveCallback;
 
 import in.foodtalk.android.Home;
 import in.foodtalk.android.R;
+import in.foodtalk.android.app.AppController;
 
 /**
  * Created by RetailAdmin on 30-06-2016.
  */
 public class ParseUtils {
     private static String TAG = ParseUtils.class.getSimpleName();
+
+
     public static void registerParse(Context context) {
         // initializing parse library
         Parse.initialize(context, context.getString(R.string.parseAppID), context.getString(R.string.parseClientID));
@@ -67,10 +70,12 @@ public class ParseUtils {
             Log.d("getCurrentUser","currentuser null");
         }
         ParseInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {
+            AppController appController = new AppController();
             @Override
             public void done(ParseException e) {
                 String deviceToken = (String) ParseInstallation.getCurrentInstallation().get("deviceToken");
                 Log.d("deviceToken callback", deviceToken+"");
+                appController.deviceToken = deviceToken;
             }
         });
 

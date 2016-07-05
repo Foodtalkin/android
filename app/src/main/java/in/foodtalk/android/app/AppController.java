@@ -57,6 +57,8 @@ public class AppController extends Application {
 
     private ParseUtils parseUtils;
 
+    public String deviceToken;
+
 
 
     @Override
