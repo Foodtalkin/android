@@ -50,11 +50,13 @@
         <activity
             android:name=".FbLogin"
             android:screenOrientation="portrait"
-            android:theme="@style/NoActionBarTheam" />
+            android:theme="@style/NoActionBarTheam"
+            />
         <activity
             android:name=".WelcomeUsername"
             android:screenOrientation="portrait"
-            android:theme="@style/NoActionBarTheam" />
+            android:theme="@style/NoActionBarTheam"
+            android:windowSoftInputMode="stateHidden"/>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

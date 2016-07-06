@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.facebook.login.LoginManager;
+
 import java.util.List;
 
 import in.foodtalk.android.FbLogin;
@@ -91,6 +93,7 @@ public class OptionsFragment extends Fragment implements View.OnTouchListener {
     }
     private void logOut(){
         db.resetTables();
+        LoginManager.getInstance().logOut();
         Intent i = new Intent(getActivity(), FbLogin.class);
         startActivity(i);
         getActivity().finish();

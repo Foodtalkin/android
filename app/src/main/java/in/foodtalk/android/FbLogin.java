@@ -1,6 +1,7 @@
 package in.foodtalk.android;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -12,10 +13,17 @@ import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -45,6 +53,7 @@ import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -54,12 +63,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import in.foodtalk.android.adapter.newpost.CityListAdapter;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.CityListCallback;
 import in.foodtalk.android.helper.ParseUtils;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.GetLocation;
 import in.foodtalk.android.module.Login;
+import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.object.LoginInfo;
 import in.foodtalk.android.object.LoginValue;
 
@@ -75,6 +87,13 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
 
     private ParseUtils parseUtils;
 
+    LinearLayout btnFbAppRemove;
+    AccessToken accessToken;
+
+
+
+
+
 
     //--location provider vars----------
     Location mLastLocation;
@@ -89,6 +108,10 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
     private Button btnPost;
     private ProgressDialog pDialog;
     AppController appController = new AppController();
+
+
+
+
     //-----------------------------------
 
     @Override
@@ -99,9 +122,30 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
 
         parseUtils = new ParseUtils();
 
+
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
         pDialog.setCancelable(true);
+
+        btnFbAppRemove = (LinearLayout) findViewById(R.id.btn_fbapp_remove);
+        btnFbAppRemove.setOnClickListener(this);
+
+        // btnSelectCity.setOnClickListener(this);
+       /* btnSelectCity.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("btn", "select city");
+                if (cityListLoaded){
+                    cityShow();
+                }else {
+                    String errorMessage = "Please wait, Cities is loading";
+                    Toast toast = Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT);
+                    toast.show();
+
+                }
+            }
+        });*/
+
 
         //btnPost = (Button) findViewById(R.id.btn_post);
         //btnPost.setOnClickListener(this);
@@ -135,7 +179,7 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                 String userId = loginResult.getAccessToken().getUserId();
                 Log.d("facebook", "Loged in: " + loginResult);
                 //-----graph api---------facebook-------
-                GraphRequest request = GraphRequest.newMeRequest(
+                /*GraphRequest request = GraphRequest.newMeRequest(
                         loginResult.getAccessToken(),
                         new GraphRequest.GraphJSONObjectCallback() {
                             @Override
@@ -177,7 +221,7 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                 Bundle parameters = new Bundle();
                 parameters.putString("fields", "id,name,email,gender, birthday");
                 request.setParameters(parameters);
-                request.executeAsync();
+                request.executeAsync();*/
                 //-------------
             }
 
@@ -197,6 +241,7 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
             }
         });
 
+
         //----------
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
@@ -211,10 +256,12 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                             System.out.println("email avilable");
                             getGraphInfo(loginResult.getAccessToken());
                         } else {
-                            System.out.println("email permission denied");
+                            getGraphInfo(loginResult.getAccessToken());
+                           // System.out.println("email permission denied");
                             //LoginManager.getInstance().logOut();
-                            deleteFacebookApplication(loginResult.getAccessToken());
-                            hideProgressDialog();
+                           // deleteFacebookApplication(loginResult.getAccessToken());
+                            accessToken = loginResult.getAccessToken();
+                           // hideProgressDialog();
                         }
                     }
                     @Override
@@ -242,7 +289,13 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                         // Application code.
                         try {
                             String id = object.getString("id");
-                            String email = object.getString("email");
+                            String email;
+                            if (object.has("email")){
+                                email = object.getString("email");
+                            }else {
+                                email = "";
+                            }
+
                             String birthday;
                             if (object.has("birthday")){
                                 birthday = object.getString("birthday");
@@ -321,7 +374,7 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
-
+    int removeInt = 0;
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -330,6 +383,15 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                 Log.d("faceboo: ", "click login button");
                 showProgressDialog();
                 break;
+            case R.id.btn_fbapp_remove:
+                removeInt++;
+                if (removeInt > 7){
+                    deleteFacebookApplication(accessToken);
+                    Log.d("fb app","removed");
+                    removeInt = 0;
+                }
+                break;
+
 
         }
     }
@@ -466,13 +528,15 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
 
 
     //----------------post to api------------------------------
-    public void postLoginInfo(LoginInfo loginInfo, String tag) throws JSONException {
+    public void postLoginInfo(final LoginInfo loginInfo, String tag) throws JSONException {
         //showProgressDialog();
         //---------------
         JSONObject obj = new JSONObject();
         obj.put("signInType", loginInfo.signInType);
         obj.put("fullName", loginInfo.fullName);
-        obj.put("email",loginInfo.email);
+        if (!loginInfo.email.equals("")){
+            obj.put("email",loginInfo.email);
+        }
         obj.put("facebookId",loginInfo.facebookId);
         obj.put("latitude",loginInfo.latitude);
         obj.put("longitude",loginInfo.longitude);
@@ -515,14 +579,9 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                             String sessionId = response.getString("sessionId");
                             String channels = jObj.getString("channels");
 
+
+
                             String str = "android,ios,web,desktop";
-
-
-
-
-
-
-
 
                            // parseInst(uId);
                             //subscribeWithInfo(String userId,String locationIdentifire, String work, String channels);
@@ -556,10 +615,12 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                             //------Start new activity according to api response
                             if(userName.equals("") || userName.equals(null)){
                                 Intent i = new Intent(FbLogin.this, WelcomeUsername.class);
+                                i.putExtra("email", loginInfo.email);
                                 startActivity(i);
-
                             }else {
                                 Intent i = new Intent(FbLogin.this, Home.class);
+                               // Intent i = new Intent(FbLogin.this, WelcomeUsername.class);
+                              //  i.putExtra("email", loginInfo.email);
                                 startActivity(i);
                             }
                             finish();
@@ -612,4 +673,5 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         installation.put("localeIdentifier","en-IN");
         installation.saveInBackground();
     }
+
 }
