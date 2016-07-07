@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -181,6 +182,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     TextView searchBarHome;
 
     LinearLayout searchHeader;
+    Fragment currentFragment;
 
 
    // ImageCapture imageCapture;
@@ -192,6 +194,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
        // imageCapture = new ImageCapture(this);
 
+       // requestWindowFeature(Window.FEATURE_NO_TITLE);
+
 
 
 
@@ -200,6 +204,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         postBookmarkApi = new PostBookmarkApi(this);
         postReportApi = new PostReportApi(this);
         //-----------------------------------------
+
+        //getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
 
         setContentView(R.layout.activity_home);
@@ -395,7 +401,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         switch (v.getId()) {
             case R.id.btn_home:
                 //Log.d("onClick", "btn home");
-
+                currentFragment = this.getFragmentManager().findFragmentById(R.id.container);
+                /*if(currentFragment != homeFragment){
+                    setFragmentView(homeFragment, R.id.container, 0, false);
+                    // titleHome.setText("Home");
+                    pageNo = 0;
+                }*/
                 if (pageNo != 0) {
                     setFragmentView(homeFragment, R.id.container, 0, false);
                    // titleHome.setText("Home");
@@ -404,7 +415,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 break;
             case R.id.btn_discover:
                 //Log.d("onClick", "btn discover");
-                if (pageNo != 1) {
+                /*currentFragment = this.getFragmentManager().findFragmentById(R.id.container);
+                if(currentFragment != discoverFragment){
+                    discoverFragment.pageType = DISCOVER_SCREEN;
+                    setFragmentView(discoverFragment, R.id.container, 1, false);
+                    //titleHome.setText("Discover");
+                    pageNo = 1;
+                }*/
+               if (pageNo != 1) {
                     discoverFragment.pageType = DISCOVER_SCREEN;
                     setFragmentView(discoverFragment, R.id.container, 1, false);
                     //titleHome.setText("Discover");
@@ -412,6 +430,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 }
                 break;
             case R.id.btn_newpost:
+
                 if (pageNo != 2) {
                     newpostFragment = new CheckIn();
                     setFragmentView(newpostFragment, R.id.container1, 2, true);
@@ -421,7 +440,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 //Log.d("onClick", "btn newpost");
                 break;
             case R.id.btn_notification:
-                if (pageNo != 3) {
+                /*currentFragment = this.getFragmentManager().findFragmentById(R.id.container);
+                if(currentFragment != notiFragment){
+                    setFragmentView(notiFragment, R.id.container, 3, false);
+                    // titleHome.setText("Notification");
+                    pageNo = 3;
+                }*/
+               if (pageNo != 3) {
                     setFragmentView(notiFragment, R.id.container, 3, false);
                    // titleHome.setText("Notification");
                     pageNo = 3;
@@ -430,6 +455,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 //Log.d("onClick", "btn notification");
                 break;
             case R.id.btn_more:
+               /* currentFragment = this.getFragmentManager().findFragmentById(R.id.container);
+                if(currentFragment != moreFragment){
+                    setFragmentView(moreFragment, R.id.container, 4, false);
+                    //titleHome.setText("More");
+                    pageNo = 4;
+                }*/
                 if (pageNo != 4) {
                     setFragmentView(moreFragment, R.id.container, 4, false);
                     //titleHome.setText("More");
@@ -448,32 +479,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 break;
         }
     }
-
-
-
     private void setFragmentView(Fragment newFragment, int container, int pageN, boolean bStack) {
         String backStateName = newFragment.getClass().getName();
 
             setTitle(newFragment);
-
-
-            //Log.d("setFragmentView","call function");
-
-        //Temp disabled--
-        /*
-            if (newFragment == userProfile) {
-                //Log.d("userProfile","header1 visible");
-                header.setVisibility(View.GONE);
-                header1.setVisibility(View.VISIBLE);
-            } else if (newFragment == openPostFragment) {
-                header.setVisibility(View.GONE);
-                header1.setVisibility(View.VISIBLE);
-            } else {
-                header.setVisibility(View.VISIBLE);
-                header1.setVisibility(View.GONE);
-            }*/
-
-        //Log.d("pageNo selected", pageN+"");
 
             //Log.d("New fragment", backStateName+"");
             if (newFragment != newpostFragment && pageN != -1){
@@ -498,13 +507,20 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 //Log.d("addtobackstack", backStateName);
             }
             // Commit the transaction
+        Log.d("setFragmentview","going to commit");
             transaction.commit();
+
     }
 
     @Override
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() > 0) {
+
+            //getFragmentManager().getBackStackEntryAt(getFragmentManager().getBackStackEntryCount()).getName();
+           // Log.d("back stack fn", getFragmentManager().getBackStackEntryAt(getFragmentManager().getBackStackEntryCount()-1).getName());
+            Log.d("onBackPressed","going to popBackStack");
             getFragmentManager().popBackStack();
+            Log.d("onBackPressed","going to popBackStack done");
             Fragment f = this.getFragmentManager().findFragmentById(R.id.container);
            // String fName = f.getClass().getSimpleName();
 
@@ -577,6 +593,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     // String phone2;
     private void callDialog(final String phone1, final String phone2) {
         final Dialog dialogCall = new Dialog(this);
+        dialogCall.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogCall.setContentView(R.layout.dialog_call);
 
         //this.phone1 = phone1;
@@ -637,6 +654,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     final static int FROM_GALLERY = 55;
 
     private void dialogImgFrom(){
+
         final Dialog dialogImgFrom = new Dialog(this);
         dialogImgFrom.setContentView(R.layout.dialog_img_from);
 
@@ -669,6 +687,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         currentPostUserId = userId;
         currentPostId = postId;
         dialogPost = new Dialog(this);
+        dialogPost.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogPost.setContentView(R.layout.dialog_post);
 
         TextView btnReport = (TextView) dialogPost.findViewById(R.id.btn_report_post);

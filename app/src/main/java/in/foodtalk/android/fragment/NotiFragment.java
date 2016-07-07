@@ -1,6 +1,7 @@
 package in.foodtalk.android.fragment;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -46,6 +47,8 @@ public class NotiFragment extends Fragment {
 
     List<NotificationObj> notiList = new ArrayList<>();
 
+    Context context;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.noti_fragment, container, false);
@@ -57,6 +60,7 @@ public class NotiFragment extends Fragment {
 
         if (getActivity() != null){
             db = new DatabaseHandler(getActivity());
+            context = getActivity();
         }
 
         Log.d("notification","open");
@@ -153,7 +157,7 @@ public class NotiFragment extends Fragment {
             current.eventType = notiArray.getJSONObject(i).getString("eventType");
             notiList.add(current);
         }
-        notificationAdapter = new NotificationAdapter(getActivity(), notiList);
+        notificationAdapter = new NotificationAdapter(context, notiList);
         recyclerView.setAdapter(notificationAdapter);
     }
 }

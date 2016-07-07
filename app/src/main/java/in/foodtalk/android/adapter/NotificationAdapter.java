@@ -33,6 +33,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     List<NotificationObj> notiList;
     NotificationCallback notificationCallback;
     public NotificationAdapter(Context context, List<NotificationObj> notiList){
+        Log.d("Noti adapter context", context+"");
         this.context = context;
         this.notiList = notiList;
         layoutInflater = LayoutInflater.from(context);

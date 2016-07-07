@@ -3,6 +3,8 @@ package in.foodtalk.android.module;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -12,6 +14,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -61,7 +64,17 @@ public class GetLocation  implements GoogleApiClient.ConnectionCallbacks,
     }
 
     public void onStart(){
-        mGoogleApiClient.connect();
+        final LocationManager manager = (LocationManager) context.getSystemService( Context.LOCATION_SERVICE );
+
+        if ( manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            // buildAlertMessageNoGps();
+            mGoogleApiClient.connect();
+            Log.d("locaton manager", "gps on");
+        }else {
+            buildAlertMessageNoGps();
+            Log.d("locaton manager", "please on gps");
+        }
+
     }
     public void onStop(){
         mGoogleApiClient.disconnect();
@@ -98,7 +111,7 @@ public class GetLocation  implements GoogleApiClient.ConnectionCallbacks,
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        Log.d("onConnectionSuspended",i+"");
     }
 
     @Override
@@ -110,6 +123,7 @@ public class GetLocation  implements GoogleApiClient.ConnectionCallbacks,
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         buildGoogleApiClient();
+        Log.d("onConnectionFailed", connectionResult+"");
     }
 
     synchronized void buildGoogleApiClient() {
@@ -156,6 +170,24 @@ public class GetLocation  implements GoogleApiClient.ConnectionCallbacks,
         latLonCallback.location(lat,lon);
         //txtOutputLat.setText(lat);
         //txtOutputLon.setText(lon);
+    }
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog,  final int id) {
+                        context.startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+
     }
 }
 

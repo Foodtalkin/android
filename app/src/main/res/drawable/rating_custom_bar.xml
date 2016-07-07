@@ -4,12 +4,12 @@
 
     <item
         android:id="@+android:id/background"
-        android:drawable="@drawable/star_blank" />
+        android:drawable="@drawable/star_pre" />
     <item
         android:id="@+android:id/secondaryProgress"
-        android:drawable="@drawable/star_blank"/>
+        android:drawable="@drawable/star_pre"/>
     <item
         android:id="@+android:id/progress"
-        android:drawable="@drawable/star_filled"/>
+        android:drawable="@drawable/star_post"/>
 
 </layer-list>

@@ -264,6 +264,7 @@ public class SearchResult extends Fragment implements SearchCallback {
         }else {
             url = null;
         }
+        Log.d("json Obj", obj+"");
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                 url, obj,
                 new Response.Listener<JSONObject>() {

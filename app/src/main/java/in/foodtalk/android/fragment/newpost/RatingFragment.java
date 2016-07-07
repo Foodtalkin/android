@@ -47,11 +47,11 @@ public class RatingFragment extends Fragment implements View.OnTouchListener {
 
         layout = inflater.inflate(R.layout.rating, container, false);
 
-        btnStar1 = (ImageView) layout.findViewById(R.id.btn_star_rating1);
+       /* btnStar1 = (ImageView) layout.findViewById(R.id.btn_star_rating1);
         btnStar2 = (ImageView) layout.findViewById(R.id.btn_star_rating2);
         btnStar3 = (ImageView) layout.findViewById(R.id.btn_star_rating3);
         btnStar4 = (ImageView) layout.findViewById(R.id.btn_star_rating4);
-        btnStar5 = (ImageView) layout.findViewById(R.id.btn_star_rating5);
+        btnStar5 = (ImageView) layout.findViewById(R.id.btn_star_rating5);*/
 
         ratingCallback = (RatingCallback) getActivity();
 
@@ -67,11 +67,11 @@ public class RatingFragment extends Fragment implements View.OnTouchListener {
 
         btnRateLater = (TextView) layout.findViewById(R.id.btn_rate_later);
 
-        btnStar1.setOnTouchListener(this);
+/*        btnStar1.setOnTouchListener(this);
         btnStar2.setOnTouchListener(this);
         btnStar3.setOnTouchListener(this);
         btnStar4.setOnTouchListener(this);
-        btnStar5.setOnTouchListener(this);
+        btnStar5.setOnTouchListener(this);*/
         btnRateLater.setOnTouchListener(this);
 
 
@@ -92,7 +92,7 @@ public class RatingFragment extends Fragment implements View.OnTouchListener {
     public boolean onTouch(View v, MotionEvent event) {
         switch (v.getId()){
 
-            case R.id.btn_star_rating1:
+           /* case R.id.btn_star_rating1:
                 switch(event.getAction()){
                     case MotionEvent.ACTION_UP:
                         Log.d("star clicked", "s1");
@@ -153,7 +153,7 @@ public class RatingFragment extends Fragment implements View.OnTouchListener {
                         Log.d("star move","s5");
                         break;
                 }
-                break;
+                break;*/
             case R.id.btn_rate_later:
                 switch (event.getAction()){
                     case MotionEvent.ACTION_UP:

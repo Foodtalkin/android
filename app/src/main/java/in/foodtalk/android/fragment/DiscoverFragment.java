@@ -3,14 +3,17 @@ package in.foodtalk.android.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -129,6 +132,8 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
 
 
 
+
+
         if(postData != null){
             Log.d("postData","size: "+ postData);
         }else {
@@ -182,10 +187,9 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
 
 
 
-        latLonCallback = this;
-        getLocation = new GetLocation(activity, latLonCallback);
 
-        getLocation.onStart();
+
+
         config = new Config();
         db = new DatabaseHandler(activity.getApplicationContext());
         postObj = new PostObj();
@@ -196,6 +200,54 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         //Log.d("get user info lon", db.getUserDetails().get("lon"));
 
         super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+       /* latLonCallback = this;
+        getLocation = new GetLocation(activity, latLonCallback);
+
+        final LocationManager manager = (LocationManager) getActivity().getSystemService( Context.LOCATION_SERVICE );
+
+        if ( manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            // buildAlertMessageNoGps();
+            getLocation.onStart();
+            Log.d("locaton manager", "gps on");
+        }else {
+            buildAlertMessageNoGps();
+            Log.d("locaton manager", "please on gps");
+        }*/
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        latLonCallback = this;
+        getLocation = new GetLocation(activity, latLonCallback);
+
+        if (pageType == DISH_RESULT){
+            //obj.put("dishId",dishName);
+           // obj.put("search",dishName);
+            pageNo = 1;
+            try {
+                getPostFeed("load");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else {
+            getLocation.onStart();
+        }
+        /*final LocationManager manager = (LocationManager) getActivity().getSystemService( Context.LOCATION_SERVICE );
+
+        if ( manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            // buildAlertMessageNoGps();
+            getLocation.onStart();
+            Log.d("locaton manager", "gps on");
+        }else {
+            //buildAlertMessageNoGps();
+            Log.d("locaton manager", "please on gps");
+        }*/
     }
     @Override
     public void onDestroyView() {
@@ -230,10 +282,9 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         obj.put("latitude",lat);
         obj.put("longitude",lon);
         if (pageType == DISH_RESULT){
-            obj.put("dishId",dishName);
+            //obj.put("dishId",dishName);
             obj.put("search",dishName);
         }
-
         Log.d("post page number param", pageNo+"");
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                 config.URL_POST_DISCOVER, obj,
@@ -309,7 +360,7 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         //--swipeRefreshHome.setRefreshing(false);
 
         JSONArray postArray = response.getJSONArray("posts");
-        JSONObject postObject = postArray.getJSONObject(0);
+        //JSONObject postObject = postArray.getJSONObject(0);
         //String userName = postObject.getString("userName");
         //Log.d("user name from post", userName);
         Log.d("check list array", postData.size()+"");
@@ -476,4 +527,5 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
             e.printStackTrace();
         }
     }
+
 }

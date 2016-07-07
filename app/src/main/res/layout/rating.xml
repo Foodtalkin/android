@@ -84,46 +84,9 @@ android:background="@color/bg_color"
             android:text="Rate this dish"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:textColor="@color/blackText1"
+            android:textColor="#fff"
             android:layout_weight="1"/>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center"
-            android:visibility="gone">
-            <ImageView
-                android:id="@+id/btn_star_rating1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/star_rating_p"
-                android:padding="6dp"/>
-            <ImageView
-                android:id="@+id/btn_star_rating2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/star_rating_p"
-                android:padding="6dp"/>
-            <ImageView
-                android:id="@+id/btn_star_rating3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/star_rating_p"
-                android:padding="6dp"/>
-            <ImageView
-                android:id="@+id/btn_star_rating4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/star_rating_p"
-                android:padding="6dp"/>
-            <ImageView
-                android:id="@+id/btn_star_rating5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/star_rating_p"
-                android:padding="6dp"/>
 
-        </LinearLayout>
         <RatingBar
             android:id="@+id/ratingBar1"
             style="@style/customRatingBar"
@@ -131,8 +94,8 @@ android:background="@color/bg_color"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textView1"
             android:layout_centerHorizontal="true"
-
             android:stepSize="1"
+
             android:layout_gravity="center_horizontal"
             />
 
@@ -142,7 +105,7 @@ android:background="@color/bg_color"
             android:layout_height="wrap_content"
             android:text="Dish rating are used to provide a better experiance \nwe use your ratings to customize the way you discover."
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:textAlignment="center"
             android:textColor="@color/blackText1"
             android:textSize="13sp"/>
