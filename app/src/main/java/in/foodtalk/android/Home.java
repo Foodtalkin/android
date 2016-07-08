@@ -402,32 +402,34 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             case R.id.btn_home:
                 //Log.d("onClick", "btn home");
                 currentFragment = this.getFragmentManager().findFragmentById(R.id.container);
-                /*if(currentFragment != homeFragment){
+                if(currentFragment != homeFragment){
                     setFragmentView(homeFragment, R.id.container, 0, false);
                     // titleHome.setText("Home");
                     pageNo = 0;
-                }*/
-                if (pageNo != 0) {
+
+                   // getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
+               /* if (pageNo != 0) {
                     setFragmentView(homeFragment, R.id.container, 0, false);
                    // titleHome.setText("Home");
                     pageNo = 0;
-                }
+                }*/
                 break;
             case R.id.btn_discover:
                 //Log.d("onClick", "btn discover");
-                /*currentFragment = this.getFragmentManager().findFragmentById(R.id.container);
+                currentFragment = this.getFragmentManager().findFragmentById(R.id.container);
                 if(currentFragment != discoverFragment){
                     discoverFragment.pageType = DISCOVER_SCREEN;
                     setFragmentView(discoverFragment, R.id.container, 1, false);
                     //titleHome.setText("Discover");
                     pageNo = 1;
-                }*/
-               if (pageNo != 1) {
+                }
+              /* if (pageNo != 1) {
                     discoverFragment.pageType = DISCOVER_SCREEN;
                     setFragmentView(discoverFragment, R.id.container, 1, false);
                     //titleHome.setText("Discover");
                     pageNo = 1;
-                }
+                }*/
                 break;
             case R.id.btn_newpost:
 
@@ -440,32 +442,32 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 //Log.d("onClick", "btn newpost");
                 break;
             case R.id.btn_notification:
-                /*currentFragment = this.getFragmentManager().findFragmentById(R.id.container);
+                currentFragment = this.getFragmentManager().findFragmentById(R.id.container);
                 if(currentFragment != notiFragment){
                     setFragmentView(notiFragment, R.id.container, 3, false);
                     // titleHome.setText("Notification");
                     pageNo = 3;
-                }*/
-               if (pageNo != 3) {
+                }
+               /*if (pageNo != 3) {
                     setFragmentView(notiFragment, R.id.container, 3, false);
                    // titleHome.setText("Notification");
                     pageNo = 3;
-                }
+                }*/
 
                 //Log.d("onClick", "btn notification");
                 break;
             case R.id.btn_more:
-               /* currentFragment = this.getFragmentManager().findFragmentById(R.id.container);
+                currentFragment = this.getFragmentManager().findFragmentById(R.id.container);
                 if(currentFragment != moreFragment){
                     setFragmentView(moreFragment, R.id.container, 4, false);
                     //titleHome.setText("More");
                     pageNo = 4;
-                }*/
-                if (pageNo != 4) {
+                }
+                /*if (pageNo != 4) {
                     setFragmentView(moreFragment, R.id.container, 4, false);
                     //titleHome.setText("More");
                     pageNo = 4;
-                }
+                }*/
                 //Log.d("onClick", "btn more");
                 break;
             case R.id.btn_logout:
@@ -494,12 +496,19 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             else {
                 //Log.d("fragment","newpostFragment");
             }
-            android.app.FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+             FragmentManager manager = getFragmentManager();
+            //boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
+
+
+            android.app.FragmentTransaction transaction = manager.beginTransaction();
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back stack if needed
             if(newFragment == newpostFragment){
                 transaction.remove(newpostFragment);
             }
+
+
 
             transaction.replace(container, newFragment);
             if (bStack) {
@@ -507,9 +516,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 //Log.d("addtobackstack", backStateName);
             }
             // Commit the transaction
-        Log.d("setFragmentview","going to commit");
+            Log.d("setFragmentview","going to commit");
+            if(newFragment == homeFragment || newFragment == discoverFragment || newFragment == notiFragment || newFragment == moreFragment){
+                clearBackStack();
+            }
             transaction.commit();
-
     }
 
     @Override
@@ -1012,7 +1023,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     @Override
     public void addNewRestaurant() {
         addRestaurant = new AddRestaurant();
-        setFragmentView(addRestaurant, R.id.container1, 0, true);
+        setFragmentView(addRestaurant, R.id.container1, -1, true);
     }
 
     @Override
@@ -1023,7 +1034,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         Bundle bundle = new Bundle();
         bundle.putString("rId", rId);
         newpostFragment.setArguments(bundle);
-        setFragmentView(newpostFragment, R.id.container1, 0, true);
+        setFragmentView(newpostFragment, R.id.container1, -1, true);
     }
 
     //---------camera and crop intent----------------------------
@@ -1288,4 +1299,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }
     }
     //-------------------------------------------------------------
+
+    private void clearBackStack() {
+        FragmentManager manager = getFragmentManager();
+        if (manager.getBackStackEntryCount() > 0) {
+            FragmentManager.BackStackEntry first = manager.getBackStackEntryAt(0);
+            manager.popBackStack(first.getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
+    }
 }

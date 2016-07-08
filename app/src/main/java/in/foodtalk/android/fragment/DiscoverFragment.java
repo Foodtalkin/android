@@ -226,7 +226,7 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         latLonCallback = this;
         getLocation = new GetLocation(activity, latLonCallback);
 
-        if (pageType == DISH_RESULT){
+        /*if (pageType == DISH_RESULT){
             //obj.put("dishId",dishName);
            // obj.put("search",dishName);
             pageNo = 1;
@@ -237,7 +237,8 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
             }
         }else {
             getLocation.onStart();
-        }
+        }*/
+        getLocation.onStart();
         /*final LocationManager manager = (LocationManager) getActivity().getSystemService( Context.LOCATION_SERVICE );
 
         if ( manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {

@@ -23,6 +23,9 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageRequest;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -33,6 +36,7 @@ import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.communicator.PostOptionCallback;
 import in.foodtalk.android.communicator.UserThumbCallback;
+import in.foodtalk.android.module.DateTimeDifference;
 import in.foodtalk.android.module.HeadSpannable;
 import in.foodtalk.android.object.PostObj;
 
@@ -61,6 +65,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     CommentCallback commentCallback;
 
+    DateTimeDifference dateTimeDifference;
+
     public HomeFeedAdapter(Context context, List<PostObj> postObj, PostLikeCallback postLikeCallback){
         layoutInflater = LayoutInflater.from(context);
         this.postObj = postObj;
@@ -77,6 +83,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         commentCallback = (CommentCallback) context;
         //likeCallback = postLikeCallback;
+
+        dateTimeDifference = new DateTimeDifference();
 
     }
     @Override
@@ -108,8 +116,20 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 String htmlHeadline = "<font color='#0369db'>"+current.userName+"</font> <font color='#1a1a1a'>is having </font><font color='#0369db'> "+current.dishName+"</font><font color='#1a1a1a'> at </font><font color='#369db'>"+current.restaurantName+"</font><font color='#1a1a1a'>.</font>";
             }
 
+            SimpleDateFormat simpleDateFormat =
+                    new SimpleDateFormat("yyyy-M-dd hh:mm:ss");
+            try {
+                Date createdate = simpleDateFormat.parse(current.createDate);
+                Date currentdate = simpleDateFormat.parse(current.currentDate);
+                postHolder.txtTime.setText(dateTimeDifference.difference(createdate, currentdate));
+
+               // printDifference(date1, date2);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
             //postHolder.txtHeadLine.setText(Html.fromHtml(htmlHeadline));
-            postHolder.txtTime.setText("4d");
+
             postHolder.txtCountLike.setText(current.likeCount);
             postHolder.txtCountBookmark.setText(current.bookmarkCount);
             postHolder.txtCountComment.setText(current.commentCount);
