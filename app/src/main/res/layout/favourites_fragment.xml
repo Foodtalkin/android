@@ -9,6 +9,15 @@
         android:scrollbars="vertical">
 
     </android.support.v7.widget.RecyclerView>
+    <TextView
+        android:id="@+id/placeholder_favourites"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textColor="@color/blackText1"
+        android:text="You have no favourites yet."
+        android:visibility="gone"/>
+
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"

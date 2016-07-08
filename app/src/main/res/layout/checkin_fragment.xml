@@ -77,6 +77,29 @@
                 />
         </RelativeLayout>
 
+        <LinearLayout
+            android:id="@+id/progress_bar_checkin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+
+            >
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:indeterminateTint="#fff"
+                android:progressDrawable="@drawable/progress_bar"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Looking for places around you."
+                android:textColor="#fff"/>
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -106,27 +129,7 @@
             android:text="Add Restaurant"
             android:padding="4dp"/>
     </LinearLayout>
-    <LinearLayout
-        android:id="@+id/progress_bar_checkin"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        >
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:indeterminateTint="#fff"
-            android:progressDrawable="@drawable/progress_bar"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Looking for places around you."
-            android:textColor="#fff"/>
-    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/tap_to_retry"
         android:layout_width="wrap_content"

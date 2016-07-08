@@ -103,6 +103,7 @@ public class CheckInAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 case MotionEvent.ACTION_UP:
                     switch (v.getId()){
                         case R.id.btn_restaurant_checkin:
+                            Log.d("btn_restaurant_checkin", getPosition()+"");
                             Log.d("clicked","name"+rList.get(getPosition()).restaurantName);
                             checkInCallback.checkInRestaurant(rList.get(getPosition()).id, rList.get(getPosition()).restaurantName);
                             break;

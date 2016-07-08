@@ -484,6 +484,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     private void setFragmentView(Fragment newFragment, int container, int pageN, boolean bStack) {
         String backStateName = newFragment.getClass().getName();
 
+           // Log.d("newFragment", backStateName);
             setTitle(newFragment);
 
             //Log.d("New fragment", backStateName+"");
@@ -1173,11 +1174,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     }
 
     private void setTitle(Fragment fragment){
-        if (fragment == homeFragment){
+        /*if (fragment == homeFragment){
             header.setVisibility(View.VISIBLE);
             header1.setVisibility(View.GONE);
             titleHome.setText("Home");
-        }
+        }*/
+
+        Log.e("setTitle",fragment.getClass().getName());
+
         if (fragment == discoverFragment){
             header.setVisibility(View.VISIBLE);
             header1.setVisibility(View.GONE);

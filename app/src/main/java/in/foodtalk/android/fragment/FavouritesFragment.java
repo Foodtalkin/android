@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -61,6 +62,7 @@ public class FavouritesFragment extends Fragment {
 
     ProgressBar progressBar;
     LinearLayout tapToRetry;
+    TextView placeholderFavourites;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.favourites_fragment, container, false);
@@ -68,6 +70,8 @@ public class FavouritesFragment extends Fragment {
 
         progressBar = (ProgressBar) layout.findViewById(R.id.progress_bar);
         tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
+
+        placeholderFavourites = (TextView) layout.findViewById(R.id.placeholder_favourites);
 
         db = new DatabaseHandler(getActivity());
         config = new Config();
@@ -179,9 +183,20 @@ public class FavouritesFragment extends Fragment {
 
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
         JSONArray favArray = response.getJSONArray("dish");
+
+
         if(favList.size()>0 && !tag.equals("loadMore")){
          favList.clear();
         }
+
+        if (favArray.length()>0){
+            Log.d("favArray","more the 0");
+            placeholderFavourites.setVisibility(View.GONE);
+        }else {
+            //Log.d("favArray","0");
+            //placeholderFavourites.setVisibility(View.VISIBLE);
+        }
+
         for (int i=0; favArray.length()> i; i++){
             FavoritesObj current = new FavoritesObj();
             current.dishName = favArray.getJSONObject(i).getString("dishName");
