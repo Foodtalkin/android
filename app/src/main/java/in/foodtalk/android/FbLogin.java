@@ -11,6 +11,9 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +22,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -62,11 +66,17 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import in.foodtalk.android.adapter.newpost.CityListAdapter;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.CityListCallback;
+import in.foodtalk.android.fragment.intro.DiscoverIntro;
+import in.foodtalk.android.fragment.intro.EatIntro;
+import in.foodtalk.android.fragment.intro.LandingIntro;
+import in.foodtalk.android.fragment.intro.PagerAdapter;
+import in.foodtalk.android.fragment.intro.ShareIntro;
 import in.foodtalk.android.helper.ParseUtils;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.GetLocation;
@@ -89,6 +99,8 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
 
     LinearLayout btnFbAppRemove;
     AccessToken accessToken;
+
+    private PagerAdapter mPagerAdapter;
 
 
 
@@ -145,6 +157,8 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                 }
             }
         });*/
+
+        initialisePaging();
 
 
         //btnPost = (Button) findViewById(R.id.btn_post);
@@ -672,6 +686,35 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         installation.put("work", "development");
         installation.put("localeIdentifier","en-IN");
         installation.saveInBackground();
+    }
+
+    private void initialisePaging(){
+        final List<Fragment> fragments = new Vector<Fragment>();
+        fragments.add(Fragment.instantiate(this,LandingIntro.class.getName()));
+        fragments.add(Fragment.instantiate(this,ShareIntro.class.getName()));
+        fragments.add(Fragment.instantiate(this,EatIntro.class.getName()));
+        fragments.add(Fragment.instantiate(this,DiscoverIntro.class.getName()));
+
+        mPagerAdapter = new PagerAdapter(this.getSupportFragmentManager(), fragments);
+        ViewPager pager = (ViewPager) findViewById(R.id.viewpager);
+        pager.setAdapter(mPagerAdapter);
+
+        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.d("onPageSelected",position+"");
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
 }
