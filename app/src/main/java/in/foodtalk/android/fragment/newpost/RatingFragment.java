@@ -36,7 +36,7 @@ public class RatingFragment extends Fragment implements View.OnTouchListener {
 
     RatingBar ratingBar;
 
-    public RatingFragment (Bitmap photo){
+    public void ratingFragment1 (Bitmap photo){
         this.photo = photo;
     }
 

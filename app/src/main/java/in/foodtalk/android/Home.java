@@ -340,15 +340,22 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         Log.d("Notification screen", fragmentName);
         switch (fragmentName){
             case "OpenPost":
-                commentFragment = new CommentFragment(elementId);
+                Bundle bundle = new Bundle();
+                bundle.putString("postId", elementId);
+                commentFragment = new CommentFragment();
+                commentFragment.setArguments(bundle);
                 setFragmentView(commentFragment, R.id.container1, 0, true);
                 break;
             case "UserProfile":
-                userProfile = new UserProfile(elementId);
+                userProfile = new UserProfile();
+                userProfile.userProfile1(elementId);
                 setFragmentView(userProfile, R.id.container, 0, true);
                 break;
             case "RestaurantProfile":
-                restaurantProfileFragment = new RestaurantProfileFragment(elementId);
+                Bundle bundle1 = new Bundle();
+                bundle1.putString("restaurantId", elementId);
+                restaurantProfileFragment = new RestaurantProfileFragment();
+                restaurantProfileFragment.setArguments(bundle1);
                 setFragmentView(restaurantProfileFragment, R.id.container, 0, true);
                 break;
             case "Home":
@@ -389,7 +396,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 setFragmentView(dishResultFragment, R.id.container, -1, true);
                 break;
             case "WebLink":
-                webViewFragment = new WebViewFragment(elementId);
+                webViewFragment = new WebViewFragment();
+                webViewFragment.webViewFragment1(elementId);
                 setFragmentView (webViewFragment, R.id.container, 0, true);
                 //titleHome.setText("Legal");
                 titleHome.setText("Web");
@@ -815,7 +823,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }*/
        switch (type){
            case "profile":
-               userProfile = new UserProfile(userId);
+               userProfile = new UserProfile();
+               userProfile.userProfile1(userId);
                setFragmentView(userProfile, R.id.container, -1, true);
                break;
            case "options":
@@ -823,7 +832,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                break;
            case "legal":
                Log.d("btn click","setFragment webview");
-               webViewFragment = new WebViewFragment("http://www.foodtalkindia.com/document.html");
+               webViewFragment = new WebViewFragment();
+               webViewFragment.webViewFragment1("http://www.foodtalkindia.com/document.html");
                setFragmentView (webViewFragment, R.id.container, -1, true);
                //titleHome.setText("Legal");
 
@@ -848,7 +858,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     }
     @Override
     public void postOpen(List<UserPostObj> postObj, String postId, String userId) {
-        openPostFragment = new OpenPostFragment(postObj, postId, userId);
+        openPostFragment = new OpenPostFragment();
+        openPostFragment.openPostFragment1(postObj, postId, userId);
         setFragmentView (openPostFragment, R.id.container1, -1, true);
         Log.d("postOpen","userId: "+userId+" postId: "+postId);
     }
@@ -858,7 +869,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         switch (viewType){
             case USER_PROFILE:
                 if(!requestFrom.equals("UserProfile")){
-                    userProfile = new UserProfile(userId);
+                    userProfile = new UserProfile();
+                    userProfile.userProfile1(userId);
                     setFragmentView(userProfile, R.id.container, -1, true);
                 }
 
@@ -868,7 +880,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 if (requestFrom.equals("UserProfile")){
                     getFragmentManager().beginTransaction().remove(openPostFragment).commit();
                 }
-                    restaurantProfileFragment = new RestaurantProfileFragment(checkinRestaurantId);
+                Bundle bundle1 = new Bundle();
+                bundle1.putString("restaurantId", checkinRestaurantId);
+                restaurantProfileFragment = new RestaurantProfileFragment();
+                restaurantProfileFragment.setArguments(bundle1);
                     setFragmentView(restaurantProfileFragment, R.id.container, -1, true);
 
 
@@ -882,13 +897,15 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
     @Override
     public void thumbClick(String userId) {
-        userProfile = new UserProfile(userId);
+        userProfile = new UserProfile();
+        userProfile.userProfile1(userId);
         setFragmentView(userProfile, R.id.container, -1, true);
     }
 
     @Override
     public void rPostOpen(List<RestaurantPostObj> postObj, String postId, String restaurantId) {
-        openRPostFragment = new OpenRPostFragment(postObj, postId, restaurantId);
+        openRPostFragment = new OpenRPostFragment();
+        openRPostFragment.openRPostFragment1(postObj, postId, restaurantId);
         setFragmentView (openRPostFragment, R.id.container1, -1, true);
         Log.d("postOpen","userId: "+userId+" postId: "+postId);
     }
@@ -921,7 +938,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         this.file = file;
 
         Log.d("capuredBitmap", "call");
-        dishTagging = new DishTagging(photo);
+        dishTagging = new DishTagging();
+        dishTagging.dishTagging1(photo);
         setFragmentView(dishTagging, R.id.container1, 0, true);
 
         //showSoftKeyboard(layout);
@@ -933,7 +951,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         this.file = file;
 
         Log.d("capuredBitmap", "call");
-        dishTagging = new DishTagging(photo);
+        dishTagging = new DishTagging();
+        dishTagging.dishTagging1(photo);
         setFragmentView(dishTagging, R.id.container1, 0, true);
 
         //showSoftKeyboard(layout);
@@ -975,14 +994,16 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         Log.d("startRating", dishName);
         this.dishName = dishName;
         hideSoftKeyboard();
-        ratingFragment = new RatingFragment(photo);
+        ratingFragment = new RatingFragment();
+        ratingFragment.ratingFragment1(photo);
         setFragmentView(ratingFragment, R.id.container1, 0, true);
     }
     @Override
     public void goforReview(String rate) {
         Log.d("goforReview", rate);
         rating = rate;
-        reviewFragment = new ReviewFragment(photo);
+        reviewFragment = new ReviewFragment();
+        reviewFragment.reviewFragment1(photo);
         setFragmentView(reviewFragment, R.id.container1, 0, true);
     }
     CloudinaryCallback cloudinaryCallback = new CloudinaryCallback() {
@@ -1268,12 +1289,21 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     public void resultClick(int resultType, String id, String dishName) {
         switch (resultType){
             case USER_SEARCH:
-                userProfile = new UserProfile(id);
+                userProfile = new UserProfile();
+                userProfile.userProfile1(id);
                 setFragmentView(userProfile, R.id.container, -1, true);
                 getFragmentManager().beginTransaction().remove(searchFragment).commit();
                 break;
             case RESTAURANT_SEARCH:
-                restaurantProfileFragment = new RestaurantProfileFragment(id);
+
+
+                Bundle bundle = new Bundle();
+                bundle.putString("restaurantId", id);
+
+
+
+                restaurantProfileFragment.setArguments(bundle);
+
                 setFragmentView(restaurantProfileFragment, R.id.container, -1, true);
                 getFragmentManager().beginTransaction().remove(searchFragment).commit();
                 break;
@@ -1295,17 +1325,26 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         Log.d("callback open comment", postId);
 
 
-        commentFragment = new CommentFragment(postId);
+       // commentFragment = new CommentFragment(postId);
+        Bundle bundle = new Bundle();
+        bundle.putString("postId", postId);
+        commentFragment = new CommentFragment();
+        commentFragment.setArguments(bundle);
         setFragmentView(commentFragment, R.id.container1, -1, true);
     }
 
     @Override
     public void notiClicked(String eventType, String raiserId, String raiserThumb, String eventDate, String elementId) {
         if(eventType.equals("2") || eventType.equals("4") || eventType.equals("9")){
-            commentFragment = new CommentFragment(elementId);
+           // commentFragment = new CommentFragment(elementId);
+            Bundle bundle = new Bundle();
+            bundle.putString("postId", elementId);
+            commentFragment = new CommentFragment();
+            commentFragment.setArguments(bundle);
             setFragmentView(commentFragment, R.id.container1, -1, true);
         }else if (eventType.equals("5")){
-            userProfile = new UserProfile(elementId);
+            userProfile = new UserProfile();
+            userProfile.userProfile1(elementId);
             setFragmentView(userProfile, R.id.container, -1, true);
         }
     }

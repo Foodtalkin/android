@@ -37,7 +37,7 @@ public class ReviewFragment extends Fragment implements View.OnTouchListener, Vi
     ReviewCallback reviewCallback;
 
 
-    public ReviewFragment (Bitmap photo){
+    public void reviewFragment1 (Bitmap photo){
         this.photo = photo;
 
 

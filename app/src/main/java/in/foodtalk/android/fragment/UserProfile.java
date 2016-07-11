@@ -85,7 +85,7 @@ public class UserProfile extends Fragment implements LatLonCallback {
 
 
 
-    public UserProfile (String userId){
+    public void userProfile1 (String userId){
            this.userIdOther = userId;
     }
 

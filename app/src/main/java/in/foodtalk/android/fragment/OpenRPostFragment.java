@@ -93,7 +93,7 @@ public class OpenRPostFragment extends Fragment implements View.OnTouchListener 
     Context context;
 
     //List<UserPostObj> postList;
-    public OpenRPostFragment(List<RestaurantPostObj> postList, String postId, String restaurantId){
+    public void openRPostFragment1(List<RestaurantPostObj> postList, String postId, String restaurantId){
         //postList.remove(0);
         //this.postData = postList;
         this.postData =  new ArrayList<RestaurantPostObj>(postList);

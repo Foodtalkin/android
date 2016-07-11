@@ -91,7 +91,7 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
     Context context;
 
     //List<UserPostObj> postList;
-    public OpenPostFragment(List<UserPostObj> postList, String postId, String userId){
+    public void openPostFragment1(List<UserPostObj> postList, String postId, String userId){
         //postList.remove(0);
         //this.postData = postList;
         this.postData =  new ArrayList<UserPostObj>(postList);

@@ -63,14 +63,16 @@ public class CommentFragment extends Fragment {
 
     TextView btnCommentSend;
 
-    public CommentFragment (String postId){
+    /*public CommentFragment (String postId){
         this.postId = postId;
-    }
+    }*/
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.comment_fragment, container, false);
+
+        postId =  getArguments().getString("postId");
 
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_comment);
 

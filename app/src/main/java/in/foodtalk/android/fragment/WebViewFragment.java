@@ -18,7 +18,7 @@ public class WebViewFragment extends Fragment{
     WebView webView;
 
     String url;
-    public WebViewFragment(String url){
+    public void webViewFragment1(String url){
         this.url = url;
     }
 

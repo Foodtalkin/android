@@ -83,7 +83,7 @@ public class DishTagging extends Fragment implements DishTaggingCallback, View.O
 
     List<DishListObj> dishList = new ArrayList<>();
 
-    public DishTagging (Bitmap photo){
+    public void dishTagging1 (Bitmap photo){
         this.photo = photo;
     }
 

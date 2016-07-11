@@ -64,14 +64,15 @@ public class RestaurantProfileFragment extends Fragment {
     StaggeredGridLayoutManager staggeredGridLayoutManager;
     private int pageNo = 1;
 
-    public RestaurantProfileFragment(String restaurantId){
+    /*public RestaurantProfileFragment(String restaurantId){
         this.restaurantId = restaurantId;
-    }
+    }*/
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.restaurant_profile_fragment, container, false);
+        restaurantId =  getArguments().getString("restaurantId");
         recyclerView = (RecyclerView) layout.findViewById(R.id.restaurant_profile_recycler_view);
         if (rPostList.size() > 0){
             rPostList.clear();
