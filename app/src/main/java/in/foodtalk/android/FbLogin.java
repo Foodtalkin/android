@@ -1,33 +1,20 @@
 package in.foodtalk.android;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -57,7 +44,6 @@ import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -68,10 +54,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import in.foodtalk.android.adapter.newpost.CityListAdapter;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
-import in.foodtalk.android.communicator.CityListCallback;
 import in.foodtalk.android.fragment.intro.DiscoverIntro;
 import in.foodtalk.android.fragment.intro.EatIntro;
 import in.foodtalk.android.fragment.intro.LandingIntro;
@@ -79,9 +63,7 @@ import in.foodtalk.android.fragment.intro.PagerAdapter;
 import in.foodtalk.android.fragment.intro.ShareIntro;
 import in.foodtalk.android.helper.ParseUtils;
 import in.foodtalk.android.module.DatabaseHandler;
-import in.foodtalk.android.module.GetLocation;
 import in.foodtalk.android.module.Login;
-import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.object.LoginInfo;
 import in.foodtalk.android.object.LoginValue;
 
@@ -122,6 +104,13 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
     AppController appController = new AppController();
 
 
+    View vpNav1;
+    View vpNav2;
+    View vpNav3;
+    View vpNav4;
+
+
+
 
 
     //-----------------------------------
@@ -141,6 +130,13 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
 
         btnFbAppRemove = (LinearLayout) findViewById(R.id.btn_fbapp_remove);
         btnFbAppRemove.setOnClickListener(this);
+
+        vpNav1 = (View)findViewById(R.id.c1);
+        vpNav2 = (View)findViewById(R.id.c2);
+        vpNav3 = (View)findViewById(R.id.c3);
+        vpNav4 = (View)findViewById(R.id.c4);
+
+
 
         // btnSelectCity.setOnClickListener(this);
        /* btnSelectCity.setOnClickListener(new OnClickListener() {
@@ -691,8 +687,8 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
     private void initialisePaging(){
         final List<Fragment> fragments = new Vector<Fragment>();
         fragments.add(Fragment.instantiate(this,LandingIntro.class.getName()));
-        fragments.add(Fragment.instantiate(this,ShareIntro.class.getName()));
         fragments.add(Fragment.instantiate(this,EatIntro.class.getName()));
+        fragments.add(Fragment.instantiate(this,ShareIntro.class.getName()));
         fragments.add(Fragment.instantiate(this,DiscoverIntro.class.getName()));
 
         mPagerAdapter = new PagerAdapter(this.getSupportFragmentManager(), fragments);
@@ -707,6 +703,31 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
 
             @Override
             public void onPageSelected(int position) {
+                if (position == 0){
+                    vpNav1.setBackgroundResource(R.drawable.circle_selected_vp);
+                    vpNav2.setBackgroundResource(R.drawable.circle_vp);
+                    vpNav3.setBackgroundResource(R.drawable.circle_vp);
+                    vpNav4.setBackgroundResource(R.drawable.circle_vp);
+                }
+                if (position == 1){
+                    vpNav2.setBackgroundResource(R.drawable.circle_selected_vp);
+                    vpNav1.setBackgroundResource(R.drawable.circle_vp);
+                    vpNav3.setBackgroundResource(R.drawable.circle_vp);
+                    vpNav4.setBackgroundResource(R.drawable.circle_vp);
+                }
+                if (position == 2){
+                    vpNav3.setBackgroundResource(R.drawable.circle_selected_vp);
+                    vpNav1.setBackgroundResource(R.drawable.circle_vp);
+                    vpNav2.setBackgroundResource(R.drawable.circle_vp);
+                    vpNav4.setBackgroundResource(R.drawable.circle_vp);
+                }
+                if (position == 3){
+                    vpNav4.setBackgroundResource(R.drawable.circle_selected_vp);
+                    vpNav1.setBackgroundResource(R.drawable.circle_vp);
+                    vpNav2.setBackgroundResource(R.drawable.circle_vp);
+                    vpNav3.setBackgroundResource(R.drawable.circle_vp);
+                }
+
                 Log.d("onPageSelected",position+"");
             }
 

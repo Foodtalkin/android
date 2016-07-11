@@ -6,6 +6,6 @@
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/intro_landing"/>
+        android:src="@drawable/intro_eat"/>
 
 </RelativeLayout>

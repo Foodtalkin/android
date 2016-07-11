@@ -58,18 +58,18 @@
         <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-vector-drawable-23.3.0_35398a9d2b429901bfa82a2e4f69d8045f015467\classes.dex" />
     </item>
     <item
-        jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-cast\9.0.0\jars\classes.jar"
-        jumboMode="true"
-        revision="23.0.3"
-        sha1="e595f98f8c525201dccd119f43ad1ddacd4c48d6">
-        <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-cast-9.0.0_29affedcd7594ec9ed00b60c919d5fa2c10f1289\classes.dex" />
-    </item>
-    <item
         jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-gcm\9.0.0\jars\classes.jar"
         jumboMode="true"
         revision="23.0.3"
         sha1="4caf75b2cfb7ec6e80a57d0ee64fc102ad3578b8">
         <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-gcm-9.0.0_1ec3d4ac42b241dfd3afeb491e8293c7f78de64c\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-cast\9.0.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="e595f98f8c525201dccd119f43ad1ddacd4c48d6">
+        <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-cast-9.0.0_29affedcd7594ec9ed00b60c919d5fa2c10f1289\classes.dex" />
     </item>
     <item
         jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-maps\9.0.0\jars\classes.jar"
@@ -114,18 +114,18 @@
         <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-23.3.0_d0eb6465b41ca783a27268286ae10c48ca4fb2fd\classes.dex" />
     </item>
     <item
-        jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-identity\9.0.0\jars\classes.jar"
-        jumboMode="true"
-        revision="23.0.3"
-        sha1="5289e799a43a64c4137d109bf992e10a2f952aa3">
-        <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-identity-9.0.0_c1f132e52570ba67223a3ebd4c46b63ad8e2e858\classes.dex" />
-    </item>
-    <item
         jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.theartofdev.edmodo\android-image-cropper\2.1.4\jars\classes.jar"
         jumboMode="true"
         revision="23.0.3"
         sha1="205c64fa4be224f4cbae8914a4f42db897709d77">
         <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.theartofdev.edmodo-android-image-cropper-2.1.4_fbff5484a365806b796e1f06ee7b0d5e02a9f0d2\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-identity\9.0.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="5289e799a43a64c4137d109bf992e10a2f952aa3">
+        <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-identity-9.0.0_c1f132e52570ba67223a3ebd4c46b63ad8e2e858\classes.dex" />
     </item>
     <item
         jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.google.firebase\firebase-storage-common\9.0.0\jars\classes.jar"
@@ -226,13 +226,6 @@
         <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.firebase-firebase-storage-9.0.0_1ae7263c68e76b966583d6ba63eff58d0e3a50e7\classes.dex" />
     </item>
     <item
-        jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-tagmanager\9.0.0\jars\classes.jar"
-        jumboMode="true"
-        revision="23.0.3"
-        sha1="8126914f5bc372a33e27ea90f02412c32468ce8a">
-        <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-tagmanager-9.0.0_eefcb90df4d21b24b21533b321a102852ac89872\classes.dex" />
-    </item>
-    <item
         jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.4.0\jars\classes.jar"
         jumboMode="true"
         revision="23.0.3"
@@ -240,10 +233,17 @@
         <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-23.4.0_57328c5d0c5b00c2fa72d91ec8cc446b5c99f131\classes.dex" />
     </item>
     <item
+        jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-tagmanager\9.0.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="8126914f5bc372a33e27ea90f02412c32468ce8a">
+        <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-tagmanager-9.0.0_eefcb90df4d21b24b21533b321a102852ac89872\classes.dex" />
+    </item>
+    <item
         jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
         jumboMode="true"
         revision="23.0.3"
-        sha1="6d775d595d44946d248ee907bca4ca87f1ad6700">
+        sha1="8711872fdc23c028528ca620be911e1dfab050b2">
         <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_3ab2cc360096cb3d341c6dc79881dd2fa2c96c82\classes.dex" />
     </item>
     <item
@@ -317,18 +317,18 @@
         <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.firebase-firebase-database-9.0.0_04d435263c145550777f2f67c32d5f4911c81382\classes.dex" />
     </item>
     <item
-        jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.android.support\design\23.3.0\jars\classes.jar"
-        jumboMode="true"
-        revision="23.0.3"
-        sha1="f0001e71cea6ae432a00021c6f727f5ef0f3d27e">
-        <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-design-23.3.0_e6818819394651675031d1d8971be8183c07fa93\classes.dex" />
-    </item>
-    <item
         jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-auth-base\9.0.0\jars\classes.jar"
         jumboMode="true"
         revision="23.0.3"
         sha1="7a23185c9b1c100e7d1a32275017e4712e31c796">
         <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-auth-base-9.0.0_bd6f7f05ae4d09961e4d030ad92620cb04921de5\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.android.support\design\23.3.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="f0001e71cea6ae432a00021c6f727f5ef0f3d27e">
+        <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-design-23.3.0_e6818819394651675031d1d8971be8183c07fa93\classes.dex" />
     </item>
     <item
         jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.android.support\customtabs\23.4.0\jars\classes.jar"
@@ -366,18 +366,18 @@
         <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-drive-9.0.0_b3d34e8314ee2e105fc8fa58ad3db528abfb248b\classes.dex" />
     </item>
     <item
-        jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-ads\9.0.0\jars\classes.jar"
-        jumboMode="true"
-        revision="23.0.3"
-        sha1="2cb29455028e92e024bbad0d41c6ec772f2433d1">
-        <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-ads-9.0.0_78a8aa4b823ee94821634eb7ed22266506b34080\classes.dex" />
-    </item>
-    <item
         jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.facebook.android\facebook-android-sdk\4.13.2\jars\classes.jar"
         jumboMode="true"
         revision="23.0.3"
         sha1="3322df7b184ab5c8e8341508431cb3fcf395d13f">
         <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.facebook.android-facebook-android-sdk-4.13.2_a4df41aabf1732f3687641fbc6657827207242ac\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-ads\9.0.0\jars\classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="2cb29455028e92e024bbad0d41c6ec772f2433d1">
+        <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-ads-9.0.0_78a8aa4b823ee94821634eb7ed22266506b34080\classes.dex" />
     </item>
     <item
         jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-tagmanager-api\9.0.0\jars\classes.jar"
@@ -422,18 +422,18 @@
         <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-base-9.0.0_9bca7126f8481db981759e5ae9aa0b19be0c7555\classes.dex" />
     </item>
     <item
-        jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
-        jumboMode="true"
-        revision="23.0.3"
-        sha1="42b4ffcfb3f6a59bc7f1189b7280676c0bf97e1a">
-        <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_50551e3d423cc16aefa57e10625a63808043196a\classes.dex" />
-    </item>
-    <item
         jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.android.support\mediarouter-v7\23.0.0\jars\libs\internal_impl-23.0.0.jar"
         jumboMode="true"
         revision="23.0.3"
         sha1="03d38bb042efe3e5ce27ba66b729a9523c36d8fe">
         <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-23.0.0_5a155b2eccba37fcf13f10acfc7860daf884a702\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="bc43267af71edf44487194ccd276abd41f86f13b">
+        <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_50551e3d423cc16aefa57e10625a63808043196a\classes.dex" />
     </item>
     <item
         jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.google.firebase\firebase-config\9.0.0\jars\classes.jar"
