@@ -22,6 +22,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.facebook.FacebookSdk;
+import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -64,6 +65,15 @@ public class AppController extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        // configure and init Flurry
+        new FlurryAgent.Builder()
+                .withLogEnabled(true)
+                .withLogLevel(Log.INFO)
+                .withContinueSessionMillis(5000L)
+                .withCaptureUncaughtExceptions(true)
+                .withPulseEnabled(true)
+                .build(this, getString(R.string.flurryKey));
 
         /*Parse.initialize(this, getString(R.string.parseAppID), getString(R.string.parseClientID));
         ParseUser.enableAutomaticUser();

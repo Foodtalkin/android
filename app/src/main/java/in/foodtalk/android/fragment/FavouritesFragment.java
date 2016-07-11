@@ -189,14 +189,13 @@ public class FavouritesFragment extends Fragment {
          favList.clear();
         }
 
-        if (favArray.length()>0){
+        if (favArray.length()>0 && tag.equals("load")){
             Log.d("favArray","more the 0");
             placeholderFavourites.setVisibility(View.GONE);
-        }else {
-            //Log.d("favArray","0");
-            //placeholderFavourites.setVisibility(View.VISIBLE);
+        }else if (tag.equals("load")){
+            Log.d("favArray","0");
+            placeholderFavourites.setVisibility(View.VISIBLE);
         }
-
         for (int i=0; favArray.length()> i; i++){
             FavoritesObj current = new FavoritesObj();
             current.dishName = favArray.getJSONObject(i).getString("dishName");

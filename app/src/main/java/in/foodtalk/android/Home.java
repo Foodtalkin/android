@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
+import com.flurry.android.FlurryAgent;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -484,7 +485,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     private void setFragmentView(Fragment newFragment, int container, int pageN, boolean bStack) {
         String backStateName = newFragment.getClass().getName();
 
-           // Log.d("newFragment", backStateName);
+        FlurryAgent.logEvent(newFragment.getClass().getSimpleName());
+
+
+        // Log.d("newFragment", backStateName);
+        Log.i("setFragmentView",newFragment.getClass().getSimpleName());
             setTitle(newFragment);
             //Log.d("New fragment", backStateName+"");
             if (newFragment != newpostFragment && pageN != -1){
@@ -522,45 +527,42 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             }
             transaction.commit();
     }
+    Boolean backPressed = false;
 
     @Override
     public void onBackPressed() {
+       // Fragment f = this.getFragmentManager().findFragmentById(R.id.container);
+       // String fName = f.getClass().getSimpleName();
+        backPressed = true;
+
+
         if (getFragmentManager().getBackStackEntryCount() > 0) {
 
             //getFragmentManager().getBackStackEntryAt(getFragmentManager().getBackStackEntryCount()).getName();
            // Log.d("back stack fn", getFragmentManager().getBackStackEntryAt(getFragmentManager().getBackStackEntryCount()-1).getName());
-            Log.d("onBackPressed","going to popBackStack");
+            Log.i("onBackPressed","going to popBackStack");
             getFragmentManager().popBackStack();
-            Log.d("onBackPressed","going to popBackStack done");
-            Fragment f = this.getFragmentManager().findFragmentById(R.id.container);
+            Log.i("onBackPressed","going to popBackStack done");
+           // Fragment f = this.getFragmentManager().findFragmentById(R.id.container);
+            //setTitle(f);
            // String fName = f.getClass().getSimpleName();
-
         } else {
             super.onBackPressed();
         }
+        Fragment f = this.getFragmentManager().findFragmentById(R.id.container);
+        setTitle(f);
     }
     @Override
     public void onBackStackChanged() {
-        Fragment f = this.getFragmentManager().findFragmentById(R.id.container);
-        String fName = f.getClass().getSimpleName();
 
-        setTitle(f);
-        //Log.d("onBackStackChanged", f.getClass().getSimpleName());
-        if (!fName.equals("UserProfile")) {
-           // header.setVisibility(View.VISIBLE);
-           // header1.setVisibility(View.GONE);
-        }
-        switch (fName) {
-            case "UserProfile":
-                //header.setVisibility(View.VISIBLE);
-                //header1.setVisibility(View.GONE);
-                break;
-            case "MoreFragment":
-                //titleHome.setText("More");
-                break;
-            case "FavouritesFragment":
-                //titleHome.setText("Favourites");
-                break;
+       // String fName = f.getClass().getSimpleName();
+
+             //Log.i("onBackStackChanged", f.getClass().getSimpleName());
+            //setTitle(f);
+        if(backPressed){
+            Fragment f = this.getFragmentManager().findFragmentById(R.id.container);
+            setTitle(f);
+            backPressed = false;
         }
     }
 
@@ -576,6 +578,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     @Override
     public void like(int position, String postId, Boolean like) {
         Log.d("likeResponse", position + " postid: " + postId);
+        FlurryAgent.logEvent("Like Tabbed");
         try {
             postLikeApi.postLike(postId, like);
         } catch (JSONException e) {
@@ -587,6 +590,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     @Override
     public void bookmark(int position, String postId, Boolean bookmark) {
         //Log.d("bookmark", "position"+ position);
+        FlurryAgent.logEvent("Bookmark Tabbed");
         try {
             postBookmarkApi.postBookmark(postId, bookmark);
         } catch (JSONException e) {
@@ -667,6 +671,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     private void dialogImgFrom(){
 
         final Dialog dialogImgFrom = new Dialog(this);
+        dialogImgFrom.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogImgFrom.setContentView(R.layout.dialog_img_from);
 
         TextView btnCamera = (TextView) dialogImgFrom.findViewById(R.id.btn_camera_imgfrom);
@@ -835,7 +840,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     @Override
     public void getUserInfo(String points, String userName) {
         //subTitleHome.setText(points);
-        subTitleHome.setText(points+" Points");
+       // int point = Integer.parseInt(points);
+
+        subTitleHome.setText(points +" Points");
         titleHome1.setText(userName);
         //Log.d("points", points);
     }

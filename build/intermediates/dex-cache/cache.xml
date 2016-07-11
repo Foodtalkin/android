@@ -243,7 +243,7 @@
         jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
         jumboMode="true"
         revision="23.0.3"
-        sha1="8711872fdc23c028528ca620be911e1dfab050b2">
+        sha1="ee32ef3eb12180d88de35ff5c8cf741ba2c2a9b1">
         <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_3ab2cc360096cb3d341c6dc79881dd2fa2c96c82\classes.dex" />
     </item>
     <item
@@ -432,7 +432,7 @@
         jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
         jumboMode="true"
         revision="23.0.3"
-        sha1="bc43267af71edf44487194ccd276abd41f86f13b">
+        sha1="4bd264ee448a5cbe34107b75bcc90a0091490865">
         <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_50551e3d423cc16aefa57e10625a63808043196a\classes.dex" />
     </item>
     <item
@@ -455,6 +455,13 @@
         revision="23.0.3"
         sha1="817b9101192f2fd6dc0fd8cd522d8f4a1a75fcdc">
         <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.google.android.gms-play-services-plus-9.0.0_8206aeb890ad3a86e0ec3a4d60a9d9ade9f38f86\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\libs\flurryAnalytics_6.4.0.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="e1b0ac92ff8a83fc43e49e482189a2c176945308">
+        <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\2\flurryAnalytics_6.4.0_cd15eb4a7f4514a6182af2cc3b8e0831b71320b5\classes.dex" />
     </item>
     <item
         jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\exploded-aar\com.google.firebase\firebase-messaging\9.0.0\jars\classes.jar"
