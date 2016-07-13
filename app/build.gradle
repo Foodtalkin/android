@@ -8,8 +8,8 @@ android {
         applicationId "in.foodtalk.android"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.0.1"
 
         multiDexEnabled true
     }
@@ -39,7 +39,7 @@ dependencies {
     //compile 'com.mcxiaoke.volley:library-aar:1.0.0'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.facebook.android:facebook-android-sdk:4.+'
-    compile 'com.google.android.gms:play-services:9.0.0'
+    compile 'com.google.android.gms:play-services:9.2.1'
     compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'com.android.support:support-v4:23.3.0'
     compile 'com.android.support:design:23.3.0'
@@ -48,7 +48,7 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.theartofdev.edmodo:android-image-cropper:2.1.+'
-    compile 'com.android.support:multidex:1.0.0'
+    compile 'com.android.support:multidex:1.0.1'
     compile 'com.cloudinary:cloudinary-core:1.4.1'
     compile 'com.cloudinary:cloudinary-android:1.4.1'
     compile files('libs/Parse-1.9.1.jar')

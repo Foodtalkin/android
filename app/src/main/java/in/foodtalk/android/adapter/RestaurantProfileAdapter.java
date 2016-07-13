@@ -51,6 +51,8 @@ public class RestaurantProfileAdapter extends RecyclerView.Adapter<RecyclerView.
 
     private ProfileRPostOpenCallback postOpenCallback;
 
+    int imgWidth;
+
     public RestaurantProfileAdapter (Context context, List<RestaurantPostObj> rPostList, RestaurantProfileObj rProfileObj){
         layoutInflater = LayoutInflater.from(context);
         this.context = context;
@@ -68,7 +70,8 @@ public class RestaurantProfileAdapter extends RecyclerView.Adapter<RecyclerView.
         Point size = new Point();
         display.getSize(size);
         width = size.x;
-        width = size.y;
+        imgWidth = width/3;
+        //width = size.y;
         //----------
     }
 
@@ -124,8 +127,11 @@ public class RestaurantProfileAdapter extends RecyclerView.Adapter<RecyclerView.
             RestaurantPostObj current = postList.get(position);
             RPostHolder rPostHolder = (RPostHolder) holder;
 
-            rPostHolder.postImg.getLayoutParams().width = width/3-200;
-            rPostHolder.postImg.getLayoutParams().height = width/3-200;
+           // rPostHolder.postImg.getLayoutParams().width = width/3-200;
+            //rPostHolder.postImg.getLayoutParams().height = width/3-200;
+
+            rPostHolder.postImg.getLayoutParams().width = imgWidth;
+            rPostHolder.postImg.getLayoutParams().height = imgWidth;
 
             rPostHolder.restaurantId = current.checkedInRestaurantId;
 

@@ -204,7 +204,7 @@ public class CommentFragment extends Fragment {
         postObj.comment_count = post.getString("comment_count");
         postObj.like_count = post.getString("like_count");
         postObj.timeElapsed = post.getString("timeElapsed");
-        txtUserName.setText(post.getString("userName"));
+        txtUserName.setText(postObj.dishName);
         CommentObj commentObj = new CommentObj();
         commentObj.viewType = "post";
         postDataList.add(commentObj);

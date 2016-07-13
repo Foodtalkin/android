@@ -249,8 +249,13 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                 Log.d("check user Id", userId+"");
                                 if (apiFollow){
                                     userFollow.follow(true,userId);
+                                    btnFollow.setText("Following");
+                                    apiFollow = false;
                                 }else {
+                                    apiFollow = true;
                                     userFollow.follow(false,userId);
+                                    btnFollow.setText("Follow");
+
                                 }
 
                             } catch (JSONException e) {

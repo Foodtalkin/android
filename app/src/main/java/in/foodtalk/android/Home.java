@@ -193,6 +193,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         super.onCreate(savedInstanceState);
         db = new DatabaseHandler(getApplicationContext());
 
+        
+
        // imageCapture = new ImageCapture(this);
 
        // requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -849,10 +851,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     }
     @Override
     public void getUserInfo(String points, String userName) {
-        //subTitleHome.setText(points);
-       // int point = Integer.parseInt(points);
 
-        subTitleHome.setText(points +" Points");
+        Double v2 = Double.parseDouble(points);
+        int v3 = (int) Math.floor(v2);
+        //Double pointValue = Double.parseDouble(points);
+        subTitleHome.setText(Integer.toString(v3)+" Points");
         titleHome1.setText(userName);
         //Log.d("points", points);
     }
@@ -890,7 +893,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 Log.d("clicked","for restaurant");
                 break;
             case DISH:
-                Log.d("clicked","for Dish");
+                Log.d("clicked","for Dish"+ dishName);
+                dishSearchByName(dishName, false);
                 break;
         }
     }
@@ -1308,16 +1312,28 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 getFragmentManager().beginTransaction().remove(searchFragment).commit();
                 break;
             case DISH_SEARCH:
-                dishResultFragment = new DiscoverFragment();
+                /*dishResultFragment = new DiscoverFragment();
                 dishResultFragment.pageType = 1;
                 dishResultFragment.dishName = dishName;
                 setFragmentView(dishResultFragment, R.id.container, -1, true);
-                getFragmentManager().beginTransaction().remove(searchFragment).commit();
+                getFragmentManager().beginTransaction().remove(searchFragment).commit();*/
+                dishSearchByName(dishName, true);
                 break;
         }
         hideSoftKeyboard();
 
         Log.d("result click", "resutlType: "+ resultType+" id:"+id);
+    }
+
+    private void dishSearchByName(String dishName, boolean fromSearch){
+        dishResultFragment = new DiscoverFragment();
+        dishResultFragment.pageType = 1;
+        dishResultFragment.dishName = dishName;
+        setFragmentView(dishResultFragment, R.id.container, -1, true);
+        if (fromSearch){
+            getFragmentManager().beginTransaction().remove(searchFragment).commit();
+        }
+
     }
 
     @Override

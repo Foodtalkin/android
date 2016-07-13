@@ -551,6 +551,7 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         obj.put("latitude",loginInfo.latitude);
         obj.put("longitude",loginInfo.longitude);
         obj.put("deviceToken",loginInfo.deviceToken);
+        obj.put("gender",loginInfo.gender);
         /*if (appController.deviceToken != null){
             obj.put("deviceToken",appController.deviceToken);
             Log.d("fblg devicetoken", appController.deviceToken);

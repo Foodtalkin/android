@@ -16,6 +16,9 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.zip.Inflater;
 
@@ -24,6 +27,7 @@ import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.communicator.PostOptionCallback;
 import in.foodtalk.android.communicator.UserThumbCallback;
+import in.foodtalk.android.module.DateTimeDifference;
 import in.foodtalk.android.module.HeadSpannable;
 import in.foodtalk.android.object.CommentObj;
 import in.foodtalk.android.object.PostObj;
@@ -50,6 +54,10 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private final int VIEW_POST = 0;
     private final int VIEW_COMMENT = 1;
 
+    LinearLayout starHolder;
+
+    DateTimeDifference dateTimeDifference;
+
 
 
     public CommentAdapter (Context context, List<CommentObj> postDataList, PostObj postObj){
@@ -65,6 +73,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         likeCallback = (PostLikeCallback) context;
         bookmarkCallback = (PostBookmarkCallback) context;
         optionCallback = (PostOptionCallback) context;
+        dateTimeDifference = new DateTimeDifference();
 
 
     }
@@ -88,7 +97,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof PostHolder){
             PostHolder postHolder = (PostHolder) holder;
-            postHolder.txtTime.setText("4d");
+           // postHolder.txtTime.setText(dateTimeDifference.difference(createdate, currentdate));
             postHolder.txtCountLike.setText(postObj.like_count);
             postHolder.txtTip.setText(postObj.tip);
             Log.d("likeCount", postObj.like_count+" like");
@@ -97,6 +106,20 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             postHolder.txtCountComment.setText(postObj.comment_count);
 
             postHolder.userId = postObj.userId;
+
+
+
+            SimpleDateFormat simpleDateFormat =
+                    new SimpleDateFormat("yyyy-M-dd hh:mm:ss");
+            try {
+                Date createdate = simpleDateFormat.parse(postObj.createDate);
+                Date currentdate = simpleDateFormat.parse(postObj.currentDate);
+                postHolder.txtTime.setText(dateTimeDifference.difference(createdate, currentdate));
+
+                // printDifference(date1, date2);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             if (postObj.restaurantIsActive.equals("1")) {
                 headSpannable.code(postHolder.txtHeadLine, postObj.userName, postObj.dishName, postObj.restaurantName, postObj.userId, postObj.checkedInRestaurantId, true , "HomeFeed");
@@ -107,7 +130,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
 
-           // setStarRating(postObj.rating, postHolder);
+           setStarRating(postObj.rating, postHolder);
             //postHolder.postId = current.id;
            // postHolder.postObj1 = current;
 
@@ -173,6 +196,48 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return viewType;
     }
 
+    public void setStarRating(String rating, PostHolder holder){
+        if (rating.equals("0")){
+            //starHolder.setVisibility(View.GONE);
+        }
+        if(rating.equals("1")){
+            holder.imgRating1.setImageResource(R.drawable.star_active);
+            holder.imgRating2.setImageResource(R.drawable.star_passive);
+            holder.imgRating3.setImageResource(R.drawable.star_passive);
+            holder.imgRating4.setImageResource(R.drawable.star_passive);
+            holder.imgRating5.setImageResource(R.drawable.star_passive);
+        }
+        if(rating.equals("2")){
+            holder.imgRating1.setImageResource(R.drawable.star_active);
+            holder.imgRating2.setImageResource(R.drawable.star_active);
+            holder.imgRating3.setImageResource(R.drawable.star_passive);
+            holder.imgRating4.setImageResource(R.drawable.star_passive);
+            holder.imgRating5.setImageResource(R.drawable.star_passive);
+        }
+        if(rating.equals("3")){
+            holder.imgRating1.setImageResource(R.drawable.star_active);
+            holder.imgRating2.setImageResource(R.drawable.star_active);
+            holder.imgRating3.setImageResource(R.drawable.star_active);
+            holder.imgRating4.setImageResource(R.drawable.star_passive);
+            holder.imgRating5.setImageResource(R.drawable.star_passive);
+        }
+        if(rating.equals("4")){
+            holder.imgRating1.setImageResource(R.drawable.star_active);
+            holder.imgRating2.setImageResource(R.drawable.star_active);
+            holder.imgRating3.setImageResource(R.drawable.star_active);
+            holder.imgRating4.setImageResource(R.drawable.star_active);
+            holder.imgRating5.setImageResource(R.drawable.star_passive);
+        }
+        if(rating.equals("5")){
+            holder.imgRating1.setImageResource(R.drawable.star_active);
+            holder.imgRating2.setImageResource(R.drawable.star_active);
+            holder.imgRating3.setImageResource(R.drawable.star_active);
+            holder.imgRating4.setImageResource(R.drawable.star_active);
+            holder.imgRating5.setImageResource(R.drawable.star_active);
+        }
+
+    }
+
     private class PostHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
 
         ImageView userThumbnail;
@@ -191,6 +256,12 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         TextView txtTip;
 
         LinearLayout iconLike, iconBookmark, iconComment, iconOption;
+
+        ImageView imgRating1;
+        ImageView imgRating2;
+        ImageView imgRating3;
+        ImageView imgRating4;
+        ImageView imgRating5;
 
         String userId;
 
@@ -214,6 +285,14 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             iconBookmark = (LinearLayout) itemView.findViewById(R.id.icon_bookmark_holder);
             iconComment = (LinearLayout) itemView.findViewById(R.id.icon_comment_holder);
             iconOption = (LinearLayout) itemView.findViewById(R.id.icon_option_holder);
+
+            starHolder = (LinearLayout) itemView.findViewById(R.id.star_rating_holder);
+
+            imgRating1 = (ImageView) itemView.findViewById(R.id.img_rating1);
+            imgRating2 = (ImageView) itemView.findViewById(R.id.img_rating2);
+            imgRating3 = (ImageView) itemView.findViewById(R.id.img_rating3);
+            imgRating4 = (ImageView) itemView.findViewById(R.id.img_rating4);
+            imgRating5 = (ImageView) itemView.findViewById(R.id.img_rating5);
 
             dishImage.setOnTouchListener(this);
             iconLike.setOnTouchListener(this);
