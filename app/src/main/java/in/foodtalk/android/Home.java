@@ -682,6 +682,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         final Dialog dialogImgFrom = new Dialog(this);
         dialogImgFrom.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         dialogImgFrom.setContentView(R.layout.dialog_img_from);
 
         TextView btnCamera = (TextView) dialogImgFrom.findViewById(R.id.btn_camera_imgfrom);
@@ -1300,11 +1301,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 break;
             case RESTAURANT_SEARCH:
 
+                Log.d("restaurantId", id+"");
+
 
                 Bundle bundle = new Bundle();
                 bundle.putString("restaurantId", id);
 
-
+                RestaurantProfileFragment restaurantProfileFragment = new RestaurantProfileFragment();
 
                 restaurantProfileFragment.setArguments(bundle);
 

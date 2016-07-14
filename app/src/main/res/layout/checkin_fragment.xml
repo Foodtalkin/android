@@ -32,7 +32,7 @@
                     android:id="@+id/btn_skip_checkin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/blackText1"
+                    android:textColor="#fff"
                     android:text="Skip"
                     android:textSize="20sp"
                     android:layout_alignParentRight="true"

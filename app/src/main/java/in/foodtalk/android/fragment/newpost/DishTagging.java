@@ -83,8 +83,16 @@ public class DishTagging extends Fragment implements DishTaggingCallback, View.O
 
     List<DishListObj> dishList = new ArrayList<>();
 
+    Context context;
+
     public void dishTagging1 (Bitmap photo){
         this.photo = photo;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 
     @Override
@@ -260,7 +268,7 @@ public class DishTagging extends Fragment implements DishTaggingCallback, View.O
             dishList.add(current);
         }
         //Log.d("send list", "total: "+restaurantList.size());
-        dishTaggingAdapter = new DishTaggingAdapter(getActivity(),dishList , dishTaggingCallback);
+        dishTaggingAdapter = new DishTaggingAdapter(context,dishList , dishTaggingCallback);
         recyclerView.setAdapter(dishTaggingAdapter);
         dishNameLoaded = true;
     }

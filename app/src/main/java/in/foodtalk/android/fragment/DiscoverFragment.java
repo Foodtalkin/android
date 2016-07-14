@@ -433,8 +433,12 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
     }
     public void remove(ContactsContract.Contacts.Data data) {
         int position = postData.indexOf(data);
-        postData.remove(position);
-        discoverAdapter.notifyItemRemoved(position);
+        if(position >=0 && position < postData.size()){
+            // in range
+            postData.remove(position);
+            discoverAdapter.notifyItemRemoved(position);
+        }
+
     }
     Boolean loading = false;
     private void callScrollClass(){
@@ -523,6 +527,7 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         try {
             pageNo = 1;
             getPostFeed("load");
+            getLocation.onStop();
 
         } catch (JSONException e) {
             e.printStackTrace();
