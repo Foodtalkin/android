@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -88,9 +89,12 @@ public class CommentFragment extends Fragment {
             public void onClick(View v) {
 
 
-                if (!btnCommentSend.getText().toString().equals("")){
+                if (!edit_comment.getText().toString().equals("")){
                     try {
                         sendComment("postComment", edit_comment.getText().toString());
+                        edit_comment.setText("");
+                        hideSoftKeyboard();
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -111,6 +115,12 @@ public class CommentFragment extends Fragment {
             e.printStackTrace();
         }
         return layout;
+    }
+    public void hideSoftKeyboard() {
+        if(getActivity().getCurrentFocus()!=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        }
     }
     public void getPostFeed(final String tag) throws JSONException {
         Log.d("getPostFeed", "post data");
@@ -314,13 +324,24 @@ public class CommentFragment extends Fragment {
         CommentObj commentObj = new CommentObj();
 
         //JSONObject comment = response.getJSONObject("")
-        JSONObject comment = response.getJSONObject("post");
+        JSONObject comment = response.getJSONObject("comment");
 
 
         commentObj.viewType = "comment";
+        commentObj.id = comment.getString("id");
+        commentObj.comment = comment.getString("comment");
+        commentObj.userId = comment.getString("userId");
+        commentObj.userName = comment.getString("userName");
+        commentObj.userImage = comment.getString("userImage");
+        commentObj.createDate = comment.getString("createDate");
+        commentObj.currentDate = comment.getString("currentDate");
+        commentObj.fullName = comment.getString("fullName");
+
+        postDataList.add(commentObj);
+
+        linearLayoutManager.scrollToPosition(postDataList.size());
+        commentAdapter.notifyDataSetChanged();
 
         Log.d("addnew comment response", comment.getString("comment")+"");
-
-
     }
 }

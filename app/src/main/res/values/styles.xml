@@ -34,6 +34,16 @@
 
 
 
+    <style name="FullyTranslucent1" parent="android:Theme.Translucent.NoTitleBar">
+        <item name="android:progressBarStyle">@style/InvisibleProgress</item>
+    </style>
+
+    <style name="InvisibleProgress1">
+        <item name="android:visibility">gone</item>
+    </style>
+
+
+
 
 
 

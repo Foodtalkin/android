@@ -65,7 +65,7 @@
             android:orientation="horizontal"
             android:layout_alignParentBottom="true"
             android:background="#fff"
-            android:visibility="gone">
+            >
 
             <EditText
                 android:id="@+id/edit_comment"
