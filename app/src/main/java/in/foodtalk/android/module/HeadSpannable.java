@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
@@ -17,8 +18,11 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.util.List;
+
 import in.foodtalk.android.R;
 import in.foodtalk.android.communicator.HeadSpannableCallback;
+import in.foodtalk.android.object.UserMention;
 
 /**
  * Created by RetailAdmin on 16-05-2016.
@@ -93,6 +97,43 @@ public class HeadSpannable {
             ds.setUnderlineText(false); // set to false to remove underline
             //ds.bgColor = Integer.parseInt(null);
             ds.bgColor = Color.WHITE;
+        }
+    }
+
+
+    public SpannableStringBuilder commentSpannable(String userName, String userId, String comment, List<UserMention> userMentionList){
+        SpannableStringBuilder ssb = new SpannableStringBuilder(comment);
+
+//        userMentionList.size();
+        //Log.d("userMentionList spann", userMentionList.size()+"");
+        int idx1 = comment.indexOf("@");
+        int idx2 = 0;
+        while (idx1 != -1){
+            idx2 = comment.indexOf(" ", idx1) + 1;
+
+            Log.d("idx2", idx2+"");
+            if (idx2 != 0){
+                final String clickString = comment.substring(idx1, idx2);
+                ssb.setSpan(new CommentClickable(clickString), idx1, idx2, 0);
+                idx1 = comment.indexOf("@", idx2);
+            }else {
+                idx1 = -1;
+            }
+        }
+        return ssb;
+    }
+
+    class CommentClickable extends ClickableSpan{
+
+        String clickString;
+
+        public CommentClickable (String clickString){
+            this.clickString = clickString;
+        }
+
+        @Override
+        public void onClick(View widget) {
+            Log.d("comment click", clickString);
         }
     }
 

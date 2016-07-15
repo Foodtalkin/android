@@ -39,6 +39,7 @@ import in.foodtalk.android.app.Config;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.object.CommentObj;
 import in.foodtalk.android.object.PostObj;
+import in.foodtalk.android.object.UserMention;
 
 /**
  * Created by RetailAdmin on 20-06-2016.
@@ -234,6 +235,20 @@ public class CommentFragment extends Fragment {
             current.userImage= comment.getJSONObject(i).getString("userImage");
             current.userThumb = comment.getJSONObject(i).getString("userThumb");
             current.timeElapsed = comment.getJSONObject(i).getString("timeElapsed");
+
+            //----------add mention to list if have--------------------------
+            JSONArray mentionList = comment.getJSONObject(i).getJSONArray("userMentioned");
+            //Log.d("mentionList length", mentionList.length()+"");
+            for (int ii = 0; ii< mentionList.length(); ii++){
+                UserMention currentMention = new UserMention();
+                Log.d("userN mentioned","from: "+i+" "+mentionList.getJSONObject(ii).getString("userName")+"");
+                Log.d("userid mentioned","from: "+i+" "+mentionList.getJSONObject(ii).getString("userId")+"");
+                currentMention.userName = mentionList.getJSONObject(ii).getString("userName");
+               // currentMention.userId = mentionList.getJSONObject(ii).getString("userId");
+               // current.userMentionsList.add(currentMention);
+            }
+            //-------------------
+
             postDataList.add(current);
            // current.id = comment.
             //Log.d("comment", comment.getJSONObject(i).getString("id"));

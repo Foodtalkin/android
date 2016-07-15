@@ -3,6 +3,7 @@ package in.foodtalk.android.adapter;
 import android.content.Context;
 import android.os.CountDownTimer;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -31,6 +32,7 @@ import in.foodtalk.android.module.DateTimeDifference;
 import in.foodtalk.android.module.HeadSpannable;
 import in.foodtalk.android.object.CommentObj;
 import in.foodtalk.android.object.PostObj;
+import in.foodtalk.android.object.UserMention;
 
 /**
  * Created by RetailAdmin on 22-06-2016.
@@ -58,6 +60,8 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     DateTimeDifference dateTimeDifference;
 
+    HeadSpannable spannable;
+
 
 
     public CommentAdapter (Context context, List<CommentObj> postDataList, PostObj postObj){
@@ -74,6 +78,8 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         bookmarkCallback = (PostBookmarkCallback) context;
         optionCallback = (PostOptionCallback) context;
         dateTimeDifference = new DateTimeDifference();
+
+        spannable = new HeadSpannable(context);
 
 
     }
@@ -170,7 +176,10 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             CommentObj current = postDataList.get(position);
             commentHolder.userName.setText(current.userName);
             commentHolder.fullUserName.setText(current.fullName);
-            commentHolder.txtComment.setText(current.comment);
+            //commentHolder.txtComment.setText(current.comment);
+            commentHolder.txtComment.setMovementMethod(LinkMovementMethod.getInstance());
+            commentHolder.txtComment.setText(spannable.commentSpannable(current.userName, current.userId, current.comment, current.userMentionsList), TextView.BufferType.SPANNABLE);
+            //spannable.commentSpannable(current.userName, current.comment, null);
             Picasso.with(context)
                     .load(current.userImage)
                     //.fit().centerCrop()

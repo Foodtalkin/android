@@ -15,9 +15,10 @@
             android:layout_height="38dp"
             android:src="@drawable/user_placeholder"
             android:id="@+id/user_thumb"
+            android:visibility="gone"
             />
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_gravity="center_vertical"
@@ -30,7 +31,8 @@
                 android:textAllCaps="true"
                 android:textColor="#000"
                 android:textSize="@dimen/txt_size_more"
-                android:clickable="false"/>
+                android:clickable="false"
+                android:visibility="gone"/>
             <TextView
                 android:id="@+id/txt_username_full"
                 android:layout_width="wrap_content"
@@ -40,12 +42,13 @@
                 android:clickable="false"
                 android:textSize="10sp"
                 android:textColor="@color/blackText1"
+                android:visibility="gone"
                 />
             <TextView
                 android:id="@+id/txt_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text=""
+                android:text="  "
                 android:textSize="@dimen/txt_size_more"/>
         </LinearLayout>
     </LinearLayout>

@@ -1,5 +1,7 @@
 package in.foodtalk.android.object;
 
+import java.util.List;
+
 /**
  * Created by RetailAdmin on 21-06-2016.
  */
@@ -15,4 +17,5 @@ public class CommentObj {
     public String userImage;
     public String userThumb;
     public String timeElapsed;
+    public List<UserMention> userMentionsList;
 }
