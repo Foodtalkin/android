@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.zip.Inflater;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.communicator.HeadSpannableCallback;
 import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.communicator.PostOptionCallback;
@@ -61,6 +62,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     DateTimeDifference dateTimeDifference;
 
     HeadSpannable spannable;
+    HeadSpannableCallback headSpannableCallback;
 
 
 
@@ -68,6 +70,8 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         layoutInflater = LayoutInflater.from(context);
         this.postObj = postObj;
         this.postDataList = postDataList;
+
+        headSpannableCallback = (HeadSpannableCallback) context;
 
         this.context = context;
         headSpannable = new HeadSpannable(context);
@@ -496,6 +500,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         TextView userName;
         TextView fullUserName;
         TextView txtComment;
+        private final int USER_PROFILE = 1;
 
         public CommentHolder(View itemView) {
             super(itemView);
@@ -513,6 +518,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("click user","name:"+userName+" id:"+userId);
+                            headSpannableCallback.spannableTxt(userId, null, null, USER_PROFILE, "commentFragment");
                             break;
                     }
                     break;
