@@ -876,6 +876,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                     userProfile = new UserProfile();
                     userProfile.userProfile1(userId);
                     setFragmentView(userProfile, R.id.container, -1, true);
+                    if(requestFrom.equals("commentFragment")){
+                        getFragmentManager().beginTransaction().remove(commentFragment).commit();
+                    }
                 }
 
                 break;
@@ -883,6 +886,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
                 if (requestFrom.equals("UserProfile")){
                     getFragmentManager().beginTransaction().remove(openPostFragment).commit();
+                }
+                if (requestFrom.equals("commentFragment")){
+                    getFragmentManager().beginTransaction().remove(commentFragment).commit();
                 }
                 Bundle bundle1 = new Bundle();
                 bundle1.putString("restaurantId", checkinRestaurantId);
@@ -894,6 +900,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 Log.d("clicked","for restaurant");
                 break;
             case DISH:
+                if (requestFrom.equals("commentFragment")){
+                    getFragmentManager().beginTransaction().remove(commentFragment).commit();
+                }
                 Log.d("clicked","for Dish"+ dishName);
                 dishSearchByName(dishName, false);
                 break;

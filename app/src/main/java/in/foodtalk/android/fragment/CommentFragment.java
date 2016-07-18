@@ -244,8 +244,8 @@ public class CommentFragment extends Fragment {
                 Log.d("userN mentioned","from: "+i+" "+mentionList.getJSONObject(ii).getString("userName")+"");
                 Log.d("userid mentioned","from: "+i+" "+mentionList.getJSONObject(ii).getString("userId")+"");
                 currentMention.userName = mentionList.getJSONObject(ii).getString("userName");
-               // currentMention.userId = mentionList.getJSONObject(ii).getString("userId");
-               // current.userMentionsList.add(currentMention);
+                currentMention.userId = mentionList.getJSONObject(ii).getString("userId");
+                current.userMentionsList.add(currentMention);
             }
             //-------------------
 
@@ -263,6 +263,7 @@ public class CommentFragment extends Fragment {
         JSONObject obj = new JSONObject();
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
         obj.put("postId",postId);
+        //obj.put("userMentioned", ListArray of mentioned user);
         byte[] data = new byte[0];
         try {
             data = commentTxt.getBytes("UTF-8");

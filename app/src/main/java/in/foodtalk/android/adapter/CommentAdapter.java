@@ -128,13 +128,10 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
 
             if (postObj.restaurantIsActive.equals("1")) {
-                headSpannable.code(postHolder.txtHeadLine, postObj.userName, postObj.dishName, postObj.restaurantName, postObj.userId, postObj.checkedInRestaurantId, true , "HomeFeed");
+                headSpannable.code(postHolder.txtHeadLine, postObj.userName, postObj.dishName, postObj.restaurantName, postObj.userId, postObj.checkedInRestaurantId, true , "commentFragment");
             }else {
-                headSpannable.code(postHolder.txtHeadLine, postObj.userName, postObj.dishName, postObj.restaurantName, postObj.userId, postObj.checkedInRestaurantId, false, "HomeFeed");
+                headSpannable.code(postHolder.txtHeadLine, postObj.userName, postObj.dishName, postObj.restaurantName, postObj.userId, postObj.checkedInRestaurantId, false, "commentFragment");
             }
-
-
-
 
            setStarRating(postObj.rating, postHolder);
             //postHolder.postId = current.id;
@@ -176,6 +173,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             CommentObj current = postDataList.get(position);
             commentHolder.userName.setText(current.userName);
             commentHolder.fullUserName.setText(current.fullName);
+            commentHolder.userId = current.userId;
             //commentHolder.txtComment.setText(current.comment);
             commentHolder.txtComment.setMovementMethod(LinkMovementMethod.getInstance());
             commentHolder.txtComment.setText(spannable.commentSpannable(current.userName, current.userId, current.comment, current.userMentionsList), TextView.BufferType.SPANNABLE);
@@ -493,6 +491,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
     private class CommentHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
 
+        String userId;
         ImageView userThumb;
         TextView userName;
         TextView fullUserName;
@@ -504,11 +503,21 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             fullUserName = (TextView) itemView.findViewById(R.id.txt_username_full);
             userName = (TextView) itemView.findViewById(R.id.txt_username);
             txtComment = (TextView) itemView.findViewById(R.id.txt_comment);
+            userName.setOnTouchListener(this);
         }
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            return false;
+            switch (v.getId()){
+                case R.id.txt_username:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("click user","name:"+userName+" id:"+userId);
+                            break;
+                    }
+                    break;
+            }
+            return true;
         }
     }
 }

@@ -50,4 +50,6 @@ public class Config {
     public static String URL_COMMENT_ADD = "http://"+IP+"/index.php/service/comment/add";
 
     public static String URL_NOTIFICATION = "http://"+IP+"/index.php/service/notification/list";
+    public static String URL_LIST_FOLLOWED = "http://"+IP+"/index.php/service/follower/listFollowed";
+
 }

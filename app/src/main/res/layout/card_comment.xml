@@ -17,22 +17,29 @@
             android:id="@+id/user_thumb"
             android:visibility="gone"
             />
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="12dp">
+            >
+            <TextView
+                android:id="@+id/txt_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="  "
+                android:textSize="16sp"/>
             <TextView
                 android:id="@+id/txt_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="MANDY"
-                android:textAllCaps="true"
-                android:textColor="#000"
-                android:textSize="@dimen/txt_size_more"
+                android:text=" "
+                android:textColor="@color/com_facebook_messenger_blue"
+                android:textSize="16sp"
                 android:clickable="false"
-                android:visibility="gone"/>
+                android:layout_marginRight="5dp"
+                />
+
             <TextView
                 android:id="@+id/txt_username_full"
                 android:layout_width="wrap_content"
@@ -44,17 +51,8 @@
                 android:textColor="@color/blackText1"
                 android:visibility="gone"
                 />
-            <TextView
-                android:id="@+id/txt_comment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="  "
-                android:textSize="@dimen/txt_size_more"/>
-        </LinearLayout>
+
+        </RelativeLayout>
     </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.33dp"
-        android:alpha=".5"
-        android:background="#000"/>
+
 </RelativeLayout>

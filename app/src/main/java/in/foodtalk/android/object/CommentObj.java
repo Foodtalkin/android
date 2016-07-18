@@ -1,5 +1,6 @@
 package in.foodtalk.android.object;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,5 +18,5 @@ public class CommentObj {
     public String userImage;
     public String userThumb;
     public String timeElapsed;
-    public List<UserMention> userMentionsList;
+    public List<UserMention> userMentionsList = new ArrayList<>();
 }

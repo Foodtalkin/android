@@ -101,21 +101,36 @@ public class HeadSpannable {
     }
 
 
-    public SpannableStringBuilder commentSpannable(String userName, String userId, String comment, List<UserMention> userMentionList){
-        SpannableStringBuilder ssb = new SpannableStringBuilder(comment);
+    public SpannableStringBuilder commentSpannable(String userName, String userId, String comment, final List<UserMention> userMentionList){
+
+        Log.d("userMention", userMentionList.size()+"");
+
+        String commentTxt;
+        String blankSpace = "";
+
+
+        for (int i = 0; i< userName.length(); i++){
+            blankSpace = blankSpace +"  ";
+        }
+
+        commentTxt = blankSpace + comment;
+
+        SpannableStringBuilder ssb = new SpannableStringBuilder(commentTxt);
+
+
 
 //        userMentionList.size();
         //Log.d("userMentionList spann", userMentionList.size()+"");
-        int idx1 = comment.indexOf("@");
+        int idx1 = commentTxt.indexOf("@");
         int idx2 = 0;
         while (idx1 != -1){
-            idx2 = comment.indexOf(" ", idx1) + 1;
+            idx2 = commentTxt.indexOf(" ", idx1) + 1;
 
             Log.d("idx2", idx2+"");
             if (idx2 != 0){
-                final String clickString = comment.substring(idx1, idx2);
-                ssb.setSpan(new CommentClickable(clickString), idx1, idx2, 0);
-                idx1 = comment.indexOf("@", idx2);
+                final String clickString = commentTxt.substring(idx1, idx2);
+                ssb.setSpan(new CommentClickable(clickString, userMentionList), idx1, idx2, 0);
+                idx1 = commentTxt.indexOf("@", idx2);
             }else {
                 idx1 = -1;
             }
@@ -126,17 +141,26 @@ public class HeadSpannable {
     class CommentClickable extends ClickableSpan{
 
         String clickString;
+        List<UserMention> userMentionList;
 
-        public CommentClickable (String clickString){
+        public CommentClickable (String clickString , List<UserMention> userMentionList){
             this.clickString = clickString;
+            this.userMentionList = userMentionList;
         }
 
         @Override
         public void onClick(View widget) {
-            Log.d("comment click", clickString);
+            Log.d("userMentionList", userMentionList.size()+"");
+            for (int i =0; i< userMentionList.size(); i++ ){
+                String userMention = "@"+userMentionList.get(i).userName;
+                if (userMention.equals(clickString.trim())){
+                    Log.d("userId", userMentionList.get(i).userId);
+                    headSpannableCallback.spannableTxt(userMentionList.get(i).userId, null, null, USER_PROFILE, "commentFragment");
+                }
+            }
+            Log.d("comment click", "|"+clickString.trim()+"|");
         }
     }
-
     private void makeLinksFocusable(TextView tv) {
         MovementMethod m = tv.getMovementMethod();
         if ((m == null) || !(m instanceof LinkMovementMethod)) {
