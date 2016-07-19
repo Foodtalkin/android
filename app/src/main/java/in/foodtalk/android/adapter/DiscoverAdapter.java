@@ -22,6 +22,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.communicator.CommentCallback;
 import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.communicator.PostOptionCallback;
@@ -48,10 +49,14 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     HeadSpannable headSpannable;
 
+    CommentCallback commentCallback;
+
     public DiscoverAdapter(Context context, List<PostObj> postObj, PostLikeCallback postLikeCallback){
         layoutInflater = LayoutInflater.from(context);
         this.postObj = postObj;
         this.context = context;
+
+        commentCallback = (CommentCallback) context;
         //Log.d("from adapter function", postObj.get(0).dishName);
        // Log.d("from adapter function", postObj.get(1).dishName);
 
@@ -98,7 +103,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             //postHolder.txtTime.setText("4d");
             postHolder.txtCountLike.setText(current.likeCount);
             postHolder.txtCountBookmark.setText(current.bookmarkCount);
-//            postHolder.txtCountComment.setText(current.commentCount);
+            postHolder.txtCountComment.setText(current.commentCount);
 
 
             double distance = Double.parseDouble(current.restaurantDistance);
@@ -258,6 +263,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         LinearLayout cardHolder;
 
         TextView txtKm;
+        LinearLayout iconComment;
 
 
 
@@ -277,6 +283,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             txtCountComment = (TextView) itemView.findViewById(R.id.txt_count_comment);
             likeIconImg = (ImageView) itemView.findViewById(R.id.icon_heart_img);
             bookmarImg = (ImageView) itemView.findViewById(R.id.img_icon_bookmark);
+            iconComment = (LinearLayout) itemView.findViewById(R.id.icon_comment_holder);
             txtKm = (TextView) itemView.findViewById(R.id.txt_km);
 
             cardHolder = (LinearLayout) itemView.findViewById(R.id.card_contaner);
@@ -303,8 +310,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             iconLike.setOnTouchListener(this);
             iconBookmark.setOnTouchListener(this);
             iconOption.setOnTouchListener(this);
-
-
+            iconComment.setOnTouchListener(this);
 
 
             mAnimation = AnimationUtils.loadAnimation(context, R.anim.like_anim);
@@ -464,6 +470,14 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
                 }
                 break;
+                case R.id.icon_comment_holder:{
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("clicked", "icon comment");
+                            commentCallback.openComment(postObj1.id);
+                            break;
+                    }
+                }
             }
             return true;
         }

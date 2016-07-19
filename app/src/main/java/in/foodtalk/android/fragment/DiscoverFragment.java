@@ -88,9 +88,6 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
 
     LinearLayout tapToRetry;
 
-
-
-
     private int pageNo = 1;
 
     LinearLayout progressBar;
