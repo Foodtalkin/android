@@ -1,6 +1,9 @@
 package in.foodtalk.android.fragment;
 
+import android.app.Dialog;
 import android.app.Fragment;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -17,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -72,6 +76,11 @@ public class CommentFragment extends Fragment {
 
     TextView btnCommentSend;
 
+    String userId;
+
+    Context context;
+
+
     /*public CommentFragment (String postId){
         this.postId = postId;
     }*/
@@ -84,11 +93,17 @@ public class CommentFragment extends Fragment {
         postId =  getArguments().getString("postId");
 
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_comment);
-
+        recyclerView.setHasFixedSize(true);
         txtUserName = (TextView) layout.findViewById(R.id.txt_name_comment);
         edit_comment = (EditText) layout.findViewById(R.id.edit_comment);
         linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        if (getActivity() != null){
+            context = getActivity();
+        }
+
 
         btnCommentSend = (TextView) layout.findViewById(R.id.txt_send_comment);
 
@@ -109,13 +124,14 @@ public class CommentFragment extends Fragment {
                 }else {
                     Log.d("btn send","blank comment");
                 }
-
             }
         });
 
         postObj = new PostObj();
         config = new Config();
         db = new DatabaseHandler(getActivity());
+
+        userId = db.getUserDetails().get("userId");
 
         try {
             getPostFeed("load");
@@ -361,6 +377,7 @@ public class CommentFragment extends Fragment {
         commentObj.currentDate = comment.getString("currentDate");
         commentObj.fullName = comment.getString("fullName");
 
+
         postDataList.add(commentObj);
 
         linearLayoutManager.scrollToPosition(postDataList.size());
@@ -374,6 +391,13 @@ public class CommentFragment extends Fragment {
     private void initSwipe(){
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
+
+            @Override
+            public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                if (viewHolder instanceof CommentAdapter.PostHolder) return 0;
+                return super.getSwipeDirs(recyclerView, viewHolder);
+            }
+
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 return false;
@@ -383,7 +407,18 @@ public class CommentFragment extends Fragment {
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
 
+                Log.d("viewHolder p", viewHolder.getAdapterPosition()+"");
+
                 if (direction == ItemTouchHelper.LEFT){
+                    if (postDataList.get(viewHolder.getAdapterPosition()).userId.equals(userId)){
+                       // Log.d("show popup","delete comment");
+                        dialogCommentAlert("delete", postDataList.get(viewHolder.getAdapterPosition()).id,viewHolder.getAdapterPosition());
+                        //adapter.removeItem(position);
+
+                    }else {
+                        dialogCommentAlert("report", postDataList.get(viewHolder.getAdapterPosition()).id,viewHolder.getAdapterPosition());
+                       // Log.d("show popup","report comment");
+                    }
                    // adapter.removeItem(position);
                 } else {
                    // removeView();
@@ -416,12 +451,22 @@ public class CommentFragment extends Fragment {
                         RectF icon_dest = new RectF((float) itemView.getLeft() + width ,(float) itemView.getTop() + width,(float) itemView.getLeft()+ 2*width,(float)itemView.getBottom() - width);
                         c.drawBitmap(icon,null,icon_dest,p);*/
                     } else {
-                        p.setColor(Color.parseColor("#D32F2F"));
-                        RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom());
-                        c.drawRect(background,p);
-                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_delete_white);
-                        RectF icon_dest = new RectF((float) itemView.getRight() - 2*width ,(float) itemView.getTop() + width,(float) itemView.getRight() - width,(float)itemView.getBottom() - width);
-                        c.drawBitmap(icon,null,icon_dest,p);
+                        Log.d("check id","login uId: "+userId+" : "+ "comm uId: "+ postDataList.get(viewHolder.getAdapterPosition()).userId);
+                        if (postDataList.get(viewHolder.getAdapterPosition()).userId.equals(userId)){
+                            p.setColor(Color.parseColor("#D32F2F"));
+                            RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom());
+                            c.drawRect(background,p);
+                            icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_delete_white);
+                            RectF icon_dest = new RectF((float) itemView.getRight() - 2*width ,(float) itemView.getTop() + width,(float) itemView.getRight() - width,(float)itemView.getBottom() - width);
+                            c.drawBitmap(icon,null,icon_dest,p);
+                        }else {
+                            p.setColor(Color.parseColor("#D32F2F"));
+                            RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom());
+                            c.drawRect(background,p);
+                            icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_flag_white_48dp);
+                            RectF icon_dest = new RectF((float) itemView.getRight() - 2*width ,(float) itemView.getTop() + width,(float) itemView.getRight() - width,(float)itemView.getBottom() - width);
+                            c.drawBitmap(icon,null,icon_dest,p);
+                        }
                     }
                 }
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
@@ -435,4 +480,158 @@ public class CommentFragment extends Fragment {
             ((ViewGroup) view.getParent()).removeView(view);
         }
     }*/
+
+    public void removeItem(int position) {
+        postDataList.remove(position);
+        commentAdapter.notifyItemRemoved(position);
+        commentAdapter.notifyItemRangeChanged(position, postDataList.size());
+    }
+    public void notifiy(int position) {
+        //postDataList.remove(position);
+        commentAdapter.notifyDataSetChanged();
+        commentAdapter.notifyItemRangeChanged(position, postDataList.size());
+    }
+
+    private void dialogCommentAlert(final String flagType, final String commentId, final int position){
+        final Dialog dialogComm = new Dialog(context);
+        dialogComm.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogComm.setContentView(R.layout.dialog_comment);
+        TextView txtComm = (TextView) dialogComm.findViewById(R.id.txt_comment_alert);
+        TextView btnCancel = (TextView) dialogComm.findViewById(R.id.btn_cancel);
+        TextView btnYes = (TextView) dialogComm.findViewById(R.id.btn_yes);
+        if (flagType.equals("report")){
+            txtComm.setText("Report Comment ?");
+        }else if (flagType.equals("delete")){
+            txtComm.setText("Delete Comment ?");
+        }
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("btnClick", "cancel");
+                dialogComm.dismiss();
+                //commentAdapter.notifyDataSetChanged();
+                notifiy(position);
+                //commentFlag(final String tag, String flagType, String commentId)
+            }
+        });
+        btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    commentFlag(flagType+"Request", flagType, commentId, position);
+                    dialogComm.dismiss();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.d("btnClick", "yes");
+            }
+        });
+
+
+
+        dialogComm.show();
+        dialogComm.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                Log.d("dialog comm", "on cancel");
+                notifiy(position);
+            }
+        });
+    }
+
+    public void commentFlag(final String tag, String flagType, String commentId, int position) throws JSONException {
+       // Log.d("getPostFeed", "post data");
+        JSONObject obj = new JSONObject();
+        obj.put("sessionId", db.getUserDetails().get("sessionId"));
+        obj.put("commentId",commentId);
+
+        if (flagType.equals("delete")){
+            removeItem(position);
+        }
+
+        notifiy(position);
+
+
+
+
+        String apiURL;
+        if (flagType.equals("report")){
+            apiURL = config.URL_REPORT_COMMENT;
+        }else {
+            apiURL = config.URL_DELETE_COMMENT;
+        }
+
+        //obj.put("userMentioned", ListArray of mentioned user);
+        /*byte[] data = new byte[0];
+        try {
+            data = commentTxt.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String base64 = Base64.encodeToString(data, Base64.DEFAULT);
+        obj.put("comment", base64);*/
+        //Log.d("getPostFeed","pageNo: "+pageNo);
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+                apiURL, obj,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        //Log.d(TAG, "After Sending JsongObj"+response.toString());
+                        //msgResponse.setText(response.toString());
+                        Log.d("Login Respond", response.toString());
+                        try {
+                            String status = response.getString("status");
+                            if (!status.equals("error")){
+                                //-- getAndSave(response);
+                                // loadDataIntoView(response , tag);
+                                //addNewComment (response);
+                            }else {
+                                String errorCode = response.getString("errorCode");
+                                if(errorCode.equals("6")){
+                                    Log.d("Response error", "Session has expired");
+                                    // logOut();
+                                }else {
+                                    Log.e("Response status", "some error");
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.d("Json Error", e+"");
+                        }
+                        //----------------------
+                        //hideProgressDialog();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("Response", "Error: " + error.getMessage());
+                // showToast("Please check your internet connection");
+
+                if(tag.equals("refresh")){
+                    //-- swipeRefreshHome.setRefreshing(false);
+                }
+                if(tag.equals("loadMore")){
+                    //remove(null);
+                    //callScrollClass();
+                    // pageNo--;
+                }
+                // hideProgressDialog();
+            }
+        }) {
+            /**
+             * Passing some request headers
+             * */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+        final int DEFAULT_TIMEOUT = 6000;
+        // Adding request to request queue
+        jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        AppController.getInstance().addToRequestQueue(jsonObjReq,"gethomefeed");
+    }
 }

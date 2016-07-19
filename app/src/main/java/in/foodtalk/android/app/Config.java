@@ -52,4 +52,9 @@ public class Config {
     public static String URL_NOTIFICATION = "http://"+IP+"/index.php/service/notification/list";
     public static String URL_LIST_FOLLOWED = "http://"+IP+"/index.php/service/follower/listFollowed";
 
+    public static String URL_REPORT_COMMENT  = "http://"+IP+"/index.php/service/flag/comment";
+    public static String URL_DELETE_COMMENT  = "http://"+IP+"/index.php/service/comment/delete";
+
+
+
 }

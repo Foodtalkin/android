@@ -101,22 +101,24 @@ public class HeadSpannable {
     }
 
 
-    public SpannableStringBuilder commentSpannable(String userName, String userId, String comment, final List<UserMention> userMentionList){
+    public SpannableStringBuilder commentSpannable(String userName, String userId, String comment, final List<UserMention> userMentionList, int textWidth){
 
         Log.d("userMention", userMentionList.size()+"");
 
         String commentTxt;
         String blankSpace = "";
 
+        Log.d("textView width", textWidth+"");
 
-        for (int i = 0; i< userName.length(); i++){
-            blankSpace = blankSpace +"  ";
+        int spaceLength = (int) Math.floor(textWidth/11);
+
+        for (int i = 0; i< spaceLength; i++){
+            blankSpace = blankSpace +" ";
         }
 
         commentTxt = blankSpace + comment;
 
         SpannableStringBuilder ssb = new SpannableStringBuilder(commentTxt);
-
 
 
 //        userMentionList.size();
@@ -147,7 +149,6 @@ public class HeadSpannable {
             this.clickString = clickString;
             this.userMentionList = userMentionList;
         }
-
         @Override
         public void onClick(View widget) {
             Log.d("userMentionList", userMentionList.size()+"");

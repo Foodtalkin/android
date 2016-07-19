@@ -66,6 +66,8 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
 
+
+
     public CommentAdapter (Context context, List<CommentObj> postDataList, PostObj postObj){
         layoutInflater = LayoutInflater.from(context);
         this.postObj = postObj;
@@ -180,7 +182,10 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             commentHolder.userId = current.userId;
             //commentHolder.txtComment.setText(current.comment);
             commentHolder.txtComment.setMovementMethod(LinkMovementMethod.getInstance());
-            commentHolder.txtComment.setText(spannable.commentSpannable(current.userName, current.userId, current.comment, current.userMentionsList), TextView.BufferType.SPANNABLE);
+
+            commentHolder.userName.measure(0, 0);
+            int textWidth = commentHolder.userName.getMeasuredWidth();
+            commentHolder.txtComment.setText(spannable.commentSpannable(current.userName, current.userId, current.comment, current.userMentionsList, textWidth), TextView.BufferType.SPANNABLE);
             //spannable.commentSpannable(current.userName, current.comment, null);
             Picasso.with(context)
                     .load(current.userImage)
@@ -195,6 +200,8 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemCount() {
         return postDataList.size();
     }
+
+
 
     @Override
     public int getItemViewType(int position) {
@@ -249,7 +256,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     }
 
-    private class PostHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
+    public class PostHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
 
         ImageView userThumbnail;
         TextView txtHeadLine;
