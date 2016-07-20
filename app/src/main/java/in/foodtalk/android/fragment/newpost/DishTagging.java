@@ -92,13 +92,17 @@ public class DishTagging extends Fragment implements DishTaggingCallback, View.O
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        this.context = context;
+        if (getActivity() != null){
+            this.context = getActivity();
+        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         layout = inflater.inflate(R.layout.dish_tagging, container, false);
+
 
 
         picHolder = (ImageView) layout.findViewById(R.id.img_dish_tagging);

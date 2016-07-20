@@ -32,10 +32,9 @@ public class DishTaggingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public DishTaggingAdapter(Context context, List<DishListObj> dishList, DishTaggingCallback dishTaggingCallback){
 
-        layoutInflater = LayoutInflater.from(context);
         this.context = context;
+        layoutInflater = LayoutInflater.from(context);
         this.dishList = dishList;
-
         this.dishTaggingCallback = dishTaggingCallback;
     }
 

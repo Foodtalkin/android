@@ -61,7 +61,9 @@
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_test_id" />
+            android:value="@string/facebook_test_id"/>
+
+        <meta-data android:name="com.parse.push.notification_icon" android:resource="@drawable/ic_stat_noti_icon"/>
 
         <activity
             android:name="com.facebook.FacebookActivity"

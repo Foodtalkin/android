@@ -15,6 +15,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -135,6 +137,7 @@ public class CommentFragment extends Fragment {
 
         try {
             getPostFeed("load");
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -164,6 +167,7 @@ public class CommentFragment extends Fragment {
                             String status = response.getString("status");
                             if (!status.equals("error")){
                                 //-- getAndSave(response);
+                                getListFollowed("load");
                                 loadDataIntoView(response , tag);
                             }else {
                                 String errorCode = response.getString("errorCode");
@@ -276,10 +280,82 @@ public class CommentFragment extends Fragment {
            // current.id = comment.
             //Log.d("comment", comment.getJSONObject(i).getString("id"));
         }
-        commentAdapter = new CommentAdapter(getActivity(), postDataList, postObj);
-        recyclerView.setAdapter(commentAdapter);
-        initSwipe();
+        if (getActivity() != null ){
+            commentAdapter = new CommentAdapter(getActivity(), postDataList, postObj);
+            recyclerView.setAdapter(commentAdapter);
+            initSwipe();
+        }
+
         Log.d("post", post+"");
+    }
+
+    public void getListFollowed(final String tag) throws JSONException {
+        Log.d("getPostFeed", "post data");
+        JSONObject obj = new JSONObject();
+        obj.put("sessionId", db.getUserDetails().get("sessionId"));
+        obj.put("selectedUserId",userId);
+        //Log.d("getPostFeed","pageNo: "+pageNo);
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
+                config.URL_LIST_FOLLOWED, obj,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        //Log.d(TAG, "After Sending JsongObj"+response.toString());
+                        //msgResponse.setText(response.toString());
+                        Log.d("Login Respond", response.toString());
+                        try {
+                            String status = response.getString("status");
+                            if (!status.equals("error")){
+                                txtListener();
+                                //-- getAndSave(response);
+                                //loadDataIntoView(response , tag);
+                            }else {
+                                String errorCode = response.getString("errorCode");
+                                if(errorCode.equals("6")){
+                                    Log.d("Response error", "Session has expired");
+                                    // logOut();
+                                }else {
+                                    Log.e("Response status", "some error");
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.d("Json Error", e+"");
+                        }
+                        //----------------------
+                        //hideProgressDialog();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("Response", "Error: " + error.getMessage());
+                // showToast("Please check your internet connection");
+
+                if(tag.equals("refresh")){
+                    //-- swipeRefreshHome.setRefreshing(false);
+                }
+                if(tag.equals("loadMore")){
+                    //remove(null);
+                    //callScrollClass();
+                    // pageNo--;
+                }
+                // hideProgressDialog();
+            }
+        }) {
+            /**
+             * Passing some request headers
+             * */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+        final int DEFAULT_TIMEOUT = 6000;
+        // Adding request to request queue
+        jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        AppController.getInstance().addToRequestQueue(jsonObjReq,"gethomefeed");
     }
 
     public void sendComment(final String tag, String commentTxt) throws JSONException {
@@ -633,5 +709,52 @@ public class CommentFragment extends Fragment {
         // Adding request to request queue
         jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         AppController.getInstance().addToRequestQueue(jsonObjReq,"gethomefeed");
+    }
+
+    private void txtListener(){
+
+        int afterSpace;
+        edit_comment.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+               /* if (tabSeleted == 0){
+                    searchCallback1.searchKey(s.toString(),"dish");
+                }
+                if (tabSeleted == 1){
+                    searchCallback2.searchKey(s.toString(),"user");
+                }
+                if (tabSeleted == 2){
+                    searchCallback3.searchKey(s.toString(),"restaurant");
+
+                }*/
+                String getString = s.toString();
+                if (count != 0){
+                    Log.d("key comm", s.toString() + " : "+ getString.substring(count-1));
+                }
+
+
+
+                mentionWord(s.toString());
+
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                //Log.d("afterTextChanged", s.toString());
+            }
+        });
+    }
+
+    private void mentionWord(String str){
+        if (str.indexOf("@") != -1){
+            String word = str.substring(str.indexOf("@")-1, str.length());
+            Log.d("mention word", word+" "+str.indexOf("@"));
+        }
+
     }
 }

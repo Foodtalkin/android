@@ -116,6 +116,8 @@ public class HeadSpannable {
             blankSpace = blankSpace +" ";
         }
 
+
+
         commentTxt = blankSpace + comment;
 
         SpannableStringBuilder ssb = new SpannableStringBuilder(commentTxt);
