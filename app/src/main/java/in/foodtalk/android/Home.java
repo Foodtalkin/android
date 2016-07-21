@@ -1060,6 +1060,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }else {
             txtUploadingDish.setText("Posting "+dishName+" at "+restaurantNameNewPost);
         }
+        clearBackStack();
     }
 
     @Override
@@ -1110,7 +1111,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 //-------
                 startCropImageActivity(Uri.fromFile(file1));
                 Log.d("onActivityResult","call cropimage activity");
-
                 //--------
             }
             catch(ActivityNotFoundException aNFE){
