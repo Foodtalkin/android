@@ -274,8 +274,11 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
             restaurantList.add(current);
         }
         //Log.d("send list", "total: "+restaurantList.size());
-        checkInAdapter = new CheckInAdapter(getActivity(),restaurantList);
-        recyclerView.setAdapter(checkInAdapter);
+        if (getActivity() != null){
+            checkInAdapter = new CheckInAdapter(getActivity(),restaurantList);
+            recyclerView.setAdapter(checkInAdapter);
+        }
+
     }
 
     @Override

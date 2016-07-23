@@ -1,5 +1,6 @@
 package in.foodtalk.android;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -35,6 +36,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -184,6 +186,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
     LinearLayout searchHeader;
     Fragment currentFragment;
+
+    private int REQUEST_CAMERA = 0, SELECT_FILE = 1, REQUEST_CROP = 2;
+    //private File destination = new File(Environment.getExternalStorageDirectory(), System.currentTimeMillis() + ".jpg");
+    private File destination = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), System.currentTimeMillis() + ".jpg");
 
 
    // ImageCapture imageCapture;
@@ -693,9 +699,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             @Override
             public void onClick(View v) {
                 dialogImgFrom.dismiss();
-                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+                cameraIntent();
+                /*Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file1));
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, 1);*/
             }
         });
         btnGallery.setOnClickListener(new View.OnClickListener() {
@@ -703,9 +710,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             public void onClick(View v) {
                 dialogImgFrom.dismiss();
                 Log.d("dialogImgFrom", "bt Gallery");
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                galleryIntent();
+                /*Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
-                startActivityForResult(intent, FROM_GALLERY);
+                //startActivityForResult(intent, FROM_GALLERY);
+                startActivityForResult(Intent.createChooser(intent, "Select File"), FROM_GALLERY);*/
             }
         });
     }
@@ -1078,103 +1087,86 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         bundle.putString("rId", rId);
         newpostFragment.setArguments(bundle);
         setFragmentView(newpostFragment, R.id.container1, -1, true);
+
     }
 
-    //---------camera and crop intent----------------------------
+    //----------new camera and gallery and crop code----------------
+    private void galleryIntent()
+    {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);//
+        startActivityForResult(Intent.createChooser(intent, "Select File"),SELECT_FILE);
+    }
+
+    private void cameraIntent()
+    {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(destination));
+        startActivityForResult(intent, REQUEST_CAMERA);
+    }
+    private void cropIntent(Uri imageUri) {
+        Log.d("startCropImage", imageUri+"");
+        Intent intent = CropImage.activity(imageUri).setFixAspectRatio(true).getIntent(this);
+        startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+    }
+
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Log.d("onAcrivitiresult", requestCode+"");
-        //if request code is same we pass as argument in startActivityForResult
-        if(requestCode==1 && resultCode == RESULT_OK){
-            //create instance of File with same name we created before to get image from storage
-            //File file = new File(Environment.getExternalStorageDirectory()+File.separator + "img.jpg");
-            //Crop the captured image using an other intent
+        if (resultCode == Activity.RESULT_OK){
+            if (requestCode == SELECT_FILE){
+                Log.d("requeestCode", "SELECT_FILE");
 
-            // Bundle extras = data.getExtras();
-            // Bitmap imageBitmap = (Bitmap) extras.get("data");
-
-            Log.d("data", data+" ");
-
-            try {
-				/*the user's device may not support cropping*/
-                //--cropCapturedImage(Uri.fromFile(file));
-                Bitmap photo = decodeFile(file1);
-                //Bitmap photo = setPic(file);
-                //Bitmap photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(String.valueOf(file)));
-
-//                Bitmap croppedBmp = Bitmap.createBitmap(photo, 0, 0,
-                //     photo.getWidth() / 2, photo.getHeight());
-                //imVCature_pic.setImageBitmap(photo);
-
-                //-------
-                startCropImageActivity(Uri.fromFile(file1));
-                Log.d("onActivityResult","call cropimage activity");
-                //--------
+                cropIntent(data.getData());
+                /*try {
+                    Bitmap  mBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
+                    imgV.setImageBitmap(mBitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }*/
             }
-            catch(ActivityNotFoundException aNFE){
-                //display an error message if user device doesn't support
-                String errorMessage = "Sorry - your device doesn't support the crop action!";
-                Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
-                toast.show();
+            if (requestCode == REQUEST_CAMERA){
+                Log.d("requeestCode", "REQUEST_CAMERA");
+                cropIntent(Uri.fromFile(destination));
+                //onCaptureImageResult(data);
             }
-            // Log.d("result code",CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE+" : "
-            // + CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE+ ": "
-            // + CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE);
-        }
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-
-            Log.d("crop img","cropd");
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                Uri resultUri = result.getUri();
-                Log.d("Log","crop image activity request"+result.getUri());
-
-                Bitmap photo = decodeFile(new File(result.getUri().getPath()));
-
-               //-- imVCature_pic.setImageBitmap(photo);
-
-               //-- camBitmapCallback.capturedBitmap(photo , new File(result.getUri().getPath()));
-                capturedBitmap1(photo , new File(result.getUri().getPath()));
-                // cropedImg.setImageUriAsync(resultUri);
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
+            if (requestCode == REQUEST_CROP){
+                Log.d("requeestCode", "REQUEST_CROP");
             }
-        }
-        if(requestCode==2){
-            //Create an instance of bundle and get the returned data
-            //Bundle extras = data.getExtras();
-            //get the cropped bitmap from extras
-            //--Bitmap thePic = extras.getParcelable("data");
-            //set image bitmap to image view
-            //--imVCature_pic.setImageBitmap(thePic);
-            //Log.d("get extras", extras.getParcelable("data")+"");
-            try {
-                if(file.exists()){
+            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
+                if (data != null){
+                    // Uri selectedImage = data.getData();
 
-                    Log.d("onActivityResult", "try to load image");
-                    Bitmap photo = decodeFile(file1);
-                    //Bitmap photo = setPic(file);
-                    //Bitmap photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(String.valueOf(file)));
-                    Bitmap croppedBmp = Bitmap.createBitmap(photo, 0, 0,
-                            photo.getWidth() / 2, photo.getHeight());
-                    // imVCature_pic.setImageBitmap(croppedBmp);
+
+                    CropImage.ActivityResult result = CropImage.getActivityResult(data);
+
+                    Bitmap photo = decodeFile(new File(result.getUri().getPath()));
+
+                    //-- imVCature_pic.setImageBitmap(photo);
+
+                    //-- camBitmapCallback.capturedBitmap(photo , new File(result.getUri().getPath()));
+                    capturedBitmap1(photo , new File(result.getUri().getPath()));
+                    /*try {
+
+                        Bitmap  mBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), result.getUri());
+                        imgV.setImageURI(result.getUri());
+                        //imgV.setImageBitmap(mBitmap);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }*/
+                }else {
+                    Log.e("onActivityResult", "data null");
                 }
-                else {
-                    Toast.makeText(this, "Error while save image", Toast.LENGTH_SHORT).show();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
 
-        if (requestCode == FROM_GALLERY && resultCode == RESULT_OK && null != data){
-            Uri selectedImage = data.getData();
-            startCropImageActivity(selectedImage);
-            Log.d("get result","from gallery"+ selectedImage);
+            }
         }
     }
+    //-----------------end camera gallery and crop
+
+    //---------camera and crop intent----------------------------
+
 
     private void startCropImageActivity(Uri imageUri) {
         // CropImage.activity(imageUri)
@@ -1182,6 +1174,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         //  .setFixAspectRatio(true)
         //     .start(getActivity());
         //
+
+        Log.d("startCropImage", imageUri+"");
         Intent intent = CropImage.activity(imageUri).setFixAspectRatio(true).getIntent(this);
         startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
 

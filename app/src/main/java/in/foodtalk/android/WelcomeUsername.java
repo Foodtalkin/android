@@ -2,12 +2,16 @@ package in.foodtalk.android;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -34,6 +38,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -66,7 +72,7 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
 
     Boolean cityListLoaded = false;
     EditText inputEmail;
-    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+    String emailPattern = "[a-zA-Z0-9._-]+@[a-z0-9]+\\.+[a-z0-9]+";
 
     TextView txtEmailError;
 
@@ -74,6 +80,8 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.welcome_username);
         txtUser = (EditText) findViewById(R.id.txt_username);
         btnUser = (ImageButton) findViewById(R.id.btn_user_select);
@@ -459,4 +467,6 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
         //Log.d("send list", "total: "+restaurantList.size());
 
     }
+
+
 }

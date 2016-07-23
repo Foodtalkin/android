@@ -272,9 +272,11 @@ public class DishTagging extends Fragment implements DishTaggingCallback, View.O
             dishList.add(current);
         }
         //Log.d("send list", "total: "+restaurantList.size());
-        dishTaggingAdapter = new DishTaggingAdapter(context,dishList , dishTaggingCallback);
-        recyclerView.setAdapter(dishTaggingAdapter);
-        dishNameLoaded = true;
+        if (getActivity() != null){
+            dishTaggingAdapter = new DishTaggingAdapter(getActivity(),dishList , dishTaggingCallback);
+            recyclerView.setAdapter(dishTaggingAdapter);
+            dishNameLoaded = true;
+        }
     }
 
     private void onTexChange(String newText){
