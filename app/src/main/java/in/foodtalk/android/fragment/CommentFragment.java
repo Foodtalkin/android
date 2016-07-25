@@ -735,12 +735,13 @@ public class CommentFragment extends Fragment {
                 }*/
                 String getString = s.toString();
                 if (count != 0){
-                    Log.d("key comm", s.toString() + " : "+ getString.substring(count-1));
+                    //Log.d("key comm", s.toString() + " : "+ getString.substring(count-1));
+                    mentionWord(s.toString());
                 }
 
 
 
-                mentionWord(s.toString());
+
 
             }
             @Override
@@ -750,11 +751,22 @@ public class CommentFragment extends Fragment {
         });
     }
 
+    Boolean readChar = false;
+    int charPosition;
     private void mentionWord(String str){
-        if (str.indexOf("@") != -1){
-            String word = str.substring(str.indexOf("@")-1, str.length());
-            Log.d("mention word", word+" "+str.indexOf("@"));
-        }
 
+        String lastWord = str.substring(str.lastIndexOf(" ")+1);
+      //  mTextView.setText(str);
+        Log.d("last word ", lastWord+"");
+        if (lastWord.length() > 0){
+            String lastFirstChar = String.valueOf(lastWord.charAt(0));
+            if (lastFirstChar.equals("@")){
+                Log.d("last word of string", lastWord);
+               // txtV.setText(lastWord);
+            }
+        }else {
+           // txtV.setText("0");
+            Log.d("last word length","0");
+        }
     }
 }
