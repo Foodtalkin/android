@@ -72,6 +72,15 @@ public class CommentFragment extends Fragment implements MentionCallback  {
     EditText edit_comment;
     List<CommentObj> postDataList  = new ArrayList<>();
     List<FollowedUsersObj> fUserList = new ArrayList<>();
+    List<FollowedUsersObj> mentionUser = new ArrayList<>();
+
+    JSONArray mentionUArray = new JSONArray();
+
+
+
+
+
+
 
     CommentAdapter commentAdapter;
     FollowedListAdapter followedListAdapter;
@@ -399,7 +408,11 @@ public class CommentFragment extends Fragment implements MentionCallback  {
         JSONObject obj = new JSONObject();
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
         obj.put("postId",postId);
-        //obj.put("userMentioned", ListArray of mentioned user);
+        if (mentionUArray.length() > 0){
+            obj.put("userMentioned", mentionUArray);
+            Log.d("mentionUser added", mentionUArray.length()+"");
+        }
+
         byte[] data = new byte[0];
         try {
             data = commentTxt.getBytes("UTF-8");
@@ -408,7 +421,9 @@ public class CommentFragment extends Fragment implements MentionCallback  {
         }
         String base64 = Base64.encodeToString(data, Base64.DEFAULT);
         obj.put("comment", base64);
-        //Log.d("getPostFeed","pageNo: "+pageNo);
+
+
+        Log.d("json to send",obj+"");
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                 config.URL_COMMENT_ADD, obj,
                 new Response.Listener<JSONObject>() {
@@ -844,6 +859,41 @@ public class CommentFragment extends Fragment implements MentionCallback  {
     }
     @Override
     public void mentionUser(String userName, String userId) {
+        String str = edit_comment.getText().toString();
+
+        if (str.indexOf(" ") != -1){
+            str = str.substring(0, str.lastIndexOf(" ")) + " @"+userName+" ";
+
+        }else {
+            str = "@"+userName+" ";
+        }
+        edit_comment.setText(str);
+        edit_comment.setSelection(edit_comment.getText().length());
+
+
+
+
+
+        //FollowedUsersObj current = new FollowedUsersObj();
+        //current.userName = userName;
+        //current.id = userId;
+       // mentionUser.add(current);
+
+
+        /*HashMap<String,String> mentionMap = new HashMap<String,String>();
+        mentionMap.put("userName", userName);
+        mentionMap.put("userId", userId);*/
+        JSONObject mentionObject = new JSONObject();
+        try {
+            mentionObject.put("userName", userName);
+            mentionObject.put("userId", userId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        mentionUArray.put(mentionObject);
+        //String lastWord = str.substring(str.lastIndexOf(" ")+1);
         Log.d("mentionUser", "user: "+userName+" userId: "+userId);
     }
 }

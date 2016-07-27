@@ -163,6 +163,13 @@ public class HeadSpannable {
             }
             Log.d("comment click", "|"+clickString.trim()+"|");
         }
+        public void updateDrawState(TextPaint ds) {// override updateDrawState
+            ds.setUnderlineText(false); // set to false to remove underline
+            ds.setColor(ds.linkColor);
+            //ds.bgColor = Integer.parseInt(null);
+            //ds.bgColor = Color.WHITE;
+           // ds.linkColor = Color.RED;
+        }
     }
     private void makeLinksFocusable(TextView tv) {
         MovementMethod m = tv.getMovementMethod();

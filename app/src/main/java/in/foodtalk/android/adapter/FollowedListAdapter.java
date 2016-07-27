@@ -76,11 +76,15 @@ public class FollowedListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public boolean onTouch(View v, MotionEvent event) {
             switch (v.getId()){
                 case R.id.btn_user_mention:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            mentionCallback.mentionUser(fUserList.get(getPosition()).userName, fUserList.get(getPosition()).id);
+                            break;
+                    }
                    // Log.d("user", fUserList.get(getPosition()).userName);
-                    mentionCallback.mentionUser(fUserList.get(getPosition()).userName, fUserList.get(getPosition()).id);
                     break;
             }
-            return false;
+            return true;
         }
     }
 
