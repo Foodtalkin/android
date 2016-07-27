@@ -28,7 +28,8 @@
                 />
         </LinearLayout>
     </RelativeLayout>
-    <LinearLayout
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/header_root"
@@ -39,7 +40,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_weight="1"
+            android:layout_alignParentTop="true"
+            android:layout_above="@+id/comment_line"
             >
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view_comment"
@@ -53,6 +55,7 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/comment_line"
             android:layout_width="match_parent"
             android:layout_height="0.33dp"
             android:layout_above="@+id/comment_send_holder"
@@ -62,6 +65,7 @@
             android:id="@+id/comment_send_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:orientation="horizontal"
             android:layout_alignParentBottom="true"
             android:background="#fff"
@@ -90,7 +94,17 @@
                 android:textColor="#000"
                 android:background="#fff"/>
         </LinearLayout>
-
-    </LinearLayout>
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/comment_send_holder"
+            android:background="#CC000000">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_mention"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                ></android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>

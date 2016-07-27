@@ -47,17 +47,20 @@ import java.util.Map;
 
 import in.foodtalk.android.R;
 import in.foodtalk.android.adapter.CommentAdapter;
+import in.foodtalk.android.adapter.FollowedListAdapter;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.MentionCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.object.CommentObj;
+import in.foodtalk.android.object.FollowedUsersObj;
 import in.foodtalk.android.object.PostObj;
 import in.foodtalk.android.object.UserMention;
 
 /**
  * Created by RetailAdmin on 20-06-2016.
  */
-public class CommentFragment extends Fragment {
+public class CommentFragment extends Fragment implements MentionCallback  {
     View layout;
     Config config;
     DatabaseHandler db;
@@ -68,11 +71,19 @@ public class CommentFragment extends Fragment {
 
     EditText edit_comment;
     List<CommentObj> postDataList  = new ArrayList<>();
+    List<FollowedUsersObj> fUserList = new ArrayList<>();
 
     CommentAdapter commentAdapter;
+    FollowedListAdapter followedListAdapter;
 
-    RecyclerView recyclerView;
+    RecyclerView recyclerView , recyclerViewMention;
     LinearLayoutManager linearLayoutManager;
+
+    JSONObject response;
+
+    MentionCallback mentionCallback;
+
+
 
     TextView txtUserName;
 
@@ -94,13 +105,17 @@ public class CommentFragment extends Fragment {
 
         postId =  getArguments().getString("postId");
 
+        recyclerViewMention = (RecyclerView) layout.findViewById(R.id.recycler_view_mention);
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_comment);
         recyclerView.setHasFixedSize(true);
         txtUserName = (TextView) layout.findViewById(R.id.txt_name_comment);
         edit_comment = (EditText) layout.findViewById(R.id.edit_comment);
         linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
 
+        recyclerViewMention.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        mentionCallback = this;
 
         if (getActivity() != null){
             context = getActivity();
@@ -306,7 +321,8 @@ public class CommentFragment extends Fragment {
                         try {
                             String status = response.getString("status");
                             if (!status.equals("error")){
-                                txtListener();
+                                setListFollowed(response);
+
                                 //-- getAndSave(response);
                                 //loadDataIntoView(response , tag);
                             }else {
@@ -356,6 +372,26 @@ public class CommentFragment extends Fragment {
         // Adding request to request queue
         jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         AppController.getInstance().addToRequestQueue(jsonObjReq,"gethomefeed");
+    }
+
+    private void setListFollowed(JSONObject response) throws JSONException {
+
+        this.response = response;
+
+        JSONArray followedList = response.getJSONArray("followedUsers");
+        //Log.d("followerList", followedList.length()+"");
+        for (int i = 0; i<followedList.length(); i++){
+            FollowedUsersObj current = new FollowedUsersObj();
+            current.id = followedList.getJSONObject(i).getString("id");
+            current.userName = followedList.getJSONObject(i).getString("userName");
+            fUserList.add(current);
+        }
+        if (getActivity() != null){
+            followedListAdapter  = new FollowedListAdapter(getActivity(), fUserList, mentionCallback);
+            recyclerViewMention.setAdapter(followedListAdapter);
+            txtListener();
+        }
+
     }
 
     public void sendComment(final String tag, String commentTxt) throws JSONException {
@@ -734,10 +770,10 @@ public class CommentFragment extends Fragment {
 
                 }*/
                 String getString = s.toString();
-                if (count != 0){
+               /* if (count != 0){
                     //Log.d("key comm", s.toString() + " : "+ getString.substring(count-1));
                     mentionWord(s.toString());
-                }
+                }*/
 
 
 
@@ -747,6 +783,7 @@ public class CommentFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 //Log.d("afterTextChanged", s.toString());
+                mentionWord(String.valueOf(s));
             }
         });
     }
@@ -761,12 +798,52 @@ public class CommentFragment extends Fragment {
         if (lastWord.length() > 0){
             String lastFirstChar = String.valueOf(lastWord.charAt(0));
             if (lastFirstChar.equals("@")){
-                Log.d("last word of string", lastWord);
+                Log.d("Mention word", lastWord.substring(1));
+                recyclerViewMention.setVisibility(View.VISIBLE);
+                onTexChange(lastWord.substring(1));
                // txtV.setText(lastWord);
             }
         }else {
            // txtV.setText("0");
+            recyclerViewMention.setVisibility(View.GONE);
             Log.d("last word length","0");
         }
+    }
+
+    private void onTexChange(String newText){
+        try {
+            JSONArray rListArray = response.getJSONArray("followedUsers");
+            fUserList.clear();
+            for (int i=0;i<rListArray.length();i++){
+                FollowedUsersObj current = new FollowedUsersObj();
+                current.id = rListArray.getJSONObject(i).getString("id");
+                current.userName = rListArray.getJSONObject(i).getString("userName");
+                //current.postCount = rListArray.getJSONObject(i).getString("postCount");
+                fUserList.add(current);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        // Log.d("rListArray", "total: "+ rListArray.length());
+        // tempList = new ArrayList<RestaurantListObj>(restaurantList);
+        final List<FollowedUsersObj> filteredModelList = filter(fUserList, newText);
+        followedListAdapter.animateTo(filteredModelList);
+        recyclerView.scrollToPosition(0);
+    }
+    private List<FollowedUsersObj> filter(List<FollowedUsersObj> models, String query) {
+        query = query.toLowerCase();
+        //this.postData =  new ArrayList<RestaurantPostObj>(postList);
+        final List<FollowedUsersObj> filteredModelList = new ArrayList<>();
+        for (FollowedUsersObj model : models) {
+            final String text = model.userName.toLowerCase();
+            if (text.contains(query)) {
+                filteredModelList.add(model);
+            }
+        }
+        return filteredModelList;
+    }
+    @Override
+    public void mentionUser(String userName, String userId) {
+        Log.d("mentionUser", "user: "+userName+" userId: "+userId);
     }
 }
