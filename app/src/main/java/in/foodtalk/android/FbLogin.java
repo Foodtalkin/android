@@ -596,6 +596,14 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                             String uId = response.getString("userId");
                             String sessionId = response.getString("sessionId");
                             String channels = jObj.getString("channels");
+                            String region;
+                            if (jObj.has("region")){
+                                region = jObj.getString("region");
+                            } else {
+                                region = "";
+                            }
+
+
 
 
 
@@ -603,7 +611,7 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
 
                            // parseInst(uId);
                             //subscribeWithInfo(String userId,String locationIdentifire, String work, String channels);
-                            parseUtils.subscribeWithInfo(uId,"en-IN","development");
+                            parseUtils.subscribeWithInfo(uId,"en-IN","development", region);
                             List<String> items = Arrays.asList(channels.split("\\s*,\\s*"));
 
                             for (int i=0;i<items.size();i++){
