@@ -187,16 +187,23 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
                 if (btnUserEnable){
                     Log.d("OnClick", "user btn clicked");
                     String email = inputEmail.getText().toString();
-                    if (email.matches(emailPattern)){
-                        txtEmailError.setAlpha(0);
-                        try {
-                            createUserName(txtUser.getText().toString(), inputEmail.getText().toString(), txtCity.getText().toString(), "postUserName");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                    boolean atleastOneAlpha = txtUser.getText().toString().matches(".*[a-zA-Z]+.*");
+                    if(atleastOneAlpha){
+                        if (email.matches(emailPattern)){
+                            txtEmailError.setAlpha(0);
+                            try {
+                                createUserName(txtUser.getText().toString(), inputEmail.getText().toString(), txtCity.getText().toString(), "postUserName");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            txtEmailError.setAlpha(1);
                         }
-                    } else {
-                        txtEmailError.setAlpha(1);
+                    }else {
+                        txtUserNameError.setText(getResources().getString(R.string.user_name_alphabet));
+                        txtUserNameError.setAlpha(1);
                     }
+
 
                 }
                 break;
@@ -240,7 +247,7 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
                                 db.resetTables();
                                 getAndSave(response);
                             }else {
-
+                                txtUserNameError.setText(getResources().getString(R.string.user_name_taken));
                                 txtUserNameError.setAlpha(1);
                                 //showErrorTxt();
                                 Log.e("Response status", "error");

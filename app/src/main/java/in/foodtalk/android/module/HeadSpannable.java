@@ -7,6 +7,7 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;
 import android.text.style.ClickableSpan;
@@ -112,15 +113,21 @@ public class HeadSpannable {
 
         int spaceLength = (int) Math.floor(textWidth/11);
 
-        for (int i = 0; i< spaceLength; i++){
+        /*for (int i = 0; i< spaceLength; i++){
             blankSpace = blankSpace +" ";
-        }
+        }*/
 
 
 
-        commentTxt = blankSpace + comment;
+        //commentTxt = blankSpace + comment;
+        commentTxt = comment;
 
+
+        SpannableStringBuilder userNSSB = new SpannableStringBuilder(userName);
         SpannableStringBuilder ssb = new SpannableStringBuilder(commentTxt);
+
+        userNSSB.setSpan(new CommentClickable(userName, null, false , userId), 0, userName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        userNSSB.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.card_head_highlight)), 0, userName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
 
 //        userMentionList.size();
@@ -133,35 +140,43 @@ public class HeadSpannable {
             Log.d("idx2", idx2+"");
             if (idx2 != 0){
                 final String clickString = commentTxt.substring(idx1, idx2);
-                ssb.setSpan(new CommentClickable(clickString, userMentionList), idx1, idx2, 0);
+                ssb.setSpan(new CommentClickable(clickString, userMentionList, true , userId), idx1, idx2, 0);
                 idx1 = commentTxt.indexOf("@", idx2);
             }else {
                 idx1 = -1;
             }
         }
-        return ssb;
+        return SpannableStringBuilder.valueOf(TextUtils.concat(userNSSB," " ,ssb));
     }
 
     class CommentClickable extends ClickableSpan{
 
         String clickString;
         List<UserMention> userMentionList;
+        Boolean mention;
+        String userId;
 
-        public CommentClickable (String clickString , List<UserMention> userMentionList){
+        public CommentClickable (String clickString , List<UserMention> userMentionList, Boolean mention , String userId){
             this.clickString = clickString;
             this.userMentionList = userMentionList;
+            this.mention = mention;
+            this.userId = userId;
         }
         @Override
         public void onClick(View widget) {
-            Log.d("userMentionList", userMentionList.size()+"");
-            for (int i =0; i< userMentionList.size(); i++ ){
-                String userMention = "@"+userMentionList.get(i).userName;
-                if (userMention.equals(clickString.trim())){
-                    Log.d("userId", userMentionList.get(i).userId);
-                    headSpannableCallback.spannableTxt(userMentionList.get(i).userId, null, null, USER_PROFILE, "commentFragment");
+            if (mention){
+                Log.d("userMentionList", userMentionList.size()+"");
+                for (int i =0; i< userMentionList.size(); i++ ){
+                    String userMention = "@"+userMentionList.get(i).userName;
+                    if (userMention.equals(clickString.trim())){
+                        Log.d("userId", userMentionList.get(i).userId);
+                        headSpannableCallback.spannableTxt(userMentionList.get(i).userId, null, null, USER_PROFILE, "commentFragment");
+                    }
                 }
+                Log.d("comment click", "|"+clickString.trim()+"|");
+            } else {
+                headSpannableCallback.spannableTxt(userId, null, null, USER_PROFILE, "commentFragment");
             }
-            Log.d("comment click", "|"+clickString.trim()+"|");
         }
         public void updateDrawState(TextPaint ds) {// override updateDrawState
             ds.setUnderlineText(false); // set to false to remove underline

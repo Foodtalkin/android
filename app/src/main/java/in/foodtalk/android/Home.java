@@ -503,10 +503,20 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         FlurryAgent.logEvent(newFragment.getClass().getSimpleName());
 
+        if (newFragment == userProfile){
+            subTitleHome.setText("");
+            titleHome1.setText("");
+        }
+
 
         // Log.d("newFragment", backStateName);
         Log.i("setFragmentView",newFragment.getClass().getSimpleName());
+
+        if(container == R.id.container){
             setTitle(newFragment);
+        }
+
+
             //Log.d("New fragment", backStateName+"");
             if (newFragment != newpostFragment && pageN != -1){
                 icons[pageNo].setImageResource(imgR[pageNo]);
@@ -542,6 +552,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 clearBackStack();
             }
             transaction.commit();
+
+        /*if(this.getFragmentManager().findFragmentById(R.id.container1) == null){
+            setTitle(newFragment);
+        }*/
     }
     Boolean backPressed = false;
 
@@ -577,7 +591,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             //setTitle(f);
         if(backPressed){
             Fragment f = this.getFragmentManager().findFragmentById(R.id.container);
+
             setTitle(f);
+
+
             backPressed = false;
         }
     }
@@ -1278,6 +1295,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             header1.setVisibility(View.GONE);
             titleHome.setText("Dishes");
         }
+        /*if(this.getFragmentManager().findFragmentById(R.id.container1) != null){
+            header.setVisibility(View.GONE);
+            Log.d("setTitle", "header gone");
+        }*/
        /* case "UserProfile":
         header.setVisibility(View.VISIBLE);
         header1.setVisibility(View.GONE);
@@ -1346,8 +1367,20 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     public void openComment(String postId) {
         Log.d("callback open comment", postId);
 
-        currentFragment = this.getFragmentManager().findFragmentById(R.id.container1);
-        if(currentFragment == openRPostFragment){
+        /*if(this.getFragmentManager().findFragmentById(R.id.container1) != null){
+            currentFragment = this.getFragmentManager().findFragmentById(R.id.container1);
+        }*/
+        if(this.getFragmentManager().findFragmentById(R.id.container1) != null){
+            Log.d("fragment c1", this.getFragmentManager().findFragmentById(R.id.container1)+"");
+            getFragmentManager().beginTransaction().remove(this.getFragmentManager().findFragmentById(R.id.container1)).commit();
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString("postId", postId);
+        commentFragment = new CommentFragment();
+        commentFragment.setArguments(bundle);
+        setFragmentView(commentFragment, R.id.container1, -1, true);
+
+       /* if(currentFragment == openRPostFragment){
             getFragmentManager().beginTransaction().remove(openRPostFragment).commit();
             Bundle bundle = new Bundle();
             bundle.putString("postId", postId);
@@ -1367,12 +1400,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             commentFragment = new CommentFragment();
             commentFragment.setArguments(bundle);
             setFragmentView(commentFragment, R.id.container1, -1, true);
-        }
+        }*/
     }
 
     @Override
     public void notiClicked(String eventType, String raiserId, String raiserThumb, String eventDate, String elementId) {
-        if(eventType.equals("2") || eventType.equals("4") || eventType.equals("9")){
+        if(eventType.equals("2") || eventType.equals("4") || eventType.equals("9") || eventType.equals("12")){
            // commentFragment = new CommentFragment(elementId);
             Bundle bundle = new Bundle();
             bundle.putString("postId", elementId);

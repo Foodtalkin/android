@@ -37,6 +37,7 @@
                 android:textColor="@color/com_facebook_messenger_blue"
                 android:textSize="16sp"
                 android:clickable="false"
+                android:visibility="gone"
                 android:layout_marginRight="5dp"
                 />
 
