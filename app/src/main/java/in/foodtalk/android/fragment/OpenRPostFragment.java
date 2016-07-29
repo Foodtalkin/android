@@ -295,6 +295,8 @@ public class OpenRPostFragment extends Fragment implements View.OnTouchListener 
             current.likeCount = postArray.getJSONObject(i).getString("likeCount");
             current.bookmarkCount = postArray.getJSONObject(i).getString("bookmarkCount");
             current.commentCount = postArray.getJSONObject(i).getString("commentCount");
+
+            Log.d("commentCount from f", current.commentCount+"");
             //current.userThumb = postArray.getJSONObject(i).getString("userThumb");
             current.userImage = postArray.getJSONObject(i).getString("userImage");
             current.postImage = postArray.getJSONObject(i).getString("postImage");

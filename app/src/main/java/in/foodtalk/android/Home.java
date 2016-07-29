@@ -1346,13 +1346,28 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     public void openComment(String postId) {
         Log.d("callback open comment", postId);
 
-
-       // commentFragment = new CommentFragment(postId);
-        Bundle bundle = new Bundle();
-        bundle.putString("postId", postId);
-        commentFragment = new CommentFragment();
-        commentFragment.setArguments(bundle);
-        setFragmentView(commentFragment, R.id.container1, -1, true);
+        currentFragment = this.getFragmentManager().findFragmentById(R.id.container1);
+        if(currentFragment == openRPostFragment){
+            getFragmentManager().beginTransaction().remove(openRPostFragment).commit();
+            Bundle bundle = new Bundle();
+            bundle.putString("postId", postId);
+            commentFragment = new CommentFragment();
+            commentFragment.setArguments(bundle);
+            setFragmentView(commentFragment, R.id.container1, -1, true);
+        }else if(currentFragment == openPostFragment) {
+            getFragmentManager().beginTransaction().remove(openPostFragment).commit();
+            Bundle bundle = new Bundle();
+            bundle.putString("postId", postId);
+            commentFragment = new CommentFragment();
+            commentFragment.setArguments(bundle);
+            setFragmentView(commentFragment, R.id.container1, -1, true);
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putString("postId", postId);
+            commentFragment = new CommentFragment();
+            commentFragment.setArguments(bundle);
+            setFragmentView(commentFragment, R.id.container1, -1, true);
+        }
     }
 
     @Override

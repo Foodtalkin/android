@@ -22,6 +22,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.communicator.CommentCallback;
 import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.communicator.PostOptionCallback;
@@ -47,11 +48,13 @@ public class OpenPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
     HeadSpannable headSpannable;
+    CommentCallback commentCallback;
 
     public OpenPostAdapter(Context context, List<UserPostObj> postObj, PostLikeCallback postLikeCallback){
         layoutInflater = LayoutInflater.from(context);
         this.postObj = postObj;
         this.context = context;
+        commentCallback = (CommentCallback) context;
         //Log.d("from adapter function", postObj.get(0).dishName);
        // Log.d("from adapter function", postObj.get(1).dishName);
 
@@ -97,7 +100,7 @@ public class OpenPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             //postHolder.txtTime.setText("4d");
             postHolder.txtCountLike.setText(current.likeCount);
             postHolder.txtCountBookmark.setText(current.bookmarkCount);
-//            postHolder.txtCountComment.setText(current.commentCount);
+            postHolder.txtCountComment.setText(current.commentCount);
 
             if (current.restaurantDistance != null){
                 double distance = Double.parseDouble(current.restaurantDistance);
@@ -269,7 +272,7 @@ public class OpenPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         //String postId;
         UserPostObj postObj1;
 
-        LinearLayout iconLike, iconBookmark, iconOption;
+        LinearLayout iconLike, iconBookmark, iconOption, iconComment;
 
         public PostHolder(final View itemView) {
             super(itemView);
@@ -301,13 +304,14 @@ public class OpenPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             iconLike = (LinearLayout) itemView.findViewById(R.id.icon_like_holder);
             iconBookmark = (LinearLayout) itemView.findViewById(R.id.icon_bookmark_holder);
             iconOption = (LinearLayout) itemView.findViewById(R.id.icon_option_holder);
-
+            iconComment = (LinearLayout) itemView.findViewById(R.id.icon_comment_holder);
 
 
             dishImage.setOnTouchListener(this);
             iconLike.setOnTouchListener(this);
             iconBookmark.setOnTouchListener(this);
             iconOption.setOnTouchListener(this);
+            iconComment.setOnTouchListener(this);
 
 
 
@@ -469,6 +473,14 @@ public class OpenPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
                 }
                 break;
+                case R.id.icon_comment_holder:{
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("clicked", "comment icon");
+                            commentCallback.openComment(postObj1.id);
+                            break;
+                    }
+                }
             }
             return true;
         }

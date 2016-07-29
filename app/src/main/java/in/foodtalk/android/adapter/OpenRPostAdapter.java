@@ -22,6 +22,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.communicator.CommentCallback;
 import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.communicator.PostOptionCallback;
@@ -47,10 +48,13 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
 
+    CommentCallback commentCallback;
+
     public OpenRPostAdapter(Context context, List<RestaurantPostObj> postObj, PostLikeCallback postLikeCallback){
         layoutInflater = LayoutInflater.from(context);
         this.postObj = postObj;
         this.context = context;
+        commentCallback = (CommentCallback) context;
         //Log.d("from adapter function", postObj.get(0).dishName);
        // Log.d("from adapter function", postObj.get(1).dishName);
 
@@ -88,7 +92,8 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             //postHolder.txtTime.setText("4d");
             postHolder.txtCountLike.setText(current.likeCount);
             postHolder.txtCountBookmark.setText(current.bookmarkCount);
-//            postHolder.txtCountComment.setText(current.commentCount);
+            Log.d("commentCount", current.commentCount+"");
+            postHolder.txtCountComment.setText(current.commentCount);
 
             /*if (current.restaurantDistance != null){
                 double distance = Double.parseDouble(current.restaurantDistance);
@@ -260,7 +265,7 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         //String postId;
         RestaurantPostObj postObj1;
 
-        LinearLayout iconLike, iconBookmark, iconOption;
+        LinearLayout iconLike, iconBookmark, iconOption, iconComment;
 
         public PostHolder(final View itemView) {
             super(itemView);
@@ -274,6 +279,7 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             likeIconImg = (ImageView) itemView.findViewById(R.id.icon_heart_img);
             bookmarImg = (ImageView) itemView.findViewById(R.id.img_icon_bookmark);
             txtKm = (TextView) itemView.findViewById(R.id.txt_km);
+            iconComment = (LinearLayout) itemView.findViewById(R.id.icon_comment_holder);
 
             cardHolder = (LinearLayout) itemView.findViewById(R.id.card_contaner);
 
@@ -299,6 +305,8 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             iconLike.setOnTouchListener(this);
             iconBookmark.setOnTouchListener(this);
             iconOption.setOnTouchListener(this);
+            iconComment.setOnTouchListener(this);
+
 
 
 
@@ -460,6 +468,16 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     }
                 }
                 break;
+                case R.id.icon_comment_holder:{
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("clicked","icon comment");
+                            commentCallback.openComment(postObj1.id);
+                            break;
+                    }
+                }
+
+
             }
             return true;
         }

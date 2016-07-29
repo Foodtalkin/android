@@ -215,6 +215,7 @@ public class RestaurantProfileFragment extends Fragment {
             current.restaurantName = postArray.getJSONObject(i).getString("restaurantName");
             current.followersCount = postArray.getJSONObject(i).getString("followersCount");
             current.likeCount = postArray.getJSONObject(i).getString("likeCount");
+            current.commentCount = postArray.getJSONObject(i).getString("commentCount");
             current.flagCount = postArray.getJSONObject(i).getString("flagCount");
             current.bookmarkCount = postArray.getJSONObject(i).getString("bookmarkCount");
             current.iLikedIt = postArray.getJSONObject(i).getString("iLikedIt");
