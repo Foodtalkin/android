@@ -425,6 +425,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                     pageNo = 0;
 
                    // getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }else {
+                    homeFragment.scrollToTop();
                 }
                /* if (pageNo != 0) {
                     setFragmentView(homeFragment, R.id.container, 0, false);
@@ -502,7 +504,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         String backStateName = newFragment.getClass().getName();
 
         FlurryAgent.logEvent(newFragment.getClass().getSimpleName());
-
 
         if (newFragment == userProfile){
             subTitleHome.setText("");
@@ -1406,7 +1407,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
     @Override
     public void notiClicked(String eventType, String raiserId, String raiserThumb, String eventDate, String elementId) {
-        if(eventType.equals("2") || eventType.equals("4") || eventType.equals("9") || eventType.equals("12")){
+        if(eventType.equals("2") || eventType.equals("4") || eventType.equals("9") || eventType.equals("12") || eventType.equals("11")){
            // commentFragment = new CommentFragment(elementId);
             Bundle bundle = new Bundle();
             bundle.putString("postId", elementId);

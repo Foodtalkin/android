@@ -3,6 +3,30 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="@color/bg_color">
 
+    <TextView
+        android:id="@+id/txt_msg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="No one cares :("
+        android:gravity="center"
+        android:visibility="gone"
+        android:textColor="@color/blackText1"/>
+    <LinearLayout
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_centerInParent="true">
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminateTint="#fff"
+            android:progressDrawable="@drawable/progress_bar"
+            />
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_notifications"
         android:scrollbars="none"

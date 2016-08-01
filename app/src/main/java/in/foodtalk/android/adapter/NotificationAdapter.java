@@ -55,13 +55,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         notiHolder.eventDate = current.eventDate;
         String msg = current.message.replace(current.raiserName,"");
         notiHolder.txtMsg.setText(Html.fromHtml("<font color='#1d6bd5'>"+current.raiserName+"</font>"+msg));
-        if (current.eventType == "2" || current.eventType == "4" || current.eventType == "9"){
 
-        }
         switch (current.eventType){
             case "2":
                 notiHolder.notificationIcon.setImageResource(R.drawable.like_icon_noti);
                 break;
+            case "12":
             case "4":
                 notiHolder.notificationIcon.setImageResource(R.drawable.commen_icon_noti);
                 break;
@@ -70,6 +69,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 break;
             case "9":
                 notiHolder.notificationIcon.setImageResource(R.drawable.mentions_icon_noti);
+                break;
+            case "11":
+                notiHolder.notificationIcon.setImageResource(R.drawable.more_fav);
                 break;
         }
 

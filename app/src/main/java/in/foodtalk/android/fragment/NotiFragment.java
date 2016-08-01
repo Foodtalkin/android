@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -47,6 +49,10 @@ public class NotiFragment extends Fragment {
 
     List<NotificationObj> notiList = new ArrayList<>();
 
+    LinearLayout progressBar;
+
+    TextView txtMsg;
+
     Context context;
 
     @Override
@@ -54,6 +60,9 @@ public class NotiFragment extends Fragment {
         layout = inflater.inflate(R.layout.noti_fragment, container, false);
         config = new Config();
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_notifications);
+
+        txtMsg = (TextView) layout.findViewById(R.id.txt_msg);
+        progressBar = (LinearLayout) layout.findViewById(R.id.progress_bar);
 
         linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -143,8 +152,12 @@ public class NotiFragment extends Fragment {
     }
     private void loadDataIntoView(JSONObject response , String tag) throws JSONException {
         JSONArray notiArray = response.getJSONArray("notifications");
+        progressBar.setVisibility(View.GONE);
         if (notiList.size()>0){
             notiList.clear();
+            txtMsg.setVisibility(View.GONE);
+        }else {
+            txtMsg.setVisibility(View.VISIBLE);
         }
         for (int i=0;i<notiArray.length();i++){
             NotificationObj current = new NotificationObj();

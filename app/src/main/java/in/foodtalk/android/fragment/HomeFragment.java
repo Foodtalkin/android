@@ -413,7 +413,7 @@ public class HomeFragment extends Fragment {
         toast.show();
     }
 
-   public NewPostCallback newPostCallback = new NewPostCallback() {
+    public NewPostCallback newPostCallback = new NewPostCallback() {
        @Override
        public void onPostCreated(String status) {
             Log.d("onPostCreated", status);
@@ -425,5 +425,9 @@ public class HomeFragment extends Fragment {
                e.printStackTrace();
            }
        }
-   };
+    };
+    public void scrollToTop(){
+        Log.d("scroll position", recyclerView.getScrollY()+"");
+        recyclerView.smoothScrollToPosition(0);
+    }
 }
