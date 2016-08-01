@@ -38,6 +38,11 @@ import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.flurry.android.FlurryAgent;
+import com.flurry.android.FlurryAgentListener;
+import com.flurry.android.FlurryEventRecordStatus;
+import com.flurry.android.FlurryInstallReceiver;
+import com.flurry.android.FlurrySyndicationEventName;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -89,11 +94,6 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
 
     private PagerAdapter mPagerAdapter;
 
-
-
-
-
-
     //--location provider vars----------
     Location mLastLocation;
     private GoogleApiClient mGoogleApiClient;
@@ -142,7 +142,6 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         vpNav4 = (View)findViewById(R.id.c4);
 
 
-
         // btnSelectCity.setOnClickListener(this);
        /* btnSelectCity.setOnClickListener(new OnClickListener() {
             @Override
@@ -162,8 +161,6 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         initialisePaging();
 
         getkey();
-
-
         //btnPost = (Button) findViewById(R.id.btn_post);
         //btnPost.setOnClickListener(this);
 
@@ -183,7 +180,6 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
 
         buildGoogleApiClient();
         FacebookSdk.sdkInitialize(getApplicationContext());
-
 
         callbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
@@ -334,7 +330,6 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                             loginInfo.signInType = "F";
                             loginInfo.deviceToken = "548698784";
                             loginInfo.image = "https://graph.facebook.com/" + id + "/picture?type=large";
-
                             // Login login = new Login(getApplicationContext());
                             postLoginInfo(loginInfo, "login");
                         } catch (JSONException e) {
@@ -364,7 +359,6 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                 if (isSuccess && response.getError()==null){
                     // Application deleted from Facebook account
                 }*/
-
             }
         }).executeAsync();
     }
@@ -448,7 +442,7 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         Log.d("check version", "v" + currentapiVersion);
         if (currentapiVersion >= 23) {
             Log.d("check version", "Marshmallow");
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
             // Do something for lollipop and above versions
         } else {
@@ -492,7 +486,6 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                         //  10, this);
                     }
                 } else {
-
                     Log.d("permission result","denied permission");
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
@@ -540,10 +533,6 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         //txtOutputLat.setText(lat);
         //txtOutputLon.setText(lon);
     }
-
-
-
-
     //----------------post to api------------------------------
     public void postLoginInfo(final LoginInfo loginInfo, String tag) throws JSONException {
         //showProgressDialog();
@@ -603,8 +592,7 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                                 region = "";
                             }
 
-
-
+                            FlurryAgent.setUserId(userName);
 
 
                             String str = "android,ios,web,desktop";
@@ -775,5 +763,4 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
             Log.e("exception", e.toString());
         }
     }
-
 }

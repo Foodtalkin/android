@@ -20,6 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.flurry.android.FlurryAgent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -337,6 +338,7 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
     @Override
     public void location(String lat, String lon) {
         //Log.d("location",lat+" : "+lon);
+        FlurryAgent.setLocation((float)Double.parseDouble(lat), (float)Double.parseDouble(lon));
         this.lat = lat;
         this.lon = lon;
         try {

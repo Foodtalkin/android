@@ -33,6 +33,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationCallback;
@@ -519,6 +520,8 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         //Log.d("location", "lat: "+ lat+" lon: "+lon);
         Log.d("GPS location","Latitude "+lat);
         Log.d("GPS location","Longitude "+lon);
+
+        FlurryAgent.setLocation((float)Double.parseDouble(lat), (float)Double.parseDouble(lon));
         this.lat = lat;
         this.lon = lon;
         try {

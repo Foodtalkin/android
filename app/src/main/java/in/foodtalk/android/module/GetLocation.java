@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -17,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.TextView;
+
 
 
 import com.google.android.gms.common.ConnectionResult;
@@ -74,7 +76,6 @@ public class GetLocation  implements GoogleApiClient.ConnectionCallbacks,
             buildAlertMessageNoGps();
             Log.d("locaton manager", "please on gps");
         }
-
     }
     public void onStop(){
         mGoogleApiClient.disconnect();
@@ -102,11 +103,11 @@ public class GetLocation  implements GoogleApiClient.ConnectionCallbacks,
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mLastLocation != null) {
+
             lat = String.valueOf(mLastLocation.getLatitude());
             lon = String.valueOf(mLastLocation.getLongitude());
             updateUI();
         }
-
     }
 
     @Override
@@ -143,7 +144,7 @@ public class GetLocation  implements GoogleApiClient.ConnectionCallbacks,
         Log.d("check version", "v" + currentapiVersion);
         if (currentapiVersion >= 23) {
             Log.d("check version", "Marshmallow");
-           ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+           //ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
             // Do something for lollipop and above versions
         } else {
@@ -168,6 +169,9 @@ public class GetLocation  implements GoogleApiClient.ConnectionCallbacks,
 
 
         latLonCallback.location(lat,lon);
+
+
+
         //txtOutputLat.setText(lat);
         //txtOutputLon.setText(lon);
     }
@@ -187,7 +191,6 @@ public class GetLocation  implements GoogleApiClient.ConnectionCallbacks,
                 });
         final AlertDialog alert = builder.create();
         alert.show();
-
     }
 }
 
