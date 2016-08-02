@@ -97,7 +97,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Restaurant Name"
-                        android:background="@drawable/round_bg_white"/>
+                        android:maxLines="1"
+                        android:background="@drawable/round_bg_white"
+                        android:digits="@string/alphanumberspace1"
+                        android:maxLength="64"
+                        />
 
                 </LinearLayout>
                 <LinearLayout
@@ -142,7 +146,8 @@
                         android:layout_height="wrap_content"
                         android:hint="Address or Area"
                         android:background="@drawable/round_bg_white"
-                        android:padding="6dp"/>
+                        android:padding="6dp"
+                        android:maxLines="1"/>
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/btn_city_add_restaurant"

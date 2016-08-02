@@ -18,6 +18,8 @@
 
     <string name="connection_error">Check your internet connection</string>
     <string name="alphanumber">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.</string>
+    <string name="alphanumberspace">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_ .</string>
+    <string name="alphanumberspace1">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_ .\'</string>
     <string name="user_name_taken">This user name is already taken!</string>
     <string name="user_name_alphabet">Username cannot be only numbers</string>
     <string name="email_validation">Please enter valid email.</string>

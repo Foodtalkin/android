@@ -120,5 +120,7 @@ android:background="@color/bg_color"
         android:backgroundTint="@color/bg_color"
         android:focusableInTouchMode="true"
         android:singleLine="true"
-        android:maxLength="32"/>
+        android:maxLength="32"
+        android:digits="@string/alphanumberspace"
+        />
 </RelativeLayout>

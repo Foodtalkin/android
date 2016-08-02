@@ -124,9 +124,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
-            android:background="#10151f">
+            android:background="#10151f"
+            android:paddingTop="1dp">
             <LinearLayout
                 android:id="@+id/btn_home"
                 android:layout_width="wrap_content"
