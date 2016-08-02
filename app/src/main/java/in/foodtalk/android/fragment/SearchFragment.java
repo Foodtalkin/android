@@ -67,6 +67,8 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
         searchViewPager = (ViewPager) layout.findViewById(R.id.search_pager);
 
+        searchViewPager.setOffscreenPageLimit(2);
+
         adapter = new Pager(fm, searchTabLayout.getTabCount());
         //adapter = new Pager(fm, 1);
         //Adding adapter to pager
@@ -171,6 +173,19 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         //searchTabLayout.setCurrentTab(position);
         Log.d("onPageSeleted", position+"");
         tabSeleted = position;
+        if (!txtSearch.equals("")){
+            switch (tabSeleted){
+                case 0:
+                    searchCallback1.searchKey(txtSearch.getText().toString(),"dish");
+                    break;
+                case 1:
+                    searchCallback2.searchKey(txtSearch.getText().toString(),"user");
+                    break;
+                case 2:
+                    searchCallback3.searchKey(txtSearch.getText().toString(),"restaurant");
+                    break;
+            }
+        }
         searchTabLayout.setScrollPosition(position,0f,true);
         setCallbackRef(position);
     }

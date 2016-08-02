@@ -365,7 +365,6 @@ public class HomeFragment extends Fragment {
            // homeFeedAdapter.notifyDataSetChanged();
             //homeFeedAdapter.notifyItemInserted(postData.size());
         }
-
         //homeFeedAdapter.notifyDataSetChanged();
     }
     public void remove(ContactsContract.Contacts.Data data) {
@@ -393,7 +392,6 @@ public class HomeFragment extends Fragment {
                     }
                 }
             }
-
             @Override
             public void onScrolled1(int dx, int dy, int firstVisibleItem, int lastVisibleItem) {
 

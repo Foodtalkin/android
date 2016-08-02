@@ -110,6 +110,7 @@ public class SearchResult extends Fragment implements SearchCallback {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
        // mPageNumber = getArguments().getInt(ARG_PAGE);
         //Log.d("onCreate tab", getArguments().getInt(ARG_PAGE)+"");
     }
@@ -214,14 +215,13 @@ public class SearchResult extends Fragment implements SearchCallback {
     @Override
     public void searchKey(String keyword, String searchType) {
         this.keyword = keyword;
+        Log.d("searchKey", keyword+" "+ searchType);
         if (keyword.length()<2 && searchResultLoaded == true){
             searchAdapter.notifyDataSetChanged();
 
             searchResultLoaded = false;
             searchResultList.clear();
             iconHolder.setVisibility(View.VISIBLE);
-
-
         }
 
         //AppController.getInstance().cancelPendingRequests(TAG);
@@ -327,7 +327,7 @@ public class SearchResult extends Fragment implements SearchCallback {
                 return headers;
             }
         };
-        final int DEFAULT_TIMEOUT = 6000;
+        final int DEFAULT_TIMEOUT = 12000;
         // Adding request to request queue
         jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         AppController.getInstance().addToRequestQueue(jsonObjReq,"gethomefeed");
