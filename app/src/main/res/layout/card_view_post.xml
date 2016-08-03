@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools">
     <android.support.v7.widget.CardView
         android:id="@+id/post_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp">
+        app:elevation="0dp"
+        app:cardCornerRadius="0dp"
+        card_view:cardElevation="0dp"
+        card_view:cardPreventCornerOverlap="false"
+        >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -45,7 +49,6 @@
                     android:textColor="@color/colorText1"
                     android:layout_gravity="center_vertical"
                     />
-
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/post_center"
@@ -60,6 +63,7 @@
                         android:id="@+id/dish_img"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:scaleType="fitXY"
                         android:src="@drawable/placeholder"
                         />
                     <ImageView
@@ -143,7 +147,6 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/margin_txt_icon_card"
                         />
-
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/icon_bookmark_holder"
@@ -208,6 +211,13 @@
                         android:clickable="false"/>
                 </LinearLayout>
             </LinearLayout>
+            <View
+                android:id="@+id/comment_line"
+                android:layout_width="match_parent"
+                android:layout_height="0.33dp"
+                android:layout_above="@+id/comment_send_holder"
+                android:alpha=".4"
+                android:background="#000"/>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </RelativeLayout>

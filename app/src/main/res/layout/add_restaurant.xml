@@ -124,9 +124,6 @@
                         android:id="@+id/switch_add_restaurant"
                         android:checked="false" />
                 </LinearLayout>
-
-
-
                 <LinearLayout
                     android:id="@+id/location_add_restaurant"
                     android:layout_width="match_parent"

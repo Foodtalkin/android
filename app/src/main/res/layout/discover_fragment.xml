@@ -7,8 +7,19 @@
             android:scrollbars="none"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            />
+
+        <ImageView
+            android:id="@+id/arrow_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_keyboard_arrow_right_black_48dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:alpha=".7"
+            android:visibility="gone"
+            android:background="#ffffff"
+
             />
         <LinearLayout
             android:id="@+id/progress_bar"

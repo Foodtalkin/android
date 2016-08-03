@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -111,6 +112,8 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
     private static final int DISH_RESULT = 1;
     public String dishName;
 
+    ImageView arrowIndicator;
+
 
 
     @Override
@@ -121,7 +124,11 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         progressBar = (LinearLayout) layout.findViewById(R.id.progress_bar);
         recyclerView.setOnTouchListener(this);
 
+        arrowIndicator = (ImageView) layout.findViewById(R.id.arrow_indicator);
+
         tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
+
+        //arrowIndicator.setVisibility(View.GONE);
 
 
         //--swipeRefreshHome = (SwipeRefreshLayout) layout.findViewById(R.id.swipeRefreshHome);
@@ -354,6 +361,8 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
     }
     private void loadDataIntoView(JSONObject response , String tag) throws JSONException {
 
+        arrowIndicator.setVisibility(View.VISIBLE);
+
         progressBar.setVisibility(View.GONE);
 
         //--swipeRefreshHome.setRefreshing(false);
@@ -460,6 +469,7 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
             }
             @Override
             public void onScrolled1(int dx, int dy, int firstVisibleItem, int lastVisibleItem) {
+                arrowIndicator.setVisibility(View.GONE);
                 dx1 = dx;
                 firstVItem = firstVisibleItem;
                 lastVItem = lastVisibleItem;
@@ -533,5 +543,7 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
             e.printStackTrace();
         }
     }
+
+
 
 }

@@ -96,7 +96,6 @@ public class HomeFragment extends Fragment {
 
         tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
 
-
         homeProgress = (ProgressBar) layout.findViewById(R.id.home_progress);
 
         if(postData != null){
