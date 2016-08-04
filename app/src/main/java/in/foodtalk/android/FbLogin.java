@@ -74,6 +74,7 @@ import in.foodtalk.android.fragment.intro.ShareIntro;
 import in.foodtalk.android.helper.ParseUtils;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.Login;
+import in.foodtalk.android.module.UserAgent;
 import in.foodtalk.android.object.LoginInfo;
 import in.foodtalk.android.object.LoginValue;
 
@@ -658,6 +659,10 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
+                UserAgent userAgent = new UserAgent();
+                if (userAgent.getUserAgent(getApplicationContext()) != null ){
+                    headers.put("User-agent", userAgent.getUserAgent(getApplicationContext()));
+                }
                 return headers;
             }
         };

@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:text="Aloo Parantha"
                 android:textSize="18dp"
-                android:textColor="#fff"/>
+                android:textColor="#000000"/>
             <TextView
                 android:id="@+id/txt_sub_result"
                 android:layout_width="wrap_content"

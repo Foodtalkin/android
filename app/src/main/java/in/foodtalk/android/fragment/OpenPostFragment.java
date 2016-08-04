@@ -47,6 +47,7 @@ import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.EndlessRecyclerOnScrollListener;
 import in.foodtalk.android.module.GetLocation;
+import in.foodtalk.android.module.UserAgent;
 import in.foodtalk.android.object.PostObj;
 import in.foodtalk.android.object.UserPostObj;
 
@@ -256,6 +257,10 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
+                UserAgent userAgent = new UserAgent();
+                if (userAgent.getUserAgent(getActivity()) != null ){
+                    headers.put("User-agent", userAgent.getUserAgent(getActivity()));
+                }
                 return headers;
             }
         };

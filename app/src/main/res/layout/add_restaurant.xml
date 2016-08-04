@@ -77,7 +77,7 @@
                     android:layout_height="wrap_content"
                     android:text="Thanks you for the update, \n We are always hungry for more"
                     android:textAlignment="center"
-                    android:textColor="#fff"
+                    android:textColor="#000"
                     android:gravity="center_horizontal"/>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -86,7 +86,7 @@
                     android:layout_marginTop="20dp"
                     >
                     <TextView
-                        android:textColor="#fff"
+                        android:textColor="#000"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Restaurant Name"/>
@@ -101,6 +101,7 @@
                         android:background="@drawable/round_bg_white"
                         android:digits="@string/alphanumberspace1"
                         android:maxLength="64"
+
                         />
 
                 </LinearLayout>
@@ -113,7 +114,7 @@
                     android:padding="6dp"
                     >
                     <TextView
-                        android:textColor="#fff"
+                        android:textColor="#000"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="I'm here at the moment"/>
@@ -131,7 +132,7 @@
                     android:orientation="vertical"
                     >
                     <TextView
-                        android:textColor="#fff"
+                        android:textColor="#000"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Address or Area"
@@ -155,7 +156,7 @@
                     <TextView
                         android:id="@+id/txt_city_add_restaurant"
                         android:padding="6dp"
-                        android:textColor="#fff"
+                        android:textColor="#000"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Delhi"
@@ -165,7 +166,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
-                        android:tint="#fff"
+                        android:tint="#000"
                         android:layout_gravity="center_vertical"
                         android:layout_marginTop="1dp"
                         />
@@ -180,10 +181,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="0.33dp"
                         android:alpha=".5"
-                        android:background="#fff"
+                        android:background="#000"
                         android:layout_below="@+id/btn_restaurant_checkin"/>
                     <TextView
-                        android:textColor="#fff"
+                        android:textColor="#000"
                         android:layout_marginTop="8dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

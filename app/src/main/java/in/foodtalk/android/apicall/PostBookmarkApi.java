@@ -18,6 +18,7 @@ import java.util.Map;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.module.DatabaseHandler;
+import in.foodtalk.android.module.UserAgent;
 
 /**
  * Created by RetailAdmin on 27-04-2016.
@@ -88,6 +89,10 @@ public class PostBookmarkApi {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
+                UserAgent userAgent = new UserAgent();
+                if (userAgent.getUserAgent(context) != null ){
+                    headers.put("User-agent", userAgent.getUserAgent(context));
+                }
                 return headers;
             }
         };

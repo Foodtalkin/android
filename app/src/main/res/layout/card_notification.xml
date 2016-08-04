@@ -34,7 +34,7 @@
                     android:layout_height="wrap_content"
                     android:text="MANDY"
 
-                    android:textColor="#fff"
+                    android:textColor="#000000"
                     android:textSize="@dimen/txt_size_more"
                     android:clickable="false"/>
             </LinearLayout>

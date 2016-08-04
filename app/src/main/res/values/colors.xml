@@ -12,7 +12,8 @@
 
     <color name="icon_txt_active">#fff</color>
     <color name="icon_txt">#939393</color>
-    <color name="bg_color">#141d2d</color>
+    <color name="bg_color_old">#141d2d</color>
+    <color name="bg_color">#ffffff</color>
     <color name="bg_header">#10151f</color>
     <color name="subtitle_color">#04d1cd</color>
     <color name="card_head_highlight">#0369db</color>

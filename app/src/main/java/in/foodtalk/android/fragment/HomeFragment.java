@@ -49,6 +49,7 @@ import in.foodtalk.android.communicator.NewPostCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.EndlessRecyclerOnScrollListener;
+import in.foodtalk.android.module.UserAgent;
 import in.foodtalk.android.object.PostObj;
 
 /**
@@ -276,6 +277,10 @@ public class HomeFragment extends Fragment {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
+                UserAgent userAgent = new UserAgent();
+                if (userAgent.getUserAgent(getActivity()) != null ){
+                    headers.put("User-agent", userAgent.getUserAgent(getActivity()));
+                }
                 return headers;
             }
         };

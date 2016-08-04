@@ -59,6 +59,7 @@ import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.EndlessRecyclerOnScrollListener;
 import in.foodtalk.android.module.GetLocation;
+import in.foodtalk.android.module.UserAgent;
 import in.foodtalk.android.object.PostObj;
 
 /**
@@ -175,6 +176,8 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         });*/
         return layout;
     }
+
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         //recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
@@ -210,6 +213,10 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
     @Override
     public void onResume() {
         super.onResume();
+
+        recyclerView.scrollToPosition(0);
+        //arrowIndicator.setVisibility(View.VISIBLE);
+        Log.d("DiscoverFragment", "onResume");
        /* latLonCallback = this;
         getLocation = new GetLocation(activity, latLonCallback);
 
@@ -350,6 +357,10 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
+                UserAgent userAgent = new UserAgent();
+                if (userAgent.getUserAgent(getActivity()) != null ){
+                    headers.put("User-agent", userAgent.getUserAgent(getActivity()));
+                }
                 return headers;
             }
         };

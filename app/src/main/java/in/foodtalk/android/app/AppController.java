@@ -61,6 +61,8 @@ public class AppController extends Application {
 
     public String deviceToken;
 
+    public String versionName;
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -82,6 +84,14 @@ public class AppController extends Application {
         /*Parse.initialize(this, getString(R.string.parseAppID), getString(R.string.parseClientID));
         ParseUser.enableAutomaticUser();
         PushService.setDefaultPushCallback(this, Home.class);*/
+
+        try {
+            PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            versionName = "Android-"+pinfo.versionName;
+            Log.d("virson name", versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
         parseUtils.registerParse(this);
 

@@ -19,7 +19,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Push Notifications"
-                android:textColor="#fff"
+                android:textColor="#000"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="12dp"
                 android:textSize="@dimen/txt_size_more"/>
@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Contact us"
-                android:textColor="#fff"
+                android:textColor="#000"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="12dp"
                 android:textSize="@dimen/txt_size_more"/>
@@ -62,18 +62,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-
             android:paddingTop="@dimen/paddint_top_bottom_options"
             android:paddingBottom="@dimen/paddint_top_bottom_options"
             >
-
-
             <TextView
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Logout"
-                android:textColor="#fff"
+                android:textColor="#000"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="12dp"
                 android:textSize="@dimen/txt_size_more"/>
