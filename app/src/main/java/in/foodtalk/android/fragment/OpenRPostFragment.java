@@ -309,6 +309,7 @@ public class OpenRPostFragment extends Fragment implements View.OnTouchListener 
             current.iLikedIt = postArray.getJSONObject(i).getString("iLikedIt");
             current.iBookark = postArray.getJSONObject(i).getString("iBookark");
             current.rating = postArray.getJSONObject(i).getString("rating");
+            current.restaurantIsActive = postArray.getJSONObject(i).getString("restaurantIsActive");
             //current.restaurantDistance = postArray.getJSONObject(i).getString("restaurantDistance");
             // postData.clear();
             postData.add(current);

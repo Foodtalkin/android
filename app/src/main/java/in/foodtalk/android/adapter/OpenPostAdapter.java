@@ -120,7 +120,7 @@ public class OpenPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             //postHolder.txtKm.setText(Double.valueOf(current.restaurantDistance)/1000+" KM");
 
-            //--setStarRating(current.rating, postHolder);
+            setStarRating(current.rating, postHolder);
             //postHolder.postId = current.id;
             postHolder.postObj1 = current;
 

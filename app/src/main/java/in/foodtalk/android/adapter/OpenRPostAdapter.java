@@ -26,6 +26,7 @@ import in.foodtalk.android.communicator.CommentCallback;
 import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.communicator.PostOptionCallback;
+import in.foodtalk.android.module.HeadSpannable;
 import in.foodtalk.android.object.PostObj;
 import in.foodtalk.android.object.RestaurantPostObj;
 import in.foodtalk.android.object.UserPostObj;
@@ -50,6 +51,8 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     CommentCallback commentCallback;
 
+    HeadSpannable headSpannable;
+
     public OpenRPostAdapter(Context context, List<RestaurantPostObj> postObj, PostLikeCallback postLikeCallback){
         layoutInflater = LayoutInflater.from(context);
         this.postObj = postObj;
@@ -61,6 +64,8 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         likeCallback = (PostLikeCallback) context;
         bookmarkCallback = (PostBookmarkCallback) context;
         optionCallback = (PostOptionCallback) context;
+
+        headSpannable = new HeadSpannable(context);
         //likeCallback = postLikeCallback;
 
     }
@@ -88,7 +93,13 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             PostHolder postHolder = (PostHolder) holder;
             //postHolder.txtHeadLine.setText(current.userName+" is having "+current.dishName+" at "+current.restaurantName);
             String htmlHeadline = "<font color='#0369db'>"+current.userName+"</font> <font color='#1a1a1a'>is having </font><font color='#0369db'> "+current.dishName+"</font><font color='#1a1a1a'> at </font><font color='#369db'>"+current.restaurantName+"</font><font color='#1a1a1a'>.</font>";
-            postHolder.txtHeadLine.setText(Html.fromHtml(htmlHeadline));
+
+            if (current.restaurantIsActive.equals("1")) {
+                headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, true, "RestaurantProfile");
+            }else {
+                headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, false, "RestaurantProfile");
+            }
+            //postHolder.txtHeadLine.setText(Html.fromHtml(htmlHeadline));
             //postHolder.txtTime.setText("4d");
             postHolder.txtCountLike.setText(current.likeCount);
             postHolder.txtCountBookmark.setText(current.bookmarkCount);

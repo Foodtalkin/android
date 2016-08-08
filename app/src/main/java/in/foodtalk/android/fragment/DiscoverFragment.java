@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -115,6 +116,8 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
 
     ImageView arrowIndicator;
 
+    TextView errorTxt;
+
 
 
     @Override
@@ -126,6 +129,8 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         recyclerView.setOnTouchListener(this);
 
         arrowIndicator = (ImageView) layout.findViewById(R.id.arrow_indicator);
+
+        errorTxt = (TextView) layout.findViewById(R.id.txt_error);
 
         tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
 
@@ -372,7 +377,7 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
     }
     private void loadDataIntoView(JSONObject response , String tag) throws JSONException {
 
-        arrowIndicator.setVisibility(View.VISIBLE);
+
 
         progressBar.setVisibility(View.GONE);
 
@@ -382,6 +387,15 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         //JSONObject postObject = postArray.getJSONObject(0);
         //String userName = postObject.getString("userName");
         //Log.d("user name from post", userName);
+        if (tag.equals("load")){
+            if (postArray.length() == 0){
+                errorTxt.setVisibility(View.VISIBLE);
+            }else {
+                errorTxt.setVisibility(View.GONE);
+                arrowIndicator.setVisibility(View.VISIBLE);
+            }
+        }
+
         Log.d("check list array", postData.size()+"");
         if (postData.size() > 0 && !tag.equals("loadMore")){
             postData.clear();

@@ -108,7 +108,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     private int[] imgR;
     private int[] imgRA;
     private LinearLayout btnLogout;
-
     LinearLayout progressBarUpload;
 
 
@@ -892,12 +891,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     public void postOpen(List<UserPostObj> postObj, String postId, String userId) {
         openPostFragment = new OpenPostFragment();
         openPostFragment.openPostFragment1(postObj, postId, userId);
-        setFragmentView (openPostFragment, R.id.container1, -1, true);
+        setFragmentView (openPostFragment, R.id.container, -1, true);
         Log.d("postOpen","userId: "+userId+" postId: "+postId);
     }
 
     @Override
     public void spannableTxt(String userId, String checkinRestaurantId, String dishName, int viewType, String requestFrom) {
+
         switch (viewType){
             case USER_PROFILE:
                 if(!requestFrom.equals("UserProfile")){
@@ -913,7 +913,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             case RESTAURANT_PROFILE:
 
                 if (requestFrom.equals("UserProfile")){
-                    getFragmentManager().beginTransaction().remove(openPostFragment).commit();
+                   // getFragmentManager().beginTransaction().remove(openPostFragment).commit();
                 }
                 if (requestFrom.equals("commentFragment")){
                     getFragmentManager().beginTransaction().remove(commentFragment).commit();
@@ -948,10 +948,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     public void rPostOpen(List<RestaurantPostObj> postObj, String postId, String restaurantId) {
         openRPostFragment = new OpenRPostFragment();
         openRPostFragment.openRPostFragment1(postObj, postId, restaurantId);
-        setFragmentView (openRPostFragment, R.id.container1, -1, true);
+        setFragmentView (openRPostFragment, R.id.container, -1, true);
         Log.d("postOpen","userId: "+userId+" postId: "+postId);
     }
-
     @Override
     public void phoneBtn(String phone1, String phone2) {
         Log.d("phone numbers", phone1+" : "+phone2);
@@ -1234,6 +1233,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             titleHome.setText("Home");
         }*/
 
+
+
         Log.e("setTitle",fragment.getClass().getName());
 
         if (fragment == discoverFragment){
@@ -1310,6 +1311,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         break;
         case "FavouritesFragment":*/
         //titleHome.setText("Favourites");
+        if(fragment == openPostFragment){
+            header.setVisibility(View.GONE);
+            Log.d("setTitle", "header gone");
+        }
     }
 
     static final int DISH_SEARCH = 0;

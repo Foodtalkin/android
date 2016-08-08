@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -84,6 +85,8 @@ public class UserProfile extends Fragment implements LatLonCallback {
     String userId;
     Button btnFollow;
 
+    LinearLayout progressBar;
+
 
 
     public void userProfile1 (String userId){
@@ -102,6 +105,8 @@ public class UserProfile extends Fragment implements LatLonCallback {
         }
         pageNo = 1;
         loading = false;
+
+        progressBar = (LinearLayout) layout.findViewById(R.id.progress_bar);
 
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
@@ -224,6 +229,8 @@ public class UserProfile extends Fragment implements LatLonCallback {
     }
 
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
+
+        progressBar.setVisibility(View.GONE);
 
         if (tag.equals("myProfile")){
             JSONObject profile = response.getJSONObject("profile");

@@ -31,6 +31,7 @@
     <!-- content for preloader copy -->
     <string name="discover_loader_copy">Finding the best dishes around you.</string>
     <string name="user_profile_copy">No dishes to show :(</string>
+    <string name="discover_no_dish">No dishes to show :(</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

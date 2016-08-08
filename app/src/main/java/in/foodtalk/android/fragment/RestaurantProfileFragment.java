@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -62,6 +63,8 @@ public class RestaurantProfileFragment extends Fragment {
     Boolean loading = false;
     Boolean loadMoreData = true;
 
+    LinearLayout progressBar;
+
     StaggeredGridLayoutManager staggeredGridLayoutManager;
     private int pageNo = 1;
 
@@ -75,6 +78,8 @@ public class RestaurantProfileFragment extends Fragment {
         layout = inflater.inflate(R.layout.restaurant_profile_fragment, container, false);
         restaurantId =  getArguments().getString("restaurantId");
         recyclerView = (RecyclerView) layout.findViewById(R.id.restaurant_profile_recycler_view);
+        progressBar = (LinearLayout) layout.findViewById(R.id.progress_bar);
+
         if (rPostList.size() > 0){
             rPostList.clear();
             loadMoreData = true;
@@ -165,6 +170,7 @@ public class RestaurantProfileFragment extends Fragment {
         AppController.getInstance().addToRequestQueue(jsonObjectRequest,"getUserProfile");
     }
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
+        progressBar.setVisibility(View.GONE);
         if (tag.equals("restaurantProfile")){
             JSONObject profile = response.getJSONObject("restaurantProfile");
             rProfile.restaurantName = profile.getString("restaurantName");
@@ -227,6 +233,7 @@ public class RestaurantProfileFragment extends Fragment {
             current.iFlaggedIt = postArray.getJSONObject(i).getString("iFlaggedIt");
             current.iBookark = postArray.getJSONObject(i).getString("iBookark");
             current.timeElapsed = postArray.getJSONObject(i).getString("timeElapsed");
+            current.restaurantIsActive = postArray.getJSONObject(i).getString("restaurantIsActive");
 
             rPostList.add(current);
         }
