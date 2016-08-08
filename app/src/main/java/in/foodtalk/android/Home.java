@@ -50,6 +50,7 @@ import in.foodtalk.android.communicator.CheckInCallback;
 import in.foodtalk.android.communicator.CloudinaryCallback;
 import in.foodtalk.android.communicator.CommentCallback;
 import in.foodtalk.android.communicator.DishTaggingCallback;
+import in.foodtalk.android.communicator.FavouritesCallback;
 import in.foodtalk.android.communicator.HeadSpannableCallback;
 import in.foodtalk.android.communicator.MoreBtnCallback;
 import in.foodtalk.android.communicator.NotificationCallback;
@@ -918,12 +919,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 if (requestFrom.equals("commentFragment")){
                     getFragmentManager().beginTransaction().remove(commentFragment).commit();
                 }
-                Bundle bundle1 = new Bundle();
-                bundle1.putString("restaurantId", checkinRestaurantId);
-                restaurantProfileFragment = new RestaurantProfileFragment();
-                restaurantProfileFragment.setArguments(bundle1);
-                    setFragmentView(restaurantProfileFragment, R.id.container, -1, true);
 
+                openRProfile(checkinRestaurantId);
 
                 Log.d("clicked","for restaurant");
                 break;
@@ -935,6 +932,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 dishSearchByName(dishName, false);
                 break;
         }
+    }
+
+    private void openRProfile(String restaurantId){
+        Bundle bundle1 = new Bundle();
+        bundle1.putString("restaurantId", restaurantId);
+        restaurantProfileFragment = new RestaurantProfileFragment();
+        restaurantProfileFragment.setArguments(bundle1);
+        setFragmentView(restaurantProfileFragment, R.id.container, -1, true);
     }
 
     @Override
@@ -1256,7 +1261,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         if(fragment == favouritesFragment){
             header.setVisibility(View.VISIBLE);
             header1.setVisibility(View.GONE);
-            titleHome.setText("Favourites");
+            titleHome.setText("My Bucket List");
         }
         if(fragment == optionsFragment){
             header.setVisibility(View.VISIBLE);
@@ -1434,4 +1439,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             manager.popBackStack(first.getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
     }
+
+
 }

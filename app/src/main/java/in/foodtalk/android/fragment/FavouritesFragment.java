@@ -204,6 +204,7 @@ public class FavouritesFragment extends Fragment {
         for (int i=0; favArray.length()> i; i++){
             FavoritesObj current = new FavoritesObj();
             current.dishName = favArray.getJSONObject(i).getString("dishName");
+            current.restaurantName = favArray.getJSONObject(i).getString("restaurantName");
             current.id = favArray.getJSONObject(i).getString("id");
             favList.add(current);
         }

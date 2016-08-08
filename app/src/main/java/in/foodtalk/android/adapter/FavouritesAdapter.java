@@ -2,9 +2,12 @@ package in.foodtalk.android.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -12,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.communicator.CommentCallback;
+import in.foodtalk.android.communicator.FavouritesCallback;
 import in.foodtalk.android.object.FavoritesObj;
 
 /**
@@ -25,10 +30,14 @@ public class FavouritesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
 
+
+    CommentCallback commentCallback;
+
     public FavouritesAdapter (Context context, List<FavoritesObj>favList){
         layoutInflater = layoutInflater.from(context);
         this.context = context;
         this.favList = favList;
+        commentCallback = (CommentCallback) context;
     }
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -52,6 +61,7 @@ public class FavouritesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 FavoritesObj current = favList.get(position);
                 FavHolder favHolder = (FavHolder) holder;
                 favHolder.txtDishName.setText(current.dishName);
+                favHolder.txtRestaurantName.setText(current.restaurantName);
             }else if (holder instanceof ProgressViewHolder){
                 ProgressViewHolder progressViewHolder = (ProgressViewHolder) holder;
                 progressViewHolder.progressBar.setIndeterminate(true);
@@ -67,11 +77,26 @@ public class FavouritesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return favList.get(position) != null ? VIEW_ITEM : VIEW_PROG;
     }
 
-    class FavHolder extends RecyclerView.ViewHolder{
-        TextView txtDishName;
+    class FavHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
+        TextView txtDishName, txtRestaurantName;
+        LinearLayout fDishHolder;
         public FavHolder(View itemView) {
             super(itemView);
             txtDishName = (TextView) itemView.findViewById(R.id.txt_dish_name_fav);
+            fDishHolder = (LinearLayout) itemView.findViewById(R.id.fdish_holder);
+            txtRestaurantName = (TextView) itemView.findViewById(R.id.txt_restaurant_name_fav);
+            fDishHolder.setOnTouchListener(this);
+        }
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            Log.d("onTouch", favList.get(getPosition()).id);
+
+            switch (event.getAction()){
+                case MotionEvent.ACTION_UP:
+                    commentCallback.openComment(favList.get(getPosition()).id);
+                    break;
+            }
+            return true;
         }
     }
     class ProgressViewHolder extends RecyclerView.ViewHolder {

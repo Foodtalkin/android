@@ -21,6 +21,7 @@ import java.util.List;
 
 import in.foodtalk.android.R;
 import in.foodtalk.android.communicator.NotificationCallback;
+import in.foodtalk.android.module.HeadSpannable;
 import in.foodtalk.android.object.NotificationObj;
 
 /**
@@ -32,12 +33,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     LayoutInflater layoutInflater;
     List<NotificationObj> notiList;
     NotificationCallback notificationCallback;
+    HeadSpannable headSpannable;
     public NotificationAdapter(Context context, List<NotificationObj> notiList){
         Log.d("Noti adapter context", context+"");
         this.context = context;
         this.notiList = notiList;
         layoutInflater = LayoutInflater.from(context);
-        notificationCallback = (NotificationCallback) context;
+        headSpannable = new HeadSpannable(context);
     }
 
     @Override
@@ -55,7 +57,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         notiHolder.eventDate = current.eventDate;
         String msg = current.message.replace(current.raiserName,"");
         notiHolder.txtMsg.setText(Html.fromHtml("<font color='#1d6bd5'>"+current.raiserName+"</font>"+msg));
-
+        //notiHolder.txtMsg.setText(headSpannable.notificationSpannable(current.raiserName, current.raiserId,msg), TextView.BufferType.SPANNABLE);
         switch (current.eventType){
             case "2":
                 notiHolder.notificationIcon.setImageResource(R.drawable.like_icon_noti);
@@ -108,7 +110,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             txtMsg.setText(message);
             Log.d("txt noti",": "+message);
         }
-
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             switch (v.getId()){

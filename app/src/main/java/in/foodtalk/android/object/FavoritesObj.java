@@ -6,4 +6,5 @@ package in.foodtalk.android.object;
 public class FavoritesObj {
     public String dishName;
     public String id;
+    public String restaurantName;
 }

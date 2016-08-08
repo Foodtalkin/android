@@ -115,9 +115,6 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 postHolder.txtKm.setText("");
             }*/
 
-
-
-
             //Log.d("distance m", distance+"");
             //new DecimalFormat("##.##").format(i2)
            // Log.d("distance km", new DecimalFormat("##.##").format(km)+"");

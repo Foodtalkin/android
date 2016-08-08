@@ -23,6 +23,7 @@ import java.util.List;
 
 import in.foodtalk.android.R;
 import in.foodtalk.android.communicator.HeadSpannableCallback;
+import in.foodtalk.android.communicator.NotificationCallback;
 import in.foodtalk.android.object.UserMention;
 
 /**
@@ -98,6 +99,29 @@ public class HeadSpannable {
             ds.setUnderlineText(false); // set to false to remove underline
             //ds.bgColor = Integer.parseInt(null);
             ds.bgColor = Color.WHITE;
+        }
+    }
+    public SpannableStringBuilder notificationSpannable(String userName, String userId, String msg){
+        SpannableStringBuilder userNSSB = new SpannableStringBuilder(userName);
+        SpannableStringBuilder ssb = new SpannableStringBuilder(msg);
+
+        userNSSB.setSpan(new NotificationClickable(userName, userId), 0, userName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        //ssb.setSpan(new CommentClickable(clickString, userMentionList, true , userId), idx1, idx2, 0);
+
+        return SpannableStringBuilder.valueOf(TextUtils.concat(userNSSB," " ,ssb));
+    }
+    class NotificationClickable extends ClickableSpan{
+
+        String userName;
+        String userId;
+        public NotificationClickable(String userName, String userId){
+            this.userName = userName;
+            this.userId = userId;
+        }
+
+        @Override
+        public void onClick(View widget) {
+            Log.d("notification","userName:"+userName+" "+"userId:"+userId);
         }
     }
 
