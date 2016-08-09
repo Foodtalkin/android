@@ -54,6 +54,7 @@ import in.foodtalk.android.communicator.FavouritesCallback;
 import in.foodtalk.android.communicator.HeadSpannableCallback;
 import in.foodtalk.android.communicator.MoreBtnCallback;
 import in.foodtalk.android.communicator.NotificationCallback;
+import in.foodtalk.android.communicator.OpenRestaurantCallback;
 import in.foodtalk.android.communicator.PhoneCallback;
 import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostDeleteCallback;
@@ -67,6 +68,7 @@ import in.foodtalk.android.communicator.SearchResultCallback;
 import in.foodtalk.android.communicator.UserProfileCallback;
 import in.foodtalk.android.communicator.UserThumbCallback;
 import in.foodtalk.android.fragment.CommentFragment;
+import in.foodtalk.android.fragment.CuratedFragment;
 import in.foodtalk.android.fragment.DiscoverFragment;
 import in.foodtalk.android.fragment.FavouritesFragment;
 import in.foodtalk.android.fragment.HomeFragment;
@@ -97,7 +99,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         MoreBtnCallback, UserProfileCallback, ProfilePostOpenCallback, FragmentManager.OnBackStackChangedListener,
         HeadSpannableCallback, UserThumbCallback, ProfileRPostOpenCallback, PhoneCallback,
         CheckInCallback, CamBitmapCallback, DishTaggingCallback , RatingCallback , ReviewCallback, AddRestaurantCallback,
-        AddedRestaurantCallback, SearchResultCallback, CommentCallback, NotificationCallback {
+        AddedRestaurantCallback, SearchResultCallback, CommentCallback, NotificationCallback, OpenRestaurantCallback {
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
@@ -131,6 +133,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     AddRestaurant addRestaurant;
     SearchFragment searchFragment;
     CommentFragment commentFragment;
+    CuratedFragment curatedFragment;
 
     //-------dummy fragment created for temporary use to set Legal screen title----
     Fragment legalFragment = new Fragment();
@@ -204,9 +207,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
        // imageCapture = new ImageCapture(this);
 
        // requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-
-
 
         //-------api init--------------------------
         postLikeApi = new PostLikeApi(this);
@@ -299,6 +299,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         optionsFragment = new OptionsFragment();
         favouritesFragment = new FavouritesFragment();
+        curatedFragment = new CuratedFragment();
 
         openHomeFirst();
 
@@ -312,7 +313,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 Log.e("Get extras", "Null");
 
                 // Add the fragment to the 'fragment_container' FrameLayout
-
             } else {
                 //newString= extras.getString("STRING_I_NEED");
                 Log.e("Get extras", "is not Null");
@@ -867,16 +867,15 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                webViewFragment.webViewFragment1("http://www.foodtalkindia.com/document.html");
                setFragmentView (webViewFragment, R.id.container, -1, true);
                //titleHome.setText("Legal");
-
-
                setTitle(legalFragment);
-
                break;
            case "favourites":
                setFragmentView(favouritesFragment, R.id.container, -1, true);
                break;
+           case "curated":
+               setFragmentView(curatedFragment, R.id.container, -1, true);
+               break;
        }
-
     }
     @Override
     public void getUserInfo(String points, String userName) {
@@ -898,7 +897,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
     @Override
     public void spannableTxt(String userId, String checkinRestaurantId, String dishName, int viewType, String requestFrom) {
-
         switch (viewType){
             case USER_PROFILE:
                 if(!requestFrom.equals("UserProfile")){
@@ -1303,6 +1301,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             header1.setVisibility(View.GONE);
             titleHome.setText("Dishes");
         }
+        if (fragment == curatedFragment){
+            titleHome.setText("Food Talk Curated list");
+        }
         /*if(this.getFragmentManager().findFragmentById(R.id.container1) != null){
             header.setVisibility(View.GONE);
             Log.d("setTitle", "header gone");
@@ -1441,4 +1442,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     }
 
 
+    @Override
+    public void restaurantOpen(String rId) {
+        openRProfile(rId);
+    }
 }

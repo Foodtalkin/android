@@ -80,7 +80,7 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return 1;
     }
     class  ProfileHolder extends RecyclerView.ViewHolder implements View.OnTouchListener {
-        LinearLayout btnProfile, btnFav, btnLoc, btnOpt, btnReport, btnLegal;
+        LinearLayout btnProfile, btnFav, btnLoc, btnOpt, btnReport, btnLegal, btnCurated;
         TextView txtUserName, txtUserNameFull;
         ImageView userThumb;
 
@@ -93,6 +93,7 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             //btnReport = (LinearLayout) itemView.findViewById(R.id.btn_report_more);
             btnOpt = (LinearLayout) itemView.findViewById(R.id.btn_option_more);
             btnLegal = (LinearLayout) itemView.findViewById(R.id.btn_legal_more);
+            btnCurated = (LinearLayout) itemView.findViewById(R.id.btn_fav_curated);
 
             userThumb = (ImageView) itemView.findViewById(R.id.userThumb_more);
 
@@ -103,8 +104,9 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             btnFav.setOnTouchListener(this);
             btnLoc.setOnTouchListener(this);
             btnOpt.setOnTouchListener(this);
-//            btnReport.setOnTouchListener(this);
+//          btnReport.setOnTouchListener(this);
             btnLegal.setOnTouchListener(this);
+            btnCurated.setOnTouchListener(this);
         }
 
         @Override
@@ -129,7 +131,6 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             moreBtnCallback.btnClick("favourites", getPosition());
                             break;
                     }
-
                     break;
                 case R.id.btn_loc_more:
                     Log.d("btnClick", "location");
@@ -147,6 +148,14 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         case MotionEvent.ACTION_UP:
                             Log.d("btnClick", "legal");
                             moreBtnCallback.btnClick("legal", getPosition());
+                            break;
+                    }
+                    break;
+                case R.id.btn_fav_curated:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("btnClick", "food talk curated");
+                            moreBtnCallback.btnClick("curated", getPosition());
                             break;
                     }
                     break;

@@ -8,4 +8,6 @@ public class RestaurantListObj {
     public String restaurantName;
     public String area;
     public String restaurantIsActive;
+    public String distance;
+    public String priceRange;
 }

@@ -99,7 +99,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         TextView txtMsg;
         public NotiHolder(View itemView) {
             super(itemView);
-
             raiserImg = (ImageView) itemView.findViewById(R.id.user_img);
             notificationIcon = (ImageView) itemView.findViewById(R.id.noti_icon);
             notificationHolder = (LinearLayout) itemView.findViewById(R.id.notification_holder);
