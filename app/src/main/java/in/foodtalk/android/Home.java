@@ -90,6 +90,7 @@ import in.foodtalk.android.fragment.newpost.ReviewFragment;
 import in.foodtalk.android.module.CloudinaryUpload;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.NewPostUpload;
+import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.object.CreatePostObj;
 import in.foodtalk.android.object.RestaurantPostObj;
 import in.foodtalk.android.object.UserPostObj;
@@ -173,6 +174,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     private final int DISCOVER_SCREEN = 0;
     private final int DISH_PROFILE = 1;
 
+    private String dishSearchedName;
+    private StringCase stringCase;
+
 
     Bitmap photo;
     File file;
@@ -213,6 +217,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         postBookmarkApi = new PostBookmarkApi(this);
         postReportApi = new PostReportApi(this);
         //-----------------------------------------
+
+        stringCase = new StringCase();
+
+
 
         //getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
@@ -401,6 +409,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 dishResultFragment = new DiscoverFragment();
                 dishResultFragment.pageType = DISH_PROFILE;
                 dishResultFragment.dishName = dishName;
+                dishSearchedName = dishName;
                 setFragmentView(dishResultFragment, R.id.container, -1, true);
                 break;
             case "WebLink":
@@ -1299,7 +1308,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             searchHeader.setVisibility(View.GONE);
             header.setVisibility(View.VISIBLE);
             header1.setVisibility(View.GONE);
-            titleHome.setText("Dishes");
+            titleHome.setText(stringCase.caseSensitive(dishSearchedName));
         }
         if (fragment == curatedFragment){
             titleHome.setText("Food Talk Curated list");
@@ -1369,6 +1378,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         dishResultFragment = new DiscoverFragment();
         dishResultFragment.pageType = 1;
         dishResultFragment.dishName = dishName;
+        dishSearchedName = dishName;
         setFragmentView(dishResultFragment, R.id.container, -1, true);
         if (fromSearch){
             getFragmentManager().beginTransaction().remove(searchFragment).commit();

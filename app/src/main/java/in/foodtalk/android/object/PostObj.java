@@ -36,4 +36,6 @@ public class PostObj {
     public String comment_count;
     public String like_count;
     public String timeElapsed;
+
+    public String region;
 }

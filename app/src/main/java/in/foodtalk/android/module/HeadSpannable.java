@@ -65,14 +65,16 @@ public class HeadSpannable {
         txt.setText(uName);
         txt.append(" is having ");
         txt.append(dName);
-        if (!restaurantName.equals("")){
+        if (!restaurantName.equals("") && !restaurantName.equals(", ")){
             txt.append(" at ");
         }
 
-        if (rLink){
-            txt.append(rName);
-        }else {
-            txt.append(restaurantName);
+        if (!restaurantName.equals(", ")){
+            if (rLink){
+                txt.append(rName);
+            }else {
+                txt.append(restaurantName);
+            }
         }
         makeLinksFocusable(txt);
     }

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.android.volley.AuthFailureError;
@@ -64,6 +65,9 @@ public class CuratedFragment extends Fragment implements LatLonCallback {
     CuratedAdapter curatedAdapter;
     LinearLayoutManager linearLayoutManager;
 
+    LinearLayout tapToRetry;
+    LinearLayout progressHolder;
+
     /*
    selectedUserId, latitude, longitude, sessionId, foodtalksuggested
    */
@@ -78,10 +82,25 @@ public class CuratedFragment extends Fragment implements LatLonCallback {
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view);
 
         progressBar = (ProgressBar) layout.findViewById(R.id.progress_bar);
+        progressHolder = (LinearLayout) layout.findViewById(R.id.progress_h);
 
+        tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
+
+        tapToRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tapToRetry.setVisibility(View.GONE);
+                //progressBar.setVisibility(View.VISIBLE);
+                progressHolder.setVisibility(View.VISIBLE);
+                try {
+                    getRestaurantList("load");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         latLonCallback = this;
-
         getLocation = new GetLocation(getActivity(), latLonCallback);
         getLocation.onStart();
 
@@ -147,7 +166,9 @@ public class CuratedFragment extends Fragment implements LatLonCallback {
                 //showToast("Please check your internet connection");
 
                // progressBarCheckin.setVisibility(View.GONE);
-               // tapToRetry.setVisibility(View.VISIBLE);
+                tapToRetry.setVisibility(View.VISIBLE);
+                //progressBar.setVisibility(View.GONE);
+                progressHolder.setVisibility(View.GONE);
 
                 if(tag.equals("refresh")){
                     //swipeRefreshHome.setRefreshing(false);
@@ -184,7 +205,10 @@ public class CuratedFragment extends Fragment implements LatLonCallback {
 
         //progressBarCheckin.setVisibility(View.GONE);
 
-        progressBar.setVisibility(View.GONE);
+       // progressBar.setVisibility(View.GONE);
+        progressHolder.setVisibility(View.GONE);
+        tapToRetry.setVisibility(View.GONE);
+
 
        // this.response = response;
         JSONArray rListArray = response.getJSONArray("restaurants");

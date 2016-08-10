@@ -21,6 +21,7 @@ import java.util.List;
 
 import in.foodtalk.android.R;
 import in.foodtalk.android.communicator.NotificationCallback;
+import in.foodtalk.android.communicator.UserThumbCallback;
 import in.foodtalk.android.module.HeadSpannable;
 import in.foodtalk.android.object.NotificationObj;
 
@@ -33,6 +34,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     LayoutInflater layoutInflater;
     List<NotificationObj> notiList;
     NotificationCallback notificationCallback;
+    UserThumbCallback userThumbCallback;
     HeadSpannable headSpannable;
     public NotificationAdapter(Context context, List<NotificationObj> notiList){
         Log.d("Noti adapter context", context+"");
@@ -40,6 +42,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         this.notiList = notiList;
         layoutInflater = LayoutInflater.from(context);
         headSpannable = new HeadSpannable(context);
+        notificationCallback = (NotificationCallback) context;
+        userThumbCallback = (UserThumbCallback) context;
     }
 
     @Override
@@ -56,6 +60,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         notiHolder.raiserName = current.raiserName;
         notiHolder.eventDate = current.eventDate;
         String msg = current.message.replace(current.raiserName,"");
+        notiHolder.txtNameTransparent.setText(current.raiserName);
         notiHolder.txtMsg.setText(Html.fromHtml("<font color='#1d6bd5'>"+current.raiserName+"</font>"+msg));
         //notiHolder.txtMsg.setText(headSpannable.notificationSpannable(current.raiserName, current.raiserId,msg), TextView.BufferType.SPANNABLE);
         switch (current.eventType){
@@ -96,14 +101,18 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         String raiserName;
         String eventDate;
         String message;
-        TextView txtMsg;
+        TextView txtMsg, txtNameTransparent;
         public NotiHolder(View itemView) {
             super(itemView);
             raiserImg = (ImageView) itemView.findViewById(R.id.user_img);
             notificationIcon = (ImageView) itemView.findViewById(R.id.noti_icon);
             notificationHolder = (LinearLayout) itemView.findViewById(R.id.notification_holder);
 
+            txtNameTransparent = (TextView) itemView.findViewById(R.id.txt_name_transparent);
+
             notificationHolder.setOnTouchListener(this);
+            txtNameTransparent.setOnTouchListener(this);
+            raiserImg.setOnTouchListener(this);
 
             txtMsg = (TextView) itemView.findViewById(R.id.txt_message);
             txtMsg.setText(message);
@@ -117,6 +126,22 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         case MotionEvent.ACTION_UP:
                             Log.d("clicked","notification");
                             notificationCallback.notiClicked(notiList.get(getPosition()).eventType, notiList.get(getPosition()).raiserImage , notiList.get(getPosition()).raiserId, notiList.get(getPosition()).eventDate, notiList.get(getPosition()).elementId);
+                            break;
+                    }
+                    break;
+                case R.id.txt_name_transparent:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("clicked","username");
+                            userThumbCallback.thumbClick(notiList.get(getPosition()).raiserId);
+                            break;
+                    }
+                    break;
+                case R.id.user_img:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("clicked","username");
+                            userThumbCallback.thumbClick(notiList.get(getPosition()).raiserId);
                             break;
                     }
                     break;
