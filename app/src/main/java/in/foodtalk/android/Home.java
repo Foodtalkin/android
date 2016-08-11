@@ -40,9 +40,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.apicall.PostBookmarkApi;
 import in.foodtalk.android.apicall.PostLikeApi;
 import in.foodtalk.android.apicall.PostReportApi;
+import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.AddRestaurantCallback;
 import in.foodtalk.android.communicator.AddedRestaurantCallback;
 import in.foodtalk.android.communicator.CamBitmapCallback;
@@ -136,6 +138,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     CommentFragment commentFragment;
     CuratedFragment curatedFragment;
 
+
     //-------dummy fragment created for temporary use to set Legal screen title----
     Fragment legalFragment = new Fragment();
 
@@ -159,6 +162,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     String currentPostUserId;
     String currentPostId;
 
+    String currentProfileUserId = "null";
+
     TextView titleHome;
     TextView subTitleHome;
     TextView titleHome1;
@@ -177,7 +182,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     private String dishSearchedName;
     private StringCase stringCase;
 
-
     Bitmap photo;
     File file;
     String restaurantNameNewPost;
@@ -194,6 +198,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     LinearLayout searchHeader;
     Fragment currentFragment;
 
+    ImageView btnOption;
+
+    ApiCall apiCall;
+
     private int REQUEST_CAMERA = 0, SELECT_FILE = 1, REQUEST_CROP = 2;
     //private File destination = new File(Environment.getExternalStorageDirectory(), System.currentTimeMillis() + ".jpg");
     private File destination = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), System.currentTimeMillis() + ".jpg");
@@ -206,7 +214,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         super.onCreate(savedInstanceState);
         db = new DatabaseHandler(getApplicationContext());
 
-        
+        apiCall = new ApiCall();
 
        // imageCapture = new ImageCapture(this);
 
@@ -245,6 +253,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         btnLogout = (LinearLayout) findViewById(R.id.btn_logout);
         btnLogout.setOnClickListener(this);
+
+        btnOption = (ImageView) findViewById(R.id.btn_option);
 
         btnHome = (LinearLayout) findViewById(R.id.btn_home);
         btnDiscover = (LinearLayout) findViewById(R.id.btn_discover);
@@ -288,6 +298,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         btnNotifications.setOnClickListener(this);
         btnMore.setOnClickListener(this);
         btnHome.setOnClickListener(this);
+        btnOption.setOnClickListener(this);
         // Log.d("getInfo",db.getRowCount()+"");
         // Log.d("get user info", db.getUserDetails().get("userName")+"");
 
@@ -363,9 +374,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 setFragmentView(commentFragment, R.id.container1, 0, true);
                 break;
             case "UserProfile":
-                userProfile = new UserProfile();
+                /*userProfile = new UserProfile();
                 userProfile.userProfile1(elementId);
-                setFragmentView(userProfile, R.id.container, 0, true);
+                setFragmentView(userProfile, R.id.container, 0, true);*/
+                userProfileOpen(elementId);
                 break;
             case "RestaurantProfile":
                 Bundle bundle1 = new Bundle();
@@ -506,6 +518,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 Log.d("clicked","on search box");
                 searchFragment = new SearchFragment();
                 setFragmentView(searchFragment, R.id.container1, -1, true);
+                break;
+            case R.id.btn_option:
+                Log.d("clicked","btnOption");
+                profileReport("user", currentProfileUserId);
                 break;
         }
     }
@@ -688,7 +704,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 Log.d("call", phone1);
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
                 callIntent.setData(Uri.parse("tel:"+phone1));
-                //startActivity(callIntent);
+                startActivity(callIntent);
             }
         });
         txtPhone2.setOnClickListener(new View.OnClickListener() {
@@ -697,12 +713,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 Log.d("call", phone2);
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
                 callIntent.setData(Uri.parse("tel:"+phone2));
-               // startActivity(callIntent);
+                startActivity(callIntent);
             }
         });
         dialogCall.show();
     }
-
     File file1 = new File(Environment.getExternalStorageDirectory()+File.separator + "img.jpg");
 
     String mCurrentPhotoPath;
@@ -841,6 +856,48 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             }
         });
     }
+
+    private void profileReport(final String profileType, String id){
+
+        final Dialog dialogReport;
+        dialogReport = new Dialog(this);
+        dialogReport.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogReport.setContentView(R.layout.dialog_report);
+        TextView btnCancel = (TextView) dialogReport.findViewById(R.id.btn_cancel);
+        TextView btnYes = (TextView) dialogReport.findViewById(R.id.btn_yes);
+        TextView txtAlert = (TextView) dialogReport.findViewById(R.id.txt_report_alert);
+        if (profileType.equals("user")){
+            txtAlert.setText("Report user ?");
+        }else if (profileType.equals("restaurant")){
+            txtAlert.setText("Report restaurant");
+        }
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogReport.dismiss();
+            }
+        });
+        btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (profileType.equals("user")){
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("sessionId", sessionId);
+                        jsonObject.put("userId", currentProfileUserId);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    //Log.d("apicall",getApplicationContext()+" "+ jsonObject+" "+Config.URL_REPORT_USER+ " userReport");
+                    apiCall.apiRequestPost(getApplicationContext(), jsonObject, Config.URL_REPORT_USER, "userReport");
+                }
+                dialogReport.dismiss();
+            }
+        });
+        dialogReport.show();
+    }
+
+
     @Override
     public void postDelete() {
         Log.d("postDelete","update recyclerview");
@@ -850,8 +907,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             e.printStackTrace();
         }
     }
-
-
     @Override
     public void btnClick(String type, int position) {
         Log.d("more btn clicked", type+" position: "+ position);
@@ -863,9 +918,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }*/
        switch (type){
            case "profile":
-               userProfile = new UserProfile();
+               /*userProfile = new UserProfile();
                userProfile.userProfile1(userId);
-               setFragmentView(userProfile, R.id.container, -1, true);
+               setFragmentView(userProfile, R.id.container, -1, true);*/
+               userProfileOpen(userId);
                break;
            case "options":
                setFragmentView(optionsFragment, R.id.container, -1, true);
@@ -909,9 +965,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         switch (viewType){
             case USER_PROFILE:
                 if(!requestFrom.equals("UserProfile")){
-                    userProfile = new UserProfile();
+                    /*userProfile = new UserProfile();
                     userProfile.userProfile1(userId);
-                    setFragmentView(userProfile, R.id.container, -1, true);
+                    setFragmentView(userProfile, R.id.container, -1, true);*/
+                    userProfileOpen(userId);
                     if(requestFrom.equals("commentFragment")){
                         getFragmentManager().beginTransaction().remove(commentFragment).commit();
                     }
@@ -926,9 +983,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 if (requestFrom.equals("commentFragment")){
                     getFragmentManager().beginTransaction().remove(commentFragment).commit();
                 }
-
                 openRProfile(checkinRestaurantId);
-
                 Log.d("clicked","for restaurant");
                 break;
             case DISH:
@@ -940,7 +995,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 break;
         }
     }
-
     private void openRProfile(String restaurantId){
         Bundle bundle1 = new Bundle();
         bundle1.putString("restaurantId", restaurantId);
@@ -951,6 +1005,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
     @Override
     public void thumbClick(String userId) {
+        /*userProfile = new UserProfile();
+        userProfile.userProfile1(userId);
+        setFragmentView(userProfile, R.id.container, -1, true);*/
+        userProfileOpen(userId);
+    }
+
+    private void userProfileOpen(String userId){
+        currentProfileUserId = userId;
         userProfile = new UserProfile();
         userProfile.userProfile1(userId);
         setFragmentView(userProfile, R.id.container, -1, true);
@@ -1292,6 +1354,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             header1.setVisibility(View.GONE);
             searchHeader.setVisibility(View.GONE);
             titleHome.setText("Restaurant");
+
         }
 
         if(fragment == homeFragment) {
@@ -1330,8 +1393,23 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             header.setVisibility(View.GONE);
             Log.d("setTitle", "header gone");
         }
-    }
 
+        if (fragment == restaurantProfileFragment){
+            btnOption.setVisibility(View.VISIBLE);
+        }else if (fragment == userProfile && userId != currentProfileUserId){
+            btnOption.setVisibility(View.VISIBLE);
+        }else {
+            btnOption.setVisibility(View.GONE);
+        }
+        Log.d("check ids","myId:"+userId+" userId:"+currentProfileUserId+" f: "+fragment.getClass().getSimpleName());
+       /* if (fragment == userProfile && currentProfileUserId.equals(userId)){
+            btnOption.setVisibility(View.VISIBLE);
+            Log.d("opton btn", "show");
+        }else if(fragment != restaurantProfileFragment && fragment != userProfile) {
+            btnOption.setVisibility(View.GONE);
+            Log.d("opton btn", "hide");
+        }*/
+    }
     static final int DISH_SEARCH = 0;
     static final int USER_SEARCH = 1;
     static final int RESTAURANT_SEARCH = 2;
@@ -1340,9 +1418,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     public void resultClick(int resultType, String id, String dishName) {
         switch (resultType){
             case USER_SEARCH:
-                userProfile = new UserProfile();
+                /*userProfile = new UserProfile();
                 userProfile.userProfile1(id);
-                setFragmentView(userProfile, R.id.container, -1, true);
+                setFragmentView(userProfile, R.id.container, -1, true);*/
+                userProfileOpen(id);
                 getFragmentManager().beginTransaction().remove(searchFragment).commit();
                 break;
             case RESTAURANT_SEARCH:
@@ -1354,9 +1433,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 bundle.putString("restaurantId", id);
 
                 RestaurantProfileFragment restaurantProfileFragment = new RestaurantProfileFragment();
-
                 restaurantProfileFragment.setArguments(bundle);
-
                 setFragmentView(restaurantProfileFragment, R.id.container, -1, true);
                 getFragmentManager().beginTransaction().remove(searchFragment).commit();
                 break;
@@ -1436,9 +1513,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             commentFragment.setArguments(bundle);
             setFragmentView(commentFragment, R.id.container1, -1, true);
         }else if (eventType.equals("5")){
-            userProfile = new UserProfile();
+            /*userProfile = new UserProfile();
             userProfile.userProfile1(elementId);
-            setFragmentView(userProfile, R.id.container, -1, true);
+            setFragmentView(userProfile, R.id.container, -1, true);*/
+            userProfileOpen(userId);
         }
     }
     //-------------------------------------------------------------

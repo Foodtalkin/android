@@ -154,9 +154,6 @@ public class UserProfile extends Fragment implements LatLonCallback {
             followBtnVisible = true;
             Log.d("userIds", "not match");
         }
-
-
-
         try {
             getUserProfile("myProfile");
         } catch (JSONException e) {
