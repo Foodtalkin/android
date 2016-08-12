@@ -18,15 +18,20 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import in.foodtalk.android.R;
 import in.foodtalk.android.app.AppController;
+import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.module.UserAgent;
 
 /**
  * Created by RetailAdmin on 11-08-2016.
  */
 public class ApiCall {
-    public void apiRequestPost(final Context context, JSONObject obj, String url, final String tag){
+    ApiCallback apiCallback1;
+    public void apiRequestPost(final Context context, JSONObject obj, String url, final String tag, ApiCallback apiCallback){
+
+            apiCallback1 = apiCallback;
+
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, obj,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -34,6 +39,9 @@ public class ApiCall {
                         //Log.d(TAG, "After Sending JsongObj"+response.toString());
                         //msgResponse.setText(response.toString());
                         Log.d("like api Respond", response.toString());
+                        if (apiCallback1 != null){
+                            apiCallback1.apiResponse(response, tag);
+                        }
                         try {
                             String status = response.getString("status");
                             if (!status.equals("error")){

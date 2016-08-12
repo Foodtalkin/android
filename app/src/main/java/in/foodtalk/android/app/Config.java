@@ -56,6 +56,7 @@ public class Config {
     public static String URL_DELETE_COMMENT  = "http://"+IP+"/index.php/service/comment/delete";
     public static String URL_REPORT_USER  = "http://"+IP+"/index.php/service/flag/user";
     public static String URL_REPORT_RESTAURANT  = "http://"+IP+"/index.php/service/restaurantReport/add";
+    public static String URL_ADWORD_LIST  = "http://"+IP+"/index.php/service/adwords/list";
 
 
 

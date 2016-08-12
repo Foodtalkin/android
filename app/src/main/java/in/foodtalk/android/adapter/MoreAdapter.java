@@ -80,7 +80,7 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return 1;
     }
     class  ProfileHolder extends RecyclerView.ViewHolder implements View.OnTouchListener {
-        LinearLayout btnProfile, btnFav, btnLoc, btnOpt, btnReport, btnLegal, btnCurated;
+        LinearLayout btnProfile, btnFav, btnLoc, btnOpt, btnReport, btnLegal, btnCurated, btnStore;
         TextView txtUserName, txtUserNameFull;
         ImageView userThumb;
 
@@ -94,6 +94,7 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             btnOpt = (LinearLayout) itemView.findViewById(R.id.btn_option_more);
             btnLegal = (LinearLayout) itemView.findViewById(R.id.btn_legal_more);
             btnCurated = (LinearLayout) itemView.findViewById(R.id.btn_fav_curated);
+            btnStore = (LinearLayout) itemView.findViewById(R.id.btn_store_more);
 
             userThumb = (ImageView) itemView.findViewById(R.id.userThumb_more);
 
@@ -107,6 +108,7 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 //          btnReport.setOnTouchListener(this);
             btnLegal.setOnTouchListener(this);
             btnCurated.setOnTouchListener(this);
+            btnStore.setOnTouchListener(this);
         }
 
         @Override
@@ -156,6 +158,13 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         case MotionEvent.ACTION_UP:
                             Log.d("btnClick", "food talk curated");
                             moreBtnCallback.btnClick("curated", getPosition());
+                            break;
+                    }
+                    break;
+                case R.id.btn_store_more:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            moreBtnCallback.btnClick("store", getPosition());
                             break;
                     }
                     break;

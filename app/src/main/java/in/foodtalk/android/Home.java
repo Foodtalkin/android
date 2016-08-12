@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.flurry.android.FlurryAgent;
@@ -36,7 +34,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -52,7 +49,6 @@ import in.foodtalk.android.communicator.CheckInCallback;
 import in.foodtalk.android.communicator.CloudinaryCallback;
 import in.foodtalk.android.communicator.CommentCallback;
 import in.foodtalk.android.communicator.DishTaggingCallback;
-import in.foodtalk.android.communicator.FavouritesCallback;
 import in.foodtalk.android.communicator.HeadSpannableCallback;
 import in.foodtalk.android.communicator.MoreBtnCallback;
 import in.foodtalk.android.communicator.NotificationCallback;
@@ -89,6 +85,7 @@ import in.foodtalk.android.fragment.WebViewFragment;
 import in.foodtalk.android.fragment.newpost.DishTagging;
 import in.foodtalk.android.fragment.newpost.RatingFragment;
 import in.foodtalk.android.fragment.newpost.ReviewFragment;
+import in.foodtalk.android.fragment.StoreFragment;
 import in.foodtalk.android.module.CloudinaryUpload;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.NewPostUpload;
@@ -137,6 +134,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     SearchFragment searchFragment;
     CommentFragment commentFragment;
     CuratedFragment curatedFragment;
+    StoreFragment storeFragment;
 
 
     //-------dummy fragment created for temporary use to set Legal screen title----
@@ -320,6 +318,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         optionsFragment = new OptionsFragment();
         favouritesFragment = new FavouritesFragment();
         curatedFragment = new CuratedFragment();
+        storeFragment = new StoreFragment();
 
         openHomeFirst();
 
@@ -909,7 +908,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                         e.printStackTrace();
                     }
                     //Log.d("apicall",getApplicationContext()+" "+ jsonObject+" "+Config.URL_REPORT_USER+ " userReport");
-                    apiCall.apiRequestPost(getApplicationContext(), jsonObject, Config.URL_REPORT_USER, "userReport");
+                    apiCall.apiRequestPost(getApplicationContext(), jsonObject, Config.URL_REPORT_USER, "userReport", null);
                 }
                 dialogReport.dismiss();
             }
@@ -925,7 +924,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                apiCall.apiRequestPost(getApplicationContext(), jsonObject, Config.URL_REPORT_RESTAURANT, "restaurantReport");
+                apiCall.apiRequestPost(getApplicationContext(), jsonObject, Config.URL_REPORT_RESTAURANT, "restaurantReport", null);
                 dialogReport.dismiss();
             }
         });
@@ -940,7 +939,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                apiCall.apiRequestPost(getApplicationContext(), jsonObject, Config.URL_REPORT_RESTAURANT, "restaurantReport");
+                apiCall.apiRequestPost(getApplicationContext(), jsonObject, Config.URL_REPORT_RESTAURANT, "restaurantReport", null);
                 dialogReport.dismiss();
             }
         });
@@ -955,7 +954,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                apiCall.apiRequestPost(getApplicationContext(), jsonObject, Config.URL_REPORT_RESTAURANT, "restaurantReport");
+                apiCall.apiRequestPost(getApplicationContext(), jsonObject, Config.URL_REPORT_RESTAURANT, "restaurantReport", null);
                 dialogReport.dismiss();
             }
         });
@@ -1010,6 +1009,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                break;
            case "curated":
                setFragmentView(curatedFragment, R.id.container, -1, true);
+               break;
+           case "store":
+               setFragmentView(storeFragment, R.id.container, -1, true);
                break;
        }
     }
