@@ -163,6 +163,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     String currentPostId;
 
     String currentProfileUserId = "null";
+    String currentProfileRestaurantId = "null";
 
     TextView titleHome;
     TextView subTitleHome;
@@ -380,11 +381,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 userProfileOpen(elementId);
                 break;
             case "RestaurantProfile":
-                Bundle bundle1 = new Bundle();
+                /*Bundle bundle1 = new Bundle();
                 bundle1.putString("restaurantId", elementId);
                 restaurantProfileFragment = new RestaurantProfileFragment();
                 restaurantProfileFragment.setArguments(bundle1);
-                setFragmentView(restaurantProfileFragment, R.id.container, 0, true);
+                setFragmentView(restaurantProfileFragment, R.id.container, 0, true);*/
+                openRProfile(elementId);
                 break;
             case "Home":
                 setFragmentView(homeFragment, R.id.container, 0, false);
@@ -521,7 +523,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 break;
             case R.id.btn_option:
                 Log.d("clicked","btnOption");
-                profileReport("user", currentProfileUserId);
+                currentFragment = this.getFragmentManager().findFragmentById(R.id.container);
+                if (currentFragment == userProfile){
+                    profileReport("user", currentProfileUserId);
+                }else if (currentFragment == restaurantProfileFragment){
+                    profileReport("restaurant", currentProfileRestaurantId);
+                }
+
                 break;
         }
     }
@@ -857,7 +865,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         });
     }
 
-    private void profileReport(final String profileType, String id){
+    private void profileReport(final String profileType, final String id){
 
         final Dialog dialogReport;
         dialogReport = new Dialog(this);
@@ -866,10 +874,22 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         TextView btnCancel = (TextView) dialogReport.findViewById(R.id.btn_cancel);
         TextView btnYes = (TextView) dialogReport.findViewById(R.id.btn_yes);
         TextView txtAlert = (TextView) dialogReport.findViewById(R.id.txt_report_alert);
+        LinearLayout alertRestaurant = (LinearLayout) dialogReport.findViewById(R.id.alert_restaurant_report);
+        LinearLayout alertUser = (LinearLayout) dialogReport.findViewById(R.id.alert_user_report);
+
+        TextView btnNumber = (TextView) dialogReport.findViewById(R.id.btn_number);
+        TextView btnAddress = (TextView) dialogReport.findViewById(R.id.btn_address);
+        TextView btnShutdown = (TextView) dialogReport.findViewById(R.id.btn_shutdown);
+        TextView btnCancel1 = (TextView) dialogReport.findViewById(R.id.btn_cancel1);
+
         if (profileType.equals("user")){
             txtAlert.setText("Report user ?");
+            alertRestaurant.setVisibility(View.GONE);
+            alertUser.setVisibility(View.VISIBLE);
         }else if (profileType.equals("restaurant")){
-            txtAlert.setText("Report restaurant");
+            alertRestaurant.setVisibility(View.VISIBLE);
+            alertUser.setVisibility(View.GONE);
+            //txtAlert.setText("Report restaurant");
         }
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -892,6 +912,57 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                     apiCall.apiRequestPost(getApplicationContext(), jsonObject, Config.URL_REPORT_USER, "userReport");
                 }
                 dialogReport.dismiss();
+            }
+        });
+        btnNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("sessionId", sessionId);
+                    jsonObject.put("restaurantId", id);
+                    jsonObject.put("reportType","1");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                apiCall.apiRequestPost(getApplicationContext(), jsonObject, Config.URL_REPORT_RESTAURANT, "restaurantReport");
+                dialogReport.dismiss();
+            }
+        });
+        btnAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("sessionId", sessionId);
+                    jsonObject.put("restaurantId", id);
+                    jsonObject.put("reportType","2");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                apiCall.apiRequestPost(getApplicationContext(), jsonObject, Config.URL_REPORT_RESTAURANT, "restaurantReport");
+                dialogReport.dismiss();
+            }
+        });
+        btnShutdown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("sessionId", sessionId);
+                    jsonObject.put("restaurantId", id);
+                    jsonObject.put("reportType","3");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                apiCall.apiRequestPost(getApplicationContext(), jsonObject, Config.URL_REPORT_RESTAURANT, "restaurantReport");
+                dialogReport.dismiss();
+            }
+        });
+        btnCancel1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              dialogReport.dismiss();
             }
         });
         dialogReport.show();
@@ -996,6 +1067,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }
     }
     private void openRProfile(String restaurantId){
+        currentProfileRestaurantId = restaurantId;
         Bundle bundle1 = new Bundle();
         bundle1.putString("restaurantId", restaurantId);
         restaurantProfileFragment = new RestaurantProfileFragment();
@@ -1432,9 +1504,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 Bundle bundle = new Bundle();
                 bundle.putString("restaurantId", id);
 
-                RestaurantProfileFragment restaurantProfileFragment = new RestaurantProfileFragment();
+                /*RestaurantProfileFragment restaurantProfileFragment = new RestaurantProfileFragment();
                 restaurantProfileFragment.setArguments(bundle);
-                setFragmentView(restaurantProfileFragment, R.id.container, -1, true);
+                setFragmentView(restaurantProfileFragment, R.id.container, -1, true);*/
+                openRProfile(id);
                 getFragmentManager().beginTransaction().remove(searchFragment).commit();
                 break;
             case DISH_SEARCH:

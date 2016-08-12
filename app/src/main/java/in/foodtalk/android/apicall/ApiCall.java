@@ -2,6 +2,8 @@ package in.foodtalk.android.apicall;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -37,8 +39,10 @@ public class ApiCall {
                             if (!status.equals("error")){
                                 //-- getAndSave(response);
                                 //loadDataIntoView(response);
-                                if(tag.equals("report")){
-                                    //showToast(context.getString(R.string.postReportMsg));
+                                if(tag.equals("userReport") || tag.equals("restaurantReport")){
+                                    showToast(context, "Your report send successfully.");
+                                    //Toast.makeText(context, "Your report send successfully.",
+                                           // Toast.LENGTH_SHORT).show();
                                 }else if(tag.equals("delete")){
                                     //deleteCallback.postDelete();
                                 }
@@ -48,7 +52,9 @@ public class ApiCall {
                                     Log.d("Response error", "Session has expired");
                                     //logOut();
                                 }else if(errorCode.equals("7")) {
-                                    Log.e("Response error", "Already Report");
+                                    if (tag.equals("userReport") || tag.equals("restaurantReport")){
+                                        showToast(context, "Your report send successfully.");
+                                    }
                                    // showToast(context.getString(R.string.postReportMsg));
                                 }
                             }
@@ -81,5 +87,13 @@ public class ApiCall {
             }
         };
         AppController.getInstance().addToRequestQueue(jsonObjectRequest,"postbookmark");
+
     }
+    public void showToast(Context context, String msg){
+        Toast toast= Toast.makeText(context,
+                msg, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 300);
+        toast.show();
+    }
+
 }
