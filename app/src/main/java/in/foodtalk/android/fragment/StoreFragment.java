@@ -18,10 +18,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.Inflater;
 
 import in.foodtalk.android.R;
-import in.foodtalk.android.adapter.newpost.StoreAdapter;
+import in.foodtalk.android.adapter.StoreAdapter;
 import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;

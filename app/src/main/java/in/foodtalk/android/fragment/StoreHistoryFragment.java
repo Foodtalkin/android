@@ -11,14 +11,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import in.foodtalk.android.R;
+import in.foodtalk.android.adapter.StoreHistoryAdapter;
 import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.module.DatabaseHandler;
+import in.foodtalk.android.object.StoreHistoryObj;
 
 /**
  * Created by RetailAdmin on 16-08-2016.
@@ -36,6 +42,10 @@ public class StoreHistoryFragment extends Fragment implements ApiCallback {
 
     ApiCallback apiCallback;
 
+    StoreHistoryAdapter storeHistoryAdapter;
+
+    List<StoreHistoryObj> storeHistoryList = new ArrayList<>();
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,6 +61,8 @@ public class StoreHistoryFragment extends Fragment implements ApiCallback {
 
             }
         });
+        linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
         db = new DatabaseHandler(getActivity());
         apiCall = new ApiCall();
         try {
@@ -71,5 +83,54 @@ public class StoreHistoryFragment extends Fragment implements ApiCallback {
     @Override
     public void apiResponse(JSONObject response, String tag) {
         Log.d("storeHistory", tag+" "+response+"");
+        try {
+            loadDataIntoView(response, tag);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
+
+        //progressBarCheckin.setVisibility(View.GONE);
+        if(storeHistoryList.size()>0){
+            storeHistoryList.clear();
+        }
+        // progressBar.setVisibility(View.GONE);
+        progressHolder.setVisibility(View.GONE);
+        tapToRetry.setVisibility(View.GONE);
+
+
+        // this.response = response;
+        JSONArray listArray = response.getJSONArray("result");
+        // Log.d("rListArray", "total: "+ rListArray.length());
+        for (int i=0;i<listArray.length();i++){
+            StoreHistoryObj current = new StoreHistoryObj();
+            current.id = listArray.getJSONObject(i).getString("id");
+            current.entityId = listArray.getJSONObject(i).getString("entityId");
+            current.title = listArray.getJSONObject(i).getString("title");
+            current.adImage = listArray.getJSONObject(i).getString("adImage");
+            current.adThumb = listArray.getJSONObject(i).getString("adThumb");
+            current.points = listArray.getJSONObject(i).getString("points");
+            current.couponCode = listArray.getJSONObject(i).getString("couponCode");
+            current.paymentUrl = listArray.getJSONObject(i).getString("paymentUrl");
+            current.description = listArray.getJSONObject(i).getString("description");
+            current.totalSlots = listArray.getJSONObject(i).getString("totalSlots");
+            current.bookedSlots = listArray.getJSONObject(i).getString("bookedSlots");
+            current.description2 = listArray.getJSONObject(i).getString("description2");
+            current.expiry = listArray.getJSONObject(i).getString("expiry");
+            current.rid = listArray.getJSONObject(i).getString("rid");
+            current.pointsRedeemed = listArray.getJSONObject(i).getString("pointsRedeemed");
+            current.iRedeemed = listArray.getJSONObject(i).getString("iRedeemed");
+            current.bookedOn = listArray.getJSONObject(i).getString("bookedOn");
+            current.type = listArray.getJSONObject(i).getString("type");
+            storeHistoryList.add(current);
+        }
+        //Log.d("send list", "total: "+restaurantList.size());
+        if (getActivity() != null){
+            storeHistoryAdapter = new StoreHistoryAdapter(getActivity(),storeHistoryList);
+            //checkInAdapter = new CheckInAdapter(getActivity(),restaurantList);
+            recyclerView.setAdapter(storeHistoryAdapter);
+        }
     }
 }

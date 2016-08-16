@@ -1,4 +1,4 @@
-package in.foodtalk.android.adapter.newpost;
+package in.foodtalk.android.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
