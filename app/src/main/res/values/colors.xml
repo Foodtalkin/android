@@ -17,6 +17,7 @@
     <color name="bg_header">#10151f</color>
     <color name="subtitle_color">#04d1cd</color>
     <color name="card_head_highlight">#0369db</color>
+    <color name="text_green">#A4C639</color>
 
 
     <!-- new post section -->

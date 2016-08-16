@@ -67,6 +67,8 @@ public class StoreFragment extends Fragment implements ApiCallback {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
         return layout;
 
     }
@@ -80,13 +82,20 @@ public class StoreFragment extends Fragment implements ApiCallback {
     @Override
     public void apiResponse(JSONObject response, String tag) {
         Log.d("apiResponse", tag+" : " +response);
+        try {
+            loadDataIntoView(response, tag);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
 
         //progressBarCheckin.setVisibility(View.GONE);
-
+        if(listStore.size()>0){
+            listStore.clear();
+        }
         // progressBar.setVisibility(View.GONE);
         progressHolder.setVisibility(View.GONE);
         tapToRetry.setVisibility(View.GONE);

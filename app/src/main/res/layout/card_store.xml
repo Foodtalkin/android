@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="wrap_content">
     <LinearLayout
+        android:id="@+id/card_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -9,53 +10,89 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <ImageView
-                android:layout_width="160dp"
-                android:layout_height="160dp"
+                android:id="@+id/thumb_img"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
                 android:src="@drawable/logo_splash"
                 android:padding="6dp"/>
         </LinearLayout>
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp">
-            <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Taco Bell, All Grown up"
-                android:textSize="24sp"
-                android:maxLines="1"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Holy guacamole - Taco Bell India, All Grown up! \r\nWe're inviting 50 food talkers for a night of tacos, beer, cocktails and whole lot of fun!"
-                android:lines="2"/>
-            <TextView
-                android:layout_marginTop="2dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Holy guacamole - Taco Bell India, All Grown up! \r\nWe're inviting 50 food talkers for a night of tacos, beer, cocktails and whole lot of fun!"
-                android:lines="2"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginTop="4dp">
+                android:orientation="vertical"
+                android:paddingRight="5dp">
                 <TextView
+                    android:id="@+id/txt_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="200Pts"
-                    android:layout_weight="1"/>
-                <Button
+                    android:text="Taco Bell, All Grown up"
+                    android:textColor="@color/blackText1"
+                    android:textSize="18sp"
+                    android:maxLines="1"/>
+                <TextView
+                    android:id="@+id/txt_des"
+                    android:textSize="12dp"
+                    android:layout_below="@+id/txt_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Book Now"
-                    android:textColor="#fff"
-                    android:background="@color/wallet_holo_blue_light"/>
-            </LinearLayout>
+                    android:text="Holy guacamole - Taco Bell India, All Grown up! \r\nWe're inviting 50 food talkers for a night of tacos, beer, cocktails and whole lot of fun!"
+                    android:lines="2"/>
+                <TextView
+                    android:id="@+id/txt_des1"
+                    android:textSize="12dp"
+                    android:textColor="@color/blackText1"
+                    android:layout_below="@+id/txt_des"
+                    android:layout_marginTop="2dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Holy guacamole - Taco Bell India, All Grown up! \r\nWe're inviting 50 food talkers for a night of tacos, beer, cocktails and whole lot of fun!"
+                    android:lines="2"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:paddingBottom="4dp">
+                    <TextView
+                        android:id="@+id/txt_points"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" "
 
+                        android:layout_centerVertical="true"
+
+                        android:textColor="@color/text_green"/>
+                    <Button
+                        android:id="@+id/btn_book"
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:text="BOOK NOW"
+                        android:textSize="11dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+
+                        android:textColor="#fff"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/round_bg_blue"/>
+
+                </RelativeLayout>
+
+            </RelativeLayout>
         </LinearLayout>
 
+
     </LinearLayout>
+    <View
+        android:layout_below="@+id/card_holder"
+        android:layout_width="match_parent"
+        android:layout_height="0.33dp"
+        android:alpha=".5"
+        android:background="#000"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"/>
 
 </RelativeLayout>

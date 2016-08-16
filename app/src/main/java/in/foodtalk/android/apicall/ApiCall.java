@@ -103,5 +103,4 @@ public class ApiCall {
         toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 300);
         toast.show();
     }
-
 }

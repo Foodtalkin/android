@@ -44,6 +44,7 @@ import in.foodtalk.android.apicall.PostReportApi;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.AddRestaurantCallback;
 import in.foodtalk.android.communicator.AddedRestaurantCallback;
+import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.communicator.CamBitmapCallback;
 import in.foodtalk.android.communicator.CheckInCallback;
 import in.foodtalk.android.communicator.CloudinaryCallback;
@@ -72,6 +73,7 @@ import in.foodtalk.android.fragment.FavouritesFragment;
 import in.foodtalk.android.fragment.HomeFragment;
 import in.foodtalk.android.fragment.MoreFragment;
 import in.foodtalk.android.fragment.SearchFragment;
+import in.foodtalk.android.fragment.StoreHistoryFragment;
 import in.foodtalk.android.fragment.newpost.AddRestaurant;
 import in.foodtalk.android.fragment.newpost.CameraFragment;
 import in.foodtalk.android.fragment.newpost.CheckIn;
@@ -99,7 +101,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         MoreBtnCallback, UserProfileCallback, ProfilePostOpenCallback, FragmentManager.OnBackStackChangedListener,
         HeadSpannableCallback, UserThumbCallback, ProfileRPostOpenCallback, PhoneCallback,
         CheckInCallback, CamBitmapCallback, DishTaggingCallback , RatingCallback , ReviewCallback, AddRestaurantCallback,
-        AddedRestaurantCallback, SearchResultCallback, CommentCallback, NotificationCallback, OpenRestaurantCallback {
+        AddedRestaurantCallback, SearchResultCallback, CommentCallback, NotificationCallback, OpenRestaurantCallback,
+        ApiCallback{
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
@@ -135,6 +138,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     CommentFragment commentFragment;
     CuratedFragment curatedFragment;
     StoreFragment storeFragment;
+    StoreHistoryFragment storeHistoryFragment;
+
 
 
     //-------dummy fragment created for temporary use to set Legal screen title----
@@ -319,6 +324,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         favouritesFragment = new FavouritesFragment();
         curatedFragment = new CuratedFragment();
         storeFragment = new StoreFragment();
+        storeHistoryFragment = new StoreHistoryFragment();
 
         openHomeFirst();
 
@@ -1475,7 +1481,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }else {
             btnOption.setVisibility(View.GONE);
         }
-        Log.d("check ids","myId:"+userId+" userId:"+currentProfileUserId+" f: "+fragment.getClass().getSimpleName());
+        if (fragment == storeFragment){
+            searchHeader.setVisibility(View.GONE);
+            header.setVisibility(View.VISIBLE);
+            header1.setVisibility(View.GONE);
+            titleHome.setText("Store");
+        }
+       // Log.d("check ids","myId:"+userId+" userId:"+currentProfileUserId+" f: "+fragment.getClass().getSimpleName());
        /* if (fragment == userProfile && currentProfileUserId.equals(userId)){
             btnOption.setVisibility(View.VISIBLE);
             Log.d("opton btn", "show");
@@ -1603,10 +1615,15 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             manager.popBackStack(first.getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
     }
-
-
     @Override
     public void restaurantOpen(String rId) {
         openRProfile(rId);
+    }
+    @Override
+    public void apiResponse(JSONObject response, String tag) {
+        if (tag.equals("bookSlot")){
+            setFragmentView(storeHistoryFragment, R.id.container, -1, true);
+        }
+        Log.d("api response home", tag);
     }
 }

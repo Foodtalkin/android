@@ -57,9 +57,6 @@ public class Config {
     public static String URL_REPORT_USER  = "http://"+IP+"/index.php/service/flag/user";
     public static String URL_REPORT_RESTAURANT  = "http://"+IP+"/index.php/service/restaurantReport/add";
     public static String URL_ADWORD_LIST  = "http://"+IP+"/index.php/service/adwords/list";
-
-
-
-
-
+    public static String URL_ADWORD_BOOKSLOT = "http://"+IP+"/index.php/service/adwords/bookslot";
+    public static String URL_ADWORD_REDEEMED = "http://"+IP+"/index.php/service/adwords/redeedmed";
 }

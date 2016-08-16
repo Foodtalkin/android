@@ -171,6 +171,8 @@ public class HomeFragment extends Fragment {
         super.onDestroy();
     }
 
+
+
     @Override
     public void onDetach() {
         Log.d("Fragment","onDetach");
