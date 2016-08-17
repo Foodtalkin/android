@@ -119,6 +119,7 @@ public class StoreFragment extends Fragment implements ApiCallback {
             current.expiry = listArray.getJSONObject(i).getString("expiry");
             current.iRedeemed = listArray.getJSONObject(i).getString("iRedeemed");
             current.type = listArray.getJSONObject(i).getString("type");
+            current.avilablePoints = listArray.getJSONObject(i).getString("avilablePoints");
             listStore.add(current);
         }
         //Log.d("send list", "total: "+restaurantList.size());

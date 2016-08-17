@@ -103,6 +103,7 @@ public class StoreHistoryFragment extends Fragment implements ApiCallback {
 
         // this.response = response;
         JSONArray listArray = response.getJSONArray("result");
+        Log.d("store history fragment", "length: "+ listArray.length());
         // Log.d("rListArray", "total: "+ rListArray.length());
         for (int i=0;i<listArray.length();i++){
             StoreHistoryObj current = new StoreHistoryObj();

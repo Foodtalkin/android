@@ -19,4 +19,5 @@ public class StoreObj {
     public String expiry;
     public String iRedeemed;
     public String type;
+    public String avilablePoints;
 }

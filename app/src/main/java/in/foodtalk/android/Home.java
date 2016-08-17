@@ -203,6 +203,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     Fragment currentFragment;
 
     ImageView btnOption;
+    ImageView btnStoreHistory;
 
     ApiCall apiCall;
 
@@ -259,6 +260,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         btnLogout.setOnClickListener(this);
 
         btnOption = (ImageView) findViewById(R.id.btn_option);
+        btnStoreHistory = (ImageView) findViewById(R.id.btn_store_history);
 
         btnHome = (LinearLayout) findViewById(R.id.btn_home);
         btnDiscover = (LinearLayout) findViewById(R.id.btn_discover);
@@ -303,6 +305,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         btnMore.setOnClickListener(this);
         btnHome.setOnClickListener(this);
         btnOption.setOnClickListener(this);
+        btnStoreHistory.setOnClickListener(this);
         // Log.d("getInfo",db.getRowCount()+"");
         // Log.d("get user info", db.getUserDetails().get("userName")+"");
 
@@ -535,6 +538,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                     profileReport("restaurant", currentProfileRestaurantId);
                 }
 
+                break;
+            case R.id.btn_store_history:
+                setFragmentView(storeHistoryFragment, R.id.container, -1, true);
                 break;
         }
     }
@@ -1456,6 +1462,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         if (fragment == curatedFragment){
             titleHome.setText("Food Talk Curated list");
         }
+
         /*if(this.getFragmentManager().findFragmentById(R.id.container1) != null){
             header.setVisibility(View.GONE);
             Log.d("setTitle", "header gone");
@@ -1486,6 +1493,17 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             header.setVisibility(View.VISIBLE);
             header1.setVisibility(View.GONE);
             titleHome.setText("Store");
+            btnStoreHistory.setVisibility(View.VISIBLE);
+        }else {
+            btnStoreHistory.setVisibility(View.GONE);
+        }
+
+        if (fragment == storeHistoryFragment){
+            searchHeader.setVisibility(View.GONE);
+            header.setVisibility(View.VISIBLE);
+            header1.setVisibility(View.GONE);
+
+            titleHome.setText("Purchases");
         }
        // Log.d("check ids","myId:"+userId+" userId:"+currentProfileUserId+" f: "+fragment.getClass().getSimpleName());
        /* if (fragment == userProfile && currentProfileUserId.equals(userId)){

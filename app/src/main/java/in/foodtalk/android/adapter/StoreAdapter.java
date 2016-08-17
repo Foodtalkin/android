@@ -62,6 +62,10 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         storeCardHolder.txtDes1.setText(current.description);
         storeCardHolder.txtDes2.setText(current.description2);
         storeCardHolder.txtTitle.setText(current.title);
+
+        storeCardHolder.type = current.type;
+
+        storeCardHolder.havePoints = Integer.parseInt(current.avilablePoints);
         Log.d("store points", current.points);
 
         Picasso.with(context)
@@ -73,10 +77,14 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         switch (current.type){
             case "event":
+                storeCardHolder.requiredPoints = Integer.parseInt(current.points);
                 if (current.iRedeemed.equals("0")){
                     storeCardHolder.btn.setText("BOOK NOW");
+                    storeCardHolder.purchased = false;
                 }else {
+                    storeCardHolder.purchased = true;
                     storeCardHolder.btn.setText("BOOKED");
+                    storeCardHolder.btn.getBackground().setAlpha(128);
                 }
 
                 if (current.points != null && !current.points.equals("")){
@@ -84,10 +92,14 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
                 break;
             case "offers":
+                storeCardHolder.requiredPoints = 0;
                 if (current.iRedeemed.equals("0")){
+                    storeCardHolder.purchased = false;
                     storeCardHolder.btn.setText("REDEEM");
                 }else {
+                    storeCardHolder.purchased = true;
                     storeCardHolder.btn.setText("REDEEMED");
+                    storeCardHolder.btn.getBackground().setAlpha(128);
                 }
                 break;
         }
@@ -101,6 +113,11 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         TextView txtDes1, txtDes2, txtTitle, txtPoints;
         ImageView thumbImg;
         Button btn;
+        String type;
+
+        int requiredPoints;
+        int havePoints;
+        boolean purchased;
 
         public StoreCardHolder(View itemView) {
             super(itemView);
@@ -122,7 +139,23 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("store", "book clicked");
-                            callDialog(getPosition());
+                            if (purchased){
+                                apiCallback.apiResponse(null,"bookSlot");
+                            }else{
+
+                                if (type.equals("event")){
+                                    Log.d("store on event", "have: "+havePoints+" required: "+requiredPoints);
+                                    if (havePoints>=requiredPoints){
+                                        callDialog(getPosition());
+                                        Log.d("store", "have");
+                                    }else {
+                                        Log.d("store", "no have");
+                                        noEnoughDialog();
+                                    }
+                                }else if (type.equals("offers")){
+                                    callDialog(getPosition());
+                                }
+                            }
                             break;
                     }
 
@@ -147,11 +180,13 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             @Override
             public void onClick(View v) {
                 dialog.cancel();
+                Log.d("callDialog", "clicked cancel");
             }
         });
         btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("callDialog","click");
                 dialog.cancel();
                 String type = listStore.get(position).type;
                 if (type.equals("event") || type.equals("offers")){
@@ -167,5 +202,24 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 Log.d("dialog",listStore.get(position).type);
             }
         });
+    }
+    private void noEnoughDialog(){
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_store1);
+        dialog.show();
+
+        TextView btnCancel = (TextView) dialog.findViewById(R.id.btn_cancel);
+
+
+        //You don't have enough points.
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
+
     }
 }
