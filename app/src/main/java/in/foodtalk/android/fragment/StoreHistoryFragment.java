@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +47,8 @@ public class StoreHistoryFragment extends Fragment implements ApiCallback {
 
     List<StoreHistoryObj> storeHistoryList = new ArrayList<>();
 
+    TextView placeholder;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,10 +58,17 @@ public class StoreHistoryFragment extends Fragment implements ApiCallback {
         progressHolder = (LinearLayout) layout.findViewById(R.id.progress_h);
         tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
         apiCallback = this;
+
+        placeholder = (TextView) layout.findViewById(R.id.placeholder);
+
         tapToRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                try {
+                    getStoreList();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
         linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
@@ -75,6 +85,8 @@ public class StoreHistoryFragment extends Fragment implements ApiCallback {
         return layout;
     }
     private void getStoreList() throws JSONException {
+        progressHolder.setVisibility(View.VISIBLE);
+        tapToRetry.setVisibility(View.GONE);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("sessionId", db.getUserDetails().get("sessionId"));
         apiCall.apiRequestPost(getActivity(),jsonObject, Config.URL_ADWORD_REDEEMED, "storeHistory", apiCallback);
@@ -83,13 +95,17 @@ public class StoreHistoryFragment extends Fragment implements ApiCallback {
     @Override
     public void apiResponse(JSONObject response, String tag) {
         Log.d("storeHistory", tag+" "+response+"");
-        try {
-            loadDataIntoView(response, tag);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (response != null){
+            try {
+                loadDataIntoView(response, tag);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else {
+            tapToRetry.setVisibility(View.VISIBLE);
+            progressHolder.setVisibility(View.GONE);
         }
     }
-
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
 
         //progressBarCheckin.setVisibility(View.GONE);
@@ -101,9 +117,16 @@ public class StoreHistoryFragment extends Fragment implements ApiCallback {
         tapToRetry.setVisibility(View.GONE);
 
 
+
+
         // this.response = response;
         JSONArray listArray = response.getJSONArray("result");
         Log.d("store history fragment", "length: "+ listArray.length());
+        if (listArray.length() > 0){
+            placeholder.setVisibility(View.GONE);
+        }else {
+            placeholder.setVisibility(View.VISIBLE);
+        }
         // Log.d("rListArray", "total: "+ rListArray.length());
         for (int i=0;i<listArray.length();i++){
             StoreHistoryObj current = new StoreHistoryObj();

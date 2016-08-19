@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 
 import org.json.JSONArray;
@@ -42,6 +43,8 @@ public class StoreFragment extends Fragment implements ApiCallback {
 
     List<StoreObj> listStore = new ArrayList<>();
 
+    public TextView title;
+
     ApiCallback apiCallback;
     StoreAdapter storeAdapter;
 
@@ -56,10 +59,13 @@ public class StoreFragment extends Fragment implements ApiCallback {
         tapToRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                try {
+                    getStoreList();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
-
         db = new DatabaseHandler(getActivity());
         try {
             getStoreList();
@@ -73,6 +79,8 @@ public class StoreFragment extends Fragment implements ApiCallback {
     }
 
     private void getStoreList() throws JSONException {
+        progressHolder.setVisibility(View.VISIBLE);
+        tapToRetry.setVisibility(View.GONE);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("sessionId", db.getUserDetails().get("sessionId"));
         apiCall.apiRequestPost(getActivity(),jsonObject, Config.URL_ADWORD_LIST, "storeList", apiCallback);
@@ -81,12 +89,16 @@ public class StoreFragment extends Fragment implements ApiCallback {
     @Override
     public void apiResponse(JSONObject response, String tag) {
         Log.d("apiResponse", tag+" : " +response);
-        try {
-            loadDataIntoView(response, tag);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (response != null){
+            try {
+                loadDataIntoView(response, tag);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else {
+            tapToRetry.setVisibility(View.VISIBLE);
+            progressHolder.setVisibility(View.GONE);
         }
-
     }
 
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
@@ -120,6 +132,8 @@ public class StoreFragment extends Fragment implements ApiCallback {
             current.iRedeemed = listArray.getJSONObject(i).getString("iRedeemed");
             current.type = listArray.getJSONObject(i).getString("type");
             current.avilablePoints = listArray.getJSONObject(i).getString("avilablePoints");
+
+            title.setText(String.valueOf((long)Double.parseDouble(current.avilablePoints))+" Points");
             listStore.add(current);
         }
         //Log.d("send list", "total: "+restaurantList.size());

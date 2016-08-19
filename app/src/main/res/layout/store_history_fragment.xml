@@ -9,12 +9,12 @@
 
     </android.support.v7.widget.RecyclerView>
     <TextView
-        android:id="@+id/placeholder_curated"
+        android:id="@+id/placeholder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:textColor="@color/blackText1"
-        android:text=""
+        android:text="@string/store_history"
         android:visibility="gone"/>
 
     <LinearLayout

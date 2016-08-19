@@ -6,6 +6,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.communicator.StoreCallback;
 import in.foodtalk.android.fragment.StoreHistoryFragment;
 import in.foodtalk.android.module.ToastShow;
 import in.foodtalk.android.object.StoreHistoryObj;
@@ -26,11 +28,13 @@ public class StoreHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     Context context;
     List<StoreHistoryObj> storeHistoryList;
     LayoutInflater layoutInflater;
+    StoreCallback storeCallback;
 
     public StoreHistoryAdapter(Context context, List<StoreHistoryObj> storeHistoryList){
         this.context = context;
         this.storeHistoryList = storeHistoryList;
         layoutInflater = LayoutInflater.from(context);
+        storeCallback = (StoreCallback) context;
 
     }
     @Override
@@ -63,7 +67,7 @@ public class StoreHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public int getItemCount() {
         return storeHistoryList.size();
     }
-    class HistoryHolder extends RecyclerView.ViewHolder {
+    class HistoryHolder extends RecyclerView.ViewHolder implements View.OnTouchListener {
 
         TextView txtDate, txtName, txtDetail, txtValue, txtCoupon, btnBuyNow;
         LinearLayout holderOffer, holderCoupon;
@@ -77,12 +81,29 @@ public class StoreHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             btnBuyNow = (TextView) itemView.findViewById(R.id.btn_buy_now);
             txtCoupon = (TextView) itemView.findViewById(R.id.txt_coupon);
             holderCoupon = (LinearLayout) itemView.findViewById(R.id.holder_coupon);
-            holderCoupon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    copyToClipboard("coupon", txtCoupon.getText().toString());
-                }
-            });
+            holderCoupon.setOnTouchListener(this);
+            btnBuyNow.setOnTouchListener(this);
+        }
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch (v.getId()){
+                case R.id.holder_coupon:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            copyToClipboard("coupon", txtCoupon.getText().toString());
+                            break;
+                    }
+                    break;
+                case R.id.btn_buy_now:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("storeHistory adapter","clicked buynow");
+                            storeCallback.storeHistory(storeHistoryList.get(getPosition()).type, storeHistoryList.get(getPosition()).paymentUrl);
+                            break;
+                    }
+                    break;
+            }
+            return true;
         }
     }
     private void copyToClipboard(String label, String text){

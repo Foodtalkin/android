@@ -33,9 +33,9 @@
     <string name="curated_loader_copy">Finding places we love, around you.</string>
     <string name="user_profile_copy">No dishes to show :(</string>
     <string name="discover_no_dish">No dishes to show :(</string>
+    <string name="store_history">The store is currently empty.</string>
 
     <string name="rs">\u20B9</string>
-
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

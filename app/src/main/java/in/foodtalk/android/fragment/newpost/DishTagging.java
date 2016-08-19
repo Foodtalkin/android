@@ -167,12 +167,9 @@ public class DishTagging extends Fragment implements DishTaggingCallback, View.O
                     btnNextEnable = true;
                 }
             }
-
             @Override
             public void afterTextChanged(Editable s) {
                 //Log.d("afterTextChange", s+"");
-
-
             }
         });
     }

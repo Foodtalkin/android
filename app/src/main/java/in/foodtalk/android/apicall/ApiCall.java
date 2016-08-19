@@ -77,6 +77,7 @@ public class ApiCall {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.e("error response", "Error: " + error.getMessage());
+                apiCallback1.apiResponse(null, tag);
                 // hideProgressDialog();
             }
         }){

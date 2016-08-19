@@ -64,6 +64,7 @@ import in.foodtalk.android.communicator.ProfileRPostOpenCallback;
 import in.foodtalk.android.communicator.RatingCallback;
 import in.foodtalk.android.communicator.ReviewCallback;
 import in.foodtalk.android.communicator.SearchResultCallback;
+import in.foodtalk.android.communicator.StoreCallback;
 import in.foodtalk.android.communicator.UserProfileCallback;
 import in.foodtalk.android.communicator.UserThumbCallback;
 import in.foodtalk.android.fragment.CommentFragment;
@@ -102,7 +103,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         HeadSpannableCallback, UserThumbCallback, ProfileRPostOpenCallback, PhoneCallback,
         CheckInCallback, CamBitmapCallback, DishTaggingCallback , RatingCallback , ReviewCallback, AddRestaurantCallback,
         AddedRestaurantCallback, SearchResultCallback, CommentCallback, NotificationCallback, OpenRestaurantCallback,
-        ApiCallback{
+        ApiCallback, StoreCallback{
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
@@ -327,6 +328,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         favouritesFragment = new FavouritesFragment();
         curatedFragment = new CuratedFragment();
         storeFragment = new StoreFragment();
+        storeFragment.title = titleHome;
         storeHistoryFragment = new StoreHistoryFragment();
 
         openHomeFirst();
@@ -435,11 +437,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 setFragmentView(dishResultFragment, R.id.container, -1, true);
                 break;
             case "WebLink":
-                webViewFragment = new WebViewFragment();
+                openWebPage(elementId, "Web");
+               /* webViewFragment = new WebViewFragment();
                 webViewFragment.webViewFragment1(elementId);
                 setFragmentView (webViewFragment, R.id.container, 0, true);
                 //titleHome.setText("Legal");
-                titleHome.setText("Web");
+                titleHome.setText("Web");*/
                 //setTitle(legalFragment);
                 break;
         }
@@ -1010,10 +1013,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                break;
            case "legal":
                Log.d("btn click","setFragment webview");
-               webViewFragment = new WebViewFragment();
+               openWebPage("http://www.foodtalkindia.com/document.html", null);
+               /*webViewFragment = new WebViewFragment();
                webViewFragment.webViewFragment1("http://www.foodtalkindia.com/document.html");
                setFragmentView (webViewFragment, R.id.container, -1, true);
-               //titleHome.setText("Legal");
+               //titleHome.setText("Legal");*/
                setTitle(legalFragment);
                break;
            case "favourites":
@@ -1393,14 +1397,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             titleHome.setText("Home");
         }*/
 
-
-
         Log.e("setTitle",fragment.getClass().getName());
-
         if (fragment == discoverFragment){
             header.setVisibility(View.VISIBLE);
             header1.setVisibility(View.GONE);
-            titleHome.setText("Discover");
+            titleHome.setText("Nearby");
         }
         if (fragment == notiFragment){
             header.setVisibility(View.VISIBLE);
@@ -1502,9 +1503,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             searchHeader.setVisibility(View.GONE);
             header.setVisibility(View.VISIBLE);
             header1.setVisibility(View.GONE);
-
             titleHome.setText("Purchases");
         }
+
        // Log.d("check ids","myId:"+userId+" userId:"+currentProfileUserId+" f: "+fragment.getClass().getSimpleName());
        /* if (fragment == userProfile && currentProfileUserId.equals(userId)){
             btnOption.setVisibility(View.VISIBLE);
@@ -1643,5 +1644,19 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             setFragmentView(storeHistoryFragment, R.id.container, -1, true);
         }
         Log.d("api response home", tag);
+    }
+    public void openWebPage(String url, String title){
+        webViewFragment = new WebViewFragment();
+        webViewFragment.webViewFragment1(url);
+        setFragmentView (webViewFragment, R.id.container, 0, true);
+        //titleHome.setText("Legal");
+        if (title != null){
+            titleHome.setText(title);
+        }
+    }
+    @Override
+    public void storeHistory(String type, String value) {
+        openWebPage(value, null);
+        titleHome.setText("");
     }
 }

@@ -65,8 +65,9 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         storeCardHolder.type = current.type;
 
-        storeCardHolder.havePoints = Integer.parseInt(current.avilablePoints);
-        Log.d("store points", current.points);
+        double point = Double.parseDouble(current.avilablePoints);
+        storeCardHolder.havePoints = (long) point;
+
 
         Picasso.with(context)
                 .load(current.adImage)
@@ -77,7 +78,9 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         switch (current.type){
             case "event":
-                storeCardHolder.requiredPoints = Integer.parseInt(current.points);
+                double rPoint = Double.parseDouble(current.points);
+                //storeCardHolder.havePoints = (long) point;
+                storeCardHolder.requiredPoints = (long) rPoint;
                 if (current.iRedeemed.equals("0")){
                     storeCardHolder.btn.setText("BOOK NOW");
                     storeCardHolder.purchased = false;
@@ -115,8 +118,8 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         Button btn;
         String type;
 
-        int requiredPoints;
-        int havePoints;
+        long requiredPoints;
+        long havePoints;
         boolean purchased;
 
         public StoreCardHolder(View itemView) {
@@ -129,7 +132,6 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             thumbImg = (ImageView) itemView.findViewById(R.id.thumb_img);
             btn = (Button) itemView.findViewById(R.id.btn_book);
             btn.setOnTouchListener(this);
-
         }
 
         @Override
@@ -142,7 +144,6 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                             if (purchased){
                                 apiCallback.apiResponse(null,"bookSlot");
                             }else{
-
                                 if (type.equals("event")){
                                     Log.d("store on event", "have: "+havePoints+" required: "+requiredPoints);
                                     if (havePoints>=requiredPoints){
