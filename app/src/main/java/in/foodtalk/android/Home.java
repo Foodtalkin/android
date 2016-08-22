@@ -410,8 +410,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 setFragmentView(searchFragment, R.id.container1, -1, true);
                 break;
             case "CheckIn":
-                newpostFragment = new CheckIn();
-                setFragmentView(newpostFragment, R.id.container1, 2, true);
+                startCheckIn(null);
+                /*newpostFragment = new CheckIn();
+                setFragmentView(newpostFragment, R.id.container1, 2, true);*/
                 break;
             case "Notifications":
                 setFragmentView(notiFragment, R.id.container, 3, false);
@@ -444,6 +445,15 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 //titleHome.setText("Legal");
                 titleHome.setText("Web");*/
                 //setTitle(legalFragment);
+                break;
+            case "FoodTalkSuggestions":
+                setFragmentView(curatedFragment, R.id.container, -1, true);
+                break;
+            case "Store":
+                setFragmentView(storeFragment, R.id.container, -1, true);
+                break;
+            case "BookStore":
+                setFragmentView(storeHistoryFragment, R.id.container, -1, true);
                 break;
         }
     }
@@ -487,8 +497,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             case R.id.btn_newpost:
 
                 if (pageNo != 2) {
-                    newpostFragment = new CheckIn();
-                    setFragmentView(newpostFragment, R.id.container1, 2, true);
+                    photo = null;
+                    startCheckIn(null);
+                    /*newpostFragment = new CheckIn();
+                    setFragmentView(newpostFragment, R.id.container1, 2, true);*/
                     //titleHome.setText("New Post");
                     //pageNo = 2;
                 }
@@ -599,6 +611,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             Log.d("setFragmentview","going to commit");
             if(newFragment == homeFragment || newFragment == discoverFragment || newFragment == notiFragment || newFragment == moreFragment){
                 clearBackStack();
+
             }
             transaction.commit();
 
@@ -750,9 +763,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     final static int FROM_GALLERY = 55;
 
     private void dialogImgFrom(){
+        Log.d("home","dialogImgFrom comes");
 
         final Dialog dialogImgFrom = new Dialog(this);
         dialogImgFrom.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+       // dialogImgFrom.setCancelable(false);
+       // dialogImgFrom.setCanceledOnTouchOutside(false);
 
         dialogImgFrom.setContentView(R.layout.dialog_img_from);
 
@@ -1122,15 +1139,25 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     }
     @Override
     public void checkInRestaurant(String restaurantId, String restaurantName) {
-        pickImage(restaurantId, restaurantName);
+        currentFragment = this.getFragmentManager().findFragmentById(R.id.container1);
+        //if (currentFragment == newpostFragment){
+            pickImage(restaurantId, restaurantName);
+        //}
+
     }
     private void pickImage(String restaurantId, String restaurantName){
+        Log.d("home", "photo "+ photo);
         this.restaurantIdNewPost = restaurantId;
-
         Log.d("checkInRestarant","rId"+restaurantId+" rName: "+restaurantName);
         cameraFragment = new CameraFragment();
         restaurantNameNewPost = restaurantName;
-        dialogImgFrom();
+
+        if (photo == null){
+            dialogImgFrom();
+        }else {
+            startDishTagging();
+        }
+
         //setFragmentView (cameraFragment, R.id.container1, 4, true);
         hideSoftKeyboard();
     }
@@ -1146,7 +1173,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         dishTagging = new DishTagging();
         dishTagging.dishTagging1(photo);
         setFragmentView(dishTagging, R.id.container1, 0, true);
-
         //showSoftKeyboard(layout);
     }
     public void capturedBitmap1(Bitmap photo , File file) {
@@ -1156,11 +1182,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         this.file = file;
 
         Log.d("capuredBitmap", "call");
+        //showSoftKeyboard(layout);
+    }
+    private void startDishTagging(){
         dishTagging = new DishTagging();
         dishTagging.dishTagging1(photo);
         setFragmentView(dishTagging, R.id.container1, 0, true);
-
-        //showSoftKeyboard(layout);
     }
 
     public void hideSoftKeyboard() {
@@ -1264,12 +1291,23 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     public void restaurantAdded(String rId) {
         Log.d("restaurant added", "Rid: "+rId);
 
-        newpostFragment = new CheckIn();
-        Bundle bundle = new Bundle();
-        bundle.putString("rId", rId);
-        newpostFragment.setArguments(bundle);
-        setFragmentView(newpostFragment, R.id.container1, -1, true);
+        startCheckIn(rId);
 
+
+
+    }
+
+    private void startCheckIn(String rId){
+        newpostFragment = new CheckIn();
+        if (rId != null){
+            Bundle bundle = new Bundle();
+            bundle.putString("rId", rId);
+            newpostFragment.setArguments(bundle);
+        }
+
+        setFragmentView(newpostFragment, R.id.container1, 2, true);
+        pickImage("","");
+        //dialogImgFrom();
     }
 
     //----------new camera and gallery and crop code----------------
@@ -1529,8 +1567,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             case RESTAURANT_SEARCH:
 
                 Log.d("restaurantId", id+"");
-
-
                 Bundle bundle = new Bundle();
                 bundle.putString("restaurantId", id);
 
@@ -1630,6 +1666,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             FragmentManager.BackStackEntry first = manager.getBackStackEntryAt(0);
             manager.popBackStack(first.getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
+        photo = null;
     }
     @Override
     public void restaurantOpen(String rId) {

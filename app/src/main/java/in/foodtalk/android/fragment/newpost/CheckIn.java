@@ -100,6 +100,13 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
         getLocation = new GetLocation(getActivity(), latLonCallback);
         getLocation.onStart();
 
+        checkInCallback = (CheckInCallback) getActivity();
+
+        //checkInCallback.checkInRestaurant("","");
+        //Log.d("checkIn Fragment","call checkInREstaurant" );
+
+
+
         tapToRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,7 +167,7 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
         //recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         linearLayoutManager = new LinearLayoutManager(getActivity());
 
-        checkInCallback = (CheckInCallback) getActivity();
+
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -178,7 +185,6 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
 
         Log.d("get user info F", db.getUserDetails().get("sessionId"));
         Log.d("get user info F", db.getUserDetails().get("userId"));
-
         super.onActivityCreated(savedInstanceState);
     }
     public void getRestaurantList(final String tag) throws JSONException {

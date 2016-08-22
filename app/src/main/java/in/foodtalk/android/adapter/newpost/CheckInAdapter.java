@@ -60,7 +60,7 @@ public class CheckInAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         RestaurantHolder restaurantHolder = (RestaurantHolder) holder;
 
         restaurantHolder.txtRName.setText(stringCase.caseSensitive(current.restaurantName));
-        Log.d("restaurantIsActive", current.restaurantIsActive+"");
+        //Log.d("restaurantIsActive", current.restaurantIsActive+"");
         if (current.restaurantIsActive != null){
             if (current.restaurantIsActive.equals("1")){
                 restaurantHolder.txtAria.setText(current.area);
@@ -70,7 +70,6 @@ public class CheckInAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 restaurantHolder.txtAria.setTextColor(Color.RED);
             }
         }
-
         restaurantHolder.id = current.id;
     }
 
