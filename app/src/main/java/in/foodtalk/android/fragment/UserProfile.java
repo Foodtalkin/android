@@ -114,7 +114,6 @@ public class UserProfile extends Fragment implements LatLonCallback {
         //btnFollow = (Button) layout.findViewById(R.id.btn_follow_profile);
         return layout;
     }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         config = new Config();
@@ -241,6 +240,7 @@ public class UserProfile extends Fragment implements LatLonCallback {
             userProfile.totalPoints = profile.getString("totalPoints");
             userProfile.score = profile.getString("score");
             userProfile.userId = profile.getString("id");
+            userProfile.avilablePoints = profile.getString("avilablePoints");
 
             UserPostObj userPostObj = new UserPostObj();
             userPostObj.viewType = "profileInfo";

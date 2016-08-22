@@ -113,7 +113,10 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (holder instanceof ProfileHolder){
             ProfileHolder profileHolder = (ProfileHolder) holder;
             profileHolder.fullName.setText(stringCase.caseSensitive(userProfileObj.fullName));
-            profileHolder.checkins.setText(userProfileObj.checkInCount);
+            //profileHolder.checkins.setText(userProfileObj.checkInCount);
+            double point = Double.parseDouble(userProfileObj.avilablePoints);
+            Log.d("abilablePoints", userProfileObj.avilablePoints);
+            profileHolder.checkins.setText(String.valueOf((long) point));
             profileHolder.followers.setText(userProfileObj.followersCount);
             profileHolder.following.setText(userProfileObj.followingCount);
 
