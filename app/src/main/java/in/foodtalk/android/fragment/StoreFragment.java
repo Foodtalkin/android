@@ -132,7 +132,6 @@ public class StoreFragment extends Fragment implements ApiCallback {
             current.iRedeemed = listArray.getJSONObject(i).getString("iRedeemed");
             current.type = listArray.getJSONObject(i).getString("type");
             current.avilablePoints = listArray.getJSONObject(i).getString("avilablePoints");
-
             title.setText(String.valueOf((long)Double.parseDouble(current.avilablePoints))+" Points");
             listStore.add(current);
         }
