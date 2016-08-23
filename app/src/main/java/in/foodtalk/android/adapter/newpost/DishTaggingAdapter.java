@@ -86,7 +86,14 @@ public class DishTaggingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("dish name", getPosition()+"");
-                            dishTaggingCallback.dishNameSelected(dishList.get(getPosition()).name);
+                            try {
+                                dishTaggingCallback.dishNameSelected(dishList.get(getPosition()).name);
+                            } catch ( IndexOutOfBoundsException e ) {
+                                Log.e("DishTaggingAdapter", e+"");
+                            }
+                           /* if (dishList.size() >= getPosition()-1){
+                                dishTaggingCallback.dishNameSelected(dishList.get(getPosition()).name);
+                            }*/
                             break;
                     }
                     break;
@@ -94,7 +101,6 @@ public class DishTaggingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             return true;
         }
     }
-
     //------------
     public void animateTo(List<DishListObj> models) {
         applyAndAnimateRemovals(models);

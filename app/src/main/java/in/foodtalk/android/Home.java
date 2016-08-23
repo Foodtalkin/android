@@ -1157,7 +1157,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }else {
             startDishTagging();
         }
-
         //setFragmentView (cameraFragment, R.id.container1, 4, true);
         hideSoftKeyboard();
     }
@@ -1290,11 +1289,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     @Override
     public void restaurantAdded(String rId) {
         Log.d("restaurant added", "Rid: "+rId);
-
         startCheckIn(rId);
-
-
-
     }
 
     private void startCheckIn(String rId){
@@ -1304,7 +1299,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             bundle.putString("rId", rId);
             newpostFragment.setArguments(bundle);
         }
-
         setFragmentView(newpostFragment, R.id.container1, 2, true);
         pickImage("","");
         //dialogImgFrom();
@@ -1358,8 +1352,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
                 if (data != null){
                     // Uri selectedImage = data.getData();
-
-
                     CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
                     Bitmap photo = decodeFile(new File(result.getUri().getPath()));
@@ -1540,7 +1532,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             header1.setVisibility(View.GONE);
             titleHome.setText("Purchases");
         }
-
        // Log.d("check ids","myId:"+userId+" userId:"+currentProfileUserId+" f: "+fragment.getClass().getSimpleName());
        /* if (fragment == userProfile && currentProfileUserId.equals(userId)){
             btnOption.setVisibility(View.VISIBLE);
