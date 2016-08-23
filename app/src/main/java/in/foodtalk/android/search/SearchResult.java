@@ -82,6 +82,8 @@ public class SearchResult extends Fragment implements SearchCallback {
 
     LinearLayout iconHolder;
 
+    TextView placeholder;
+
 
 
 
@@ -136,6 +138,8 @@ public class SearchResult extends Fragment implements SearchCallback {
         txtHolder = (TextView) layout.findViewById(R.id.txt_search);
 
         iconHolder = (LinearLayout) layout.findViewById(R.id.icon_copy_holder);
+
+        placeholder = (TextView) layout.findViewById(R.id.placeholder);
 
 
 
@@ -216,6 +220,9 @@ public class SearchResult extends Fragment implements SearchCallback {
     public void searchKey(String keyword, String searchType) {
         this.keyword = keyword;
         Log.d("searchKey", keyword+" "+ searchType);
+        if (keyword.length() == 0){
+            placeholder.setVisibility(View.GONE);
+        }
         if (keyword.length()<2 && searchResultLoaded == true){
             searchAdapter.notifyDataSetChanged();
 
@@ -237,6 +244,8 @@ public class SearchResult extends Fragment implements SearchCallback {
             onTexChange(keyword);
         }
 
+       // Log.d("check list size", "searchRList: "+searchResultList.size() );
+
         Log.d("status on searchKey","keyword: "+keyword+" searchResultLoaded: "+ searchResultLoaded);
         //Log.d("search key", "keyword: "+ keyword+" searchType "+searchType + "session id: "+ sessionId);
     }
@@ -247,7 +256,6 @@ public class SearchResult extends Fragment implements SearchCallback {
         //Log.d("pageNo loaded", pageNumber+"");
 
         progressBar.setVisibility(View.VISIBLE);
-
         //Log.d("session Id global", AppController.getInstance().sessionId+"");
         //Log.d("getPostFeed", "post data");
         JSONObject obj = new JSONObject();
@@ -282,8 +290,6 @@ public class SearchResult extends Fragment implements SearchCallback {
                                     loadDataIntoView(response , tag);
                                     Log.d("respons","loadDataIntoView");
                                 }
-
-
                             }else {
                                 String errorCode = response.getString("errorCode");
                                 if(errorCode.equals("6")){
@@ -359,6 +365,8 @@ public class SearchResult extends Fragment implements SearchCallback {
     }
     private void onTexChange(String newText){
 
+
+
         setListArray(response);
         final List<SearchResultObj> filteredModelList = filter(searchResultList, newText);
         searchAdapter.animateTo(filteredModelList);
@@ -380,6 +388,7 @@ public class SearchResult extends Fragment implements SearchCallback {
 
                         searchResultList.add(current);
                     }
+                    Log.d("searchResult","array length: "+rListArray.length());
                     break;
                 case USER_SEARCH:
                     JSONArray rListArray1 = response.getJSONArray("users");
@@ -405,7 +414,6 @@ public class SearchResult extends Fragment implements SearchCallback {
                     }
                     break;
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -419,6 +427,12 @@ public class SearchResult extends Fragment implements SearchCallback {
             if (text.contains(query)) {
                 filteredModelList.add(model);
             }
+        }
+        Log.d("filter", "filtermodeList"+ filteredModelList.size());
+        if (filteredModelList.size() > 0 ){
+            placeholder.setVisibility(View.GONE);
+        }else {
+            placeholder.setVisibility(View.VISIBLE);
         }
         return filteredModelList;
     }

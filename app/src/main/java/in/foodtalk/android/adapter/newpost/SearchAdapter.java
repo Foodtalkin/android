@@ -90,6 +90,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemCount() {
+        //Log.d("searchAdapter","at getItemCount size: "+ searchResultList.size());
         return searchResultList.size();
     }
 
@@ -109,7 +110,6 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             btnCard = (LinearLayout) itemView.findViewById(R.id.card_search_result);
 
             btnCard.setOnTouchListener(this);
-
         }
 
         @Override
