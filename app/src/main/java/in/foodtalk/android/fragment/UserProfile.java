@@ -1,5 +1,6 @@
 package in.foodtalk.android.fragment;
 
+import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -11,7 +12,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.android.volley.AuthFailureError;
@@ -21,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +41,7 @@ import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.LatLonCallback;
 import in.foodtalk.android.communicator.UserProfileCallback;
+import in.foodtalk.android.communicator.UserProfileImgCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.EndlessRecyclerOnScrollListener;
 import in.foodtalk.android.module.GetLocation;
@@ -47,7 +52,7 @@ import in.foodtalk.android.object.UserProfileObj;
 /**
  * Created by RetailAdmin on 06-05-2016.
  */
-public class UserProfile extends Fragment implements LatLonCallback {
+public class UserProfile extends Fragment implements LatLonCallback, UserProfileImgCallback {
 
     View layout;
 
@@ -76,6 +81,7 @@ public class UserProfile extends Fragment implements LatLonCallback {
     GetLocation getLocation;
 
     LatLonCallback latLonCallback;
+    UserProfileImgCallback userProfileImgCallback;
 
 
     String lat, lon;
@@ -86,6 +92,7 @@ public class UserProfile extends Fragment implements LatLonCallback {
     Button btnFollow;
 
     LinearLayout progressBar;
+    ImageView imgHolder;
 
 
 
@@ -98,6 +105,7 @@ public class UserProfile extends Fragment implements LatLonCallback {
 
         layout = inflater.inflate(R.layout.user_profile_fragment, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.user_profile_recycler_view);
+        imgHolder = (ImageView) layout.findViewById(R.id.img_holder);
         if (postList.size() > 0){
             postList.clear();
             loadMoreData = true;
@@ -123,6 +131,7 @@ public class UserProfile extends Fragment implements LatLonCallback {
 
         //------for gps location----------------
         latLonCallback = this;
+        userProfileImgCallback = this;
         //getLocation = new GetLocation(getActivity(), latLonCallback);
 
        // getLocation.onStart();
@@ -250,6 +259,8 @@ public class UserProfile extends Fragment implements LatLonCallback {
         JSONArray postArray = response.getJSONArray("imagePosts");
         //Log.d("Image post", postArray.getJSONObject(0).getString("postImage")+"");
 
+        showUserImage(userProfile.image);
+
         //----if array length 0 or less then 15 then ignore loadmore next time------------
         if (postArray.length() == 0){
             loadMoreData = false;
@@ -309,7 +320,8 @@ public class UserProfile extends Fragment implements LatLonCallback {
             loading = false;
             //userProfileAdapter.notifyDataSetChanged();
         }else {
-            userProfileAdapter = new UserProfileAdapter(context, postList , userProfile ,followBtnVisible);
+            userProfileAdapter = new UserProfileAdapter(context, postList , userProfile ,followBtnVisible, userProfileImgCallback);
+            userProfileAdapter.userImg = imgHolder;
             recyclerView.setAdapter(userProfileAdapter);
         }
         callScrollClass();
@@ -367,5 +379,25 @@ public class UserProfile extends Fragment implements LatLonCallback {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+    Dialog dialog;
+    private void showUserImage(String url){
+        dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_user_img);
+        ImageView userImgHolder = (ImageView) dialog.findViewById(R.id.img_holder);
+
+        Picasso.with(context)
+                .load(url)
+                .resize(800,800)
+                //.fit().centerCrop()
+                //.fit()
+                //.placeholder(R.drawable.user_placeholder)
+                .into(userImgHolder);
+    }
+
+    @Override
+    public void showUImage() {
+        dialog.show();
     }
 }

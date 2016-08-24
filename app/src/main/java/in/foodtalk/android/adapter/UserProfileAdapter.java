@@ -25,6 +25,7 @@ import java.util.List;
 import in.foodtalk.android.R;
 import in.foodtalk.android.apicall.UserFollow;
 import in.foodtalk.android.communicator.ProfilePostOpenCallback;
+import in.foodtalk.android.communicator.UserProfileImgCallback;
 import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.object.UserPostObj;
 import in.foodtalk.android.object.UserProfileObj;
@@ -53,15 +54,20 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     UserFollow userFollow;
 
+    public ImageView userImg;
+
     int imgWidth;
+    UserProfileImgCallback userProfileImgCallback;
 
     private ProfilePostOpenCallback postOpenCallback;
-    public UserProfileAdapter (Context context, List<UserPostObj> postList, UserProfileObj userProfile, Boolean followBtnVisible){
+    public UserProfileAdapter (Context context, List<UserPostObj> postList, UserProfileObj userProfile, Boolean followBtnVisible, UserProfileImgCallback userProfileImgCallback){
         layoutInflater = LayoutInflater.from(context);
         this.postList = postList;
         this.context = context;
         this.userProfileObj = userProfile;
         this.followBtnVisible = followBtnVisible;
+        this.userProfileImgCallback = userProfileImgCallback;
+
 
 
         postOpenCallback = (ProfilePostOpenCallback) context;
@@ -240,6 +246,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             btnFollow = (Button) itemView.findViewById(R.id.btn_follow_profile);
 
             btnFollow.setOnTouchListener(this);
+            profileImg.setOnTouchListener(this);
         }
 
         @Override
@@ -258,12 +265,26 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                     apiFollow = true;
                                     userFollow.follow(false,userId);
                                     btnFollow.setText("Follow");
-
                                 }
-
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
+                            break;
+                    }
+                    break;
+                case R.id.user_img_profile:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("UserProfileAdapter","img clicked "+userProfileObj.image);
+                            userProfileImgCallback.showUImage();
+
+                           /* Picasso.with(context)
+                                    .load(userProfileObj.image)
+                                    .resize(800,800)
+                                    //.fit().centerCrop()
+                                    //.fit()
+                                    //.placeholder(R.drawable.user_placeholder)
+                                    .into(userImg);*/
                             break;
                     }
                     break;

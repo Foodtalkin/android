@@ -389,12 +389,13 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
         getActivity().finish();
     }
     public void showToast(String msg){
-        Toast toast= Toast.makeText(getActivity(),
-                msg, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 300);
-        toast.show();
+        if (getActivity() != null){
+            Toast toast= Toast.makeText(getActivity(),
+                    msg, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 300);
+            toast.show();
+        }
     }
-
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         Log.d("onTouch","call");

@@ -17,10 +17,18 @@
             android:progressDrawable="@drawable/progress_bar"
             />
     </LinearLayout>
+
+
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/user_profile_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
     </android.support.v7.widget.RecyclerView>
+    <ImageView
+        android:id="@+id/img_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
 </RelativeLayout>
