@@ -35,6 +35,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
+import com.facebook.applinks.AppLinkData;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -767,5 +768,31 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         } catch (Exception e) {
             Log.e("exception", e.toString());
         }
+    }
+    private void deepLinkfb(){
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppLinkData.fetchDeferredAppLinkData(getApplicationContext(),
+                new AppLinkData.CompletionHandler() {
+                    @Override
+                    public void onDeferredAppLinkDataFetched(AppLinkData appLinkData) {
+                        if (appLinkData != null) {
+                            Bundle bundle = appLinkData.getArgumentBundle();
+                            Log.i("DEBUG_FACEBOOK_SDK", bundle.getString("target_url"));
+                            String url = bundle.getString("target_url");
+                            List<String> items = Arrays.asList(url.split("\\s*/\\s*"));
+                            if (items.size() > 3){
+                                Log.d("DebugFb urlvalue", items.get(2));
+                                Log.d("DebugFb urlvalue", items.get(3));
+                                //openNotificationFragment(items.get(2), items.get(3));
+                            }else if (items.size() > 2){
+                                //openNotificationFragment(items.get(2), "");
+                                Log.d("DebugFb urlvalue", items.get(2));
+                            }
+
+                        } else {
+                            Log.i("DEBUG_FACEBOOK_SDK", "AppLinkData is Null");
+                        }
+                    }
+                });
     }
 }

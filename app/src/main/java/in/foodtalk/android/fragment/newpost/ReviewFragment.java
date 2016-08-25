@@ -21,6 +21,8 @@ import java.util.Map;
 
 import in.foodtalk.android.R;
 import in.foodtalk.android.communicator.ReviewCallback;
+import in.foodtalk.android.module.NetworkConnection;
+import in.foodtalk.android.module.ToastShow;
 
 /**
  * Created by RetailAdmin on 27-05-2016.
@@ -63,6 +65,9 @@ public class ReviewFragment extends Fragment implements View.OnTouchListener, Vi
 
         editReview.setOnKeyListener(this);
 
+
+        Log.d("ReviewFragment", "isNetworkConnected: "+NetworkConnection.isNetworkConnected(getActivity()));
+
         InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         editReview.requestFocus();
@@ -83,11 +88,16 @@ public class ReviewFragment extends Fragment implements View.OnTouchListener, Vi
                 switch (event.getAction()){
                     case MotionEvent.ACTION_UP:
                         //Log.d("onTouch",editReview.getText().toString()+"");
-                        if (editReview.getText().length() != 0){
-                            reviewCallback.postData(editReview.getText().toString());
+                        if (NetworkConnection.isNetworkConnected(getActivity())){
+                            if (editReview.getText().length() != 0){
+                                reviewCallback.postData(editReview.getText().toString());
+                            }else {
+                                reviewCallback.postData("");
+                            }
                         }else {
-                            reviewCallback.postData("");
+                            ToastShow.showToast(getActivity(),"No Internet Connection");
                         }
+
                         break;
                 }
                 break;

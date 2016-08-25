@@ -23,6 +23,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.facebook.FacebookSdk;
+import com.facebook.applinks.AppLinkData;
 import com.facebook.login.LoginManager;
 import com.flurry.android.FlurryAgent;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -34,6 +36,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -103,7 +106,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         HeadSpannableCallback, UserThumbCallback, ProfileRPostOpenCallback, PhoneCallback,
         CheckInCallback, CamBitmapCallback, DishTaggingCallback , RatingCallback , ReviewCallback, AddRestaurantCallback,
         AddedRestaurantCallback, SearchResultCallback, CommentCallback, NotificationCallback, OpenRestaurantCallback,
-        ApiCallback, StoreCallback{
+        ApiCallback, StoreCallback {
 
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
@@ -116,7 +119,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     private int[] imgRA;
     private LinearLayout btnLogout;
     LinearLayout progressBarUpload;
-
 
     HomeFragment homeFragment;
     DiscoverFragment discoverFragment;
@@ -332,6 +334,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         storeHistoryFragment = new StoreHistoryFragment();
 
         openHomeFirst();
+        deepLinkfb();
 
         //----------get extra------
         String newString;
@@ -350,9 +353,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 String jsonData = extras.getString("com.parse.Data");
                 try {
                     JSONObject jsonObject = new JSONObject(jsonData);
-                    String screenName = jsonObject.getString("class");
-                    String elementId = jsonObject.getString("elementId");
-                    openNotificationFragment(screenName, elementId);
+                    final String screenName = jsonObject.getString("class");
+                    final String elementId = jsonObject.getString("elementId");
+                    //openNotificationFragment(screenName, elementId);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -364,6 +368,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             Log.d("Get extras", "null--");
         }
         //----------------------------
+
+
     }
 
     private void openHomeFirst(){
@@ -374,6 +380,33 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         getFragmentManager().addOnBackStackChangedListener(this);
     }
 
+    private void deepLinkfb(){
+        FacebookSdk.sdkInitialize(this);
+        AppLinkData.fetchDeferredAppLinkData(this,
+                new AppLinkData.CompletionHandler() {
+                    @Override
+                    public void onDeferredAppLinkDataFetched(AppLinkData appLinkData) {
+                        if (appLinkData != null) {
+                            Bundle bundle = appLinkData.getArgumentBundle();
+                            Log.i("DEBUG_FACEBOOK_SDK", bundle.getString("target_url"));
+                            String url = bundle.getString("target_url");
+                            List<String> items = Arrays.asList(url.split("\\s*/\\s*"));
+
+                            if (items.size() > 3){
+                                Log.e("DebugFb urlvalue", items.get(2));
+                                Log.e("DebugFb urlvalue", items.get(3));
+                                //openNotificationFragment(items.get(2), items.get(3));
+                            }else if (items.size() > 2){
+                                //openNotificationFragment(items.get(2), "");
+                                Log.e("DebugFb urlvalue", items.get(2));
+                            }
+
+                        } else {
+                            Log.i("DEBUG_FACEBOOK_SDK", "AppLinkData is Null");
+                        }
+                    }
+                });
+    }
     private void openNotificationFragment(String fragmentName, String elementId){
         Log.d("Notification screen", fragmentName);
         switch (fragmentName){
@@ -495,7 +528,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 }*/
                 break;
             case R.id.btn_newpost:
-
                 if (pageNo != 2) {
                     photo = null;
                     startCheckIn(null);

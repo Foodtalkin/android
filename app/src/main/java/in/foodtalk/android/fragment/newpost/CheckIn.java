@@ -97,8 +97,15 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
 
         addRestaurantCallback = (AddRestaurantCallback) getActivity();
 
-        getLocation = new GetLocation(getActivity(), latLonCallback);
-        getLocation.onStart();
+
+        Fragment currentFragment = this.getFragmentManager().findFragmentById(R.id.container1);
+        if (currentFragment == this){
+            getLocation = new GetLocation(getActivity(), latLonCallback);
+            getLocation.onStart();
+        }
+
+
+        Log.d("CheckIn", "getLocation");
 
         checkInCallback = (CheckInCallback) getActivity();
 

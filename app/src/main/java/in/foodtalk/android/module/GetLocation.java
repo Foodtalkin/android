@@ -176,6 +176,7 @@ public class GetLocation  implements GoogleApiClient.ConnectionCallbacks,
         //txtOutputLon.setText(lon);
     }
     private void buildAlertMessageNoGps() {
+        Log.d("GetLocation", "buildAlertMessageNoGps");
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
                 .setCancelable(false)
