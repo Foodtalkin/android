@@ -189,6 +189,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     private String dishSearchedName;
     private StringCase stringCase;
 
+
+
     Bitmap photo;
     File file;
     String restaurantNameNewPost;
@@ -334,7 +336,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         storeHistoryFragment = new StoreHistoryFragment();
 
         openHomeFirst();
-        deepLinkfb();
+        //deepLinkfb();
 
         //----------get extra------
         String newString;
@@ -346,7 +348,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 Log.e("Get extras", "Null");
 
                 // Add the fragment to the 'fragment_container' FrameLayout
-            } else {
+            } else if (extras.getString("com.parse.Data") != null){
                 //newString= extras.getString("STRING_I_NEED");
                 Log.e("Get extras", "is not Null");
                 Log.d("Get extras", extras.getString("com.parse.Data")+"");
@@ -355,12 +357,19 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                     JSONObject jsonObject = new JSONObject(jsonData);
                     final String screenName = jsonObject.getString("class");
                     final String elementId = jsonObject.getString("elementId");
-                    //openNotificationFragment(screenName, elementId);
+                    openNotificationFragment(screenName, elementId);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 //openNotificationFragment();
+            }else if (extras.getString("FRAGMENT_NAME") != null){
+                if (extras.getString("ELEMENT_ID") != null){
+                    openNotificationFragment(extras.getString("FRAGMENT_NAME"), extras.getString("ELEMENT_ID"));
+                }else {
+                    openNotificationFragment(extras.getString("FRAGMENT_NAME"), "");
+                }
+
             }
         } else {
             Log.e("SavedInstance", "is not Null");
@@ -395,12 +404,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                             if (items.size() > 3){
                                 Log.e("DebugFb urlvalue", items.get(2));
                                 Log.e("DebugFb urlvalue", items.get(3));
-                                //openNotificationFragment(items.get(2), items.get(3));
+                                openNotificationFragment(items.get(2), items.get(3));
                             }else if (items.size() > 2){
-                                //openNotificationFragment(items.get(2), "");
+                                openNotificationFragment(items.get(2), "");
                                 Log.e("DebugFb urlvalue", items.get(2));
                             }
-
                         } else {
                             Log.i("DEBUG_FACEBOOK_SDK", "AppLinkData is Null");
                         }

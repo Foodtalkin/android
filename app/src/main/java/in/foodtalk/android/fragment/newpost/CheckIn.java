@@ -127,7 +127,6 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
             }
         });
 
-
         btnAddRestaurant.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
