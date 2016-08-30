@@ -57,6 +57,7 @@ import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.LatLonCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
+import in.foodtalk.android.constant.ConstantVar;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.EndlessRecyclerOnScrollListener;
 import in.foodtalk.android.module.GetLocation;
@@ -90,7 +91,7 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
 
     LinearLayoutManager linearLayoutManager;
 
-    LinearLayout tapToRetry;
+    LinearLayout tapToRetry, tapToEnableLocation;
 
     private int pageNo = 1;
 
@@ -126,6 +127,7 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         layout = inflater.inflate(R.layout.discover_fragment, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_discover);
         progressBar = (LinearLayout) layout.findViewById(R.id.progress_bar);
+        tapToEnableLocation = (LinearLayout) layout.findViewById(R.id.tap_to_on_gps);
         recyclerView.setOnTouchListener(this);
 
         arrowIndicator = (ImageView) layout.findViewById(R.id.arrow_indicator);
@@ -134,15 +136,19 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
 
         tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
 
+        tapToEnableLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getLocation.onStart();
+                tapToEnableLocation.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
+            }
+        });
+
         //arrowIndicator.setVisibility(View.GONE);
-
-
         //--swipeRefreshHome = (SwipeRefreshLayout) layout.findViewById(R.id.swipeRefreshHome);
         // use a linear layout manager
        // linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL);
-
-
-
 
 
         if(postData != null){
@@ -242,6 +248,8 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         super.onStart();
         latLonCallback = this;
         getLocation = new GetLocation(activity, latLonCallback);
+
+        Log.d("DiscoverFragment", "onStart");
 
         /*if (pageType == DISH_RESULT){
             //obj.put("dishId",dishName);
@@ -551,24 +559,29 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         return false;
     }
     @Override
-    public void location(String lat, String lon) {
+    public void location(String gpsStatus, String lat, String lon) {
         //Log.d("location", "lat: "+ lat+" lon: "+lon);
-        Log.d("GPS location","Latitude "+lat);
-        Log.d("GPS location","Longitude "+lon);
+        if (gpsStatus.equals(ConstantVar.LOCATION_GOT)){
+            tapToEnableLocation.setVisibility(View.GONE);
+            Log.d("GPS location","Latitude "+lat);
+            Log.d("GPS location","Longitude "+lon);
 
-        FlurryAgent.setLocation((float)Double.parseDouble(lat), (float)Double.parseDouble(lon));
-        this.lat = lat;
-        this.lon = lon;
-        try {
-            pageNo = 1;
-            getPostFeed("load");
-            getLocation.onStop();
+            FlurryAgent.setLocation((float)Double.parseDouble(lat), (float)Double.parseDouble(lon));
+            this.lat = lat;
+            this.lon = lon;
+            try {
+                pageNo = 1;
+                getPostFeed("load");
+                getLocation.onStop();
 
-        } catch (JSONException e) {
-            e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else if (gpsStatus.equals(ConstantVar.LOCATION_DISABLED)){
+            Log.d("DiscoverFragment","location disabled");
+            tapToEnableLocation.setVisibility(View.VISIBLE);
+            tapToRetry.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
         }
     }
-
-
-
 }

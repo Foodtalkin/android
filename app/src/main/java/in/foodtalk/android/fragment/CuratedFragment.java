@@ -36,6 +36,7 @@ import in.foodtalk.android.adapter.newpost.CheckInAdapter;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.LatLonCallback;
+import in.foodtalk.android.constant.ConstantVar;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.GetLocation;
 import in.foodtalk.android.module.UserAgent;
@@ -65,7 +66,7 @@ public class CuratedFragment extends Fragment implements LatLonCallback {
     CuratedAdapter curatedAdapter;
     LinearLayoutManager linearLayoutManager;
 
-    LinearLayout tapToRetry;
+    LinearLayout tapToRetry, tapToEnableLocation;
     LinearLayout progressHolder;
 
     /*
@@ -85,6 +86,7 @@ public class CuratedFragment extends Fragment implements LatLonCallback {
         progressHolder = (LinearLayout) layout.findViewById(R.id.progress_h);
 
         tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
+        tapToEnableLocation = (LinearLayout) layout.findViewById(R.id.tap_to_on_gps);
 
         tapToRetry.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,15 +101,30 @@ public class CuratedFragment extends Fragment implements LatLonCallback {
                 }
             }
         });
+        tapToEnableLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getLocation.onStart();
+                tapToEnableLocation.setVisibility(View.GONE);
+                progressHolder.setVisibility(View.VISIBLE);
+            }
+        });
 
         latLonCallback = this;
         getLocation = new GetLocation(getActivity(), latLonCallback);
-        getLocation.onStart();
+        //getLocation.onStart();
 
         linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         return layout;
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getLocation.onStart();
+    }
+
     @Override
     public void onDestroyView() {
         Log.d("Fragment","onDestryView");
@@ -232,14 +249,21 @@ public class CuratedFragment extends Fragment implements LatLonCallback {
     }
 
     @Override
-    public void location(String lat, String lon) {
-        FlurryAgent.setLocation((float)Double.parseDouble(lat), (float)Double.parseDouble(lon));
-        this.lat = lat;
-        this.lon = lon;
-        try {
-            getRestaurantList("load");
-        } catch (JSONException e) {
-            e.printStackTrace();
+    public void location(String gpsStatus, String lat, String lon) {
+        if (gpsStatus.equals(ConstantVar.LOCATION_GOT)){
+            tapToEnableLocation.setVisibility(View.GONE);
+            FlurryAgent.setLocation((float)Double.parseDouble(lat), (float)Double.parseDouble(lon));
+            this.lat = lat;
+            this.lon = lon;
+            try {
+                getRestaurantList("load");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else if (gpsStatus.equals(ConstantVar.LOCATION_DISABLED)){
+            tapToEnableLocation.setVisibility(View.VISIBLE);
+            tapToRetry.setVisibility(View.GONE);
+            progressHolder.setVisibility(View.GONE);
         }
     }
 }

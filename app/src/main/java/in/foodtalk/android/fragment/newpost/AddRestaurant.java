@@ -49,6 +49,7 @@ import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.AddedRestaurantCallback;
 import in.foodtalk.android.communicator.CityListCallback;
 import in.foodtalk.android.communicator.LatLonCallback;
+import in.foodtalk.android.constant.ConstantVar;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.GetLocation;
 import in.foodtalk.android.module.StringCase;
@@ -409,9 +410,12 @@ public class AddRestaurant extends Fragment implements LatLonCallback {
         dialog.show();
     }
     @Override
-    public void location(String lat, String lon) {
-        this.lat = lat;
-        this.lon = lon;
+    public void location(String gpsStatus, String lat, String lon) {
+        if (gpsStatus.equals(ConstantVar.LOCATION_GOT)){
+            this.lat = lat;
+            this.lon = lon;
+        }
+
     }
 
 

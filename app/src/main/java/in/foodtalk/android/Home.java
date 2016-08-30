@@ -143,8 +143,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     StoreFragment storeFragment;
     StoreHistoryFragment storeHistoryFragment;
 
-
-
     //-------dummy fragment created for temporary use to set Legal screen title----
     Fragment legalFragment = new Fragment();
 

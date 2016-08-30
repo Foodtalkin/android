@@ -38,6 +38,7 @@ import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.AddRestaurantCallback;
 import in.foodtalk.android.communicator.CheckInCallback;
 import in.foodtalk.android.communicator.LatLonCallback;
+import in.foodtalk.android.constant.ConstantVar;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.GetLocation;
 import in.foodtalk.android.module.UserAgent;
@@ -352,15 +353,17 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
         return filteredModelList;
     }
     @Override
-    public void location(String lat, String lon) {
+    public void location(String gpsStatus, String lat, String lon) {
         //Log.d("location",lat+" : "+lon);
-        FlurryAgent.setLocation((float)Double.parseDouble(lat), (float)Double.parseDouble(lon));
-        this.lat = lat;
-        this.lon = lon;
-        try {
-            getRestaurantList("load");
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (gpsStatus.equals(ConstantVar.LOCATION_GOT)){
+            FlurryAgent.setLocation((float)Double.parseDouble(lat), (float)Double.parseDouble(lon));
+            this.lat = lat;
+            this.lon = lon;
+            try {
+                getRestaurantList("load");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

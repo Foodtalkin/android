@@ -42,6 +42,7 @@ import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.LatLonCallback;
 import in.foodtalk.android.communicator.UserProfileCallback;
 import in.foodtalk.android.communicator.UserProfileImgCallback;
+import in.foodtalk.android.constant.ConstantVar;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.EndlessRecyclerOnScrollListener;
 import in.foodtalk.android.module.GetLocation;
@@ -366,19 +367,22 @@ public class UserProfile extends Fragment implements LatLonCallback, UserProfile
     }
 
     @Override
-    public void location(String lat, String lon) {
+    public void location(String gpsStatus, String lat, String lon) {
         //Log.d("location", "lat: "+ lat+" lon: "+lon);
-        Log.d("GPS location","Latitude "+lat);
-        Log.d("GPS location","Longitude "+lon);
-        this.lat = lat;
-        this.lon = lon;
-        try {
-            pageNo = 1;
-            getUserProfile("myProfile");
+        if (gpsStatus.equals(ConstantVar.LOCATION_GOT)){
+            Log.d("GPS location","Latitude "+lat);
+            Log.d("GPS location","Longitude "+lon);
+            this.lat = lat;
+            this.lon = lon;
+            try {
+                pageNo = 1;
+                getUserProfile("myProfile");
 
-        } catch (JSONException e) {
-            e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
+
     }
     Dialog dialog;
     private void showUserImage(String url){

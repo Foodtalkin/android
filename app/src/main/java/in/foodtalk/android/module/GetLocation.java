@@ -28,6 +28,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import in.foodtalk.android.communicator.LatLonCallback;
+import in.foodtalk.android.constant.ConstantVar;
 import in.foodtalk.android.object.LocationGps;
 
 /**
@@ -168,9 +169,7 @@ public class GetLocation  implements GoogleApiClient.ConnectionCallbacks,
         Log.d("GPS location","Longitude"+lon);
 
 
-        latLonCallback.location(lat,lon);
-
-
+        latLonCallback.location(ConstantVar.LOCATION_GOT,lat,lon);
 
         //txtOutputLat.setText(lat);
         //txtOutputLon.setText(lon);
@@ -187,6 +186,7 @@ public class GetLocation  implements GoogleApiClient.ConnectionCallbacks,
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, final int id) {
+                        latLonCallback.location(ConstantVar.LOCATION_DISABLED,"","");
                         dialog.cancel();
                     }
                 });
