@@ -6,9 +6,11 @@
 
     tools:context="in.foodtalk.android.WelcomeUsername"
     android:background="#141d2d">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -127,5 +129,13 @@
                 android:background="@android:color/transparent"/>
         </LinearLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/onboard_holder"
+        android:orientation="horizontal">
+
+    </LinearLayout>
 
 </RelativeLayout>

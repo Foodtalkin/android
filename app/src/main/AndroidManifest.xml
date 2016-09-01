@@ -60,8 +60,8 @@
             android:name=".WelcomeUsername"
             android:screenOrientation="portrait"
             android:theme="@style/NoActionBarTheam"
-            android:windowSoftInputMode="stateHidden"/>
-
+            android:windowSoftInputMode="adjustPan"
+            />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>

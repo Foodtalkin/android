@@ -42,6 +42,13 @@
         <item name="android:visibility">gone</item>
     </style>
 
+    <style name="MyEditTextTheme">
+        <!-- Used for the bottom line when not selected / focused -->
+        <item name="colorControlNormal">#ffffff</item>
+        <item name="colorAccent">#eeeeee</item>
+        <!-- colorControlActivated & colorControlHighlight use the colorAccent color by default -->
+    </style>
+
 
 
 

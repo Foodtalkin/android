@@ -11,6 +11,13 @@
     <dimen name="txt_size_more">14sp</dimen>
     <dimen name="paddint_top_bottom_options">12dp</dimen>
     <dimen name="circle_r_vp">12dp</dimen>
-
+    
+    <dimen name="font_onboarding1">24sp</dimen>
+    <dimen name="font_onboarding2">16sp</dimen>
+    <dimen name="padding_lr_onboarding">45dp</dimen>
+    <dimen name="padding_top_onboarding">40dp</dimen>
+    <dimen name="padding_between_onboarding">15dp</dimen>
+    <dimen name="padding_between_onboarding2">12dp</dimen>
+    <dimen name="padding_between_onboarding1">17dp</dimen>
 
 </resources>

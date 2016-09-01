@@ -1,6 +1,8 @@
 package in.foodtalk.android;
 
 import android.app.Dialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -48,6 +50,7 @@ import in.foodtalk.android.adapter.newpost.CityListAdapter;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.CityListCallback;
+import in.foodtalk.android.fragment.onboarding.SelectUsername;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.module.UserAgent;
@@ -77,6 +80,8 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
 
     TextView txtEmailError;
 
+    SelectUsername selectUsername = new SelectUsername();
+
     DatabaseHandler db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +93,8 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
         btnUser = (ImageButton) findViewById(R.id.btn_user_select);
         txtUserNameError = (TextView) findViewById(R.id.txt_username_error);
         inputEmail = (EditText) findViewById(R.id.txt_email);
+
+        setFragmentView(selectUsername, R.id.onboard_holder, false);
 
         txtEmailError = (TextView) findViewById(R.id.txt_email_error);
 
@@ -177,8 +184,29 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
 
+
+    }
+    private void setFragmentView(Fragment newFragment, int container, boolean bStack) {
+        String backStateName = newFragment.getClass().getName();
+
+        Log.i("setFragmentView",newFragment.getClass().getSimpleName());
+        FragmentManager manager = getFragmentManager();
+
+
+
+        android.app.FragmentTransaction transaction = manager.beginTransaction();
+
+        transaction.replace(container, newFragment);
+        if (bStack) {
+            transaction.addToBackStack(backStateName);
+            //Log.d("addtobackstack", backStateName);
+        }
+        // Commit the transaction
+        Log.d("setFragmentview","going to commit");
+        transaction.commit();
+
+    }
 
 
     @Override

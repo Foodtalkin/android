@@ -634,9 +634,9 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                                 i.putExtra("email", loginInfo.email);
                                 startActivity(i);
                             }else {
-                                Intent i = new Intent(FbLogin.this, Home.class);
-                               // Intent i = new Intent(FbLogin.this, WelcomeUsername.class);
-                              //  i.putExtra("email", loginInfo.email);
+                                //Intent i = new Intent(FbLogin.this, Home.class);
+                                Intent i = new Intent(FbLogin.this, WelcomeUsername.class);
+                                i.putExtra("email", loginInfo.email);
                                 startActivity(i);
                             }
                             finish();
