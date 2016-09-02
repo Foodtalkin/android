@@ -18,35 +18,35 @@
                 android:id="@+id/txt_head"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hello Mandeep,"
+                android:text="One last step"
                 android:textColor="#fff"
                 android:textSize="@dimen/font_onboarding1"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Welcome to Food Talk."
+                android:text="Where do you live?"
                 android:textColor="#fff"
                 android:layout_marginTop="@dimen/padding_between_onboarding"
                 android:textSize="@dimen/font_onboarding2"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Let's create a username for you. Your username should be unique and will be used to identity you on Food Talk."
+                android:text="We will customize your experience based on where you live. Great food is now just few taps away."
                 android:textSize="@dimen/font_onboarding2"
                 android:textColor="#fff"
                 android:layout_marginTop="@dimen/padding_between_onboarding2"/>
             <EditText
-                android:id="@+id/input_username"
+                android:id="@+id/input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_between_onboarding2"
                 android:theme="@style/MyEditTextTheme"
                 android:textColor="#ffffff"
-                android:hint="Username"
+                android:hint="Your hometown"
                 android:drawablePadding="7dp"
                 android:textColorHint="#8Cffffff"
                 android:paddingBottom="15dp"
-                android:drawableLeft="@drawable/ic_person_white_24dp"
+                android:drawableLeft="@drawable/ic_home_white_24dp"
                 />
             <LinearLayout
                 android:id="@+id/btn_send"
@@ -62,14 +62,6 @@
                     android:src="@drawable/ic_arrow_forward_black_36dp"
                     android:tint="@color/bg_onboarding"/>
             </LinearLayout>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ah Snap, This username is already taken!"
-                android:layout_gravity="center"
-                android:textSize="@dimen/font_onboarding3"
-                android:layout_marginTop="@dimen/padding_between_onboarding"
-                android:textColor="#ffffff"/>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

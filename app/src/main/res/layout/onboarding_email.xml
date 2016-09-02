@@ -18,35 +18,35 @@
                 android:id="@+id/txt_head"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hello Mandeep,"
+                android:text="Mandy,"
                 android:textColor="#fff"
                 android:textSize="@dimen/font_onboarding1"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Welcome to Food Talk."
+                android:text="Next Step is email"
                 android:textColor="#fff"
                 android:layout_marginTop="@dimen/padding_between_onboarding"
                 android:textSize="@dimen/font_onboarding2"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Let's create a username for you. Your username should be unique and will be used to identity you on Food Talk."
+                android:text="Don't worry we, we wont spam you. This is only required to make sure we contact you if need be."
                 android:textSize="@dimen/font_onboarding2"
                 android:textColor="#fff"
                 android:layout_marginTop="@dimen/padding_between_onboarding2"/>
             <EditText
-                android:id="@+id/input_username"
+                android:id="@+id/input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_between_onboarding2"
                 android:theme="@style/MyEditTextTheme"
                 android:textColor="#ffffff"
-                android:hint="Username"
+                android:hint="Your email"
                 android:drawablePadding="7dp"
                 android:textColorHint="#8Cffffff"
                 android:paddingBottom="15dp"
-                android:drawableLeft="@drawable/ic_person_white_24dp"
+                android:drawableLeft="@drawable/ic_email_white_24dp"
                 />
             <LinearLayout
                 android:id="@+id/btn_send"
@@ -65,9 +65,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ah Snap, This username is already taken!"
+                android:text="Ooops, this doesn't look like a valid email"
                 android:layout_gravity="center"
-                android:textSize="@dimen/font_onboarding3"
+                android:textSize="@dimen/font_onboarding2"
                 android:layout_marginTop="@dimen/padding_between_onboarding"
                 android:textColor="#ffffff"/>
         </LinearLayout>

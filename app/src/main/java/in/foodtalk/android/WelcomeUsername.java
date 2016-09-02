@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +17,7 @@ import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
@@ -44,12 +46,22 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import in.foodtalk.android.adapter.newpost.CityListAdapter;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.CityListCallback;
+import in.foodtalk.android.fragment.intro.DiscoverIntro;
+import in.foodtalk.android.fragment.intro.EatIntro;
+import in.foodtalk.android.fragment.intro.LandingIntro;
+import in.foodtalk.android.fragment.intro.PagerAdapter;
+import in.foodtalk.android.fragment.intro.ShareIntro;
+import in.foodtalk.android.fragment.onboarding.PagerAdapterOb;
+import in.foodtalk.android.fragment.onboarding.SelectCity;
+import in.foodtalk.android.fragment.onboarding.SelectEmail;
 import in.foodtalk.android.fragment.onboarding.SelectUsername;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.StringCase;
@@ -82,6 +94,8 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
 
     SelectUsername selectUsername = new SelectUsername();
 
+    PagerAdapterOb mPagerAdapter;
+
     DatabaseHandler db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +108,7 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
         txtUserNameError = (TextView) findViewById(R.id.txt_username_error);
         inputEmail = (EditText) findViewById(R.id.txt_email);
 
-        setFragmentView(selectUsername, R.id.onboard_holder, false);
+        //setFragmentView(selectUsername, R.id.onboard_holder, false);
 
         txtEmailError = (TextView) findViewById(R.id.txt_email_error);
 
@@ -115,6 +129,8 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
         Log.d("btnSelectCity", btnSelectCity+"");
 
         btnUser.setOnClickListener(this);
+
+        initialisePaging();
 
 
 
@@ -505,7 +521,69 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
             cityList.add(rListArray.getJSONObject(i).getString("name"));
         }
         //Log.d("send list", "total: "+restaurantList.size());
+    }
 
+    private void initialisePaging(){
+        final List<android.support.v4.app.Fragment> fragments = new Vector<android.support.v4.app.Fragment>();
+        fragments.add(android.support.v4.app.Fragment.instantiate(this,SelectUsername.class.getName()));
+        fragments.add(android.support.v4.app.Fragment.instantiate(this,SelectEmail.class.getName()));
+        fragments.add(android.support.v4.app.Fragment.instantiate(this,SelectCity.class.getName()));
+
+        mPagerAdapter = new PagerAdapterOb(this.getSupportFragmentManager(), fragments);
+        final ViewPager pager = (ViewPager) findViewById(R.id.viewpager);
+        pager.setAdapter(mPagerAdapter);
+
+        pager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_MOVE:
+                        return true;
+                }
+                return false;
+            }
+        });
+
+        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                //pager.setCurrentItem(0, true);
+            }
+            @Override
+            public void onPageSelected(int position) {
+                /*if (position == 0){
+                    vpNav1.setBackgroundResource(R.drawable.circle_selected_vp);
+                    vpNav2.setBackgroundResource(R.drawable.circle_vp);
+                    vpNav3.setBackgroundResource(R.drawable.circle_vp);
+                    vpNav4.setBackgroundResource(R.drawable.circle_vp);
+                }
+                if (position == 1){
+                    vpNav2.setBackgroundResource(R.drawable.circle_selected_vp);
+                    vpNav1.setBackgroundResource(R.drawable.circle_vp);
+                    vpNav3.setBackgroundResource(R.drawable.circle_vp);
+                    vpNav4.setBackgroundResource(R.drawable.circle_vp);
+                }
+                if (position == 2){
+                    vpNav3.setBackgroundResource(R.drawable.circle_selected_vp);
+                    vpNav1.setBackgroundResource(R.drawable.circle_vp);
+                    vpNav2.setBackgroundResource(R.drawable.circle_vp);
+                    vpNav4.setBackgroundResource(R.drawable.circle_vp);
+                }
+                if (position == 3){
+                    vpNav4.setBackgroundResource(R.drawable.circle_selected_vp);
+                    vpNav1.setBackgroundResource(R.drawable.circle_vp);
+                    vpNav2.setBackgroundResource(R.drawable.circle_vp);
+                    vpNav3.setBackgroundResource(R.drawable.circle_vp);
+                }*/
+
+                Log.d("onPageSelected",position+"");
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
 
