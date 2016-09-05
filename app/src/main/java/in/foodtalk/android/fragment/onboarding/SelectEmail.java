@@ -29,7 +29,7 @@ public class SelectEmail extends Fragment {
         View layout = inflater.inflate(R.layout.onboarding_email, container, false);
         btnSend = (LinearLayout) layout.findViewById(R.id.btn_send);
         txtError = (TextView) layout.findViewById(R.id.txt_error);
-        txtError.setAlpha(0);
+        txtError.setVisibility(View.GONE);
 
         inputEmail = (EditText) layout.findViewById(R.id.input_email);
         inputEmail.setText(AppController.fbEmailId);
