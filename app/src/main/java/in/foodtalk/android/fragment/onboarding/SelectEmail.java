@@ -3,20 +3,46 @@ package in.foodtalk.android.fragment.onboarding;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.app.AppController;
+import in.foodtalk.android.communicator.OnBoardingCallback;
 
 /**
  * Created by RetailAdmin on 02-09-2016.
  */
 public class SelectEmail extends Fragment {
+    OnBoardingCallback onBoardingCallback;
+    LinearLayout btnSend;
+    EditText inputEmail;
+    TextView txtError;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.onboarding_email, container, false);
+        btnSend = (LinearLayout) layout.findViewById(R.id.btn_send);
+        txtError = (TextView) layout.findViewById(R.id.txt_error);
+        txtError.setAlpha(0);
+
+        inputEmail = (EditText) layout.findViewById(R.id.input_email);
+        inputEmail.setText(AppController.fbEmailId);
+
+        onBoardingCallback = (OnBoardingCallback) getActivity();
+
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("SelectEmail","button clicked send");
+                onBoardingCallback.onboardingBtnClicked("next", null);
+            }
+        });
         return layout;
     }
 }

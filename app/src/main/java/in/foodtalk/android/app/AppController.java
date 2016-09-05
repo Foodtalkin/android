@@ -45,6 +45,8 @@ public class AppController extends Application {
     public static final String TAG = AppController.class
             .getSimpleName();
 
+    public static String fbEmailId;
+
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
 

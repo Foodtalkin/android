@@ -42,6 +42,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ import in.foodtalk.android.adapter.newpost.CityListAdapter;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.CityListCallback;
+import in.foodtalk.android.communicator.OnBoardingCallback;
 import in.foodtalk.android.fragment.intro.DiscoverIntro;
 import in.foodtalk.android.fragment.intro.EatIntro;
 import in.foodtalk.android.fragment.intro.LandingIntro;
@@ -64,12 +66,13 @@ import in.foodtalk.android.fragment.onboarding.SelectCity;
 import in.foodtalk.android.fragment.onboarding.SelectEmail;
 import in.foodtalk.android.fragment.onboarding.SelectUsername;
 import in.foodtalk.android.module.DatabaseHandler;
+import in.foodtalk.android.module.FixedSpeedScroller;
 import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.module.UserAgent;
 import in.foodtalk.android.object.LoginInfo;
 import in.foodtalk.android.object.LoginValue;
 
-public class WelcomeUsername extends AppCompatActivity implements View.OnClickListener {
+public class WelcomeUsername extends AppCompatActivity implements View.OnClickListener, OnBoardingCallback {
 
     EditText txtUser;
     ImageButton btnUser;
@@ -522,6 +525,7 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
         }
         //Log.d("send list", "total: "+restaurantList.size());
     }
+    ViewPager pager;
 
     private void initialisePaging(){
         final List<android.support.v4.app.Fragment> fragments = new Vector<android.support.v4.app.Fragment>();
@@ -530,17 +534,26 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
         fragments.add(android.support.v4.app.Fragment.instantiate(this,SelectCity.class.getName()));
 
         mPagerAdapter = new PagerAdapterOb(this.getSupportFragmentManager(), fragments);
-        final ViewPager pager = (ViewPager) findViewById(R.id.viewpager);
+        pager = (ViewPager) findViewById(R.id.viewpager);
         pager.setAdapter(mPagerAdapter);
+
+        try {
+            Field mScroller;
+            mScroller = ViewPager.class.getDeclaredField("mScroller");
+            mScroller.setAccessible(true);
+            FixedSpeedScroller scroller = new FixedSpeedScroller(pager.getContext());
+            // scroller.setFixedDuration(5000);
+            mScroller.set(pager, scroller);
+        } catch (NoSuchFieldException e) {
+        } catch (IllegalArgumentException e) {
+        } catch (IllegalAccessException e) {
+        }
 
         pager.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()){
-                    case MotionEvent.ACTION_MOVE:
-                        return true;
-                }
-                return false;
+
+                return true;
             }
         });
 
@@ -575,16 +588,23 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
                     vpNav2.setBackgroundResource(R.drawable.circle_vp);
                     vpNav3.setBackgroundResource(R.drawable.circle_vp);
                 }*/
-
                 Log.d("onPageSelected",position+"");
             }
-
             @Override
             public void onPageScrollStateChanged(int state) {
 
             }
         });
     }
-
-
+    @Override
+    public void onboardingBtnClicked(String btn, String value) {
+        if (btn.equals("next")){
+            pager.setCurrentItem(getItem(+1), true);
+        }else if (btn.equals("previos")){
+            pager.setCurrentItem(getItem(-1), true);
+        }
+    }
+    private int getItem(int i) {
+        return pager.getCurrentItem() + i;
+    }
 }
