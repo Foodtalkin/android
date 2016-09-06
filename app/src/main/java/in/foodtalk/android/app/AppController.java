@@ -37,6 +37,7 @@ import java.security.NoSuchAlgorithmException;
 
 import in.foodtalk.android.Home;
 import in.foodtalk.android.R;
+import in.foodtalk.android.communicator.OnBoardingCallback;
 import in.foodtalk.android.helper.ParseUtils;
 import in.foodtalk.android.module.LruBitmapCache;
 
@@ -46,6 +47,8 @@ public class AppController extends Application {
             .getSimpleName();
 
     public static String fbEmailId;
+    public static String userName;
+    public static String fullName;
 
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;

@@ -22,10 +22,12 @@ import org.json.JSONObject;
 import in.foodtalk.android.R;
 import in.foodtalk.android.WelcomeUsername;
 import in.foodtalk.android.apicall.ApiCall;
+import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.communicator.OnBoardingCallback;
 import in.foodtalk.android.module.DatabaseHandler;
+import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.module.ToastShow;
 
 /**
@@ -34,17 +36,18 @@ import in.foodtalk.android.module.ToastShow;
 public class SelectUsername extends Fragment implements ApiCallback {
 
     LinearLayout btnSend;
-    TextView txtUser, txtError;
+    TextView txtUser, txtError, txtHead;
 
     OnBoardingCallback onBoardingCallback;
 
     View layout;
 
     Boolean btnClickable = false;
-    DatabaseHandler db;
+
 
     ApiCall apiCall;
     ApiCallback apiCallback;
+    DatabaseHandler db;
 
     @Nullable
     @Override
@@ -52,10 +55,18 @@ public class SelectUsername extends Fragment implements ApiCallback {
         layout = inflater.inflate(R.layout.onboarding_username, container, false);
         btnSend = (LinearLayout) layout.findViewById(R.id.btn_send);
 
+        db = new DatabaseHandler(getContext());
+
         txtUser = (TextView) layout.findViewById(R.id.input_username);
         txtError = (TextView) layout.findViewById(R.id.txt_error);
+        txtHead = (TextView) layout.findViewById(R.id.txt_head);
 
-        onBoardingCallback = (OnBoardingCallback) getActivity();
+        txtHead.setText("Hello, "+ StringCase.caseSensitive(db.getUserDetails().get("fullName")));
+
+        onBoardingCallback = (OnBoardingCallback) getContext();
+
+       // onBoardingCallback = getContext();
+        //AppController.onBoardingCallback = onBoardingCallback;
 
         apiCallback = this;
 
@@ -179,7 +190,10 @@ public class SelectUsername extends Fragment implements ApiCallback {
             try {
                 String status = response.getString("status");
                 if (status.equals("OK")){
-                    onBoardingCallback.onboardingBtnClicked("next", null);
+
+                    Log.d("SelectUsername","set username "+response.getString("userName"));
+                    AppController.userName = response.getString("userName");
+                    onBoardingCallback.onboardingBtnClicked("next", "userName", response.getString("userName"));
                     errorMsg(false,"");
                 }else if (status.equals("error")){
                     String errorCode = response.getString("errorCode");

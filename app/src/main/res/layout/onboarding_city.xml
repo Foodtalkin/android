@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent" android:background="@color/bg_onboarding">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -22,6 +23,8 @@
                 android:textColor="#fff"
                 android:textSize="@dimen/font_onboarding1"/>
             <TextView
+                android:id="@+id/txt1"
+                android:layout_below="@+id/txt_head"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Where do you live?"
@@ -29,6 +32,8 @@
                 android:layout_marginTop="@dimen/padding_between_onboarding"
                 android:textSize="@dimen/font_onboarding2"/>
             <TextView
+                android:id="@+id/txt2"
+                android:layout_below="@+id/txt1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="We will customize your experience based on where you live. Great food is now just few taps away."
@@ -36,7 +41,8 @@
                 android:textColor="#fff"
                 android:layout_marginTop="@dimen/padding_between_onboarding2"/>
             <EditText
-                android:id="@+id/input_email"
+                android:layout_below="@+id/txt2"
+                android:id="@+id/input_city"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/padding_between_onboarding2"
@@ -48,20 +54,27 @@
                 android:paddingBottom="15dp"
                 android:drawableLeft="@drawable/ic_home_white_24dp"
                 />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:scrollbars="vertical"
+                android:layout_below="@+id/input_city"/>
             <LinearLayout
+                android:layout_below="@+id/input_city"
                 android:id="@+id/btn_send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/circle_white"
                 android:padding="7dp"
-                android:layout_gravity="right"
-                android:layout_marginTop="@dimen/padding_between_onboarding2">
+                android:layout_marginTop="@dimen/padding_between_onboarding2"
+                android:layout_alignParentRight="true">
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_arrow_forward_black_36dp"
                     android:tint="@color/bg_onboarding"/>
             </LinearLayout>
-        </LinearLayout>
+        </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

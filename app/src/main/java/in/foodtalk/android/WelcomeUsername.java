@@ -17,6 +17,7 @@ import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -89,6 +90,8 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
     StringCase stringCase;
     ArrayList<String> cityList;
 
+    OnBoardingCallback onBoardingCallback;
+
     Boolean cityListLoaded = false;
     EditText inputEmail;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z0-9]+\\.+[a-z0-9]+";
@@ -110,6 +113,8 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
         btnUser = (ImageButton) findViewById(R.id.btn_user_select);
         txtUserNameError = (TextView) findViewById(R.id.txt_username_error);
         inputEmail = (EditText) findViewById(R.id.txt_email);
+
+
 
         //setFragmentView(selectUsername, R.id.onboard_holder, false);
 
@@ -526,9 +531,10 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
         //Log.d("send list", "total: "+restaurantList.size());
     }
     ViewPager pager;
+    List<android.support.v4.app.Fragment> fragments;
 
     private void initialisePaging(){
-        final List<android.support.v4.app.Fragment> fragments = new Vector<android.support.v4.app.Fragment>();
+        fragments = new Vector<android.support.v4.app.Fragment>();
         fragments.add(android.support.v4.app.Fragment.instantiate(this,SelectUsername.class.getName()));
         fragments.add(android.support.v4.app.Fragment.instantiate(this,SelectEmail.class.getName()));
         fragments.add(android.support.v4.app.Fragment.instantiate(this,SelectCity.class.getName()));
@@ -597,14 +603,42 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
         });
     }
     @Override
-    public void onboardingBtnClicked(String btn, String value) {
+    public void onboardingBtnClicked(String btn, String key, String value) {
+        Log.d("wu callback", btn);
+        Log.d("check pager", pager.getCurrentItem()+"");
         if (btn.equals("next")){
             pager.setCurrentItem(getItem(+1), true);
         }else if (btn.equals("previos")){
             pager.setCurrentItem(getItem(-1), true);
         }
+        if (key != null){
+            if (key.equals("userName")){
+                View v = pager.getChildAt(1);
+                //TextView head = (TextView) v.findViewById(R.id.txt_head);
+                try {
+                    TextView txt = (TextView) fragments.get(1).getView().findViewById(R.id.txt_head);
+                    txt.setText(value);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+
+                //getSupportFragmentManager().findFragmentById(R.id.fra)
+                //head.setText(value+",");
+                //Fragment fragment = getFragmentManager().findF
+                //AppController.onBoardingCallback.onboardingBtnClicked(btn, key, value);
+            }
+        }
     }
     private int getItem(int i) {
         return pager.getCurrentItem() + i;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (pager.getCurrentItem() > 0) {
+            pager.setCurrentItem(pager.getCurrentItem()-1, true);
+        } else {
+            super.onBackPressed();
+        }
     }
 }

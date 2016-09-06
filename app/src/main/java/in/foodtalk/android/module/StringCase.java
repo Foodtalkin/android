@@ -4,7 +4,7 @@ package in.foodtalk.android.module;
  * Created by RetailAdmin on 09-05-2016.
  */
 public class StringCase {
-    public String caseSensitive (String source){
+    public static String caseSensitive (String source){
 
         StringBuffer res = new StringBuffer();
 
