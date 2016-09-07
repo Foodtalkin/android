@@ -14,6 +14,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.communicator.SelectCityCallback;
 import in.foodtalk.android.fragment.onboarding.SelectCity;
 import in.foodtalk.android.object.SelectCityObj;
 
@@ -24,9 +25,13 @@ public class SelectCityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     List<SelectCityObj> cityList;
     LayoutInflater layoutInflater;
     Context context;
-    public SelectCityAdapter(Context context, List<SelectCityObj> cityList){
+    SelectCityCallback selectCityCallback;
+    public SelectCityAdapter(Context context, List<SelectCityObj> cityList, SelectCityCallback selectCityCallback){
         this.context = context;
         this.cityList = cityList;
+        layoutInflater = LayoutInflater.from(context);
+        Log.d("city adapter","length"+cityList.size());
+        this.selectCityCallback = selectCityCallback;
     }
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -34,13 +39,14 @@ public class SelectCityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         CityHolder cityHolder = new CityHolder(view);
         return cityHolder;
 
-
     }
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         SelectCityObj current = cityList.get(position);
         CityHolder cityHolder = (CityHolder) holder;
         cityHolder.txtCity.setText(current.description);
+        cityHolder.desctiption = current.description;
+        cityHolder.cityId = current.place_id;
     }
     @Override
     public int getItemCount() {
@@ -50,6 +56,8 @@ public class SelectCityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     class CityHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
         TextView txtCity;
         LinearLayout btnCity;
+        String desctiption;
+        String cityId;
         public CityHolder(View itemView) {
             super(itemView);
             txtCity = (TextView) itemView.findViewById(R.id.txt_city);
@@ -60,7 +68,12 @@ public class SelectCityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public boolean onTouch(View v, MotionEvent event) {
             switch (v.getId()){
                 case R.id.btn_city:
-                    Log.d("selectCity click", "clicked");
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("selectCity click", "city: "+ desctiption);
+                            selectCityCallback.getSelectedCity(desctiption, cityId);
+                            break;
+                    }
                     break;
             }
             return true;

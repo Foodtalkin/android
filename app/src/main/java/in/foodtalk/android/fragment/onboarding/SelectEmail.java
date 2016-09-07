@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,6 +26,7 @@ public class SelectEmail extends Fragment implements OnBoardingCallback {
     LinearLayout btnSend;
     EditText inputEmail;
     TextView txtError, txtHead;
+    String emailPattern = "[a-zA-Z0-9._-]+@[a-z0-9]+\\.+[a-z0-9]+";
 
 
     @Nullable
@@ -47,7 +50,17 @@ public class SelectEmail extends Fragment implements OnBoardingCallback {
             @Override
             public void onClick(View v) {
                 Log.d("SelectEmail","button clicked send");
-                onBoardingCallback.onboardingBtnClicked("next", null, null);
+                String email = inputEmail.getText().toString();
+                Log.d("email", email+"");
+                if (email.matches(emailPattern)){
+                    onBoardingCallback.onboardingBtnClicked("next", null, null);
+                    AppController.fbEmailId = email;
+                    errorMsg(false, "");
+                }else {
+                    Log.d("select email", "wrong email");
+                    errorMsg(true, "Ooops, this doesn't look like a valid email");
+                }
+
             }
         });
         return layout;
@@ -71,6 +84,17 @@ public class SelectEmail extends Fragment implements OnBoardingCallback {
                 Log.d("SelectEmail", "username: "+ value);
                 txtHead.setText(value+",");
             }
+        }
+    }
+    private void errorMsg(Boolean error, String msg){
+        if (error){
+            txtError.setText(msg);
+            //txtError.setAlpha(1);
+            txtError.setVisibility(View.VISIBLE);
+            Animation myFadeInAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.blink_anim);
+            txtError.startAnimation(myFadeInAnimation);
+        }else {
+            txtError.setVisibility(View.GONE);
         }
     }
 }

@@ -53,13 +53,10 @@
                 android:textColorHint="#8Cffffff"
                 android:paddingBottom="15dp"
                 android:drawableLeft="@drawable/ic_home_white_24dp"
+                android:maxLines="1"
+                android:singleLine="true"
                 />
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:scrollbars="vertical"
-                android:layout_below="@+id/input_city"/>
+
             <LinearLayout
                 android:layout_below="@+id/input_city"
                 android:id="@+id/btn_send"
@@ -75,6 +72,23 @@
                     android:src="@drawable/ic_arrow_forward_black_36dp"
                     android:tint="@color/bg_onboarding"/>
             </LinearLayout>
+            <TextView
+                android:layout_below="@+id/btn_send"
+                android:id="@+id/txt_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_gravity="center"
+                android:textSize="@dimen/font_onboarding2"
+                android:layout_marginTop="@dimen/padding_between_onboarding"
+                android:textColor="#ffffff"
+                android:layout_centerInParent="true"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_height="130dp"
+                android:layout_width="match_parent"
+                android:scrollbars="vertical"
+                android:layout_below="@+id/input_city"/>
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

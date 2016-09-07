@@ -13,9 +13,9 @@
     <dimen name="circle_r_vp">12dp</dimen>
     
     <dimen name="font_onboarding1">24sp</dimen>
-    <dimen name="font_onboarding2">16sp</dimen>
+    <dimen name="font_onboarding2">15sp</dimen>
     <dimen name="font_onboarding3">14sp</dimen>
-    <dimen name="padding_lr_onboarding">45dp</dimen>
+    <dimen name="padding_lr_onboarding">40dp</dimen>
     <dimen name="padding_top_onboarding">40dp</dimen>
     <dimen name="padding_between_onboarding">15dp</dimen>
     <dimen name="padding_between_onboarding2">12dp</dimen>

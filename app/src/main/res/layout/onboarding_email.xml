@@ -44,6 +44,7 @@
                 android:textColor="#ffffff"
                 android:hint="Your email"
                 android:drawablePadding="7dp"
+                android:textSize="16sp"
                 android:textColorHint="#8Cffffff"
                 android:paddingBottom="15dp"
                 android:drawableLeft="@drawable/ic_email_white_24dp"
