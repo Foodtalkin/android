@@ -352,6 +352,8 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
         loginValue.uId = uId;
         loginValue.sId = sessionId;
         loginValue.name = fullName;
+        loginValue.email = jObj.getString("email");
+        loginValue.cityId = jObj.getString("cityId");
         //loginValue.userName = userName;
         loginValue.userName = ((userName.equals("")) ? "N/A" : userName);
 

@@ -626,6 +626,8 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                             //loginValue.userName = userName;
 
                             loginValue.userName = ((userName.equals("")) ? "N/A" : userName);
+                            loginValue.email = ((email.equals("")) ? "N/A" : email);
+                            loginValue.cityId = ((cityId.equals("")) ? "N/A" : cityId);
 
                            // Log.d("check table", db.getRowCount()+"");
                             db.addUser(loginValue);

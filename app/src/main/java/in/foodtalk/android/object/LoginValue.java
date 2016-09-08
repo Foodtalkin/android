@@ -11,4 +11,6 @@ public class LoginValue {
     public String userName;
     public String lat;
     public String lon;
+    public String email;
+    public String cityId;
 }
