@@ -1,6 +1,7 @@
 package in.foodtalk.android.fragment.onboarding;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,6 +28,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import in.foodtalk.android.Home;
 import in.foodtalk.android.R;
 import in.foodtalk.android.adapter.CuratedAdapter;
 import in.foodtalk.android.adapter.onboarding.SelectCityAdapter;
@@ -185,6 +187,12 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
         if (tag.equals("emailSubmit")){
             Log.d("apiResponse", "email submited");
             errorMsg(false, "");
+            //Intent i = new Intent(FbLogin.this, Home.class);
+            Intent i = new Intent(getActivity(), Home.class);
+            //AppController.fbEmailId = loginInfo.email;
+           // i.putExtra("email", loginInfo.email);
+            getActivity().startActivity(i);
+            getActivity().finish();
         }
     }
     private void btnSendEnabled(Boolean b){
