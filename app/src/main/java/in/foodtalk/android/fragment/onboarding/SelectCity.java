@@ -57,6 +57,8 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
     Boolean btnSendIsEnabled = false;
     TextView txtError;
 
+    Boolean searchOnChangeText = true;
+
     ApiCall apiCall;
     //ApiCallback apiCallback;
     String googlePlaceId;
@@ -64,6 +66,7 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
     LinearLayoutManager mLayoutManager;
     SelectCityCallback selectCityCallback;
     DatabaseHandler db;
+    String searchKey = "";
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -96,7 +99,6 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
             }
         });
         inputListener();
-
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -131,11 +133,19 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (count > 0 ){
+
                     String sKey = s.toString();
                     sKey = sKey.replaceAll(" ", "%20");
                     Log.d("onTextChanged", sKey);
-                    GetCitiesApi.getRequest(getActivity(),sKey,apiCallback);
-                    errorMsg(true, "Searching...");
+                    //Log.d("onTextChanged", "searchOnChangeText : "+searchOnChangeText);
+                    Log.d("onTextChanged","searchKey "+searchKey+" : "+"s "+ s.toString());
+                    Log.d("onTextChange", String.valueOf("boolean"+ searchKey == s.toString()));
+                    if (searchKey != null){
+                        if (!searchKey.equals(s.toString())){
+                            GetCitiesApi.getRequest(getActivity(),sKey,apiCallback);
+                            errorMsg(true, "Searching...");
+                        }
+                    }
                 }else {
                     recyclerView.setVisibility(View.GONE);
                     btnSendEnabled(false);
@@ -150,13 +160,18 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
     @Override
     public void apiResponse(JSONObject response, String tag) {
         if (tag.equals("googleApiCities")){
-            Log.d("apiResponse - "+tag,response+"");
+            //Log.d("apiResponse - "+tag,response+"");
             errorMsg(false, "");
             try {
                 JSONArray rListArray = response.getJSONArray("predictions");
                 String status = response.getString("status");
+
                 if (status.equals("OK")){
-                    loadDataIntoView(response, tag);
+                    if (inputCity.getText().length() > 1){
+                        loadDataIntoView(response, tag);
+                    }
+
+
 
                 }else if (status.equals("ZERO_RESULTS")){
                     errorMsg(true,"Result not found.");
@@ -225,11 +240,16 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
 
     @Override
     public void getSelectedCity(String city, String placeId) {
-        inputCity.setText(city);
+
         inputCity.setSelection(inputCity.getText().length());
         Log.d("SelectCity", "PlaceId: "+ placeId);
+        searchKey = city;
+        searchOnChangeText = false;
+        Log.d("searchOnChangeText", searchOnChangeText+"");
 
         errorMsg(false,"");
+
+        inputCity.setText(city);
 
         googlePlaceId = placeId;
         btnSendEnabled(true);
@@ -264,12 +284,13 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
         Log.d("errorMsg", "error show"+ error);
         if (error){
             txtError.setText(msg);
-            //txtError.setAlpha(1);
-            txtError.setVisibility(View.VISIBLE);
+            txtError.setAlpha(1);
+            //txtError.setVisibility(View.VISIBLE);
             Animation myFadeInAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.blink_anim);
             txtError.startAnimation(myFadeInAnimation);
         }else {
-            txtError.setVisibility(View.GONE);
+            txtError.setAlpha(0);
+            //txtError.setVisibility(View.GONE);
         }
     }
 }
