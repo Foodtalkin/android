@@ -19,6 +19,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Database Version
     private static final int DATABASE_VERSION = 2;
 
+    //---- master test for git--
+
     // Database Name
     private static final String DATABASE_NAME = "appDb";
 
@@ -164,7 +166,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // return count
         return cursor.getCount();
     }
-
     public int getDatabaseVersion(){
         SQLiteDatabase db = this.getWritableDatabase();
         // what value do you get here?
