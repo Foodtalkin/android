@@ -40,6 +40,7 @@ import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.communicator.OnBoardingCallback;
 import in.foodtalk.android.communicator.SelectCityCallback;
 import in.foodtalk.android.module.DatabaseHandler;
+import in.foodtalk.android.object.LoginValue;
 import in.foodtalk.android.object.RestaurantListObj;
 import in.foodtalk.android.object.SelectCityObj;
 
@@ -184,17 +185,24 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
                 e.printStackTrace();
             }
         }
-        if (tag.equals("emailSubmit")){
+        if (tag.equals("emailCitySubmit")){
             Log.d("apiResponse", "email submited");
+
+            try {
+                getAndSave(response);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             errorMsg(false, "");
             //Intent i = new Intent(FbLogin.this, Home.class);
-            Intent i = new Intent(getActivity(), Home.class);
+            /*Intent i = new Intent(getActivity(), Home.class);
             //AppController.fbEmailId = loginInfo.email;
            // i.putExtra("email", loginInfo.email);
             getActivity().startActivity(i);
-            getActivity().finish();
+            getActivity().finish();*/
         }
     }
+
     private void btnSendEnabled(Boolean b){
         if (!b){
             btnSend.setAlpha(0.5f);
@@ -278,7 +286,7 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
         obj.put("google_place_id", googlePlaceId);
         //obj.put("region", city);
         obj.put("deviceToken","12344566776");
-        apiCall.apiRequestPost(getActivity(), obj, Config.URL_LOGIN, "emailSubmit", apiCallback);
+        apiCall.apiRequestPost(getActivity(), obj, Config.URL_LOGIN, "emailCitySubmit", apiCallback);
         errorMsg(true, "Please wait...");
     }
     private void hideKeyboard(){
@@ -299,6 +307,37 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
         }else {
             txtError.setAlpha(0);
             //txtError.setVisibility(View.GONE);
+        }
+    }
+
+
+    private void getAndSave(JSONObject response) throws JSONException {
+        JSONObject jObj = response.getJSONObject("profile");
+
+        String fullName = jObj.getString("fullName");
+        String fId = jObj.getString("facebookId");
+        String userName = jObj.getString("userName");
+        String uId = response.getString("userId");
+        String sessionId = response.getString("sessionId");
+        LoginValue loginValue = new LoginValue();
+        loginValue.fbId = fId;
+        loginValue.uId = uId;
+        loginValue.sId = sessionId;
+        loginValue.name = fullName;
+        loginValue.email = jObj.getString("email");
+        loginValue.cityId = jObj.getString("cityId");
+        //loginValue.userName = userName;
+        loginValue.userName = ((userName.equals("")) ? "N/A" : userName);
+
+        //-- Log.d("check table", db.getRowCount()+"");
+        db.addUser(loginValue);
+
+        if(!userName.equals("") || !userName.equals(null)){
+            Intent i = new Intent(getActivity(), Home.class);
+            startActivity(i);
+            getActivity().finish();
+        }else {
+            Log.d("Username class", "error with username");
         }
     }
 }

@@ -8,14 +8,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import in.foodtalk.android.object.LoginValue;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
+
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Database Name
     private static final String DATABASE_NAME = "appDb";
@@ -30,8 +32,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_UID = "uId";
     private static final String KEY_NAME = "name";
     private static final String KEY_USER_NAME = "userName";
+    private static final String KEY_EMAIL = "email";
+    private static final String KEY_CITY_ID = "cityId";
 
-    //private static final String KEY_PH_NO = "phone_number";
+
+
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -40,21 +45,31 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_LOGIN + "("
+        String CREATE_CONTACTS_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_LOGIN + "("
                 + KEY_ID + " INTEGER PRIMARY KEY,"
                 + KEY_FID + " TEXT,"
                 + KEY_SID + " TEXT,"
                 + KEY_UID + " TEXT,"
                 + KEY_NAME + " TEXT,"
-                + KEY_USER_NAME + " TEXT" + ")";
+                + KEY_USER_NAME + " TEXT,"
+                + KEY_CITY_ID + " TEXT,"
+                + KEY_EMAIL +" TEXT"+ ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
+
+        Log.d("DatabaseHandler", "onCreate");
     }
 
     // Upgrading database
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOGIN);
+        // db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOGIN);
+        if (newVersion == 2){
+            db.execSQL("ALTER TABLE " + TABLE_LOGIN + " ADD "+KEY_EMAIL+" TEXT");
+            db.execSQL("ALTER TABLE " + TABLE_LOGIN + " ADD "+KEY_CITY_ID+" TEXT");
+        }
+
+        Log.d("DatabaseHandler", "onUpgrade"+" oldV "+ oldVersion+" newV "+newVersion);
 
         // Create tables again
         onCreate(db);
@@ -74,6 +89,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_UID, loginValue.uId);
         values.put(KEY_NAME, loginValue.name);
         values.put(KEY_USER_NAME, loginValue.userName);
+        values.put(KEY_EMAIL, loginValue.email);
+        values.put(KEY_CITY_ID, loginValue.cityId);
 
         // Inserting Row
         db.insert(TABLE_LOGIN, null, values);
@@ -91,12 +108,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // Move to first row
         cursor.moveToFirst();
         if(cursor.getCount() > 0){
-            user.put("facebooId", cursor.getString(1));
-            user.put("sessionId", cursor.getString(2));
-            user.put("userId", cursor.getString(3));
-            user.put("fullName", cursor.getString(4));
-            user.put("userName", cursor.getString(5));
+
+            user.put("facebooId", cursor.getString(cursor.getColumnIndex(KEY_FID)));
+            user.put("sessionId", cursor.getString(cursor.getColumnIndex(KEY_SID)));
+            user.put("userId", cursor.getString(cursor.getColumnIndex(KEY_UID)));
+            user.put("fullName", cursor.getString(cursor.getColumnIndex(KEY_NAME)));
+            user.put("userName", cursor.getString(cursor.getColumnIndex(KEY_USER_NAME)));
+            user.put("email",cursor.getString(cursor.getColumnIndex(KEY_EMAIL)));
+            user.put("cityId",cursor.getString(cursor.getColumnIndex(KEY_CITY_ID)));
+
         }
+        Log.d("cursor ", cursor+"");
         cursor.close();
         db.close();
         // return user
@@ -141,6 +163,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         // return count
         return cursor.getCount();
+    }
+
+    public int getDatabaseVersion(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        // what value do you get here?
+        return db.getVersion();
     }
 
 }

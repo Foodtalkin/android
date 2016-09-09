@@ -54,14 +54,17 @@ public class SplashScreen extends AppCompatActivity {
                 Intent i;
 
                 if(count > 0){
-                    if(db.getUserDetails().get("userName").equals("N/A") ||
-                            db.getUserDetails().get("email").equals("N/A") ||
-                            db.getUserDetails().get("cityId").equals("N/A")){
+                    if(db.getUserDetails().get("userName").equals("N/A")){
                         i = new Intent(SplashScreen.this, WelcomeUsername.class);
                     }
                     else {
-
-                        i = new Intent(SplashScreen.this, Home.class);
+                        if (db.getUserDetails().get("email") == null){
+                            i = new Intent(SplashScreen.this, WelcomeUsername.class);
+                        }else if (db.getUserDetails().get("cityId") == null){
+                            i = new Intent(SplashScreen.this, WelcomeUsername.class);
+                        }else {
+                            i = new Intent(SplashScreen.this, Home.class);
+                        }
                         if (fragmentName != null){
                             i.putExtra("FRAGMENT_NAME",fragmentName);
                         }
