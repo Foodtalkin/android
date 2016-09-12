@@ -48,6 +48,7 @@
                 android:paddingBottom="15dp"
                 android:drawableLeft="@drawable/ic_person_white_24dp"
                 android:maxLines="1"
+                android:maxLength="16"
                 android:singleLine="true"
                 />
             <LinearLayout

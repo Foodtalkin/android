@@ -34,8 +34,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_UID = "uId";
     private static final String KEY_NAME = "name";
     private static final String KEY_USER_NAME = "userName";
-    private static final String KEY_EMAIL = "email";
-    private static final String KEY_CITY_ID = "cityId";
+
 
 
 
@@ -53,9 +52,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_SID + " TEXT,"
                 + KEY_UID + " TEXT,"
                 + KEY_NAME + " TEXT,"
-                + KEY_USER_NAME + " TEXT,"
-                + KEY_CITY_ID + " TEXT,"
-                + KEY_EMAIL +" TEXT"+ ")";
+                + KEY_USER_NAME + " TEXT" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
 
         Log.d("DatabaseHandler", "onCreate");
@@ -65,11 +62,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
-        // db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOGIN);
-        if (newVersion == 2){
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOGIN);
+        /*if (newVersion == 2){
             db.execSQL("ALTER TABLE " + TABLE_LOGIN + " ADD "+KEY_EMAIL+" TEXT");
             db.execSQL("ALTER TABLE " + TABLE_LOGIN + " ADD "+KEY_CITY_ID+" TEXT");
-        }
+        }*/
 
         Log.d("DatabaseHandler", "onUpgrade"+" oldV "+ oldVersion+" newV "+newVersion);
 
@@ -91,8 +88,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_UID, loginValue.uId);
         values.put(KEY_NAME, loginValue.name);
         values.put(KEY_USER_NAME, loginValue.userName);
-        values.put(KEY_EMAIL, loginValue.email);
-        values.put(KEY_CITY_ID, loginValue.cityId);
+
 
         // Inserting Row
         db.insert(TABLE_LOGIN, null, values);
@@ -116,8 +112,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             user.put("userId", cursor.getString(cursor.getColumnIndex(KEY_UID)));
             user.put("fullName", cursor.getString(cursor.getColumnIndex(KEY_NAME)));
             user.put("userName", cursor.getString(cursor.getColumnIndex(KEY_USER_NAME)));
-            user.put("email",cursor.getString(cursor.getColumnIndex(KEY_EMAIL)));
-            user.put("cityId",cursor.getString(cursor.getColumnIndex(KEY_CITY_ID)));
+
 
         }
         Log.d("cursor ", cursor+"");

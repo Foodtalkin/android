@@ -107,7 +107,7 @@ android:background="@color/bg_color"
         android:textColorHint="@color/blackText1"
         android:backgroundTint="@color/bg_color"
         android:focusableInTouchMode="true"
-        android:maxLength="240"
+        android:maxLength="140"
 
         />
 </RelativeLayout>

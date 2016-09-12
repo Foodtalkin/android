@@ -100,7 +100,7 @@
                         android:maxLines="1"
                         android:background="@drawable/round_bg_white"
                         android:digits="@string/alphanumberspace1"
-                        android:maxLength="64"
+                        android:maxLength="32"
 
                         />
 
