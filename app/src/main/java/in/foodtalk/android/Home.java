@@ -1740,7 +1740,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             }
             Log.d("json obj","check");
             Log.d("jsonObj","getUserInfo : "+jsonObject);
-           // apiCall.apiRequestPost(this,jsonObject,Config.URL_USER_PROFILE,"userInfo", this);
+            apiCall.apiRequestPost(this,jsonObject,Config.URL_USER_PROFILE,"userInfo", this);
         }
     }
 }
