@@ -97,6 +97,7 @@ import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.NewPostUpload;
 import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.object.CreatePostObj;
+import in.foodtalk.android.object.LoginValue;
 import in.foodtalk.android.object.RestaurantPostObj;
 import in.foodtalk.android.object.UserPostObj;
 
@@ -1710,8 +1711,45 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }
         if (tag.equals("userInfo")){
             Log.d("userInfo", response+"");
+            try {
+                addUserToDb(response);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         Log.d("api response home", tag);
+    }
+    private void addUserToDb(JSONObject response) throws JSONException {
+
+        if (response.getString("status").equals("OK")){
+            String fId = db.getUserDetails().get("facebooId");
+            String uId = db.getUserDetails().get("userId");
+            String sId = db.getUserDetails().get("sessionId");
+            String fullName = db.getUserDetails().get("fullName");
+            String userName = db.getUserDetails().get("userName");
+            String email = response.getJSONObject("profile").getString("email");
+            String cityId = response.getJSONObject("profile").getString("cityId");
+
+            db.resetTables();
+
+            LoginValue loginValue = new LoginValue();
+            loginValue.fbId = fId;
+            loginValue.uId = uId;
+            loginValue.sId = sId;
+            loginValue.name = fullName;
+            loginValue.userName = userName;
+            loginValue.email = email;
+            loginValue.cityId = cityId;
+            //loginValue.userName = ((userName.equals("")) ? "N/A" : userName);
+           // loginValue.email = ((email.equals("")) ? "N/A" : email);
+           // loginValue.cityId = ((cityId.equals("")) ? "N/A" : cityId);
+
+            // Log.d("check table", db.getRowCount()+"");
+            db.addUser(loginValue);
+
+            Log.d("addUserToDb","email: "+db.getUserDetails().get("email"));
+        }
+
     }
     public void openWebPage(String url, String title){
         webViewFragment = new WebViewFragment();
@@ -1734,7 +1772,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put("sessionId", sessionId);
-                jsonObject.put("userId", userId);
+                jsonObject.put("selectedUserId", userId);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
