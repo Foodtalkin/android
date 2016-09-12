@@ -236,6 +236,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         stringCase = new StringCase();
 
+        getUserInfo();
+
 
 
         //getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -1706,6 +1708,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         if (tag.equals("bookSlot")){
             setFragmentView(storeHistoryFragment, R.id.container, -1, true);
         }
+        if (tag.equals("userInfo")){
+            Log.d("userInfo", response+"");
+        }
         Log.d("api response home", tag);
     }
     public void openWebPage(String url, String title){
@@ -1721,5 +1726,18 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     public void storeHistory(String type, String value) {
         openWebPage(value, null);
         titleHome.setText("");
+    }
+    private void getUserInfo(){
+        Log.d("home GetUserInfo",""+ db.getUserDetails());
+        if (db.getUserDetails().get("cityId").equals("blank")){
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("sessionId", sessionId);
+                jsonObject.put("userId", userId);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            apiCall.apiRequestPost(this,jsonObject,Config.URL_USER_PROFILE,"userInfo", this);
+        }
     }
 }

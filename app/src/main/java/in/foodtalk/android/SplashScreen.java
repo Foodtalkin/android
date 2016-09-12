@@ -84,6 +84,7 @@ public class SplashScreen extends AppCompatActivity {
                 finish();
             }
         }, SPLASH_TIME_OUT);
+
     }
     public void setActivityBackgroundColor(int color) {
         View view = this.getWindow().getDecorView();
@@ -119,4 +120,6 @@ public class SplashScreen extends AppCompatActivity {
                     }
                 });
     }
+
+
 }
