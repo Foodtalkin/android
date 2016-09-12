@@ -324,8 +324,7 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
         loginValue.uId = uId;
         loginValue.sId = sessionId;
         loginValue.name = fullName;
-        loginValue.email = jObj.getString("email");
-        loginValue.cityId = jObj.getString("cityId");
+
         //loginValue.userName = userName;
         loginValue.userName = ((userName.equals("")) ? "N/A" : userName);
 

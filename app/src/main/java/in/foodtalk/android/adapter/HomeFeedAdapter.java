@@ -167,13 +167,17 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 Log.e("HomeFeedAdapter","null iBookark position: "+position);
             }
             //Log.d("image url", current.postImage);
-            Picasso.with(context)
-                    .load(current.postImage)
-                    //.fit().centerCrop()
-                    .fit()
-                    .placeholder(R.drawable.placeholder)
-                    .into(postHolder.dishImage);
-
+            if (current.postImage.isEmpty()) {
+                Log.i("path empty", current.postImage);
+            } else{
+               // Picasso.with(_c).load(image).into(iview);
+                Picasso.with(context)
+                        .load(current.postImage)
+                        //.fit().centerCrop()
+                        .fit()
+                        .placeholder(R.drawable.placeholder)
+                        .into(postHolder.dishImage);
+            }
             //Log.d("userThumb large",current.userThumb);
             Picasso.with(context)
                     .load(current.userImage)
