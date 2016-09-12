@@ -73,11 +73,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // Create tables again
         onCreate(db);
     }
-
     /**
      * All CRUD(Create, Read, Update, Delete) Operations
      */
-
     // Adding new contact
     public void addUser(LoginValue loginValue) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -88,8 +86,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_UID, loginValue.uId);
         values.put(KEY_NAME, loginValue.name);
         values.put(KEY_USER_NAME, loginValue.userName);
-
-
         // Inserting Row
         db.insert(TABLE_LOGIN, null, values);
         db.close(); // Closing database connection
