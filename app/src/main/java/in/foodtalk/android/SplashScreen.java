@@ -58,7 +58,7 @@ public class SplashScreen extends AppCompatActivity {
                         i = new Intent(SplashScreen.this, WelcomeUsername.class);
                     }
                     else {
-                        if (db.getUserDetails().get("email") == null){
+                        if (db.getUserDetails().get("email") == null ){
                             i = new Intent(SplashScreen.this, WelcomeUsername.class);
                         }else if (db.getUserDetails().get("cityId") == null){
                             i = new Intent(SplashScreen.this, WelcomeUsername.class);

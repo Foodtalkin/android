@@ -35,6 +35,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_EMAIL = "email";
     private static final String KEY_CITY_ID = "cityId";
 
+    public Boolean oldDb = false;
+
 
 
 
@@ -65,14 +67,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // Drop older table if existed
         // db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOGIN);
         if (newVersion == 2){
-            db.execSQL("ALTER TABLE " + TABLE_LOGIN + " ADD "+KEY_EMAIL+" TEXT");
-            db.execSQL("ALTER TABLE " + TABLE_LOGIN + " ADD "+KEY_CITY_ID+" TEXT");
+            db.execSQL("ALTER TABLE " + TABLE_LOGIN + " ADD "+KEY_EMAIL+" TEXT DEFAULT blank");
+            db.execSQL("ALTER TABLE " + TABLE_LOGIN + " ADD "+KEY_CITY_ID+" TEXT DEFAULT blank");
         }
 
         Log.d("DatabaseHandler", "onUpgrade"+" oldV "+ oldVersion+" newV "+newVersion);
 
         // Create tables again
-        onCreate(db);
+       // onCreate(db);
     }
 
     /**
