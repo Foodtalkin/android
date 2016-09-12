@@ -162,5 +162,4 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // what value do you get here?
         return db.getVersion();
     }
-
 }
