@@ -236,7 +236,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         stringCase = new StringCase();
 
-        getUserInfo();
+
 
 
 
@@ -377,7 +377,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             Log.d("Get extras", "null--");
         }
         //----------------------------
-
+        getUserInfo();
 
     }
 
@@ -1728,8 +1728,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         titleHome.setText("");
     }
     private void getUserInfo(){
-        Log.d("home GetUserInfo",""+ db.getUserDetails());
+        Log.d("home GetUserInfo",""+db.getUserDetails().get("cityId").equals("blank")+" : "+ db.getUserDetails());
         if (db.getUserDetails().get("cityId").equals("blank")){
+
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put("sessionId", sessionId);
@@ -1737,7 +1738,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            apiCall.apiRequestPost(this,jsonObject,Config.URL_USER_PROFILE,"userInfo", this);
+            Log.d("json obj","check");
+            Log.d("jsonObj","getUserInfo : "+jsonObject);
+           // apiCall.apiRequestPost(this,jsonObject,Config.URL_USER_PROFILE,"userInfo", this);
         }
     }
 }
