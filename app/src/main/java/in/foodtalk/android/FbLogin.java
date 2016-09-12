@@ -587,8 +587,6 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                             String uId = response.getString("userId");
                             String sessionId = response.getString("sessionId");
                             String channels = jObj.getString("channels");
-                            String email = jObj.getString("email");
-                            String cityId = jObj.getString("cityId");
                             String region;
                             if (jObj.has("region")){
                                 region = jObj.getString("region");
@@ -626,22 +624,20 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                             //loginValue.userName = userName;
 
                             loginValue.userName = ((userName.equals("")) ? "N/A" : userName);
-                            loginValue.email = ((email.equals("")) ? "N/A" : email);
-                            loginValue.cityId = ((cityId.equals("")) ? "N/A" : cityId);
 
                            // Log.d("check table", db.getRowCount()+"");
                             db.addUser(loginValue);
 
                             //------Start new activity according to api response
                             if(userName.equals("") || userName.equals(null)){
-                                gotoOnboarding(loginInfo.email);
-                            }else if (email.equals("")){
-                                gotoOnboarding(loginInfo.email);
-
-                            }else if (cityId.equals("")){
-                                gotoOnboarding(loginInfo.email);
+                                Intent i = new Intent(FbLogin.this, WelcomeUsername.class);
+                                i.putExtra("email", loginInfo.email);
+                                startActivity(i);
                             }else {
-                                gotoHome();
+                                Intent i = new Intent(FbLogin.this, Home.class);
+                               // Intent i = new Intent(FbLogin.this, WelcomeUsername.class);
+                              //  i.putExtra("email", loginInfo.email);
+                                startActivity(i);
                             }
                             finish();
                         } catch (JSONException e) {
@@ -677,17 +673,6 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         AppController.getInstance().addToRequestQueue(jsonObjReq,tag);
         // Cancelling request
         // ApplicationController.getInstance().getRequestQueue().cancelAll(tag_json_obj);
-    }
-
-    private void gotoOnboarding(String email){
-        Intent i = new Intent(FbLogin.this, WelcomeUsername.class);
-        i.putExtra("email", email);
-        AppController.fbEmailId = email;
-        startActivity(i);
-    }
-    private void gotoHome(){
-        Intent i = new Intent(FbLogin.this, Home.class);
-        startActivity(i);
     }
 
     private void parseInst(String userId){
