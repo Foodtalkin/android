@@ -85,7 +85,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         commentCallback = (CommentCallback) context;
         //likeCallback = postLikeCallback;
-
         dateTimeDifference = new DateTimeDifference();
 
     }
