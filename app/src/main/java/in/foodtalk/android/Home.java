@@ -347,7 +347,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             if(extras == null) {
                 newString= null;
                 Log.e("Get extras", "Null");
-
                 // Add the fragment to the 'fragment_container' FrameLayout
             } else if (extras.getString("com.parse.Data") != null){
                 //newString= extras.getString("STRING_I_NEED");
@@ -1746,7 +1745,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
             // Log.d("check table", db.getRowCount()+"");
             db.addUser(loginValue);
-
             Log.d("addUserToDb","email: "+db.getUserDetails().get("email"));
         }
 

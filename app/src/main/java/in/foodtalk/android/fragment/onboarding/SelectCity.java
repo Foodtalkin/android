@@ -40,6 +40,7 @@ import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.communicator.OnBoardingCallback;
 import in.foodtalk.android.communicator.SelectCityCallback;
 import in.foodtalk.android.module.DatabaseHandler;
+import in.foodtalk.android.module.ToastShow;
 import in.foodtalk.android.object.LoginValue;
 import in.foodtalk.android.object.RestaurantListObj;
 import in.foodtalk.android.object.SelectCityObj;
@@ -125,7 +126,6 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
        // mAdapter = new ListingAdapter(mListing);
         //mRecyclerView.setAdapter(mAdapter);
     }
-
     private void inputListener(){
 
         inputCity.addTextChangedListener(new TextWatcher() {
@@ -188,12 +188,20 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
         if (tag.equals("emailCitySubmit")){
             Log.d("apiResponse", "email submited");
 
-            try {
-                getAndSave(response);
-            } catch (JSONException e) {
-                e.printStackTrace();
+            if (response != null){
+                try {
+                    getAndSave(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }else {
+                ToastShow.showToast(getActivity(), "Please check your internet connection");
+                btnSendEnabled(true);
             }
             errorMsg(false, "");
+
+
             //Intent i = new Intent(FbLogin.this, Home.class);
             /*Intent i = new Intent(getActivity(), Home.class);
             //AppController.fbEmailId = loginInfo.email;
@@ -257,7 +265,7 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
     @Override
     public void getSelectedCity(String city, String placeId) {
 
-        inputCity.setSelection(inputCity.getText().length());
+
         Log.d("SelectCity", "PlaceId: "+ placeId);
         searchKey = city;
         searchOnChangeText = false;
@@ -270,10 +278,10 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
         googlePlaceId = placeId;
         btnSendEnabled(true);
         recyclerView.setVisibility(View.GONE);
+        inputCity.setSelection(inputCity.getText().length());
     }
 
     private void createUserName(String userName ,String email, String googlePlaceId)throws JSONException{
-
         btnSendEnabled(false);
         //btnClickable = false;
         hideKeyboard();
@@ -326,10 +334,11 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
         loginValue.name = fullName;
         loginValue.email = jObj.getString("email");
         loginValue.cityId = jObj.getString("cityId");
-        //loginValue.userName = userName;
-        loginValue.userName = ((userName.equals("")) ? "N/A" : userName);
+        loginValue.userName = userName;
+       // loginValue.userName = ((userName.equals("")) ? "N/A" : userName);
 
         //-- Log.d("check table", db.getRowCount()+"");
+        db.resetTables();
         db.addUser(loginValue);
 
         if(!userName.equals("") || !userName.equals(null)){

@@ -154,15 +154,18 @@ public class UserProfile extends Fragment implements LatLonCallback, UserProfile
         userId = db.getUserDetails().get("userId");
 
         Log.d("check user ids","userId: "+userId+ " userIdOther: "+userIdOther);
-        if (userIdOther.equals(userId)){
-            Log.d("userIds","Match");
-            followBtnVisible = false;
-           // btnFollow.setVisibility(View.GONE);
-        }else {
-           // btnFollow.setVisibility(View.VISIBLE);
-            followBtnVisible = true;
-            Log.d("userIds", "not match");
+        if (userIdOther != null){
+            if (userIdOther.equals(userId)){
+                Log.d("userIds","Match");
+                followBtnVisible = false;
+                // btnFollow.setVisibility(View.GONE);
+            }else {
+                // btnFollow.setVisibility(View.VISIBLE);
+                followBtnVisible = true;
+                Log.d("userIds", "not match");
+            }
         }
+
         try {
             getUserProfile("myProfile");
         } catch (JSONException e) {
@@ -248,6 +251,7 @@ public class UserProfile extends Fragment implements LatLonCallback, UserProfile
             userProfile.iFollowedIt = profile.getString("iFollowedIt");
             userProfile.image = profile.getString("image");
             userProfile.totalPoints = profile.getString("totalPoints");
+            userProfile.cityName = profile.getString("cityName");
             userProfile.score = profile.getString("score");
             userProfile.userId = profile.getString("id");
             userProfile.avilablePoints = profile.getString("avilablePoints");

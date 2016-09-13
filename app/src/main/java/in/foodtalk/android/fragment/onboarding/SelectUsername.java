@@ -1,5 +1,6 @@
 package in.foodtalk.android.fragment.onboarding;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import in.foodtalk.android.Home;
 import in.foodtalk.android.R;
 import in.foodtalk.android.WelcomeUsername;
 import in.foodtalk.android.apicall.ApiCall;
@@ -29,6 +31,7 @@ import in.foodtalk.android.communicator.OnBoardingCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.module.ToastShow;
+import in.foodtalk.android.object.LoginValue;
 
 /**
  * Created by RetailAdmin on 01-09-2016.
@@ -62,6 +65,8 @@ public class SelectUsername extends Fragment implements ApiCallback {
         txtHead = (TextView) layout.findViewById(R.id.txt_head);
 
         txtHead.setText("Hello, "+ StringCase.caseSensitive(db.getUserDetails().get("fullName")));
+
+
 
         onBoardingCallback = (OnBoardingCallback) getContext();
 
@@ -121,6 +126,11 @@ public class SelectUsername extends Fragment implements ApiCallback {
         // Check if no view has focus:
         hideKeyboard();
 
+        if (AppController.userName != null){
+            txtUser.setText(AppController.userName);
+            btnClickable = true;
+            btnSend.setAlpha(1);
+        }
         return layout;
     }
     private void hideKeyboard(){
@@ -191,6 +201,8 @@ public class SelectUsername extends Fragment implements ApiCallback {
                 String status = response.getString("status");
                 if (status.equals("OK")){
 
+                    getAndSave(response);
+
                     Log.d("SelectUsername","set username "+response.getString("userName"));
                     AppController.userName = response.getString("userName");
                     onBoardingCallback.onboardingBtnClicked("next", "userName", response.getString("userName"));
@@ -218,5 +230,38 @@ public class SelectUsername extends Fragment implements ApiCallback {
         }else {
             txtError.setAlpha(0);
         }
+    }
+
+    private void getAndSave(JSONObject response) throws JSONException {
+        JSONObject jObj = response.getJSONObject("profile");
+
+        String fullName = jObj.getString("fullName");
+        String fId = jObj.getString("facebookId");
+        String userName = jObj.getString("userName");
+        String uId = response.getString("userId");
+        String sessionId = response.getString("sessionId");
+        LoginValue loginValue = new LoginValue();
+        loginValue.fbId = fId;
+        loginValue.uId = uId;
+        loginValue.sId = sessionId;
+        loginValue.name = fullName;
+        if (AppController.fbEmailId != null){
+            loginValue.email = AppController.fbEmailId;
+        }
+        //loginValue.cityId = jObj.getString("cityId");
+        loginValue.userName = userName;
+        // loginValue.userName = ((userName.equals("")) ? "N/A" : userName);
+
+        //-- Log.d("check table", db.getRowCount()+"");
+        db.resetTables();
+        db.addUser(loginValue);
+
+        /*if(!userName.equals("") || !userName.equals(null)){
+            Intent i = new Intent(getActivity(), Home.class);
+            startActivity(i);
+            getActivity().finish();
+        }else {
+            Log.d("Username class", "error with username");
+        }*/
     }
 }

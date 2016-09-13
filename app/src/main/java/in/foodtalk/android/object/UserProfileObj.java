@@ -21,5 +21,6 @@ public class UserProfileObj {
     public String totalPoints;
     public String score;
     public String userId;
+    public String cityName;
 
 }

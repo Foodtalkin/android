@@ -49,6 +49,8 @@
                 android:drawableLeft="@drawable/ic_person_white_24dp"
                 android:maxLines="1"
                 android:singleLine="true"
+
+                android:digits="@string/alphanumber"
                 />
             <LinearLayout
                 android:id="@+id/btn_send"

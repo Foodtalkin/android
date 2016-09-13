@@ -595,9 +595,7 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                             } else {
                                 region = "";
                             }
-
                             FlurryAgent.setUserId(userName);
-
 
                             String str = "android,ios,web,desktop";
 
@@ -626,7 +624,12 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                             //loginValue.userName = userName;
 
                             loginValue.userName = ((userName.equals("")) ? "N/A" : userName);
-                            loginValue.email = ((email.equals("")) ? "N/A" : email);
+                            if (loginInfo.email != null){
+                                loginValue.email = ((email.equals("")) ? loginInfo.email : email);
+                            }else {
+                                loginValue.email = ((email.equals("")) ? "N/A" : email);
+                            }
+
                             loginValue.cityId = ((cityId.equals("")) ? "N/A" : cityId);
 
                            // Log.d("check table", db.getRowCount()+"");

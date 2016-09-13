@@ -13,6 +13,7 @@ import com.facebook.applinks.AppLinkData;
 import java.util.Arrays;
 import java.util.List;
 
+import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.module.DatabaseHandler;
 
 public class SplashScreen extends AppCompatActivity {
@@ -56,11 +57,14 @@ public class SplashScreen extends AppCompatActivity {
                 if(count > 0){
                     if(db.getUserDetails().get("userName").equals("N/A")){
                         i = new Intent(SplashScreen.this, WelcomeUsername.class);
+                        Log.d("SplashScreen", "userName na");
                     }
                     else {
                         if (db.getUserDetails().get("email") == null ){
+                            Log.d("SplashScreen", "email null");
                             i = new Intent(SplashScreen.this, WelcomeUsername.class);
                         }else if (db.getUserDetails().get("cityId") == null){
+                            Log.d("SplashScreen", "cityId null");
                             i = new Intent(SplashScreen.this, WelcomeUsername.class);
                         }else {
                             i = new Intent(SplashScreen.this, Home.class);
@@ -71,7 +75,14 @@ public class SplashScreen extends AppCompatActivity {
                         if (elementId != null){
                             i.putExtra("ELEMENT_ID",elementId);
                         }
-
+                        if (db.getUserDetails().get("email") != null){
+                            Log.d("SplashScreen","email"+ db.getUserDetails().get("email"));
+                            AppController.fbEmailId = db.getUserDetails().get("email");
+                        }
+                        if (db.getUserDetails().get("userName") != null){
+                            Log.d("SplashScreen","userName"+ db.getUserDetails().get("userName"));
+                            AppController.userName = db.getUserDetails().get("userName");
+                        }
                     }
                     Log.d("user info from Splash", db.getUserDetails().get("userName")+"");
                 }else {

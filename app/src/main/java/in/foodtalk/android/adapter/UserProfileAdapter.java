@@ -118,7 +118,8 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ProfileHolder){
             ProfileHolder profileHolder = (ProfileHolder) holder;
-            profileHolder.fullName.setText(stringCase.caseSensitive(userProfileObj.fullName));
+            profileHolder.fullName.setText(stringCase.caseSensitive(userProfileObj.fullName+" | "+userProfileObj.cityName));
+
             //profileHolder.checkins.setText(userProfileObj.checkInCount);
             double point = Double.parseDouble(userProfileObj.avilablePoints);
             Log.d("abilablePoints", userProfileObj.avilablePoints);
