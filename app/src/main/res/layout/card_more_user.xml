@@ -89,6 +89,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/more_loc"/>
             <TextView
+                android:id="@+id/city_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Delhi NCR"

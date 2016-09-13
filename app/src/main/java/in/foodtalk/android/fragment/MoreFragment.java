@@ -58,9 +58,11 @@ public class MoreFragment extends Fragment {
         fId = db.getUserDetails().get("facebooId");
         sId = db.getUserDetails().get("sessionId");
 
+
         userProfile.fullName = fullName;
         userProfile.userName = userName;
         userProfile.image = "https://graph.facebook.com/"+fId+"/picture?type=large";
+        userProfile.cityName = db.getUserDetails().get("cityId");
 
         moreAdapter = new MoreAdapter(getActivity(), userProfile, favorites);
         recyclerView.setAdapter(moreAdapter);

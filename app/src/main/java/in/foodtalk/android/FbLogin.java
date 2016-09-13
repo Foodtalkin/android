@@ -588,7 +588,7 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                             String sessionId = response.getString("sessionId");
                             String channels = jObj.getString("channels");
                             String email = jObj.getString("email");
-                            String cityId = jObj.getString("cityId");
+                            String cityId = jObj.getString("cityName");
                             String region;
                             if (jObj.has("region")){
                                 region = jObj.getString("region");

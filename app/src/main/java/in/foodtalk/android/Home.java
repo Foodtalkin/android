@@ -1727,7 +1727,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             String fullName = db.getUserDetails().get("fullName");
             String userName = db.getUserDetails().get("userName");
             String email = response.getJSONObject("profile").getString("email");
-            String cityId = response.getJSONObject("profile").getString("cityId");
+            String cityId = response.getJSONObject("profile").getString("cityName");
 
             db.resetTables();
 

@@ -68,6 +68,8 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
        // Log.d("position of space name", fullName.indexOf(" ")+"");
         profileHolder.txtUserNameFull.setText(stringCase.caseSensitive(fullName));
+
+        profileHolder.cityName.setText(stringCase.caseSensitive(userProfile.cityName));
         Log.d("userImage",userImage);
         Picasso.with(context)
                 .load(userImage)
@@ -81,7 +83,7 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
     class  ProfileHolder extends RecyclerView.ViewHolder implements View.OnTouchListener {
         LinearLayout btnProfile, btnFav, btnLoc, btnOpt, btnReport, btnLegal, btnCurated, btnStore;
-        TextView txtUserName, txtUserNameFull;
+        TextView txtUserName, txtUserNameFull, cityName;
         ImageView userThumb;
 
         public ProfileHolder(View itemView) {
@@ -100,6 +102,8 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             txtUserName = (TextView) itemView.findViewById(R.id.txt_username_more);
             txtUserNameFull = (TextView) itemView.findViewById(R.id.txt_username_full_more);
+
+            cityName = (TextView) itemView.findViewById(R.id.city_name);
 
             btnProfile.setOnTouchListener(this);
             btnFav.setOnTouchListener(this);

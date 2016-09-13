@@ -50,7 +50,7 @@ public class SelectEmail extends Fragment implements OnBoardingCallback {
             @Override
             public void onClick(View v) {
                 Log.d("SelectEmail","button clicked send");
-                String email = inputEmail.getText().toString();
+                String email = inputEmail.getText().toString().trim();
                 Log.d("email", email+"");
                 if (email.matches(emailPattern)){
                     onBoardingCallback.onboardingBtnClicked("next", null, null);

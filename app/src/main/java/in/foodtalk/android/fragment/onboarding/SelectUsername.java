@@ -103,7 +103,7 @@ public class SelectUsername extends Fragment implements ApiCallback {
                             txtEmailError.setAlpha(1);
                         }*/
                         try {
-                            createUserName(txtUser.getText().toString());
+                            createUserName(txtUser.getText().toString().trim());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -151,6 +151,7 @@ public class SelectUsername extends Fragment implements ApiCallback {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.d("onTextChange","count "+count+ " start "+start+" before "+before);
+                errorMsg(false, "");
                 if (start > 0 || count > 0){
                     Log.d("setImg","enable");
                     btnClickable = true;
@@ -248,7 +249,7 @@ public class SelectUsername extends Fragment implements ApiCallback {
         if (AppController.fbEmailId != null){
             loginValue.email = AppController.fbEmailId;
         }
-        //loginValue.cityId = jObj.getString("cityId");
+        //loginValue.cityId = jObj.getString("cityName");
         loginValue.userName = userName;
         // loginValue.userName = ((userName.equals("")) ? "N/A" : userName);
 
