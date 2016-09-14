@@ -25,6 +25,22 @@
     <!-- new post section -->
     <color name="btn_disable">#4b4f54</color>
     <color name="btn_enable">#317ff4</color>
+    
+    
+    <!-- final colors -->
+    <color name="black">#1F2D3D</color>
+    <color name="slate">#3C4858</color>
+    <color name="silver">#8492A6</color>
+    <color name="smoke">#E0E6ED</color>
+    <color name="snow">#F9FAFC</color>
+
+    <color name="navigation">#005B7F</color>
+
+    <color name="active">#1FB6FF</color>
+    <color name="positive">#13CE66</color>
+    <color name="negetive">#FF4949</color>
+    <color name="warning">#FFC82C</color>
+
 
 
 

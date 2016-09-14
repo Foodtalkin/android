@@ -18,9 +18,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,9 +47,11 @@ import java.util.Map;
 import in.foodtalk.android.R;
 import in.foodtalk.android.adapter.newpost.CheckInAdapter;
 import in.foodtalk.android.adapter.newpost.CityListAdapter;
+import in.foodtalk.android.apicall.GetCitiesApi;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.AddedRestaurantCallback;
+import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.communicator.CityListCallback;
 import in.foodtalk.android.communicator.LatLonCallback;
 import in.foodtalk.android.constant.ConstantVar;
@@ -59,7 +64,7 @@ import in.foodtalk.android.object.RestaurantListObj;
 /**
  * Created by RetailAdmin on 03-06-2016.
  */
-public class AddRestaurant extends Fragment implements LatLonCallback {
+public class AddRestaurant extends Fragment implements LatLonCallback, ApiCallback {
 
     View layout;
 
@@ -78,7 +83,7 @@ public class AddRestaurant extends Fragment implements LatLonCallback {
     LatLonCallback latLonCallback;
 
     CityListAdapter cityListAdapter;
-    RecyclerView recyclerView;
+
     LinearLayoutManager linearLayoutManager;
 
     StringCase stringCase;
@@ -102,7 +107,17 @@ public class AddRestaurant extends Fragment implements LatLonCallback {
 
     AddedRestaurantCallback addedRestaurantCallback;
 
+    EditText inputCity;
+
+    LinearLayout selectCityHolder;
+
+    String searchKey = "";
+
+    ScrollView scrollView;
+
     //Boolean iAmHere = false;
+    TextView txtError;
+    RecyclerView recyclerView;
 
 
 
@@ -114,8 +129,29 @@ public class AddRestaurant extends Fragment implements LatLonCallback {
         address = (EditText) layout.findViewById(R.id.input_address_add_restaurant);
 
         locationSection = (LinearLayout) layout.findViewById(R.id.location_add_restaurant);
-        txtCity = (TextView) layout.findViewById(R.id.txt_city_add_restaurant);
-        btnCity = (LinearLayout) layout.findViewById(R.id.btn_city_add_restaurant);
+        //--txtCity = (TextView) layout.findViewById(R.id.txt_city_add_restaurant);
+        //--btnCity = (LinearLayout) layout.findViewById(R.id.btn_city_add_restaurant);
+        inputCity = (EditText) layout.findViewById(R.id.input_city);
+        selectCityHolder = (LinearLayout) layout.findViewById(R.id.select_city);
+        scrollView = (ScrollView) layout.findViewById(R.id.scroll_view_add_restaurant);
+        txtError = (TextView) layout.findViewById(R.id.txt_error);
+        recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view);
+
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+
+        recyclerView.setLayoutManager(layoutManager);
+
+        inputCity.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus){
+                    Log.d("AddRestaurant", "hasFocus "+hasFocus+ " : "+selectCityHolder.getY());
+                    //scrollView.scrollTo(0,(int)selectCityHolder.getY());
+                }else {
+                    Log.d("AddRestaurant", "hasFocus "+hasFocus);
+                }
+            }
+        });
 
         addRestaurantContainer = (LinearLayout) layout.findViewById(R.id.add_restaurant_container);
         Display display = getActivity().getWindowManager().getDefaultDisplay();
@@ -158,7 +194,7 @@ public class AddRestaurant extends Fragment implements LatLonCallback {
             }
         });
         stringCase = new StringCase();
-        switchIamHere = (Switch) layout.findViewById(R.id.switch_add_restaurant);
+        //--switchIamHere = (Switch) layout.findViewById(R.id.switch_add_restaurant);
 
         db = new DatabaseHandler(getActivity());
         config = new Config();
@@ -169,7 +205,7 @@ public class AddRestaurant extends Fragment implements LatLonCallback {
             e.printStackTrace();
         }
 
-        btnCity.setOnTouchListener(new View.OnTouchListener() {
+       /* -- btnCity.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 Log.d("touch","call");
@@ -195,8 +231,8 @@ public class AddRestaurant extends Fragment implements LatLonCallback {
                 }
                 return true;
             }
-        });
-        switchIamHere.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        });*/
+       /* switchIamHere.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
@@ -239,7 +275,7 @@ public class AddRestaurant extends Fragment implements LatLonCallback {
                     Log.d("switch is Checked", isChecked+"");
                 }
             }
-        });
+        });*/
 
        /* address.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -249,6 +285,20 @@ public class AddRestaurant extends Fragment implements LatLonCallback {
             }
         });*/
         return layout;
+    }
+
+    private void errorMsg(Boolean error, String msg){
+        Log.d("errorMsg", "error show"+ error);
+        if (error){
+           //-- txtError.setText(msg);
+           //-- txtError.setAlpha(1);
+            //txtError.setVisibility(View.VISIBLE);
+            Animation myFadeInAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.blink_anim);
+           //-- txtError.startAnimation(myFadeInAnimation);
+        }else {
+           //-- txtError.setAlpha(0);
+            //txtError.setVisibility(View.GONE);
+        }
     }
 
 
@@ -539,6 +589,7 @@ public class AddRestaurant extends Fragment implements LatLonCallback {
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+
                 if (count == 0){
                     btnAddRestaurant.setTextColor(getResources().getColor(R.color.btn_disable));
                     btnAddRestaurantEnable = false;
@@ -554,5 +605,42 @@ public class AddRestaurant extends Fragment implements LatLonCallback {
 
             }
         });
+        inputCity.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                scrollView.scrollTo(0,(int)selectCityHolder.getY());
+                if (count > 0 ){
+                    String sKey = s.toString();
+                    sKey = sKey.replaceAll(" ", "%20");
+                    Log.d("onTextChanged", sKey);
+                    //Log.d("onTextChanged", "searchOnChangeText : "+searchOnChangeText);
+                    Log.d("onTextChanged","searchKey "+searchKey+" : "+"s "+ s.toString());
+                    Log.d("onTextChange", String.valueOf("boolean"+ searchKey == s.toString()));
+                    if (searchKey != null){
+                        if (!searchKey.equals(s.toString())){
+                            //--GetCitiesApi.getRequest(getActivity(),sKey,apiCallback);
+                            errorMsg(true, "Searching...");
+                        }
+                    }
+                }else {
+                   //-- recyclerView.setVisibility(View.GONE);
+                    //--btnSendEnabled(false);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    @Override
+    public void apiResponse(JSONObject response, String tag) {
+
     }
 }

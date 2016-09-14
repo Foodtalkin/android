@@ -165,25 +165,27 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
         if (tag.equals("googleApiCities")){
             //Log.d("apiResponse - "+tag,response+"");
             errorMsg(false, "");
-            try {
-                JSONArray rListArray = response.getJSONArray("predictions");
-                String status = response.getString("status");
+            if (response != null){
+                try {
+                    JSONArray rListArray = response.getJSONArray("predictions");
+                    String status = response.getString("status");
 
-                if (status.equals("OK")){
-                    if (inputCity.getText().length() > 1){
-                        loadDataIntoView(response, tag);
+                    if (status.equals("OK")){
+                        if (inputCity.getText().length() > 1){
+                            loadDataIntoView(response, tag);
+                        }
+                    }else if (status.equals("ZERO_RESULTS")){
+                        errorMsg(true,"Result not found.");
+                        recyclerView.setVisibility(View.GONE);
                     }
 
-
-
-                }else if (status.equals("ZERO_RESULTS")){
-                    errorMsg(true,"Result not found.");
-                    recyclerView.setVisibility(View.GONE);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+            }else {
 
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
+
         }
         if (tag.equals("emailCitySubmit")){
             Log.d("apiResponse", "email submited");

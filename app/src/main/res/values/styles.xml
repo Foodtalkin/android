@@ -49,6 +49,14 @@
         <!-- colorControlActivated & colorControlHighlight use the colorAccent color by default -->
     </style>
 
+    <style name="MyEditTextTheme1">
+        <!-- Used for the bottom line when not selected / focused -->
+        <item name="colorControlNormal">#000000</item>
+        <item name="colorAccent">#eeeeee</item>
+        <!-- colorControlActivated & colorControlHighlight use the colorAccent color by default -->
+    </style>
+
+
 
 
 
