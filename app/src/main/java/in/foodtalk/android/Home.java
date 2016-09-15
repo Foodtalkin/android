@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -211,6 +212,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
     ApiCall apiCall;
 
+    Dialog dialogImgFrom;
+
     private int REQUEST_CAMERA = 0, SELECT_FILE = 1, REQUEST_CROP = 2;
     //private File destination = new File(Environment.getExternalStorageDirectory(), System.currentTimeMillis() + ".jpg");
     private File destination = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), System.currentTimeMillis() + ".jpg");
@@ -338,6 +341,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         openHomeFirst();
         //deepLinkfb();
+
+        dialogImgFrom = new Dialog(this);
+        dialogImgFrom.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         //----------get extra------
         String newString;
@@ -802,11 +808,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     CropImageView cropedImg;
     final static int FROM_GALLERY = 55;
 
+    Boolean dialogImg = false;
+
+
     private void dialogImgFrom(){
 
 
-        final Dialog dialogImgFrom = new Dialog(this);
-        dialogImgFrom.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
        // dialogImgFrom.setCancelable(false);
        // dialogImgFrom.setCanceledOnTouchOutside(false);
@@ -815,8 +822,23 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         TextView btnCamera = (TextView) dialogImgFrom.findViewById(R.id.btn_camera_imgfrom);
         TextView btnGallery = (TextView) dialogImgFrom.findViewById(R.id.btn_gallery_imgfrom);
+        dialogImgFrom.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                Log.d("dialogImgFrom", "dismiss");
+            }
+        });
+        dialogImgFrom.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Log.d("dialogImgFrom", "show");
+            }
+        });
 
-        dialogImgFrom.show();
+
+            dialogImgFrom.show();
+
+
         Log.d("home","dialogImgFrom comes");
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1341,6 +1363,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             newpostFragment.setArguments(bundle);
         }
         setFragmentView(newpostFragment, R.id.container1, 2, true);
+        Log.d("StartCheckIn","pickImage");
         pickImage("","");
         //dialogImgFrom();
     }
