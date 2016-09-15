@@ -1361,7 +1361,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         startActivityForResult(intent, REQUEST_CAMERA);
     }
     private void cropIntent(Uri imageUri) {
-        Log.d("startCropImage", imageUri+"");
+        //Log.d("startCropImage", imageUri+"");
         Intent intent = CropImage.activity(imageUri).setFixAspectRatio(true).getIntent(this);
         startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
     }
@@ -1372,7 +1372,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         if (resultCode == Activity.RESULT_OK){
             if (requestCode == SELECT_FILE){
-                Log.d("requeestCode", "SELECT_FILE");
+                //Log.d("requeestCode", "SELECT_FILE");
 
                 cropIntent(data.getData());
                 /*try {
@@ -1383,12 +1383,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 }*/
             }
             if (requestCode == REQUEST_CAMERA){
-                Log.d("requeestCode", "REQUEST_CAMERA");
+                //Log.d("requeestCode", "REQUEST_CAMERA");
                 cropIntent(Uri.fromFile(destination));
                 //onCaptureImageResult(data);
             }
             if (requestCode == REQUEST_CROP){
-                Log.d("requeestCode", "REQUEST_CROP");
+               // Log.d("requeestCode", "REQUEST_CROP");
             }
             if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
                 if (data != null){
@@ -1428,7 +1428,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         //     .start(getActivity());
         //
 
-        Log.d("startCropImage", imageUri+"");
+        //Log.d("startCropImage", imageUri+"");
         Intent intent = CropImage.activity(imageUri).setFixAspectRatio(true).getIntent(this);
         startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
 
@@ -1547,7 +1547,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         //titleHome.setText("Favourites");
         if(fragment == openPostFragment){
             header.setVisibility(View.GONE);
-            Log.d("setTitle", "header gone");
+            //Log.d("setTitle", "header gone");
         }
 
         if (fragment == restaurantProfileFragment){
@@ -1598,7 +1598,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 break;
             case RESTAURANT_SEARCH:
 
-                Log.d("restaurantId", id+"");
+                //Log.d("restaurantId", id+"");
                 Bundle bundle = new Bundle();
                 bundle.putString("restaurantId", id);
 
@@ -1619,7 +1619,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }
         hideSoftKeyboard();
 
-        Log.d("result click", "resutlType: "+ resultType+" id:"+id);
+        //Log.d("result click", "resutlType: "+ resultType+" id:"+id);
     }
 
     private void dishSearchByName(String dishName, boolean fromSearch){
