@@ -803,7 +803,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     final static int FROM_GALLERY = 55;
 
     private void dialogImgFrom(){
-        Log.d("home","dialogImgFrom comes");
+
 
         final Dialog dialogImgFrom = new Dialog(this);
         dialogImgFrom.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -817,6 +817,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         TextView btnGallery = (TextView) dialogImgFrom.findViewById(R.id.btn_gallery_imgfrom);
 
         dialogImgFrom.show();
+        Log.d("home","dialogImgFrom comes");
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

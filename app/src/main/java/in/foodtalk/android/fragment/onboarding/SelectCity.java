@@ -169,7 +169,6 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
                 try {
                     JSONArray rListArray = response.getJSONArray("predictions");
                     String status = response.getString("status");
-
                     if (status.equals("OK")){
                         if (inputCity.getText().length() > 1){
                             loadDataIntoView(response, tag);
@@ -183,7 +182,8 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
                     e.printStackTrace();
                 }
             }else {
-
+                ToastShow.showToast(getActivity(), "Please check your internet connection");
+                btnSendEnabled(true);
             }
 
         }
