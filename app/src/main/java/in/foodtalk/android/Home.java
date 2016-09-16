@@ -214,6 +214,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
     Dialog dialogImgFrom;
 
+    Boolean imgDialogCanDisplay = true;
+
     private int REQUEST_CAMERA = 0, SELECT_FILE = 1, REQUEST_CROP = 2;
     //private File destination = new File(Environment.getExternalStorageDirectory(), System.currentTimeMillis() + ".jpg");
     private File destination = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), System.currentTimeMillis() + ".jpg");
@@ -836,8 +838,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         });
 
 
+        if (imgDialogCanDisplay){
             dialogImgFrom.show();
-
+        }
 
         Log.d("home","dialogImgFrom comes");
         btnCamera.setOnClickListener(new View.OnClickListener() {
@@ -1328,6 +1331,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     };
     @Override
     public void postData(String review) {
+
+        imgDialogCanDisplay = false;
         Log.d("review call back", review);
         this.review = review;
         getFragmentManager().beginTransaction().remove(reviewFragment).commit();
@@ -1361,6 +1366,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     }
 
     private void startCheckIn(String rId){
+        imgDialogCanDisplay = true;
         newpostFragment = new CheckIn();
         if (rId != null){
             Bundle bundle = new Bundle();
