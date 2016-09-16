@@ -825,13 +825,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         dialogImgFrom.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                Log.d("dialogImgFrom", "dismiss");
+                Log.e("dialogImgFrom", "dismiss");
             }
         });
         dialogImgFrom.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
-                Log.d("dialogImgFrom", "show");
+                Log.e("dialogImgFrom", "show");
             }
         });
 
@@ -1306,6 +1306,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             Log.d("uploaded", result+"");
             //progressBarUpload.setVisibility(View.GONE);
             Log.d("result img url", result.get("url").toString());
+            //dialogImgFrom.dismiss();
 
             createPostObj.sessionId= sessionId;
             createPostObj.checkedInRestaurantId = restaurantIdNewPost;
@@ -1330,6 +1331,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         Log.d("review call back", review);
         this.review = review;
         getFragmentManager().beginTransaction().remove(reviewFragment).commit();
+
         hideSoftKeyboard();
         //new GetApiContent(getContext(), apiAsyncCallback).execute("http://www.circuitmagic.com/api/get_posts/");
         new CloudinaryUpload(this, cloudinaryCallback).execute(file);
@@ -1340,7 +1342,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }else {
             txtUploadingDish.setText("Posting "+dishName+" at "+restaurantNameNewPost);
         }
+
+
         clearBackStack();
+       // dialogImgFrom.dismiss();
     }
 
     @Override
@@ -1722,6 +1727,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             manager.popBackStack(first.getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
         photo = null;
+
     }
     @Override
     public void restaurantOpen(String rId) {
