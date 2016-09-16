@@ -257,7 +257,7 @@
         jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
         jumboMode="true"
         revision="23.0.3"
-        sha1="3667193c1e5c666af678b3f58720851a9c7d3838">
+        sha1="9bdba804c677c46d4831ab34d7a1177496b509fc">
         <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_3ab2cc360096cb3d341c6dc79881dd2fa2c96c82\classes.dex" />
     </item>
     <item
@@ -495,7 +495,7 @@
         jar="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
         jumboMode="true"
         revision="23.0.3"
-        sha1="d64939140ca2dd7f2d1ec7b89c231cafcfbea8fc">
+        sha1="040a790c90a283471562a15648174b74c627c597">
         <dex dex="C:\Users\RetailAdmin\AndroidStudioProjects\FoodTalk\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_50551e3d423cc16aefa57e10625a63808043196a\classes.dex" />
     </item>
     <item

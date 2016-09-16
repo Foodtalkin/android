@@ -12,6 +12,7 @@ import android.net.Uri;
 
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -347,6 +348,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         dialogImgFrom = new Dialog(this);
         dialogImgFrom.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+        //homeIcon.setColorFilter(ContextCompat.getColor(this, R.color.icon));
+
         //----------get extra------
         String newString;
         if (savedInstanceState == null) {
@@ -628,10 +631,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
             //Log.d("New fragment", backStateName+"");
             if (newFragment != newpostFragment && pageN != -1){
-                icons[pageNo].setImageResource(imgR[pageNo]);
-                icons[pageN].setImageResource(imgRA[pageN]);
-                txtIcons[pageN].setTextColor(getResources().getColor(R.color.icon_txt_active));
-                txtIcons[pageNo].setTextColor(getResources().getColor(R.color.icon_txt));
+                //icons[pageNo].setImageResource(imgR[pageNo]);
+                //icons[pageN].setImageResource(imgRA[pageN]);
+                icons[pageNo].setColorFilter(ContextCompat.getColor(this, R.color.icon));
+                icons[pageN].setColorFilter(ContextCompat.getColor(this, R.color.snow));
+
+                txtIcons[pageN].setTextColor(getResources().getColor(R.color.snow));
+                txtIcons[pageNo].setTextColor(getResources().getColor(R.color.icon));
             }
             else {
                 //Log.d("fragment","newpostFragment");
