@@ -17,7 +17,7 @@
                 android:id="@+id/search_header"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/bg_header"
+                android:background="@color/navigation"
                 android:orientation="horizontal"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
@@ -43,9 +43,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabTextColor="#fff"
-            app:tabSelectedTextColor="@color/com_facebook_blue"
-            app:tabIndicatorColor="@color/com_facebook_blue"
-            android:background="@color/bg_header"
+            app:tabSelectedTextColor="@color/active"
+            app:tabIndicatorColor="@color/active"
+            android:background="@color/navigation"
             />
         <!-- View pager to swipe views -->
         <android.support.v4.view.ViewPager

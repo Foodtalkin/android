@@ -21,7 +21,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:background="@color/bg_header"
+            android:background="@color/navigation"
 
 
             >
@@ -63,7 +63,7 @@
                 android:id="@+id/search_header"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/bg_header"
+                android:background="@color/navigation"
                 android:orientation="horizontal"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
@@ -112,7 +112,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="#10151f"
+            android:background="@color/navigation"
             android:visibility="gone">
             <TextView
                 android:id="@+id/txt_uploading_dish"
@@ -142,7 +142,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#10151f"
+            android:background="@color/navigation"
             android:paddingTop="1dp">
             <LinearLayout
                 android:id="@+id/btn_home"

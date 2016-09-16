@@ -10,7 +10,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#10151f"
+            android:background="@color/navigation"
             >
             <RelativeLayout
                 android:id="@+id/header"
@@ -116,7 +116,7 @@
         android:id="@+id/btn_add_restaurant"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#000"
+        android:background="@color/navigation"
         android:padding="8dp"
         android:gravity="center|bottom"
         android:layout_alignParentBottom="true">
