@@ -1,5 +1,6 @@
 package in.foodtalk.android.module;
 
+import android.content.Context;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -36,8 +37,9 @@ public class NewPostUpload {
 
     NewPostCallback newPostCallback;
     LinearLayout progressBar;
+    Context context;
 
-    public NewPostUpload (CreatePostObj createPostObj , NewPostCallback newPostCallback, LinearLayout progressBar){
+    public NewPostUpload (CreatePostObj createPostObj , NewPostCallback newPostCallback, LinearLayout progressBar, Context context){
         config = new Config();
 
         this.progressBar = progressBar;
@@ -45,6 +47,8 @@ public class NewPostUpload {
         this.createPostObj = createPostObj;
 
         this.newPostCallback = newPostCallback;
+
+        this.context = context;
 
         //newPostCallback = ;
     }
@@ -129,6 +133,10 @@ public class NewPostUpload {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
+                UserAgent userAgent = new UserAgent();
+                if (userAgent.getUserAgent(context) != null ){
+                    headers.put("User-agent", userAgent.getUserAgent(context));
+                }
                 return headers;
             }
         };

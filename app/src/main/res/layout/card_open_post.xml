@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         app:cardCornerRadius="0dp"
+        app:cardElevation="0dp"
         card_view:cardElevation="0dp">
         <LinearLayout
             android:id="@+id/card_contaner"
@@ -57,7 +58,6 @@
                         android:src="@drawable/option"
                         android:clickable="false"/>
                 </LinearLayout>
-
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/post_center"
@@ -74,7 +74,6 @@
                         android:layout_height="wrap_content"
                         android:scaleType="centerCrop"
                         android:src="@drawable/placeholder"
-
                         />
                     <ImageView
                         android:id="@+id/like_heart"

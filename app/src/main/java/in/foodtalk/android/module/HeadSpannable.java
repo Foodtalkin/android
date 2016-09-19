@@ -63,7 +63,13 @@ public class HeadSpannable {
         rName.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.card_head_highlight)), 0, rName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         txt.setText(uName);
-        txt.append(" is having ");
+        //Log.d("HeadSpannable", uName);
+        if (userName.equals("foodtalk")){
+            txt.append(" recommends ");
+        }else {
+            txt.append(" is having ");
+        }
+
         txt.append(dName);
         if (!restaurantName.equals("") && !restaurantName.equals(", ")){
             txt.append(" at ");

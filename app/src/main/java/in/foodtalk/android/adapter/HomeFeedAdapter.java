@@ -137,9 +137,18 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             postHolder.userId = current.userId;
 
             if (current.restaurantIsActive.equals("1")) {
-                headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName+", "+current.region, current.userId, current.checkedInRestaurantId, true , "HomeFeed");
+                if (current.region.equals("")){
+                    headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, true , "HomeFeed");
+                }else {
+                    headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName+", "+current.region, current.userId, current.checkedInRestaurantId, true , "HomeFeed");
+                }
             }else {
-                headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName+", "+current.region, current.userId, current.checkedInRestaurantId, false, "HomeFeed");
+                if (current.region.equals("")){
+                    headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, false, "HomeFeed");
+                }else {
+                    headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName+", "+current.region, current.userId, current.checkedInRestaurantId, false, "HomeFeed");
+                }
+
             }
 
             setStarRating(current.rating, postHolder);

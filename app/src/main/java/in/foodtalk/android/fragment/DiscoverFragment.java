@@ -571,7 +571,11 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
             this.lon = lon;
             try {
                 pageNo = 1;
-                getPostFeed("load");
+
+
+                    getPostFeed("load");
+
+                Log.e("DiscoverFragment","getpostFeed and old list "+postData.size());
                 getLocation.onStop();
 
             } catch (JSONException e) {

@@ -627,8 +627,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         if(container == R.id.container){
             setTitle(newFragment);
         }
-
-
             //Log.d("New fragment", backStateName+"");
             if (newFragment != newpostFragment && pageN != -1){
                 //icons[pageNo].setImageResource(imgR[pageNo]);
@@ -1136,6 +1134,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         openPostFragment.openPostFragment1(postObj, postId, userId);
         setFragmentView (openPostFragment, R.id.container, -1, true);
         Log.d("postOpen","userId: "+userId+" postId: "+postId);
+
     }
 
     @Override
@@ -1243,7 +1242,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         Log.d("capuredBitmap", "call");
         dishTagging = new DishTagging();
         dishTagging.dishTagging1(photo);
-        setFragmentView(dishTagging, R.id.container1, 0, true);
+        setFragmentView(dishTagging, R.id.container1, -1, true);
         //showSoftKeyboard(layout);
     }
     public void capturedBitmap1(Bitmap photo , File file) {
@@ -1258,7 +1257,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     private void startDishTagging(){
         dishTagging = new DishTagging();
         dishTagging.dishTagging1(photo);
-        setFragmentView(dishTagging, R.id.container1, 0, true);
+        setFragmentView(dishTagging, R.id.container1, -1, true);
     }
 
     public void hideSoftKeyboard() {
@@ -1299,7 +1298,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         hideSoftKeyboard();
         ratingFragment = new RatingFragment();
         ratingFragment.ratingFragment1(photo);
-        setFragmentView(ratingFragment, R.id.container1, 0, true);
+        setFragmentView(ratingFragment, R.id.container1, -1, true);
     }
     @Override
     public void goforReview(String rate) {
@@ -1307,7 +1306,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         rating = rate;
         reviewFragment = new ReviewFragment();
         reviewFragment.reviewFragment1(photo);
-        setFragmentView(reviewFragment, R.id.container1, 0, true);
+        setFragmentView(reviewFragment, R.id.container1, -1, true);
     }
     CloudinaryCallback cloudinaryCallback = new CloudinaryCallback() {
         @Override
@@ -1327,7 +1326,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             createPostObj.shareOnFacebook = "1";
             createPostObj.shareOnTwitter = "1";
             createPostObj.shareOnInstagram = "1";
-            NewPostUpload newPostUpload = new NewPostUpload(createPostObj , homeFragment.newPostCallback, progressBarUpload);
+            NewPostUpload newPostUpload = new NewPostUpload(createPostObj , homeFragment.newPostCallback, progressBarUpload, getApplicationContext());
             try {
                 newPostUpload.uploadNewPost();
             } catch (JSONException e) {
@@ -1353,8 +1352,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }else {
             txtUploadingDish.setText("Posting "+dishName+" at "+restaurantNameNewPost);
         }
-
-
         clearBackStack();
        // dialogImgFrom.dismiss();
     }
@@ -1379,7 +1376,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             bundle.putString("rId", rId);
             newpostFragment.setArguments(bundle);
         }
-        setFragmentView(newpostFragment, R.id.container1, 2, true);
+        setFragmentView(newpostFragment, R.id.container1, -1, true);
         Log.d("StartCheckIn","pickImage");
         pickImage("","");
         //dialogImgFrom();
@@ -1586,7 +1583,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         case "FavouritesFragment":*/
         //titleHome.setText("Favourites");
         if(fragment == openPostFragment){
-            header.setVisibility(View.GONE);
+            //header.setVisibility(View.GONE);
             //Log.d("setTitle", "header gone");
         }
 

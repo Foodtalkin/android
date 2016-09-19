@@ -83,6 +83,11 @@ public class ParseUtils {
         installation.put("userId", userId);
         installation.put("work", work);
         installation.put("region",region);
+
+        //installation.put("cityId");
+        //installation.put("stateId");
+        //installation.put("countryId");
+
 //        installation.put("localeIdentifier","en-IN");
        // installation.put("channels",channels);
         installation.saveInBackground();
