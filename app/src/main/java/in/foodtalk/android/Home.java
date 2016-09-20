@@ -353,15 +353,15 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         //----------get extra------
         String newString;
         if (savedInstanceState == null) {
-            Log.e("SavedInstance", "Null");
+            //Log.e("SavedInstance", "Null");
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
                 newString= null;
-                Log.e("Get extras", "Null");
+                //Log.e("Get extras", "Null");
                 // Add the fragment to the 'fragment_container' FrameLayout
             } else if (extras.getString("com.parse.Data") != null){
                 //newString= extras.getString("STRING_I_NEED");
-                Log.e("Get extras", "is not Null");
+                //Log.e("Get extras", "is not Null");
                 Log.d("Get extras", extras.getString("com.parse.Data")+"");
                 String jsonData = extras.getString("com.parse.Data");
                 try {
@@ -383,7 +383,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
             }
         } else {
-            Log.e("SavedInstance", "is not Null");
+            //Log.e("SavedInstance", "is not Null");
             newString= (String) savedInstanceState.getSerializable("STRING_I_NEED");
             Log.d("Get extras", "null--");
         }
@@ -658,6 +658,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             if (bStack) {
                 transaction.addToBackStack(backStateName);
                 //Log.d("addtobackstack", backStateName);
+                Log.e("setFragment","addto backStact"+ backStateName);
+            }else {
+                Log.e("setFragment","not addto backStact"+ backStateName);
             }
             // Commit the transaction
             Log.d("setFragmentview","going to commit");
@@ -671,7 +674,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
 
         for(int entry = 0; entry < fm.getBackStackEntryCount(); entry++){
-            Log.e("Fragment bstack entry", "Found fragment: " + fm.getBackStackEntryAt(entry).getId());
+            Log.e("Fragment bstack entry", "Found fragment: " + fm.getBackStackEntryAt(entry).getName());
         }
 
         /*if(this.getFragmentManager().findFragmentById(R.id.container1) == null){
@@ -828,8 +831,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
 
 
-       // dialogImgFrom.setCancelable(false);
-       // dialogImgFrom.setCanceledOnTouchOutside(false);
+        dialogImgFrom.setCancelable(false);
+        dialogImgFrom.setCanceledOnTouchOutside(false);
 
         dialogImgFrom.setContentView(R.layout.dialog_img_from);
 
@@ -838,13 +841,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         dialogImgFrom.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                Log.e("dialogImgFrom", "dismiss");
+                //Log.e("dialogImgFrom", "dismiss");
             }
         });
         dialogImgFrom.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
-                Log.e("dialogImgFrom", "show");
+                //Log.e("dialogImgFrom", "show");
             }
         });
 
@@ -1219,14 +1222,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     public void checkInRestaurant(String restaurantId, String restaurantName) {
         currentFragment = this.getFragmentManager().findFragmentById(R.id.container1);
         //if (currentFragment == newpostFragment){
+            Log.d("checkInRestaurant","callback");
             pickImage(restaurantId, restaurantName);
         //}
-
     }
     private void pickImage(String restaurantId, String restaurantName){
         Log.d("home", "photo "+ photo);
         this.restaurantIdNewPost = restaurantId;
-        Log.d("checkInRestarant","rId"+restaurantId+" rName: "+restaurantName);
+        Log.e("checkInRestarant","rId: "+restaurantId+" rName: "+restaurantName);
         cameraFragment = new CameraFragment();
         restaurantNameNewPost = restaurantName;
 
@@ -1243,9 +1246,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     public void capturedBitmap(Bitmap photo , File file) {
 
         this.photo = photo;
-
         this.file = file;
-
         Log.d("capuredBitmap", "call");
         dishTagging = new DishTagging();
         dishTagging.dishTagging1(photo);
@@ -1262,6 +1263,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         //showSoftKeyboard(layout);
     }
     private void startDishTagging(){
+        Log.e("startDishTagging","call");
         dishTagging = new DishTagging();
         dishTagging.dishTagging1(photo);
         setFragmentView(dishTagging, R.id.container1, -1, true);
@@ -1373,9 +1375,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     @Override
     public void restaurantAdded(String rId) {
         Log.d("restaurant added", "Rid: "+rId);
-        //startCheckIn(rId);
-        hideSoftKeyboard();
-        getFragmentManager().popBackStack();
+        startCheckIn(rId);
+        //hideSoftKeyboard();
+        //getFragmentManager().popBackStack();
     }
 
     private void startCheckIn(String rId){
@@ -1386,12 +1388,17 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             bundle.putString("rId", rId);
             newpostFragment.setArguments(bundle);
         }
-        setFragmentView(newpostFragment, R.id.container1, -1, true);
-        Log.d("StartCheckIn","pickImage");
-        pickImage("","");
+
+        Log.e("StartCheckIn","pickImage "+rId);
+
+        if (rId == null){
+            pickImage("","");
+            setFragmentView(newpostFragment, R.id.container1, -1, true);
+        }else {
+            pickImage(rId, "");
+        }
         //dialogImgFrom();
     }
-
     //----------new camera and gallery and crop code----------------
     private void galleryIntent()
     {
@@ -1515,7 +1522,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             titleHome.setText("Home");
         }*/
 
-        Log.e("setTitle",fragment.getClass().getName());
+        //Log.e("setTitle",fragment.getClass().getName());
         if (fragment == discoverFragment){
             header.setVisibility(View.VISIBLE);
             header1.setVisibility(View.GONE);
