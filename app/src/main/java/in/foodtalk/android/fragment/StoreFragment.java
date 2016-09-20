@@ -47,6 +47,7 @@ public class StoreFragment extends Fragment implements ApiCallback {
 
     ApiCallback apiCallback;
     StoreAdapter storeAdapter;
+    TextView placeholder;
 
     @Nullable
     @Override
@@ -55,6 +56,7 @@ public class StoreFragment extends Fragment implements ApiCallback {
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view);
         progressHolder = (LinearLayout) layout.findViewById(R.id.progress_h);
         tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
+        placeholder = (TextView) layout.findViewById(R.id.placeholder);
         apiCallback = this;
         tapToRetry.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +83,7 @@ public class StoreFragment extends Fragment implements ApiCallback {
     private void getStoreList() throws JSONException {
         progressHolder.setVisibility(View.VISIBLE);
         tapToRetry.setVisibility(View.GONE);
+        placeholder.setVisibility(View.GONE);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("sessionId", db.getUserDetails().get("sessionId"));
         apiCall.apiRequestPost(getActivity(),jsonObject, Config.URL_ADWORD_LIST, "storeList", apiCallback);
@@ -114,6 +117,11 @@ public class StoreFragment extends Fragment implements ApiCallback {
 
         // this.response = response;
         JSONArray listArray = response.getJSONArray("result");
+
+        if (listArray.length() == 0){
+            placeholder.setVisibility(View.VISIBLE);
+        }
+
         // Log.d("rListArray", "total: "+ rListArray.length());
         for (int i=0;i<listArray.length();i++){
             StoreObj current = new StoreObj();

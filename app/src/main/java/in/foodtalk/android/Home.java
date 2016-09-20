@@ -667,6 +667,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             }
             transaction.commit();
 
+        FragmentManager fm = getFragmentManager();
+
+
+        for(int entry = 0; entry < fm.getBackStackEntryCount(); entry++){
+            Log.e("Fragment bstack entry", "Found fragment: " + fm.getBackStackEntryAt(entry).getId());
+        }
+
         /*if(this.getFragmentManager().findFragmentById(R.id.container1) == null){
             setTitle(newFragment);
         }*/
@@ -1358,6 +1365,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
     @Override
     public void addNewRestaurant() {
+        Log.d("addNewRestaurant","addRestaurant");
         addRestaurant = new AddRestaurant();
         setFragmentView(addRestaurant, R.id.container1, -1, true);
     }
@@ -1365,7 +1373,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     @Override
     public void restaurantAdded(String rId) {
         Log.d("restaurant added", "Rid: "+rId);
-        startCheckIn(rId);
+        //startCheckIn(rId);
+        hideSoftKeyboard();
+        getFragmentManager().popBackStack();
     }
 
     private void startCheckIn(String rId){
@@ -1525,7 +1535,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         if(fragment == favouritesFragment){
             header.setVisibility(View.VISIBLE);
             header1.setVisibility(View.GONE);
-            titleHome.setText("My Bucket List");
+            titleHome.setText("Bookmarks");
         }
         if(fragment == optionsFragment){
             header.setVisibility(View.VISIBLE);
@@ -1566,9 +1576,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             titleHome.setText(stringCase.caseSensitive(dishSearchedName));
         }
         if (fragment == curatedFragment){
-            titleHome.setText("Food Talk Curated list");
+            titleHome.setText("City Guide");
         }
-
         /*if(this.getFragmentManager().findFragmentById(R.id.container1) != null){
             header.setVisibility(View.GONE);
             Log.d("setTitle", "header gone");
