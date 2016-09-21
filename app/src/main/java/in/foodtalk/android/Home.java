@@ -1531,14 +1531,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         if (fragment == notiFragment){
             header.setVisibility(View.VISIBLE);
             header1.setVisibility(View.GONE);
-            titleHome.setText("Notification");
+            titleHome.setText("Alerts");
         }
         if (fragment == moreFragment){
             header.setVisibility(View.VISIBLE);
             header1.setVisibility(View.GONE);
             titleHome.setText("More");
         }
-
         if(fragment == favouritesFragment){
             header.setVisibility(View.VISIBLE);
             header1.setVisibility(View.GONE);

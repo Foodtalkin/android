@@ -46,7 +46,8 @@ public class ParseUtils {
             }
         });*/
     }
-    public static void subscribeWithInfo(String userId,String locationIdentifire, String work, String region) {
+    public static void subscribeWithInfo(String userId,String locationIdentifire, String work,
+                                         String cityId, String stateId, String countryId, String regionId) {
 
         /*if (ParseUser.getCurrentUser() == null) {
             ParseUser.enableAutomaticUser();
@@ -82,11 +83,12 @@ public class ParseUtils {
         ParseInstallation installation = ParseInstallation.getCurrentInstallation();
         installation.put("userId", userId);
         installation.put("work", work);
-        installation.put("region",region);
+        //installation.put("region",region);
 
-        //installation.put("cityId");
-        //installation.put("stateId");
-        //installation.put("countryId");
+        installation.put("cityId", cityId);
+        installation.put("stateId", stateId);
+        installation.put("countryId", countryId);
+        installation.put("regionId", regionId);
 
 //        installation.put("localeIdentifier","en-IN");
        // installation.put("channels",channels);

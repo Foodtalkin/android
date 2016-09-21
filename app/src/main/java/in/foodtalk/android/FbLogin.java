@@ -601,13 +601,12 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
 
                            // parseInst(uId);
                             //subscribeWithInfo(String userId,String locationIdentifire, String work, String channels);
-                            parseUtils.subscribeWithInfo(uId,"en-IN","development", region);
+                           /*parseUtils.subscribeWithInfo(uId,"en-IN","development", region);
                             List<String> items = Arrays.asList(channels.split("\\s*,\\s*"));
-
                             for (int i=0;i<items.size();i++){
                                 Log.d("items", items.get(i));
                                 parseUtils.subscribeToChannels(items.get(i));
-                            }
+                            }*/
                             //parseUtils.subscribeToChannels("Android");
                            // parseUtils.subscribeToChannels("Web");
                            // parseUtils.subscribeToChannels("Ios");

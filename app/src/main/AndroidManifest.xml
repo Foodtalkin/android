@@ -28,6 +28,9 @@
     <uses-feature android:name="android.hardware.camera"
         android:required="true" />
 
+    <!-- Needed only if your app targets Android 5.0 (API level 21) or higher. -->
+    <uses-feature android:name="android.hardware.location.gps" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />

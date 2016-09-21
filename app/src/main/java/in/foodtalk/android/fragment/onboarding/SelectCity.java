@@ -26,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import in.foodtalk.android.Home;
@@ -39,6 +40,7 @@ import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.communicator.OnBoardingCallback;
 import in.foodtalk.android.communicator.SelectCityCallback;
+import in.foodtalk.android.helper.ParseUtils;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.ToastShow;
 import in.foodtalk.android.object.LoginValue;
@@ -66,6 +68,8 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
     ApiCall apiCall;
     //ApiCallback apiCallback;
     String googlePlaceId;
+
+    private ParseUtils parseUtils;
 
     LinearLayoutManager mLayoutManager;
     SelectCityCallback selectCityCallback;
@@ -107,6 +111,8 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
+
+        parseUtils = new ParseUtils();
 
         return layout;
     }
@@ -339,6 +345,14 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
         loginValue.userName = userName;
        // loginValue.userName = ((userName.equals("")) ? "N/A" : userName);
 
+
+        //Log.d("parseInfo", "channels "+ response.getString("channels"));
+        parseInfo(loginValue.uId,
+                jObj.getString("channels"),
+                jObj.getString("cityId"),
+                jObj.getString("stateId"),
+                jObj.getString("countryId"),
+                jObj.getString("regionId"));
         //-- Log.d("check table", db.getRowCount()+"");
         db.resetTables();
         db.addUser(loginValue);
@@ -349,6 +363,16 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
             getActivity().finish();
         }else {
             Log.d("Username class", "error with username");
+        }
+    }
+
+    private void parseInfo(String uId, String channels, String cityId, String stateId, String countryId, String regionId){
+        parseUtils.subscribeWithInfo(uId,"en-IN","development", cityId, stateId, countryId, regionId);
+
+        List<String> items = Arrays.asList(channels.split("\\s*,\\s*"));
+        for (int i=0;i<items.size();i++){
+            Log.d("items", items.get(i));
+            parseUtils.subscribeToChannels(items.get(i));
         }
     }
 }
