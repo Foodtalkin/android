@@ -379,6 +379,10 @@ public class CommentFragment extends Fragment implements MentionCallback  {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
+                UserAgent userAgent = new UserAgent();
+                if (userAgent.getUserAgent(getActivity()) != null ){
+                    headers.put("User-agent", userAgent.getUserAgent(getActivity()));
+                }
                 return headers;
             }
         };

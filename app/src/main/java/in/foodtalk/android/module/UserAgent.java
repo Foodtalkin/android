@@ -16,7 +16,7 @@ public class UserAgent {
             return versionName;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
-            return null;
+            return "Android - 0";
         }
     }
 }

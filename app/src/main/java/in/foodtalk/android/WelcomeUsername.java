@@ -498,6 +498,10 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put("Content-Type", "application/json; charset=utf-8");
+                UserAgent userAgent = new UserAgent();
+                if (userAgent.getUserAgent(getApplicationContext()) != null ){
+                    headers.put("User-agent", userAgent.getUserAgent(getApplicationContext()));
+                }
                 return headers;
             }
         };

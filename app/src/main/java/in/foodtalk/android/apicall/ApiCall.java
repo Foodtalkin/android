@@ -96,7 +96,6 @@ public class ApiCall {
             }
         };
         AppController.getInstance().addToRequestQueue(jsonObjectRequest,"postbookmark");
-
     }
     public void showToast(Context context, String msg){
         Toast toast= Toast.makeText(context,

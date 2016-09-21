@@ -831,7 +831,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
 
 
-        dialogImgFrom.setCancelable(false);
+        //dialogImgFrom.setCancelable(false);
         dialogImgFrom.setCanceledOnTouchOutside(false);
 
         dialogImgFrom.setContentView(R.layout.dialog_img_from);
