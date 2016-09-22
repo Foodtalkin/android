@@ -91,6 +91,7 @@ import in.foodtalk.android.fragment.RestaurantProfileFragment;
 import in.foodtalk.android.fragment.UserProfile;
 import in.foodtalk.android.fragment.WebViewFragment;
 import in.foodtalk.android.fragment.newpost.DishTagging;
+import in.foodtalk.android.fragment.newpost.NewPostShare;
 import in.foodtalk.android.fragment.newpost.RatingFragment;
 import in.foodtalk.android.fragment.newpost.ReviewFragment;
 import in.foodtalk.android.fragment.StoreFragment;
@@ -145,6 +146,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     CuratedFragment curatedFragment;
     StoreFragment storeFragment;
     StoreHistoryFragment storeHistoryFragment;
+    NewPostShare newPostShare;
 
     //-------dummy fragment created for temporary use to set Legal screen title----
     Fragment legalFragment = new Fragment();
@@ -1248,9 +1250,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         this.photo = photo;
         this.file = file;
         Log.d("capuredBitmap", "call");
-        dishTagging = new DishTagging();
+        /*dishTagging = new DishTagging();
         dishTagging.dishTagging1(photo);
-        setFragmentView(dishTagging, R.id.container1, -1, true);
+        setFragmentView(dishTagging, R.id.container1, -1, true);*/
+
+        startDishTagging();
         //showSoftKeyboard(layout);
     }
     public void capturedBitmap1(Bitmap photo , File file) {
@@ -1266,7 +1270,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         Log.e("startDishTagging","call");
         dishTagging = new DishTagging();
         dishTagging.dishTagging1(photo);
-        setFragmentView(dishTagging, R.id.container1, -1, true);
+        //setFragmentView(dishTagging, R.id.container1, -1, true);
+        //--------
+        newPostShare = new NewPostShare();
+        setFragmentView(newPostShare, R.id.container1, -1, true);
     }
 
     public void hideSoftKeyboard() {

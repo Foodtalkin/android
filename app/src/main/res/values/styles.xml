@@ -56,6 +56,12 @@
         <!-- colorControlActivated & colorControlHighlight use the colorAccent color by default -->
     </style>
 
+    <style name="newpost_switch" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">@color/positive</item>
+        <item name="colorSwitchThumbNormal">#cc0000</item>
+    </style>
+
 
 
 
