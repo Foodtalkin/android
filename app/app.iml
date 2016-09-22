@@ -181,8 +181,8 @@
     <orderEntry type="library" exported="" name="bolts-applinks-1.4.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-iid-9.2.1" level="project" />
     <orderEntry type="library" exported="" name="Parse-1.9.1" level="project" />
-    <orderEntry type="library" exported="" name="cloudinary-android-1.4.1" level="project" />
     <orderEntry type="library" exported="" name="picasso-2.5.2" level="project" />
+    <orderEntry type="library" exported="" name="cloudinary-android-1.4.1" level="project" />
     <orderEntry type="library" exported="" name="facebook-android-sdk-4.14.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-wearable-9.2.1" level="project" />
     <orderEntry type="library" exported="" name="play-services-appindexing-9.2.1" level="project" />
