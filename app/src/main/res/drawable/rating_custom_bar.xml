@@ -7,9 +7,11 @@
         android:drawable="@drawable/star_pre" />
     <item
         android:id="@+android:id/secondaryProgress"
-        android:drawable="@drawable/star_pre"/>
+        android:drawable="@drawable/star_pre"
+        />
     <item
         android:id="@+android:id/progress"
-        android:drawable="@drawable/star_post"/>
+        android:drawable="@drawable/star_post"
+        />
 
 </layer-list>

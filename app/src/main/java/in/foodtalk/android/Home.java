@@ -1274,6 +1274,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         //--------
         newPostShare = new NewPostShare();
         newPostShare.photo = photo;
+        newPostShare.checkInRestaurantId = restaurantIdNewPost;
+        newPostShare.checkInRestaurantName = restaurantNameNewPost;
         setFragmentView(newPostShare, R.id.container1, -1, true);
     }
 
