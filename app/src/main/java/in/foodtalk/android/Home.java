@@ -1273,6 +1273,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         //setFragmentView(dishTagging, R.id.container1, -1, true);
         //--------
         newPostShare = new NewPostShare();
+        newPostShare.photo = photo;
         setFragmentView(newPostShare, R.id.container1, -1, true);
     }
 
