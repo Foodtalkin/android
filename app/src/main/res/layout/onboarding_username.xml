@@ -49,7 +49,7 @@
                 android:drawableLeft="@drawable/ic_person_white_24dp"
                 android:maxLines="1"
                 android:singleLine="true"
-
+                android:maxLength="16"
                 android:digits="@string/alphanumber"
                 />
             <LinearLayout

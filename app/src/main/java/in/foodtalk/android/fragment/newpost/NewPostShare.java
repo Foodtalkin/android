@@ -5,25 +5,44 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import in.foodtalk.android.R;
+import in.foodtalk.android.apicall.ApiCall;
+import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.ApiCallback;
+import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.StringCase;
+import in.foodtalk.android.object.DishListObj;
 
 /**
  * Created by RetailAdmin on 22-09-2016.
  */
-public class NewPostShare extends Fragment {
+public class NewPostShare extends Fragment implements View.OnTouchListener, ApiCallback {
 
     View layout;
     public Bitmap photo;
@@ -33,6 +52,21 @@ public class NewPostShare extends Fragment {
     ScrollView scrollView;
     EditText inputTip;
     TextView rName;
+    public RelativeLayout dishSearch;
+
+    LinearLayout lableAddDish;
+    LinearLayout lableCheckin;
+
+    EditText inputDishSearch;
+
+    public Boolean searchView = false;
+
+    List<DishListObj> dishList = new ArrayList<>();
+    RecyclerView recyclerView;
+
+    ApiCall apiCall;
+    DatabaseHandler db;
+    ApiCallback apiCallback;
 
 
     @Nullable
@@ -44,6 +78,21 @@ public class NewPostShare extends Fragment {
         scrollView = (ScrollView) layout.findViewById(R.id.scroll_view);
         final View activityRootView = layout.findViewById(R.id.activityRoot);
         rName = (TextView) layout.findViewById(R.id.txt_rName);
+        dishSearch = (RelativeLayout) layout.findViewById(R.id.dish_search);
+
+        lableAddDish = (LinearLayout) layout.findViewById(R.id.lable_add_dish);
+        lableCheckin = (LinearLayout) layout.findViewById(R.id.lable_checkin);
+
+        inputDishSearch = (EditText) layout.findViewById(R.id.input_dish_search);
+
+        recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view);
+
+        apiCall = new ApiCall();
+        db = new DatabaseHandler(getActivity());
+        apiCallback = this;
+
+        lableAddDish.setOnTouchListener(this);
+        lableCheckin.setOnTouchListener(this);
 
         Log.d("NewPOstShare","rName: "+checkInRestaurantName);
         if (!checkInRestaurantName.equals("")){
@@ -72,6 +121,14 @@ public class NewPostShare extends Fragment {
             imgHolder.setImageBitmap(photo);
         }
         focusListener();
+        textListener();
+        try {
+            getDishList();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        //fordishSearch();
         return layout;
     }
     public static float dpToPx(Context context, float valueInDp) {
@@ -85,11 +142,76 @@ public class NewPostShare extends Fragment {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus){
                     Log.d("NewPostShare","onFocus");
+
                     //scrollView.scrollTo(0,800);
                 }else {
                     Log.d("NewPostShare","offFocus");
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (v.getId()){
+            case R.id.lable_add_dish:
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_UP:
+                        dishSearch.setVisibility(View.VISIBLE);
+                        inputDishSearch.requestFocus();
+                        searchView = true;
+                        //fordishSearch();
+                        break;
+                }
+                break;
+            case R.id.lable_checkin:
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_UP:
+                        break;
+                }
+                break;
+        }
+        return true;
+    }
+
+    private void textListener(){
+        inputDishSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //Log.d("beforeTextChange", s+"");
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d("onTextChanged", count+"");
+                if (count == 0){
+                    recyclerView.setVisibility(View.GONE);
+                    //btnNext.setTextColor(getResources().getColor(R.color.btn_disable));
+                   // btnNextEnable = false;
+                }else {
+                    /*if (dishNameLoaded){
+                        onTexChange(s.toString());
+                    }*/
+                    recyclerView.setVisibility(View.VISIBLE);
+                    Log.d("NewPostShare","onTextChange: "+s.toString());
+                    //btnNext.setTextColor(getResources().getColor(R.color.btn_enable));
+                    //btnNextEnable = true;
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                //Log.d("afterTextChange", s+"");
+            }
+        });
+    }
+
+    private void getDishList() throws JSONException {
+        JSONObject obj = new JSONObject();
+        obj.put("sessionId", db.getUserDetails().get("sessionId"));
+        apiCall.apiRequestPost(getActivity(),obj, Config.URL_DISH_NAME, "loadDishNameList", apiCallback);
+    }
+    @Override
+    public void apiResponse(JSONObject response, String tag) {
+        Log.d("NewPostShare",tag+" : "+response);
     }
 }

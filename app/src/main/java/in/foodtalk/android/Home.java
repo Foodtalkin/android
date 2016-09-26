@@ -691,19 +691,28 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
        // String fName = f.getClass().getSimpleName();
         backPressed = true;
 
+        if (this.getFragmentManager().findFragmentById(R.id.container1) == newPostShare){
 
-        if (getFragmentManager().getBackStackEntryCount() > 0) {
-
-            //getFragmentManager().getBackStackEntryAt(getFragmentManager().getBackStackEntryCount()).getName();
-           // Log.d("back stack fn", getFragmentManager().getBackStackEntryAt(getFragmentManager().getBackStackEntryCount()-1).getName());
-            Log.i("onBackPressed","going to popBackStack");
-            getFragmentManager().popBackStack();
-            Log.i("onBackPressed","going to popBackStack done");
-           // Fragment f = this.getFragmentManager().findFragmentById(R.id.container);
-            //setTitle(f);
-           // String fName = f.getClass().getSimpleName();
-        } else {
-            super.onBackPressed();
+            Log.d("onBackPressd", "checkView "+ newPostShare.searchView);
+            if (newPostShare.searchView){
+                newPostShare.dishSearch.setVisibility(View.GONE);
+                newPostShare.searchView = false;
+            }else {
+                getFragmentManager().popBackStack();
+            }
+        }else {
+            if (getFragmentManager().getBackStackEntryCount() > 0) {
+                //getFragmentManager().getBackStackEntryAt(getFragmentManager().getBackStackEntryCount()).getName();
+                // Log.d("back stack fn", getFragmentManager().getBackStackEntryAt(getFragmentManager().getBackStackEntryCount()-1).getName());
+                Log.i("onBackPressed","going to popBackStack");
+                getFragmentManager().popBackStack();
+                Log.i("onBackPressed","going to popBackStack done");
+                // Fragment f = this.getFragmentManager().findFragmentById(R.id.container);
+                //setTitle(f);
+                // String fName = f.getClass().getSimpleName();
+            } else {
+                super.onBackPressed();
+            }
         }
         Fragment f = this.getFragmentManager().findFragmentById(R.id.container);
         setTitle(f);
