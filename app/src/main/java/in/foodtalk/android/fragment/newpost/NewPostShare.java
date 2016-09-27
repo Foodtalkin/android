@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,9 +34,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.adapter.newpost.DishTaggingAdapter;
 import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;
+import in.foodtalk.android.communicator.DishTaggingCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.object.DishListObj;
@@ -42,7 +46,7 @@ import in.foodtalk.android.object.DishListObj;
 /**
  * Created by RetailAdmin on 22-09-2016.
  */
-public class NewPostShare extends Fragment implements View.OnTouchListener, ApiCallback {
+public class NewPostShare extends Fragment implements View.OnTouchListener, ApiCallback, DishTaggingCallback {
 
     View layout;
     public Bitmap photo;
@@ -68,6 +72,11 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     DatabaseHandler db;
     ApiCallback apiCallback;
 
+    DishTaggingAdapter dishTaggingAdapter;
+    DishTaggingCallback dishTaggingCallback;
+
+    LinearLayoutManager linearLayoutManager;
+
 
     @Nullable
     @Override
@@ -87,9 +96,13 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
 
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view);
 
+        linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+
         apiCall = new ApiCall();
         db = new DatabaseHandler(getActivity());
         apiCallback = this;
+        dishTaggingCallback = this;
 
         lableAddDish.setOnTouchListener(this);
         lableCheckin.setOnTouchListener(this);
@@ -213,5 +226,41 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     @Override
     public void apiResponse(JSONObject response, String tag) {
         Log.d("NewPostShare",tag+" : "+response);
+        try {
+            loadDataIntoView(response, tag);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
+
+        //this.response = response;
+
+        JSONArray rListArray = response.getJSONArray("result");
+        // Log.d("rListArray", "total: "+ rListArray.length());
+        for (int i=0;i<rListArray.length();i++){
+            DishListObj current = new DishListObj();
+            current.id = rListArray.getJSONObject(i).getString("id");
+            current.name = rListArray.getJSONObject(i).getString("name");
+            current.postCount = rListArray.getJSONObject(i).getString("postCount");
+            dishList.add(current);
+        }
+        //Log.d("send list", "total: "+restaurantList.size());
+        if (getActivity() != null){
+            dishTaggingAdapter = new DishTaggingAdapter(getActivity(),dishList , dishTaggingCallback);
+            recyclerView.setAdapter(dishTaggingAdapter);
+            //dishNameLoaded = true;
+        }
+    }
+
+    @Override
+    public void dishNameSelected(String dishName) {
+        Log.d("NewPostShare","dishNameS: "+dishName);
+    }
+
+    @Override
+    public void startRating(String dishName) {
+
     }
 }
