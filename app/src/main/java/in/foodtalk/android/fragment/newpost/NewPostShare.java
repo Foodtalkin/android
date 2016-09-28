@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -76,6 +77,8 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     DishTaggingCallback dishTaggingCallback;
 
     LinearLayoutManager linearLayoutManager;
+
+    Boolean dishNameLoaded = false;
 
 
     @Nullable
@@ -173,6 +176,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
                         dishSearch.setVisibility(View.VISIBLE);
                         inputDishSearch.requestFocus();
                         searchView = true;
+                        showKeyBoard();
                         //fordishSearch();
                         break;
                 }
@@ -198,14 +202,14 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.d("onTextChanged", count+"");
                 if (count == 0){
-                    recyclerView.setVisibility(View.GONE);
+                   // recyclerView.setVisibility(View.GONE);
                     //btnNext.setTextColor(getResources().getColor(R.color.btn_disable));
                    // btnNextEnable = false;
                 }else {
-                    /*if (dishNameLoaded){
-                        onTexChange(s.toString());
-                    }*/
-                    recyclerView.setVisibility(View.VISIBLE);
+                    if (dishNameLoaded){
+                        //onTexChange(s.toString());
+                    }
+                    //recyclerView.setVisibility(View.VISIBLE);
                     Log.d("NewPostShare","onTextChange: "+s.toString());
                     //btnNext.setTextColor(getResources().getColor(R.color.btn_enable));
                     //btnNextEnable = true;
@@ -226,17 +230,17 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     @Override
     public void apiResponse(JSONObject response, String tag) {
         Log.d("NewPostShare",tag+" : "+response);
-        try {
-            loadDataIntoView(response, tag);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (response !=null){
+            try {
+                loadDataIntoView(response, tag);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
-
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
 
         //this.response = response;
-
         JSONArray rListArray = response.getJSONArray("result");
         // Log.d("rListArray", "total: "+ rListArray.length());
         for (int i=0;i<rListArray.length();i++){
@@ -250,7 +254,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         if (getActivity() != null){
             dishTaggingAdapter = new DishTaggingAdapter(getActivity(),dishList , dishTaggingCallback);
             recyclerView.setAdapter(dishTaggingAdapter);
-            //dishNameLoaded = true;
+            dishNameLoaded = true;
         }
     }
 
@@ -262,5 +266,10 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     @Override
     public void startRating(String dishName) {
 
+    }
+
+    private void showKeyBoard(){
+        InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 }

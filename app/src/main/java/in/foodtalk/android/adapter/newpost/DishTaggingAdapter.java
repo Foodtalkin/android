@@ -36,6 +36,8 @@ public class DishTaggingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         layoutInflater = LayoutInflater.from(context);
         this.dishList = dishList;
         this.dishTaggingCallback = dishTaggingCallback;
+
+        Log.d("dishTaggingAdapter", dishList.size()+"");
     }
 
     @Override
