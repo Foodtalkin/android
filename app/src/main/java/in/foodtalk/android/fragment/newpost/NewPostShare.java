@@ -57,12 +57,14 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     ScrollView scrollView;
     EditText inputTip;
     TextView rName;
+    TextView txtAddDish;
     public RelativeLayout dishSearch;
 
     LinearLayout lableAddDish;
     LinearLayout lableCheckin;
 
     EditText inputDishSearch;
+
 
     public Boolean searchView = false;
 
@@ -80,6 +82,8 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
 
     Boolean dishNameLoaded = false;
 
+    JSONObject response;
+
 
     @Nullable
     @Override
@@ -94,6 +98,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
 
         lableAddDish = (LinearLayout) layout.findViewById(R.id.lable_add_dish);
         lableCheckin = (LinearLayout) layout.findViewById(R.id.lable_checkin);
+        txtAddDish = (TextView) layout.findViewById(R.id.txt_add_dish);
 
         inputDishSearch = (EditText) layout.findViewById(R.id.input_dish_search);
 
@@ -147,6 +152,15 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         //fordishSearch();
         return layout;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (searchView){
+            showKeyBoard();
+        }
+    }
+
     public static float dpToPx(Context context, float valueInDp) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics);
@@ -207,7 +221,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
                    // btnNextEnable = false;
                 }else {
                     if (dishNameLoaded){
-                        //onTexChange(s.toString());
+                        onTexChange(s.toString());
                     }
                     //recyclerView.setVisibility(View.VISIBLE);
                     Log.d("NewPostShare","onTextChange: "+s.toString());
@@ -240,7 +254,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     }
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
 
-        //this.response = response;
+        this.response = response;
         JSONArray rListArray = response.getJSONArray("result");
         // Log.d("rListArray", "total: "+ rListArray.length());
         for (int i=0;i<rListArray.length();i++){
@@ -261,6 +275,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     @Override
     public void dishNameSelected(String dishName) {
         Log.d("NewPostShare","dishNameS: "+dishName);
+        txtAddDish.setText(dishName);
     }
 
     @Override
@@ -271,5 +286,39 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     private void showKeyBoard(){
         InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+    }
+
+    //------
+    private void onTexChange(String newText){
+        try {
+            JSONArray rListArray = response.getJSONArray("result");
+            dishList.clear();
+            for (int i=0;i<rListArray.length();i++){
+                DishListObj current = new DishListObj();
+                current.id = rListArray.getJSONObject(i).getString("id");
+                current.name = rListArray.getJSONObject(i).getString("name");
+                current.postCount = rListArray.getJSONObject(i).getString("postCount");
+                dishList.add(current);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        // Log.d("rListArray", "total: "+ rListArray.length());
+        // tempList = new ArrayList<RestaurantListObj>(restaurantList);
+        final List<DishListObj> filteredModelList = filter(dishList, newText);
+        dishTaggingAdapter.animateTo(filteredModelList);
+        recyclerView.scrollToPosition(0);
+    }
+    private List<DishListObj> filter(List<DishListObj> models, String query) {
+        query = query.toLowerCase();
+        //this.postData =  new ArrayList<RestaurantPostObj>(postList);
+        final List<DishListObj> filteredModelList = new ArrayList<>();
+        for (DishListObj model : models) {
+            final String text = model.name.toLowerCase();
+            if (text.contains(query)) {
+                filteredModelList.add(model);
+            }
+        }
+        return filteredModelList;
     }
 }

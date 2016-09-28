@@ -99,6 +99,7 @@
                             android:orientation="horizontal"
                             android:padding="6dp">
                             <TextView
+                                android:id="@+id/txt_add_dish"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Add a dish"
