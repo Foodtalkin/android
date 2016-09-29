@@ -275,19 +275,25 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     @Override
     public void dishNameSelected(String dishName) {
         Log.d("NewPostShare","dishNameS: "+dishName);
-        txtAddDish.setText(dishName);
+        hideSoftKeyboard();
+        txtAddDish.setText(StringCase.caseSensitive(dishName));
+        dishSearch.setVisibility(View.GONE);
+        searchView = false;
     }
-
     @Override
     public void startRating(String dishName) {
 
     }
-
     private void showKeyBoard(){
         InputMethodManager imgr = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imgr.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
-
+    public void hideSoftKeyboard() {
+        if(getActivity().getCurrentFocus()!=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        }
+    }
     //------
     private void onTexChange(String newText){
         try {
