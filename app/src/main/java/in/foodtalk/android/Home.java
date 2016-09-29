@@ -697,6 +697,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             if (newPostShare.searchView){
                 newPostShare.dishSearch.setVisibility(View.GONE);
                 newPostShare.searchView = false;
+            }else if (newPostShare.restaurantSearchView){
+                newPostShare.restaurantSearch.setVisibility(View.GONE);
+                newPostShare.restaurantSearchView = false;
             }else {
                 getFragmentManager().popBackStack();
             }
@@ -839,11 +842,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
 
     private void dialogImgFrom(){
-
-
-
         //dialogImgFrom.setCancelable(false);
-        dialogImgFrom.setCanceledOnTouchOutside(false);
+        //dialogImgFrom.setCanceledOnTouchOutside(false);
 
         dialogImgFrom.setContentView(R.layout.dialog_img_from);
 
@@ -1272,6 +1272,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         this.file = file;
 
+        startDishTagging();
+
         Log.d("capuredBitmap", "call");
         //showSoftKeyboard(layout);
     }
@@ -1412,7 +1414,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         if (rId == null){
             pickImage("","");
-            setFragmentView(newpostFragment, R.id.container1, -1, true);
+            //setFragmentView(newpostFragment, R.id.container1, -1, true);
         }else {
             pickImage(rId, "");
         }
@@ -1506,7 +1508,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         startActivityForResult(intent, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
 
     }
-
     private Bitmap decodeFile(File f) {
         try {
             // decode image size

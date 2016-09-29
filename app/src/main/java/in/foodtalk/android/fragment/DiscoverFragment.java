@@ -247,7 +247,7 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
     public void onStart() {
         super.onStart();
         latLonCallback = this;
-        getLocation = new GetLocation(activity, latLonCallback);
+        getLocation = new GetLocation(activity, latLonCallback, "discoverFragment");
 
         Log.d("DiscoverFragment", "onStart");
 

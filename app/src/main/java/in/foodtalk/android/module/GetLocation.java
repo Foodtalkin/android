@@ -48,12 +48,12 @@ public class GetLocation  implements GoogleApiClient.ConnectionCallbacks,
 
 
 
-    public GetLocation(Context context, LatLonCallback latLonCallback){
+    public GetLocation(Context context, LatLonCallback latLonCallback, String requestFrom){
         this.context = context;
         this.latLonCallback = latLonCallback;
         buildGoogleApiClient();
 
-        //Log.d("GetLocation","call");
+        Log.d("GetLocation","requestFrom: "+ requestFrom);
 
     }
     public LocationGps getUserLocation(){

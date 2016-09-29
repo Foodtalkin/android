@@ -34,41 +34,8 @@
                         android:textSize="22sp"
                         android:layout_centerInParent="true"
                         android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/btn_post_review"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/snow"
-                        android:text="Share"
-                        android:textSize="20sp"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="10dp"
-                        android:padding="4dp"/>
                 </RelativeLayout>
-                <RelativeLayout
-                    android:visibility="gone"
-                    android:id="@+id/header1"
-                    android:layout_centerInParent="true"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
-                    <TextView
-                        android:id="@+id/title_home1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#fff"
-                        android:text=""
-                        android:textSize="18sp"
-                        android:layout_centerHorizontal="true" />
-                    <TextView
-                        android:id="@+id/subtitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:layout_centerHorizontal="true"
-                        android:layout_below="@+id/title_home1"
-                        android:textColor="@color/subtitle_color"/>
-                </RelativeLayout>
+
             </RelativeLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -292,6 +259,59 @@
             <android.support.v7.widget.RecyclerView
                 android:layout_below="@+id/input_dish_search"
                 android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                >
+            </android.support.v7.widget.RecyclerView>
+        </RelativeLayout>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/restaurant_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:visibility="gone">
+        <RelativeLayout
+            android:id="@+id/add_restaurant_header"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@color/navigation"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/snow"
+                    android:text="Check In"
+                    android:textSize="22sp"
+                    android:layout_centerInParent="true"
+                    android:textStyle="bold"/>
+            </RelativeLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_below="@id/add_restaurant_header"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/snow">
+            <EditText
+                android:id="@+id/input_restaurant_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Restaurant Name"
+                android:padding="12dp"
+                android:theme="@style/MyEditTextTheme1"
+                android:drawableLeft="@drawable/ic_search_black_24dp"
+                android:drawablePadding="7dp"
+                android:maxLines="1"
+                />
+            <android.support.v7.widget.RecyclerView
+                android:layout_below="@+id/input_restaurant_search"
+                android:id="@+id/recycler_view_restaurant"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="visible"

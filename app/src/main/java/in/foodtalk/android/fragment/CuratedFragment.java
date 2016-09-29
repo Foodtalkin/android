@@ -111,7 +111,7 @@ public class CuratedFragment extends Fragment implements LatLonCallback {
         });
 
         latLonCallback = this;
-        getLocation = new GetLocation(getActivity(), latLonCallback);
+        getLocation = new GetLocation(getActivity(), latLonCallback, "curatedFragment");
         //getLocation.onStart();
 
         linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());

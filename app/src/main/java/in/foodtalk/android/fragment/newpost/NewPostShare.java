@@ -59,6 +59,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     TextView rName;
     TextView txtAddDish;
     public RelativeLayout dishSearch;
+    public RelativeLayout restaurantSearch;
 
     LinearLayout lableAddDish;
     LinearLayout lableCheckin;
@@ -67,6 +68,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
 
 
     public Boolean searchView = false;
+    public Boolean restaurantSearchView = false;
 
     List<DishListObj> dishList = new ArrayList<>();
     RecyclerView recyclerView;
@@ -95,6 +97,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         final View activityRootView = layout.findViewById(R.id.activityRoot);
         rName = (TextView) layout.findViewById(R.id.txt_rName);
         dishSearch = (RelativeLayout) layout.findViewById(R.id.dish_search);
+        restaurantSearch = (RelativeLayout) layout.findViewById(R.id.restaurant_search);
 
         lableAddDish = (LinearLayout) layout.findViewById(R.id.lable_add_dish);
         lableCheckin = (LinearLayout) layout.findViewById(R.id.lable_checkin);
@@ -198,6 +201,8 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
             case R.id.lable_checkin:
                 switch (event.getAction()){
                     case MotionEvent.ACTION_UP:
+                        restaurantSearch.setVisibility(View.VISIBLE);
+                        restaurantSearchView = true;
                         break;
                 }
                 break;
@@ -241,16 +246,28 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
         apiCall.apiRequestPost(getActivity(),obj, Config.URL_DISH_NAME, "loadDishNameList", apiCallback);
     }
+    private void getRestaurantList() throws JSONException {
+        JSONObject obj = new JSONObject();
+        obj.put("sessionId", db.getUserDetails().get("sessionId"));
+        obj.put("postUserId",db.getUserDetails().get("userId"));
+        apiCall.apiRequestPost(getActivity(),obj, Config.URL_DISH_NAME, "loadRestaurantList", apiCallback);
+    }
     @Override
     public void apiResponse(JSONObject response, String tag) {
         Log.d("NewPostShare",tag+" : "+response);
-        if (response !=null){
-            try {
-                loadDataIntoView(response, tag);
-            } catch (JSONException e) {
-                e.printStackTrace();
+        if (tag.equals("loadDishNameList")){
+            if (response !=null){
+                try {
+                    loadDataIntoView(response, tag);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
+        if (tag.equals("loadRestaurantList")){
+
+        }
+
     }
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
 
