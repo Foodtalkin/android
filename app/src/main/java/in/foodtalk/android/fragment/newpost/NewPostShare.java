@@ -40,14 +40,17 @@ import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.communicator.DishTaggingCallback;
+import in.foodtalk.android.communicator.LatLonCallback;
+import in.foodtalk.android.constant.ConstantVar;
 import in.foodtalk.android.module.DatabaseHandler;
+import in.foodtalk.android.module.GetLocation;
 import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.object.DishListObj;
 
 /**
  * Created by RetailAdmin on 22-09-2016.
  */
-public class NewPostShare extends Fragment implements View.OnTouchListener, ApiCallback, DishTaggingCallback {
+public class NewPostShare extends Fragment implements View.OnTouchListener, ApiCallback, DishTaggingCallback, LatLonCallback {
 
     View layout;
     public Bitmap photo;
@@ -86,6 +89,15 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
 
     JSONObject response;
 
+    String lat;
+    String lon;
+    GetLocation getLocation;
+    LatLonCallback latLonCallback;
+
+    String gpsLocationOn = "notSet";
+
+    LinearLayout gpsAlertMsg;
+
 
     @Nullable
     @Override
@@ -98,6 +110,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         rName = (TextView) layout.findViewById(R.id.txt_rName);
         dishSearch = (RelativeLayout) layout.findViewById(R.id.dish_search);
         restaurantSearch = (RelativeLayout) layout.findViewById(R.id.restaurant_search);
+        gpsAlertMsg = (LinearLayout) layout.findViewById(R.id.gps_alert_msg);
 
         lableAddDish = (LinearLayout) layout.findViewById(R.id.lable_add_dish);
         lableCheckin = (LinearLayout) layout.findViewById(R.id.lable_checkin);
@@ -152,8 +165,20 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
             e.printStackTrace();
         }
 
+        latLonCallback = this;
+        Fragment currentFragment = this.getFragmentManager().findFragmentById(R.id.container1);
+        if (currentFragment == this){
+            getLocation = new GetLocation(getActivity(), latLonCallback, "newPostShare");
+            getLocation.onStart();
+        }
         //fordishSearch();
         return layout;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getLocation.onStop();
     }
 
     @Override
@@ -203,6 +228,11 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
                     case MotionEvent.ACTION_UP:
                         restaurantSearch.setVisibility(View.VISIBLE);
                         restaurantSearchView = true;
+                        if (gpsLocationOn.equals("on")){
+                            gpsAlertMsg.setVisibility(View.GONE);
+                        }else if (gpsLocationOn.equals("off")){
+                            gpsAlertMsg.setVisibility(View.VISIBLE);
+                        }
                         break;
                 }
                 break;
@@ -343,5 +373,15 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
             }
         }
         return filteredModelList;
+    }
+    @Override
+    public void location(String gpsStatus, String lat, String lon) {
+        if (gpsStatus.equals(ConstantVar.LOCATION_GOT)){
+            gpsLocationOn = "on";
+            Log.d("NewPostShare", "lat: "+lat+" lon: "+lon);
+        }else if (gpsStatus.equals(ConstantVar.LOCATION_DISABLED)){
+            gpsLocationOn = "off";
+            Log.d("NewPostShare", "location disabled");
+        }
     }
 }
