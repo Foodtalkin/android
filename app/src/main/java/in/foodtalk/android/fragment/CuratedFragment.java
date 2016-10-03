@@ -123,6 +123,7 @@ public class CuratedFragment extends Fragment implements LatLonCallback {
     public void onStart() {
         super.onStart();
         getLocation.onStart();
+        Log.d("CuratedFragment", "onStart");
     }
 
     @Override

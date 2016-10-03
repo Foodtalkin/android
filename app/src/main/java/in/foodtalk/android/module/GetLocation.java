@@ -24,16 +24,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStates;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import in.foodtalk.android.communicator.LatLonCallback;
 import in.foodtalk.android.constant.ConstantVar;
@@ -50,7 +43,7 @@ public class GetLocation  implements GoogleApiClient.ConnectionCallbacks,
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     String lat, lon;
-    private Activity context;
+    private Context context;
 
     LatLonCallback latLonCallback;
 
@@ -85,8 +78,9 @@ public class GetLocation  implements GoogleApiClient.ConnectionCallbacks,
             Log.d("locaton manager", "gps on");
         }else {
             if (!requestFrom.equals("newPostShare")){
-                 //buildAlertMessageNoGps();
-                locationChecker(mGoogleApiClient, context);
+                 buildAlertMessageNoGps();
+                Log.d("locaton manager", "please on gps1");
+                //locationChecker(mGoogleApiClient, context);
             }else {
                 latLonCallback.location(ConstantVar.LOCATION_DISABLED,"","");
             }
@@ -208,59 +202,6 @@ public class GetLocation  implements GoogleApiClient.ConnectionCallbacks,
                 });
         final AlertDialog alert = builder.create();
         alert.show();
-    }
-
-    //---------------------------
-
-    public static void locationChecker(GoogleApiClient mGoogleApiClient, final Activity activity) {
-        LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(30 * 1000);
-        locationRequest.setFastestInterval(5 * 1000);
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(locationRequest);
-        builder.setAlwaysShow(true);
-        PendingResult<LocationSettingsResult> result =
-                LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
-        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-            @Override
-            public void onResult(LocationSettingsResult result) {
-                final Status status = result.getStatus();
-                final LocationSettingsStates state = result.getLocationSettingsStates();
-                Log.d("status code", status.getStatusCode()+"");
-                switch (status.getStatusCode()) {
-                    case LocationSettingsStatusCodes.SUCCESS:
-                        // All location settings are satisfied. The client can initialize location
-                        Log.d("onResult","SUCCESS");
-                        // requests here.
-                        break;
-                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        // Location settings are not satisfied. But could be fixed by showing the user
-                        // a dialog.
-                        Log.d("onResult","RESOLUTION_REQUIRED");
-                        try {
-                            // Show the dialog by calling startResolutionForResult(),
-                            // and check the result in onActivityResult().
-                            status.startResolutionForResult(
-                                    activity, 1000);
-                        } catch (IntentSender.SendIntentException e) {
-                            // Ignore the error.
-                        }
-                        break;
-                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        // Location settings are not satisfied. However, we have no way to fix the
-                        // settings so we won't show the dialog.
-                        Log.d("onResult","SETTINGS_CHANGE_UNAVAILABLE");
-                        break;
-                    case LocationSettingsStatusCodes.SIGN_IN_REQUIRED:
-                        Log.d("onResult","SIGN_IN_REQUIRED");
-                        break;
-                    case LocationSettingsStatusCodes.SUCCESS_CACHE:
-                        Log.d("onResult","SUCCESS_CACHE");
-                        break;
-                }
-            }
-        });
     }
 }
 

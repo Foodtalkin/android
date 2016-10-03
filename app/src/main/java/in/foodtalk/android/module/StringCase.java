@@ -6,16 +6,23 @@ package in.foodtalk.android.module;
 public class StringCase {
     public static String caseSensitive (String source){
 
-        StringBuffer res = new StringBuffer();
+        if (source != null){
+            StringBuffer res = new StringBuffer();
 
-        String[] strArr = source.split(" ");
-        for (String str : strArr) {
-            char[] stringArray = str.trim().toCharArray();
-            stringArray[0] = Character.toUpperCase(stringArray[0]);
-            str = new String(stringArray);
-            res.append(str).append(" ");
+            String[] strArr = source.split(" ");
+            for (String str : strArr) {
+                char[] stringArray = str.trim().toCharArray();
+                stringArray[0] = Character.toUpperCase(stringArray[0]);
+                str = new String(stringArray);
+                res.append(str).append(" ");
+            }
+            //System.out.print("Result: " + res.toString().trim());
+            return res.toString().trim();
+        }else {
+            return null;
         }
-        //System.out.print("Result: " + res.toString().trim());
-        return res.toString().trim();
+
+
     }
 }
+

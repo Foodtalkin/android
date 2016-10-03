@@ -111,7 +111,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         CheckInCallback, CamBitmapCallback, DishTaggingCallback , RatingCallback , ReviewCallback, AddRestaurantCallback,
         AddedRestaurantCallback, SearchResultCallback, CommentCallback, NotificationCallback, OpenRestaurantCallback,
         ApiCallback, StoreCallback {
-
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
     ImageView homeIcon, discoverIcon, newpostIcon, notiIcon, moreIcon;
@@ -1282,12 +1281,15 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         dishTagging = new DishTagging();
         dishTagging.dishTagging1(photo);
         //setFragmentView(dishTagging, R.id.container1, -1, true);
+        //getFragmentManager().beginTransaction().remove(discoverFragment).commit();
         //--------
         newPostShare = new NewPostShare();
         newPostShare.photo = photo;
         newPostShare.checkInRestaurantId = restaurantIdNewPost;
         newPostShare.checkInRestaurantName = restaurantNameNewPost;
         setFragmentView(newPostShare, R.id.container1, -1, true);
+
+
     }
 
     public void hideSoftKeyboard() {
@@ -1667,6 +1669,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 setFragmentView(userProfile, R.id.container, -1, true);*/
                 userProfileOpen(id);
                 getFragmentManager().beginTransaction().remove(searchFragment).commit();
+
                 break;
             case RESTAURANT_SEARCH:
 

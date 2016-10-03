@@ -172,6 +172,8 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         });
 
 
+
+
         /*--swipeRefreshHome.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -188,6 +190,11 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         return layout;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("DiscoverFragment","requestCode: "+requestCode+" resultCode: "+resultCode);
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

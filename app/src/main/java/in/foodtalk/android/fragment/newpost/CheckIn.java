@@ -57,6 +57,7 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
     LinearLayoutManager linearLayoutManager;
     RecyclerView recyclerView;
 
+
     List<RestaurantListObj> restaurantList = new ArrayList<>();
 
     JSONObject response;
@@ -82,6 +83,7 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
         layout = inflater.inflate(R.layout.checkin_fragment, container, false);
 
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_checkin);
+
 
         final SearchView searchView = (SearchView) layout.findViewById(R.id.search_view);
         searchView.setOnQueryTextListener(this);

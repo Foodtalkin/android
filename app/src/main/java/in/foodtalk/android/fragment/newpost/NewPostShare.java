@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.adapter.newpost.CheckInAdapter;
 import in.foodtalk.android.adapter.newpost.DishTaggingAdapter;
 import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.Config;
@@ -46,6 +47,7 @@ import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.GetLocation;
 import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.object.DishListObj;
+import in.foodtalk.android.object.RestaurantListObj;
 
 /**
  * Created by RetailAdmin on 22-09-2016.
@@ -74,20 +76,25 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     public Boolean restaurantSearchView = false;
 
     List<DishListObj> dishList = new ArrayList<>();
+    List<RestaurantListObj> restaurantList = new ArrayList<>();
     RecyclerView recyclerView;
+    RecyclerView recyclerViewRestaurant;
 
     ApiCall apiCall;
     DatabaseHandler db;
     ApiCallback apiCallback;
 
     DishTaggingAdapter dishTaggingAdapter;
+    CheckInAdapter checkInAdapter;
     DishTaggingCallback dishTaggingCallback;
 
     LinearLayoutManager linearLayoutManager;
+    LinearLayoutManager linearLayoutManager1;
 
     Boolean dishNameLoaded = false;
 
     JSONObject response;
+    JSONObject responseRList;
 
     String lat;
     String lon;
@@ -97,6 +104,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     String gpsLocationOn = "notSet";
 
     LinearLayout gpsAlertMsg;
+
 
 
     @Nullable
@@ -119,9 +127,12 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         inputDishSearch = (EditText) layout.findViewById(R.id.input_dish_search);
 
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view);
+        recyclerViewRestaurant = (RecyclerView) layout.findViewById(R.id.recycler_view_restaurant);
 
         linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        linearLayoutManager1 = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerViewRestaurant.setLayoutManager(linearLayoutManager1);
 
         apiCall = new ApiCall();
         db = new DatabaseHandler(getActivity());
@@ -130,6 +141,8 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
 
         lableAddDish.setOnTouchListener(this);
         lableCheckin.setOnTouchListener(this);
+
+
 
         Log.d("NewPOstShare","rName: "+checkInRestaurantName);
         if (!checkInRestaurantName.equals("")){
@@ -168,6 +181,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         latLonCallback = this;
         Fragment currentFragment = this.getFragmentManager().findFragmentById(R.id.container1);
         if (currentFragment == this){
+            Log.d("NewPostShare","getLocation");
             getLocation = new GetLocation(getActivity(), latLonCallback, "newPostShare");
             getLocation.onStart();
         }
@@ -276,11 +290,13 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
         apiCall.apiRequestPost(getActivity(),obj, Config.URL_DISH_NAME, "loadDishNameList", apiCallback);
     }
-    private void getRestaurantList() throws JSONException {
+    private void getRestaurantList(String lat, String lon) throws JSONException {
         JSONObject obj = new JSONObject();
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
         obj.put("postUserId",db.getUserDetails().get("userId"));
-        apiCall.apiRequestPost(getActivity(),obj, Config.URL_DISH_NAME, "loadRestaurantList", apiCallback);
+        obj.put("latitude",lat);
+        obj.put("longitude",lon);
+        apiCall.apiRequestPost(getActivity(),obj, Config.URL_NEAR_BY_RESTAURANT, "loadRestaurantList", apiCallback);
     }
     @Override
     public void apiResponse(JSONObject response, String tag) {
@@ -295,9 +311,14 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
             }
         }
         if (tag.equals("loadRestaurantList")){
-
+            if (response != null){
+                try {
+                    loadRestaurantIntoView(response, tag);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-
     }
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
 
@@ -316,6 +337,23 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
             dishTaggingAdapter = new DishTaggingAdapter(getActivity(),dishList , dishTaggingCallback);
             recyclerView.setAdapter(dishTaggingAdapter);
             dishNameLoaded = true;
+        }
+    }
+
+    private void loadRestaurantIntoView(JSONObject response, String tag) throws JSONException{
+        responseRList = response;
+        JSONArray rListArray = response.getJSONArray("restaurants");
+        for (int i=0;i<rListArray.length();i++){
+            RestaurantListObj current = new RestaurantListObj();
+            current.id = rListArray.getJSONObject(i).getString("id");
+            current.area = rListArray.getJSONObject(i).getString("area");
+            current.restaurantName = rListArray.getJSONObject(i).getString("restaurantName");
+            current.restaurantIsActive = rListArray.getJSONObject(i).getString("restaurantIsActive");
+            restaurantList.add(current);
+        }
+        if (getActivity() != null){
+            checkInAdapter = new CheckInAdapter(getActivity(),restaurantList);
+            recyclerViewRestaurant.setAdapter(checkInAdapter);
         }
     }
 
@@ -378,6 +416,11 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     public void location(String gpsStatus, String lat, String lon) {
         if (gpsStatus.equals(ConstantVar.LOCATION_GOT)){
             gpsLocationOn = "on";
+            try {
+                getRestaurantList(lat, lon);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             Log.d("NewPostShare", "lat: "+lat+" lon: "+lon);
         }else if (gpsStatus.equals(ConstantVar.LOCATION_DISABLED)){
             gpsLocationOn = "off";
