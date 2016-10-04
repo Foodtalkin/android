@@ -105,6 +105,9 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
 
     LinearLayout gpsAlertMsg;
 
+    LinearLayout btnAddDishName;
+    TextView txtNewDish;
+
 
 
     @Nullable
@@ -124,6 +127,9 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         lableCheckin = (LinearLayout) layout.findViewById(R.id.lable_checkin);
         txtAddDish = (TextView) layout.findViewById(R.id.txt_add_dish);
 
+        btnAddDishName = (LinearLayout) layout.findViewById(R.id.btn_add_dish_name);
+        txtNewDish = (TextView) layout.findViewById(R.id.txt_new_dish);
+
         inputDishSearch = (EditText) layout.findViewById(R.id.input_dish_search);
 
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view);
@@ -141,8 +147,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
 
         lableAddDish.setOnTouchListener(this);
         lableCheckin.setOnTouchListener(this);
-
-
+        btnAddDishName.setOnTouchListener(this);
 
         Log.d("NewPOstShare","rName: "+checkInRestaurantName);
         if (!checkInRestaurantName.equals("")){
@@ -247,6 +252,16 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
                         }else if (gpsLocationOn.equals("off")){
                             gpsAlertMsg.setVisibility(View.VISIBLE);
                         }
+                        break;
+                }
+                break;
+            case R.id.btn_add_dish_name:
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_UP:
+                        hideSoftKeyboard();
+                        txtAddDish.setText(StringCase.caseSensitive(txtNewDish.getText().toString()));
+                        dishSearch.setVisibility(View.GONE);
+                        searchView = false;
                         break;
                 }
                 break;
@@ -396,9 +411,18 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         }
         // Log.d("rListArray", "total: "+ rListArray.length());
         // tempList = new ArrayList<RestaurantListObj>(restaurantList);
+
         final List<DishListObj> filteredModelList = filter(dishList, newText);
+        Log.d("NewPostShare", "filterdModeList "+filteredModelList.size());
         dishTaggingAdapter.animateTo(filteredModelList);
         recyclerView.scrollToPosition(0);
+
+        if (filteredModelList.size() == 0){
+            btnAddDishName.setVisibility(View.VISIBLE);
+            txtNewDish.setText("Add "+newText);
+        }else {
+            btnAddDishName.setVisibility(View.GONE);
+        }
     }
     private List<DishListObj> filter(List<DishListObj> models, String query) {
         query = query.toLowerCase();

@@ -255,6 +255,9 @@
                 android:drawableLeft="@drawable/ic_search_black_24dp"
                 android:drawablePadding="7dp"
                 android:maxLines="1"
+                android:singleLine="true"
+                android:maxLength="32"
+                android:digits="@string/alphanumberspace"
                 />
             <android.support.v7.widget.RecyclerView
                 android:layout_below="@+id/input_dish_search"
@@ -264,6 +267,30 @@
                 android:visibility="visible"
                 >
             </android.support.v7.widget.RecyclerView>
+            <LinearLayout
+                android:id="@+id/btn_add_dish_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/input_dish_search"
+                android:padding="10dp"
+                android:background="@color/snow"
+                android:visibility="gone">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_control_point_black_24dp"/>
+                <TextView
+                    android:id="@+id/txt_new_dish"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Veg Pizza"
+                    android:textColor="@color/slate"
+                    android:layout_gravity="center_vertical"
+                    android:clickable="false"
+                    />
+
+            </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>
     <RelativeLayout
