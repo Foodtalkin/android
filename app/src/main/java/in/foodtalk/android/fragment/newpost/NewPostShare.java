@@ -70,6 +70,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     LinearLayout lableCheckin;
 
     EditText inputDishSearch;
+    EditText inputRestaurantSearch;
 
 
     public Boolean searchView = false;
@@ -108,6 +109,8 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     LinearLayout btnAddDishName;
     TextView txtNewDish;
 
+    String newDishName;
+
 
 
     @Nullable
@@ -131,6 +134,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         txtNewDish = (TextView) layout.findViewById(R.id.txt_new_dish);
 
         inputDishSearch = (EditText) layout.findViewById(R.id.input_dish_search);
+        inputRestaurantSearch = (EditText) layout.findViewById(R.id.input_restaurant_search);
 
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view);
         recyclerViewRestaurant = (RecyclerView) layout.findViewById(R.id.recycler_view_restaurant);
@@ -246,6 +250,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
                 switch (event.getAction()){
                     case MotionEvent.ACTION_UP:
                         restaurantSearch.setVisibility(View.VISIBLE);
+                        showKeyBoard();
                         restaurantSearchView = true;
                         if (gpsLocationOn.equals("on")){
                             gpsAlertMsg.setVisibility(View.GONE);
@@ -259,7 +264,8 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
                 switch (event.getAction()){
                     case MotionEvent.ACTION_UP:
                         hideSoftKeyboard();
-                        txtAddDish.setText(StringCase.caseSensitive(txtNewDish.getText().toString()));
+                        txtAddDish.setText(StringCase.caseSensitive(newDishName));
+                        Log.d("NewPostShare",newDishName);
                         dishSearch.setVisibility(View.GONE);
                         searchView = false;
                         break;
@@ -298,6 +304,38 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
                 //Log.d("afterTextChange", s+"");
             }
         });
+        inputRestaurantSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //Log.d("beforeTextChange", s+"");
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d("onTextChanged", count+"");
+                if (count == 0){
+                    // recyclerView.setVisibility(View.GONE);
+                    //btnNext.setTextColor(getResources().getColor(R.color.btn_disable));
+                    // btnNextEnable = false;
+                }else {
+
+                    //recyclerView.setVisibility(View.VISIBLE);
+                    try {
+                        getRestaurantListSearch(s.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    Log.d("NewPostShare","onTextChange: "+s.toString());
+                    //btnNext.setTextColor(getResources().getColor(R.color.btn_enable));
+                    //btnNextEnable = true;
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                //Log.d("afterTextChange", s+"");
+            }
+        });
+
     }
 
     private void getDishList() throws JSONException {
@@ -308,10 +346,23 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     private void getRestaurantList(String lat, String lon) throws JSONException {
         JSONObject obj = new JSONObject();
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
-        obj.put("postUserId",db.getUserDetails().get("userId"));
-        obj.put("latitude",lat);
-        obj.put("longitude",lon);
-        apiCall.apiRequestPost(getActivity(),obj, Config.URL_NEAR_BY_RESTAURANT, "loadRestaurantList", apiCallback);
+        //obj.put("postUserId",db.getUserDetails().get("userId"));
+        obj.put("type", "restaurant");
+       // obj.put("searchText","fa");
+        if (!lat.equals("")){
+            obj.put("latitude",lat);
+            obj.put("longitude",lon);
+        }
+        apiCall.apiRequestPost(getActivity(),obj, Config.URL_RESTAURANT_LIST_CHECKIN, "loadRestaurantListCheckin", apiCallback);
+    }
+    private void getRestaurantListSearch(String key) throws JSONException {
+        JSONObject obj = new JSONObject();
+        obj.put("sessionId", db.getUserDetails().get("sessionId"));
+        //obj.put("postUserId",db.getUserDetails().get("userId"));
+        obj.put("type", "restaurant");
+        obj.put("searchText", key);
+
+        apiCall.apiRequestPost(getActivity(),obj, Config.URL_RESTAURANT_LIST_CHECKIN, "loadRestaurantListCheckin", apiCallback);
     }
     @Override
     public void apiResponse(JSONObject response, String tag) {
@@ -325,7 +376,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
                 }
             }
         }
-        if (tag.equals("loadRestaurantList")){
+        if (tag.equals("loadRestaurantListCheckin")){
             if (response != null){
                 try {
                     loadRestaurantIntoView(response, tag);
@@ -352,18 +403,29 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
             dishTaggingAdapter = new DishTaggingAdapter(getActivity(),dishList , dishTaggingCallback);
             recyclerView.setAdapter(dishTaggingAdapter);
             dishNameLoaded = true;
+            dishTaggingAdapter.notifyDataSetChanged();
         }
     }
 
     private void loadRestaurantIntoView(JSONObject response, String tag) throws JSONException{
         responseRList = response;
-        JSONArray rListArray = response.getJSONArray("restaurants");
-        for (int i=0;i<rListArray.length();i++){
+//        JSONArray rListArray = response.getJSONArray("restaurants");
+
+        JSONObject result= response.getJSONObject("result");
+        JSONObject hitsObj = result.getJSONObject("hits");
+        JSONArray hitsArray = hitsObj.getJSONArray("hits");
+
+        //JSONObject sourceObj = hitsArray.getJSONObject(0).get;
+
+       // Log.d("Restaurant list",);
+
+        Log.d("NewPostShare","total: "+hitsArray.length()+" source rname "+hitsArray.getJSONObject(0).getJSONObject("_source").getString("restaurantname"));
+       for (int i=0;i<hitsArray.length();i++){
             RestaurantListObj current = new RestaurantListObj();
-            current.id = rListArray.getJSONObject(i).getString("id");
-            current.area = rListArray.getJSONObject(i).getString("area");
-            current.restaurantName = rListArray.getJSONObject(i).getString("restaurantName");
-            current.restaurantIsActive = rListArray.getJSONObject(i).getString("restaurantIsActive");
+            current.id = hitsArray.getJSONObject(i).getJSONObject("_source").getString("id");
+            current.area = hitsArray.getJSONObject(i).getJSONObject("_source").getString("area");
+            current.restaurantName = hitsArray.getJSONObject(i).getJSONObject("_source").getString("restaurantname");
+            current.restaurantIsActive = hitsArray.getJSONObject(i).getJSONObject("_source").getString("isactivated");
             restaurantList.add(current);
         }
         if (getActivity() != null){
@@ -371,7 +433,6 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
             recyclerViewRestaurant.setAdapter(checkInAdapter);
         }
     }
-
     @Override
     public void dishNameSelected(String dishName) {
         Log.d("NewPostShare","dishNameS: "+dishName);
@@ -420,6 +481,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         if (filteredModelList.size() == 0){
             btnAddDishName.setVisibility(View.VISIBLE);
             txtNewDish.setText("Add "+newText);
+            newDishName = newText;
         }else {
             btnAddDishName.setVisibility(View.GONE);
         }
@@ -448,6 +510,11 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
             Log.d("NewPostShare", "lat: "+lat+" lon: "+lon);
         }else if (gpsStatus.equals(ConstantVar.LOCATION_DISABLED)){
             gpsLocationOn = "off";
+            try {
+                getRestaurantList("", "");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             Log.d("NewPostShare", "location disabled");
         }
     }

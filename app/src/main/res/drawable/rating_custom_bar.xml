@@ -4,14 +4,16 @@
 
     <item
         android:id="@+android:id/background"
-        android:drawable="@drawable/star_pre" />
+        android:drawable="@drawable/star_rating_p"
+        />
     <item
         android:id="@+android:id/secondaryProgress"
-        android:drawable="@drawable/star_pre"
+        android:drawable="@drawable/star_rating_p"
+
         />
     <item
         android:id="@+android:id/progress"
-        android:drawable="@drawable/star_post"
+        android:drawable="@drawable/star_rating_a"
         />
 
 </layer-list>

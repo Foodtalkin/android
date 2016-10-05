@@ -95,7 +95,8 @@ public class ApiCall {
                 return headers;
             }
         };
-        AppController.getInstance().addToRequestQueue(jsonObjectRequest,"postbookmark");
+        AppController.getInstance().cancelPendingRequests(tag);
+        AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag);
     }
     public void showToast(Context context, String msg){
         Toast toast= Toast.makeText(context,

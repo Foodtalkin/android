@@ -58,11 +58,10 @@ public class CheckInAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         RestaurantListObj current = rList.get(position);
         RestaurantHolder restaurantHolder = (RestaurantHolder) holder;
-
         restaurantHolder.txtRName.setText(stringCase.caseSensitive(current.restaurantName));
         //Log.d("restaurantIsActive", current.restaurantIsActive+"");
         if (current.restaurantIsActive != null){
-            if (current.restaurantIsActive.equals("1")){
+            if (current.restaurantIsActive.equals("true")){
                 restaurantHolder.txtAria.setText(current.area);
                 restaurantHolder.txtAria.setTextColor(context.getResources().getColor(R.color.blackText1));
             }else {
@@ -91,7 +90,6 @@ public class CheckInAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             txtRName = (TextView) itemView.findViewById(R.id.txt_rname_checkin);
             txtAria = (TextView) itemView.findViewById(R.id.txt_aria_checkin);
             btnRestaurant = (LinearLayout) itemView.findViewById(R.id.btn_restaurant_checkin);
-
             btnRestaurant.setOnTouchListener(this);
         }
 

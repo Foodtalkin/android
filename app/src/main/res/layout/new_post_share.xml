@@ -58,13 +58,18 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="20dp">
+                        android:layout_marginLeft="10dp">
                         <LinearLayout
                             android:id="@+id/lable_add_dish"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:padding="6dp">
+                            android:padding="6dp"
+                            android:gravity="center_vertical">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_dish"/>
                             <TextView
                                 android:id="@+id/txt_add_dish"
                                 android:layout_width="wrap_content"
@@ -72,6 +77,7 @@
                                 android:text="Add a dish"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
+                                android:layout_marginLeft="10dp"
                                 android:textColor="@color/slate"/>
 
                         </LinearLayout>
@@ -81,12 +87,18 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:layout_marginTop="10dp"
-                            android:padding="6dp">
+                            android:padding="6dp"
+                            android:gravity="center_vertical">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_location"/>
                             <TextView
                                 android:id="@+id/txt_rName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Hauz Khas Social"
+                                android:layout_marginLeft="10dp"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
                                 android:textColor="@color/slate"/>
@@ -117,6 +129,7 @@
                         android:layout_below="@+id/textView1"
                         android:layout_centerHorizontal="true"
                         android:stepSize="1"
+
                         android:layout_gravity="center_horizontal"
                         />
                 </LinearLayout>
