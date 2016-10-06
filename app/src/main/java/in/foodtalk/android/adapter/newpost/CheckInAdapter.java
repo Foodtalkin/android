@@ -35,12 +35,12 @@ public class CheckInAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     CheckInCallback checkInCallback;
 
 
-    public CheckInAdapter(Context context, List<RestaurantListObj> restaurantListObjs){
+    public CheckInAdapter(Context context, List<RestaurantListObj> restaurantListObjs, CheckInCallback checkInCallback){
         layoutInflater = LayoutInflater.from(context);
         this.context = context;
         this.rList = restaurantListObjs;
 
-        checkInCallback = (CheckInCallback) context;
+        this.checkInCallback = checkInCallback;
 
         stringCase = new StringCase();
 

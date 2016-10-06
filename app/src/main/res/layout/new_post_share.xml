@@ -158,7 +158,8 @@
                     android:orientation="vertical"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp">
+                    android:layout_marginRight="50dp"
+                    android:visibility="gone">
                     <RelativeLayout
 
                         android:layout_width="match_parent"
@@ -264,7 +265,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Dish Name"
                 android:padding="12dp"
-                android:theme="@style/MyEditTextTheme1"
+
                 android:drawableLeft="@drawable/ic_search_black_24dp"
                 android:drawablePadding="7dp"
                 android:maxLines="1"
@@ -344,10 +345,11 @@
                 android:layout_height="wrap_content"
                 android:hint="Restaurant Name"
                 android:padding="12dp"
-                android:theme="@style/MyEditTextTheme1"
+
                 android:drawableLeft="@drawable/ic_search_black_24dp"
                 android:drawablePadding="7dp"
                 android:maxLines="1"
+                android:textCursorDrawable="@null"
 
                 />
             <LinearLayout
@@ -363,8 +365,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="We use your location to find nearby places. \nTap on this bar to turn on location services"
+                    android:clickable="false"
                     android:textColor="@color/black"/>
             </LinearLayout>
+
             <android.support.v7.widget.RecyclerView
                 android:layout_below="@+id/gps_alert_msg"
                 android:id="@+id/recycler_view_restaurant"
@@ -373,6 +377,33 @@
                 android:visibility="visible"
                 >
             </android.support.v7.widget.RecyclerView>
+            <LinearLayout
+                android:id="@+id/place_holder_no_restaurant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:visibility="gone">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_face_crying"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Can't find this restaurant"
+                    android:textColor="@color/slate"/>
+                <TextView
+                    android:id="@+id/txt_add_restaurant"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="You can add 'Sushi Haus' to food talk"
+                    android:textColor="@color/active"
+                    android:layout_marginTop="4dp"/>
+
+            </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>
