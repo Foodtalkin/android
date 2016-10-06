@@ -212,7 +212,7 @@
         </RelativeLayout>
     </ScrollView>
     <LinearLayout
-        android:id="@+id/btn_add_restaurant"
+        android:id="@+id/btn_post_share"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/active"

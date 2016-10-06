@@ -69,6 +69,7 @@ import in.foodtalk.android.communicator.ProfileRPostOpenCallback;
 import in.foodtalk.android.communicator.RatingCallback;
 import in.foodtalk.android.communicator.ReviewCallback;
 import in.foodtalk.android.communicator.SearchResultCallback;
+import in.foodtalk.android.communicator.ShareNewPostCallback;
 import in.foodtalk.android.communicator.StoreCallback;
 import in.foodtalk.android.communicator.UserProfileCallback;
 import in.foodtalk.android.communicator.UserThumbCallback;
@@ -110,7 +111,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         HeadSpannableCallback, UserThumbCallback, ProfileRPostOpenCallback, PhoneCallback,
         CheckInCallback, CamBitmapCallback, DishTaggingCallback , RatingCallback , ReviewCallback, AddRestaurantCallback,
         AddedRestaurantCallback, SearchResultCallback, CommentCallback, NotificationCallback, OpenRestaurantCallback,
-        ApiCallback, StoreCallback {
+        ApiCallback, StoreCallback, ShareNewPostCallback {
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
     ImageView homeIcon, discoverIcon, newpostIcon, notiIcon, moreIcon;
@@ -197,7 +198,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     File file;
     String restaurantNameNewPost;
     String rating;
-    String review;
+    String review1;
     String restaurantIdNewPost;
     String dishName;
 
@@ -1351,7 +1352,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             createPostObj.sessionId= sessionId;
             createPostObj.checkedInRestaurantId = restaurantIdNewPost;
             createPostObj.image = result.get("url").toString();
-            createPostObj.tip = review;
+            createPostObj.tip = review1;
             createPostObj.rating = rating;
             createPostObj.dishName = dishName;
             createPostObj.sendPushNotification = "1";
@@ -1371,7 +1372,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         imgDialogCanDisplay = false;
         Log.d("review call back", review);
-        this.review = review;
+        this.review1 = review;
         getFragmentManager().beginTransaction().remove(reviewFragment).commit();
 
         hideSoftKeyboard();
@@ -1855,5 +1856,42 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             Log.d("jsonObj","getUserInfo : "+jsonObject);
             apiCall.apiRequestPost(this,jsonObject,Config.URL_USER_PROFILE,"userInfo", this);
         }
+    }
+
+    @Override
+    public void shareNewPost(String restaurantId, String dishName, String rating, String tip) {
+
+        //--
+       /* createPostObj.sessionId= sessionId;
+        createPostObj.checkedInRestaurantId = restaurantIdNewPost;
+        createPostObj.image = result.get("url").toString();
+        createPostObj.tip = review;
+        createPostObj.rating = rating;
+        createPostObj.dishName = dishName;*/
+        //-------
+
+        review1 = tip;
+        this.rating = rating;
+        restaurantIdNewPost = restaurantId;
+
+        Log.d("shareNewPost", "review: "+review1+" rating: "+ rating+" restaurantIdNewpost: "+restaurantId);
+
+
+        imgDialogCanDisplay = false;
+        //Log.d("review call back", review);
+        //review1 = review;
+        getFragmentManager().beginTransaction().remove(newPostShare).commit();
+
+        hideSoftKeyboard();
+        //new GetApiContent(getContext(), apiAsyncCallback).execute("http://www.circuitmagic.com/api/get_posts/");
+        new CloudinaryUpload(this, cloudinaryCallback).execute(file);
+        //progressBarUpload.setIndeterminate(true);
+        progressBarUpload.setVisibility(View.VISIBLE);
+        if (restaurantNameNewPost.equals("")){
+            txtUploadingDish.setText("Posting "+dishName);
+        }else {
+            txtUploadingDish.setText("Posting "+dishName+" at "+restaurantNameNewPost);
+        }
+        clearBackStack();
     }
 }

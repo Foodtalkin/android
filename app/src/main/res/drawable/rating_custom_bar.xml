@@ -13,7 +13,7 @@
         />
     <item
         android:id="@+android:id/progress"
-        android:drawable="@drawable/ic_star_filled"
+        android:drawable="@drawable/ic_star_filled1"
         />
 
 </layer-list>

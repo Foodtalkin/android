@@ -23,6 +23,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -43,6 +44,7 @@ import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.communicator.CheckInCallback;
 import in.foodtalk.android.communicator.DishTaggingCallback;
 import in.foodtalk.android.communicator.LatLonCallback;
+import in.foodtalk.android.communicator.ShareNewPostCallback;
 import in.foodtalk.android.constant.ConstantVar;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.GetLocation;
@@ -116,6 +118,15 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     LinearLayout placeHolderNoRestaurant;
     TextView txtAddRestaurant;
 
+    ShareNewPostCallback shareNewPostCallback;
+
+    LinearLayout btnShare;
+
+    String restaurantId, dishName, tip;
+    String rating1;
+
+    RatingBar ratingBar;
+
 
 
     @Nullable
@@ -130,6 +141,9 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         dishSearch = (RelativeLayout) layout.findViewById(R.id.dish_search);
         restaurantSearch = (RelativeLayout) layout.findViewById(R.id.restaurant_search);
         gpsAlertMsg = (LinearLayout) layout.findViewById(R.id.gps_alert_msg);
+        btnShare = (LinearLayout) layout.findViewById(R.id.btn_post_share);
+
+        ratingBar = (RatingBar) layout.findViewById(R.id.ratingBar1);
 
         placeHolderNoRestaurant = (LinearLayout) layout.findViewById(R.id.place_holder_no_restaurant);
         txtAddRestaurant = (TextView) layout.findViewById(R.id.txt_add_restaurant);
@@ -158,10 +172,13 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         dishTaggingCallback = this;
         checkInCallback = this;
 
+        shareNewPostCallback = (ShareNewPostCallback) getActivity();
+
         lableAddDish.setOnTouchListener(this);
         lableCheckin.setOnTouchListener(this);
         btnAddDishName.setOnTouchListener(this);
         gpsAlertMsg.setOnTouchListener(this);
+        btnShare.setOnTouchListener(this);
 
         Log.d("NewPOstShare","rName: "+checkInRestaurantName);
         if (!checkInRestaurantName.equals("")){
@@ -198,6 +215,18 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         }
 
         latLonCallback = this;
+
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            Boolean a = false;
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+
+                if ((int)rating != 0 && fromUser){
+                    rating1 =  Integer.toString((int)rating);
+                    //ratingCallback.goforReview(Integer.toString((int)rating));
+                }
+            }
+        });
 
         //fordishSearch();
         return layout;
@@ -242,7 +271,6 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
             }
         });
     }
-
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         switch (v.getId()){
@@ -291,9 +319,17 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
                         break;
                 }
                 break;
+            case R.id.btn_post_share:
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_UP:
+                        shareNewPostCallback.shareNewPost(restaurantId, dishName, rating1,inputTip.getText().toString());
+                        break;
+                }
+                break;
         }
         return true;
     }
+
 
     private void textListener(){
         inputDishSearch.addTextChangedListener(new TextWatcher() {
@@ -466,6 +502,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     }
     @Override
     public void dishNameSelected(String dishName) {
+        this.dishName = dishName;
         Log.d("NewPostShare","dishNameS: "+dishName);
         hideSoftKeyboard();
         txtAddDish.setText(StringCase.caseSensitive(dishName));
@@ -553,6 +590,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
 
     @Override
     public void checkInRestaurant(String restaurantId, String restaurantName) {
+        this.restaurantId = restaurantId;
         rName.setText(StringCase.caseSensitive(restaurantName));
         restaurantSearch.setVisibility(View.GONE);
         restaurantSearchView = false;
