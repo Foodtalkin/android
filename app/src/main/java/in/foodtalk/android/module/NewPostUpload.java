@@ -60,6 +60,7 @@ public class NewPostUpload {
         String base64DishName;
         String base64Tip;
         JSONObject obj = new JSONObject();
+        Log.d("NewPostUpload", createPostObj+" : "+createPostObj.dishName);
         try {
             data = createPostObj.dishName.getBytes("UTF-8");
             dataTip = createPostObj.tip.getBytes("UTF-8");

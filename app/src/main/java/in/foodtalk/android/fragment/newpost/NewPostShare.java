@@ -179,6 +179,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         btnAddDishName.setOnTouchListener(this);
         gpsAlertMsg.setOnTouchListener(this);
         btnShare.setOnTouchListener(this);
+        txtAddRestaurant.setOnTouchListener(this);
 
         Log.d("NewPOstShare","rName: "+checkInRestaurantName);
         if (!checkInRestaurantName.equals("")){
@@ -323,6 +324,13 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
                 switch (event.getAction()){
                     case MotionEvent.ACTION_UP:
                         shareNewPostCallback.shareNewPost(restaurantId, dishName, rating1,inputTip.getText().toString());
+                        break;
+                }
+                break;
+            case R.id.txt_add_restaurant:
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_UP:
+                        Log.d("NewPostShare","addRestaurant");
                         break;
                 }
                 break;

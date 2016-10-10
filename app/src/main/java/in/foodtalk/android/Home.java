@@ -1873,6 +1873,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         review1 = tip;
         this.rating = rating;
         restaurantIdNewPost = restaurantId;
+        this.dishName = dishName;
 
         Log.d("shareNewPost", "review: "+review1+" rating: "+ rating+" restaurantIdNewpost: "+restaurantId);
 
