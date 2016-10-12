@@ -675,6 +675,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         FragmentManager fm = getFragmentManager();
 
 
+
+
         for(int entry = 0; entry < fm.getBackStackEntryCount(); entry++){
             Log.e("Fragment bstack entry", "Found fragment: " + fm.getBackStackEntryAt(entry).getName());
         }
@@ -1286,7 +1288,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         //--------
         newPostShare = new NewPostShare();
         newPostShare.photo = photo;
-        newPostShare.checkInRestaurantId = restaurantIdNewPost;
+        newPostShare.restaurantId = restaurantIdNewPost;
         newPostShare.checkInRestaurantName = restaurantNameNewPost;
         setFragmentView(newPostShare, R.id.container1, -1, true);
 
@@ -1397,9 +1399,22 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     }
 
     @Override
-    public void restaurantAdded(String rId) {
+    public void restaurantAdded(String rId, String rName) {
         Log.d("restaurant added", "Rid: "+rId);
-        startCheckIn(rId);
+        if (this.getFragmentManager().findFragmentById(R.id.container1) != null){
+            currentFragment = this.getFragmentManager().findFragmentById(R.id.container1);
+            if (currentFragment == addRestaurant){
+                //newPostShare.rName.setText(rName);
+                newPostShare.restaurantId = rId;
+                newPostShare.checkInRestaurantName = rName;
+                getFragmentManager().popBackStack();
+                hideSoftKeyboard();
+            }
+        }
+
+
+
+       // startCheckIn(rId);
         //hideSoftKeyboard();
         //getFragmentManager().popBackStack();
     }

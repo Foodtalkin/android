@@ -300,7 +300,7 @@ public class AddRestaurant extends Fragment implements LatLonCallback, ApiCallba
                             String status = response.getString("status");
                             if (!status.equals("error")){
                                 //Log.d("api call","restaurant added"+ response.getString("restaurantId"));
-                                addedRestaurantCallback.restaurantAdded(response.getString("restaurantId"));
+                                addedRestaurantCallback.restaurantAdded(response.getString("restaurantId"), inputRName.getText().toString());
                                 errorMsg(false, "");
                                 //-- getAndSave(response);
                                 //loadDataIntoView(response , tag);

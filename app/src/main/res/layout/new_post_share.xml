@@ -401,6 +401,7 @@
                     android:layout_height="wrap_content"
                     android:text="You can add 'Sushi Haus' to food talk"
                     android:textColor="@color/active"
+                    android:clickable="true"
                     android:layout_marginTop="4dp"/>
 
             </LinearLayout>

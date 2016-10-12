@@ -40,6 +40,7 @@ import in.foodtalk.android.adapter.newpost.CheckInAdapter;
 import in.foodtalk.android.adapter.newpost.DishTaggingAdapter;
 import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.AddRestaurantCallback;
 import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.communicator.CheckInCallback;
 import in.foodtalk.android.communicator.DishTaggingCallback;
@@ -49,6 +50,7 @@ import in.foodtalk.android.constant.ConstantVar;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.GetLocation;
 import in.foodtalk.android.module.StringCase;
+import in.foodtalk.android.module.ToastShow;
 import in.foodtalk.android.object.DishListObj;
 import in.foodtalk.android.object.RestaurantListObj;
 
@@ -60,11 +62,12 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     View layout;
     public Bitmap photo;
     public String checkInRestaurantName;
-    public String checkInRestaurantId;
+    //public String checkInRestaurantId;
+
     ImageView imgHolder;
     ScrollView scrollView;
     EditText inputTip;
-    TextView rName;
+    public TextView rName;
     TextView txtAddDish;
     public RelativeLayout dishSearch;
     public RelativeLayout restaurantSearch;
@@ -122,10 +125,14 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
 
     LinearLayout btnShare;
 
-    String restaurantId, dishName, tip;
+    public String restaurantId, dishName, tip;
+    //public String restaurantName;
     String rating1;
 
+    Boolean btnShareIsEnable = false;
+
     RatingBar ratingBar;
+    AddRestaurantCallback addRestaurantCallback;
 
 
 
@@ -165,6 +172,8 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         linearLayoutManager1 = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerViewRestaurant.setLayoutManager(linearLayoutManager1);
+
+        addRestaurantCallback = (AddRestaurantCallback) getActivity();
 
         apiCall = new ApiCall();
         db = new DatabaseHandler(getActivity());
@@ -207,6 +216,20 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         if (photo != null){
             imgHolder.setImageBitmap(photo);
         }
+        if (dishName != null){
+            txtAddDish.setText(StringCase.caseSensitive(dishName));
+        }
+        if (rating1 != null){
+            ratingBar.setRating(Float.parseFloat(rating1));
+        }
+        if (tip != null){
+            inputTip.setText(tip);
+        }
+        if (rating1 == null || rating1.equals("0") || dishName == null){
+            shareBtnEnable(false);
+        }else {
+            shareBtnEnable(true);
+        }
         focusListener();
         textListener();
         try {
@@ -216,19 +239,22 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         }
 
         latLonCallback = this;
-
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             Boolean a = false;
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
 
-                if ((int)rating != 0 && fromUser){
+                if (fromUser){
                     rating1 =  Integer.toString((int)rating);
+                    if (dishName != null && rating1 != null && !rating1.equals("0")){
+                        shareBtnEnable(true);
+                    }else {
+                        shareBtnEnable(false);
+                    }
                     //ratingCallback.goforReview(Integer.toString((int)rating));
                 }
             }
         });
-
         //fordishSearch();
         return layout;
     }
@@ -238,7 +264,6 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         super.onDestroyView();
         getLocation.onStop();
     }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -252,6 +277,8 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
             showKeyBoard();
         }
     }
+
+
 
     public static float dpToPx(Context context, float valueInDp) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
@@ -290,6 +317,9 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
                 switch (event.getAction()){
                     case MotionEvent.ACTION_UP:
                         restaurantSearch.setVisibility(View.VISIBLE);
+                        if (inputTip.getText().length() > 0){
+                            tip = inputTip.getText().toString();
+                        }
                         //showKeyBoard();
                         restaurantSearchView = true;
                         if (gpsLocationOn.equals("on")){
@@ -323,7 +353,25 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
             case R.id.btn_post_share:
                 switch (event.getAction()){
                     case MotionEvent.ACTION_UP:
-                        shareNewPostCallback.shareNewPost(restaurantId, dishName, rating1,inputTip.getText().toString());
+                        Log.d("NewPostShare","dishName: "+ dishName+" rating1:"+ rating1+ "btnShareIsEnable: "+btnShareIsEnable);
+                        if (rating1 != null || dishName != null){
+                            if (dishName != null){
+                                if (rating1 != null && !rating1.equals("0")){
+                                    Log.d("NewPostShare","posing...");
+                                    shareNewPostCallback.shareNewPost(restaurantId, dishName, rating1,inputTip.getText().toString());
+                                }else {
+                                    ToastShow.showToast(getActivity(), "Rating required");
+                                }
+                            }else {
+                                if (rating1 != null && !rating1.equals("0")){
+                                    ToastShow.showToast(getActivity(), "Dish Name required");
+                                }else {
+                                    ToastShow.showToast(getActivity(), "Dish Name and Rating required");
+                                }
+                            }
+                        }else {
+                            ToastShow.showToast(getActivity(), "Dish Name and Rating required");
+                        }
                         break;
                 }
                 break;
@@ -331,6 +379,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
                 switch (event.getAction()){
                     case MotionEvent.ACTION_UP:
                         Log.d("NewPostShare","addRestaurant");
+                        addRestaurantCallback.addNewRestaurant();
                         break;
                 }
                 break;
@@ -338,6 +387,16 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         return true;
     }
 
+    private void shareBtnEnable(boolean btn){
+        if (!btn){
+            btnShare.setAlpha(.5f);
+            btnShareIsEnable = false;
+        }else {
+            btnShare.setAlpha(1);
+            btnShareIsEnable = true;
+        }
+
+    }
 
     private void textListener(){
         inputDishSearch.addTextChangedListener(new TextWatcher() {
@@ -345,7 +404,6 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 //Log.d("beforeTextChange", s+"");
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.d("onTextChanged", count+"");
@@ -516,6 +574,9 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         txtAddDish.setText(StringCase.caseSensitive(dishName));
         dishSearch.setVisibility(View.GONE);
         searchView = false;
+        if (rating1 != null && !rating1.equals("0")){
+            shareBtnEnable(true);
+        }
     }
     @Override
     public void startRating(String dishName) {
