@@ -33,7 +33,7 @@ public class WebViewFragment extends Fragment{
         webView = (WebView) layout.findViewById(R.id.webview);
         //next line explained below
         webView.setWebViewClient(new CustomWebViewClient());
-       // webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(url);
         return layout;
     }

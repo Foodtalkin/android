@@ -203,6 +203,8 @@ public class AddRestaurant extends Fragment implements LatLonCallback, ApiCallba
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
+                                }else {
+                                    ToastShow.showToast(getActivity(), "Restaurant and City are required");
                                 }
                                 break;
                         }

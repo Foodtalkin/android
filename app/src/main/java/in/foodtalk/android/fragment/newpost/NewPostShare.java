@@ -360,13 +360,13 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
                                     Log.d("NewPostShare","posing...");
                                     shareNewPostCallback.shareNewPost(restaurantId, dishName, rating1,inputTip.getText().toString());
                                 }else {
-                                    ToastShow.showToast(getActivity(), "Rating required");
+                                    ToastShow.showToast(getActivity(), "Rating is required");
                                 }
                             }else {
                                 if (rating1 != null && !rating1.equals("0")){
-                                    ToastShow.showToast(getActivity(), "Dish Name required");
+                                    ToastShow.showToast(getActivity(), "Dish Name is required");
                                 }else {
-                                    ToastShow.showToast(getActivity(), "Dish Name and Rating required");
+                                    ToastShow.showToast(getActivity(), "Dish Name and Rating are required");
                                 }
                             }
                         }else {
@@ -380,6 +380,8 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
                     case MotionEvent.ACTION_UP:
                         Log.d("NewPostShare","addRestaurant");
                         addRestaurantCallback.addNewRestaurant();
+                        restaurantSearchView = false;
+                        searchView = false;
                         break;
                 }
                 break;
@@ -434,11 +436,23 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.d("onTextChanged", count+"");
-                if (count == 0){
+                Log.d("onTextChanged", s.length()+"");
+                if (s.length() == 0){
                     // recyclerView.setVisibility(View.GONE);
                     //btnNext.setTextColor(getResources().getColor(R.color.btn_disable));
                     // btnNextEnable = false;
+                    try {
+                        if (lat != null && !lat.equals("")){
+                            getRestaurantList(lat, lon);
+                            Log.d("onTextChanged", "call with lat lon");
+                        }else {
+                            Log.d("onTextChanged", "call with -- -- ");
+                            getRestaurantList("", "");
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }else {
 
                     //recyclerView.setVisibility(View.VISIBLE);
@@ -548,6 +562,8 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         }
         if (hitsArray.length() == 0){
             placeHolderNoRestaurant.setVisibility(View.VISIBLE);
+            txtAddRestaurant.setText("You can add '" +inputRestaurantSearch.getText().toString()+ "' to food talk");
+
         }else {
             placeHolderNoRestaurant.setVisibility(View.GONE);
         }
@@ -639,6 +655,8 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     public void location(String gpsStatus, String lat, String lon) {
         if (gpsStatus.equals(ConstantVar.LOCATION_GOT)){
             gpsLocationOn = "on";
+            this.lat = lat;
+            this.lon = lon;
             try {
                 getRestaurantList(lat, lon);
             } catch (JSONException e) {

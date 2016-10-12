@@ -693,18 +693,28 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
        // String fName = f.getClass().getSimpleName();
         backPressed = true;
 
-        if (this.getFragmentManager().findFragmentById(R.id.container1) == newPostShare){
+        Log.d("onBackPress", "clicked");
 
-            Log.d("onBackPressd", "checkView "+ newPostShare.searchView);
-            if (newPostShare.searchView){
-                newPostShare.dishSearch.setVisibility(View.GONE);
-                newPostShare.searchView = false;
-            }else if (newPostShare.restaurantSearchView){
-                newPostShare.restaurantSearch.setVisibility(View.GONE);
-                newPostShare.restaurantSearchView = false;
-            }else {
-                getFragmentManager().popBackStack();
-            }
+        if (this.getFragmentManager().findFragmentById(R.id.container1) != null){
+
+            //Log.d("onBackPressd", "checkView "+ newPostShare.searchView);
+           if (this.getFragmentManager().findFragmentById(R.id.container1) == newPostShare){
+               Log.d("onBackPress", "current == newPOstShare");
+               if (newPostShare.searchView){
+                   newPostShare.dishSearch.setVisibility(View.GONE);
+                   newPostShare.searchView = false;
+                   Log.d("onBackPress", "d search false");
+               }else if (newPostShare.restaurantSearchView){
+                   newPostShare.restaurantSearch.setVisibility(View.GONE);
+                   newPostShare.restaurantSearchView = false;
+                   Log.d("onBackPress", "r search false");
+               }else {
+                   Log.d("onBackPress", "popback");
+                   getFragmentManager().popBackStack();
+               }
+           }else {
+               getFragmentManager().popBackStack();
+           }
         }else {
             if (getFragmentManager().getBackStackEntryCount() > 0) {
                 //getFragmentManager().getBackStackEntryAt(getFragmentManager().getBackStackEntryCount()).getName();
@@ -724,7 +734,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     }
     @Override
     public void onBackStackChanged() {
-
        // String fName = f.getClass().getSimpleName();
 
              //Log.i("onBackStackChanged", f.getClass().getSimpleName());
@@ -1845,7 +1854,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     public void openWebPage(String url, String title){
         webViewFragment = new WebViewFragment();
         webViewFragment.webViewFragment1(url);
-        setFragmentView (webViewFragment, R.id.container, 0, true);
+        setFragmentView (webViewFragment, R.id.container, -1, true);
         //titleHome.setText("Legal");
         if (title != null){
             titleHome.setText(title);
