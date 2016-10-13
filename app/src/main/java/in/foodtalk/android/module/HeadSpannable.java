@@ -64,7 +64,7 @@ public class HeadSpannable {
 
         txt.setText(uName);
         //Log.d("HeadSpannable", uName);
-        if (userName.equals("foodtalk")){
+        if (userName.equals("foodtalk") || userName.equals("grubguide")){
             txt.append(" recommends ");
         }else {
             txt.append(" is having ");

@@ -82,7 +82,7 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return 1;
     }
     class  ProfileHolder extends RecyclerView.ViewHolder implements View.OnTouchListener {
-        LinearLayout btnProfile, btnFav, btnLoc, btnOpt, btnReport, btnLegal, btnCurated, btnStore;
+        LinearLayout btnProfile, btnFav, btnLoc, btnOpt, btnReport, btnLegal, btnCurated, btnStore, btnGrubguid;
         TextView txtUserName, txtUserNameFull, cityName;
         ImageView userThumb;
 
@@ -97,6 +97,7 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             btnLegal = (LinearLayout) itemView.findViewById(R.id.btn_legal_more);
             btnCurated = (LinearLayout) itemView.findViewById(R.id.btn_fav_curated);
             btnStore = (LinearLayout) itemView.findViewById(R.id.btn_store_more);
+            btnGrubguid = (LinearLayout) itemView.findViewById(R.id.btn_grub_guide_more);
 
             userThumb = (ImageView) itemView.findViewById(R.id.userThumb_more);
 
@@ -113,6 +114,7 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             btnLegal.setOnTouchListener(this);
             btnCurated.setOnTouchListener(this);
             btnStore.setOnTouchListener(this);
+            btnGrubguid.setOnTouchListener(this);
         }
 
         @Override
@@ -169,6 +171,13 @@ public class MoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             moreBtnCallback.btnClick("store", getPosition());
+                            break;
+                    }
+                    break;
+                case R.id.btn_grub_guide_more:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            moreBtnCallback.btnClick("grubguide", getPosition());
                             break;
                     }
                     break;

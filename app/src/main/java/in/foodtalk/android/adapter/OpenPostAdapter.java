@@ -90,12 +90,14 @@ public class OpenPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             PostHolder postHolder = (PostHolder) holder;
             //postHolder.txtHeadLine.setText(current.userName+" is having "+current.dishName+" at "+current.restaurantName);
            // String htmlHeadline = "<font color='#0369db'>"+current.userName+"</font> <font color='#1a1a1a'>is having </font><font color='#0369db'> "+current.dishName+"</font><font color='#1a1a1a'> at </font><font color='#369db'>"+current.restaurantName+"</font><font color='#1a1a1a'>.</font>";
-            if (current.restaurantIsActive.equals("1")) {
-                headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, true, "UserProfile");
-            }else {
-                headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, false, "UserProfile");
+            Log.d("OpenPostAdapter", current.restaurantIsActive+"");
+            if (current.restaurantIsActive != null){
+                if (current.restaurantIsActive.equals("1")) {
+                    headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, true, "UserProfile");
+                }else {
+                    headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, false, "UserProfile");
+                }
             }
-
             //postHolder.txtHeadLine.setText(Html.fromHtml(htmlHeadline));
             //postHolder.txtTime.setText("4d");
             postHolder.txtCountLike.setText(current.likeCount);

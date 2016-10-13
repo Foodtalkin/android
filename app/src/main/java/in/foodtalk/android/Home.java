@@ -382,7 +382,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 }else {
                     openNotificationFragment(extras.getString("FRAGMENT_NAME"), "");
                 }
-
             }
         } else {
             //Log.e("SavedInstance", "is not Null");
@@ -1148,6 +1147,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
            case "store":
                setFragmentView(storeFragment, R.id.container, -1, true);
                break;
+           case "grubguide":
+               userProfileOpen("3165");
+               break;
        }
     }
     @Override
@@ -1862,6 +1864,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     }
     @Override
     public void storeHistory(String type, String value) {
+        //db.getUserDetails().get("facebooId");
+        //Log.d("home callback store", db.getUserDetails().get("facebooId")+" : "+ value);
         openWebPage(value, null);
         titleHome.setText("");
     }
