@@ -191,10 +191,12 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="8dp">
-            <ImageView
+
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/more_opt"/>
+                android:src="@drawable/more_opt"
+                />
 
             <TextView
                 android:layout_width="wrap_content"

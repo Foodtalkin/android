@@ -1872,7 +1872,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     private void getUserInfo(){
         Log.d("home GetUserInfo",""+db.getUserDetails().get("cityId").equals("blank")+" : "+ db.getUserDetails());
         if (db.getUserDetails().get("cityId").equals("blank")){
-
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put("sessionId", sessionId);

@@ -30,7 +30,7 @@ public class OptionsFragment extends Fragment implements View.OnTouchListener {
 
     DatabaseHandler db;
 
-    String[] email = {"info@foodtalkindia.com"};
+    String[] email = {"contact@foodtalkindia.com"};
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.options_fragment, container, false);
@@ -70,7 +70,7 @@ public class OptionsFragment extends Fragment implements View.OnTouchListener {
 
         Intent sendIntent = new Intent(Intent.ACTION_SEND);
         sendIntent.setType("text/plain");
-        sendIntent.putExtra(Intent.EXTRA_EMAIL, "info@foodtalkindia.com");
+        sendIntent.putExtra(Intent.EXTRA_EMAIL, "contact@foodtalkindia.com");
         sendIntent.putExtra(Intent.EXTRA_SUBJECT,"Email subject");
         sendIntent.putExtra(Intent.EXTRA_TEXT, "Body of Email");
         startActivity(Intent.createChooser(sendIntent, "Email:"));

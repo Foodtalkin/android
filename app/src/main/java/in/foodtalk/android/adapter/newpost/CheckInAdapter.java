@@ -34,6 +34,8 @@ public class CheckInAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     CheckInCallback checkInCallback;
 
+    private final int VIEW_ADD_BUTTON = 1;
+
 
     public CheckInAdapter(Context context, List<RestaurantListObj> restaurantListObjs, CheckInCallback checkInCallback){
         layoutInflater = LayoutInflater.from(context);
@@ -49,32 +51,87 @@ public class CheckInAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = layoutInflater.inflate(R.layout.card_checkin_restaurant, parent, false);
-        RestaurantHolder restaurantHolder = new RestaurantHolder(view);
-        return restaurantHolder;
+        Log.d("CheckInAdapter", "viewType: "+viewType);
+        if (viewType == VIEW_ADD_BUTTON){
+            View view = layoutInflater.inflate(R.layout.card_checkin_add_btn, parent, false);
+            AddRestaurantBtn addRestaurantBtn = new AddRestaurantBtn(view);
+            return addRestaurantBtn;
+        }else {
+            View view = layoutInflater.inflate(R.layout.card_checkin_restaurant, parent, false);
+            RestaurantHolder restaurantHolder = new RestaurantHolder(view);
+            return restaurantHolder;
+        }
+
+
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        RestaurantListObj current = rList.get(position);
-        RestaurantHolder restaurantHolder = (RestaurantHolder) holder;
-        restaurantHolder.txtRName.setText(stringCase.caseSensitive(current.restaurantName));
-        //Log.d("restaurantIsActive", current.restaurantIsActive+"");
-        if (current.restaurantIsActive != null){
-            if (current.restaurantIsActive.equals("true")){
-                restaurantHolder.txtAria.setText(current.area);
-                restaurantHolder.txtAria.setTextColor(context.getResources().getColor(R.color.blackText1));
-            }else {
-                restaurantHolder.txtAria.setText("Unverified");
-                restaurantHolder.txtAria.setTextColor(Color.RED);
+        if (holder instanceof RestaurantHolder){
+            RestaurantListObj current = rList.get(position);
+            RestaurantHolder restaurantHolder = (RestaurantHolder) holder;
+            restaurantHolder.txtRName.setText(stringCase.caseSensitive(current.restaurantName));
+            //Log.d("restaurantIsActive", current.restaurantIsActive+"");
+            if (current.restaurantIsActive != null){
+                if (current.restaurantIsActive.equals("true")){
+                    restaurantHolder.txtAria.setText(current.area);
+                    restaurantHolder.txtAria.setTextColor(context.getResources().getColor(R.color.blackText1));
+                }else {
+                    restaurantHolder.txtAria.setText("Unverified");
+                    restaurantHolder.txtAria.setTextColor(Color.RED);
+                }
             }
+            restaurantHolder.id = current.id;
+        }else if (holder instanceof AddRestaurantBtn){
+
         }
-        restaurantHolder.id = current.id;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+
+        Log.d("checkinAdapter", "position: "+position+" rList size: "+rList.size());
+
+
+        if (position > rList.size()-1){
+            return VIEW_ADD_BUTTON;
+        }else {
+            return 0;
+        }
+
     }
 
     @Override
     public int getItemCount() {
-        return rList.size();
+        if (rList.size()> 0){
+            return rList.size()+1;
+        }else {
+            return rList.size();
+        }
+    }
+    class AddRestaurantBtn extends RecyclerView.ViewHolder implements View.OnTouchListener {
+
+        LinearLayout btnAddNewRestaurant;
+        public AddRestaurantBtn(View itemView) {
+            super(itemView);
+            btnAddNewRestaurant = (LinearLayout) itemView.findViewById(R.id.btn_restaurant_add);
+            btnAddNewRestaurant.setOnTouchListener(this);
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch (event.getAction()){
+                case MotionEvent.ACTION_UP:
+                    switch (v.getId()){
+                        case R.id.btn_restaurant_add:
+                            Log.d("CheckInAdapter","call add restaurant screen");
+                            checkInCallback.checkInRestaurant(null, null);
+                            break;
+                    }
+                    break;
+            }
+            return true;
+        }
     }
 
     class RestaurantHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{

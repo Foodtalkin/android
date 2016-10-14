@@ -677,8 +677,14 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
 
     @Override
     public void checkInRestaurant(String restaurantId, String restaurantName) {
-        this.restaurantId = restaurantId;
-        rName.setText(StringCase.caseSensitive(restaurantName));
+        if (restaurantId == null){
+            addRestaurantCallback.addNewRestaurant();
+            restaurantSearchView = false;
+            searchView = false;
+        }else {
+            this.restaurantId = restaurantId;
+            rName.setText(StringCase.caseSensitive(restaurantName));
+        }
         restaurantSearch.setVisibility(View.GONE);
         restaurantSearchView = false;
         hideSoftKeyboard();
