@@ -1147,9 +1147,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
            case "store":
                setFragmentView(storeFragment, R.id.container, -1, true);
                break;
-           case "grubguide":
-               userProfileOpen("3165");
-               break;
        }
     }
     @Override
