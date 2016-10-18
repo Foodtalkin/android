@@ -3,7 +3,6 @@ package in.foodtalk.android.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.CountDownTimer;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
@@ -159,10 +158,9 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             if(current.iLikedIt != null){
                 if (current.iLikedIt.equals("1")){
-                    //postHolder.likeIconImg.setImageResource(R.drawable.heart_active);
-                    postHolder.likeIconImg.setColorFilter(ContextCompat.getColor(context,R.color.com_facebook_blue));
+                    postHolder.likeIconImg.setImageResource(R.drawable.heart_active);
                 }else {
-                    postHolder.likeIconImg.setImageResource(R.drawable.ic_like_card_24);
+                    postHolder.likeIconImg.setImageResource(R.drawable.heart);
                 }
             }else{
                 Log.e("HomeFeedAdapter","null iLikeIt position: "+ position);
@@ -370,6 +368,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             Log.d("timer","finish");
                             likeHeart.setVisibility(itemView.GONE);
                         }
+
                         public void onTick(long millisUntilFinished) {
                             // millisUntilFinished    The amount of time until finished.
                             Log.d("timer","onTicker");
@@ -446,7 +445,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                     Log.e("HomeFeedAdapter","null likeCallback");
                                 }
                             }else {
-                                likeIconImg.setImageResource(R.drawable.ic_like_card_24);
+                                likeIconImg.setImageResource(R.drawable.heart);
                                 String likeCount = String.valueOf(Integer.parseInt(txtCountLike.getText().toString())-1);
                                 txtCountLike.setText(likeCount);
 

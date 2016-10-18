@@ -264,7 +264,10 @@ public class UserProfile extends Fragment implements LatLonCallback, UserProfile
         JSONArray postArray = response.getJSONArray("imagePosts");
         //Log.d("Image post", postArray.getJSONObject(0).getString("postImage")+"");
 
-        showUserImage(userProfile.image);
+        if (userProfile.image != null){
+            showUserImage(userProfile.image);
+        }
+
 
         //----if array length 0 or less then 15 then ignore loadmore next time------------
         if (postArray.length() == 0){
@@ -406,6 +409,9 @@ public class UserProfile extends Fragment implements LatLonCallback, UserProfile
 
     @Override
     public void showUImage() {
-        dialog.show();
+        if (dialog != null){
+            dialog.show();
+        }
+
     }
 }
