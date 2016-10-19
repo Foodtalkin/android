@@ -1,0 +1,13 @@
+package in.foodtalk.android.object;
+
+/**
+ * Created by RetailAdmin on 19-10-2016.
+ */
+
+public class LikeListObj {
+    public String id;
+    public String userName;
+    public String email;
+    public String fullName;
+    public String iFollowIt;
+}

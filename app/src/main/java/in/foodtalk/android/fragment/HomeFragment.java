@@ -2,7 +2,7 @@ package in.foodtalk.android.fragment;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.Fragment;
+import android.app.Fragment ;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -333,6 +333,7 @@ public class HomeFragment extends Fragment {
             current.rating = postArray.getJSONObject(i).getString("rating");
             current.restaurantIsActive = postArray.getJSONObject(i).getString("restaurantIsActive");
             current.region = postArray.getJSONObject(i).getString("region");
+            current.tip = postArray.getJSONObject(i).getString("tip");
            // postData.clear();
             postData.add(current);
             Log.d("dish name", postData.get(i).userId);

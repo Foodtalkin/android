@@ -34,6 +34,7 @@ import java.util.concurrent.TimeUnit;
 import in.foodtalk.android.R;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.communicator.CommentCallback;
+import in.foodtalk.android.communicator.OpenFragmentCallback;
 import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.communicator.PostOptionCallback;
@@ -69,6 +70,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     DateTimeDifference dateTimeDifference;
 
+    OpenFragmentCallback openFragmentCallback;
+
     public HomeFeedAdapter(Context context, List<PostObj> postObj, PostLikeCallback postLikeCallback){
         layoutInflater = LayoutInflater.from(context);
         this.postObj = postObj;
@@ -79,6 +82,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         likeCallback = (PostLikeCallback) context;
         bookmarkCallback = (PostBookmarkCallback) context;
         optionCallback = (PostOptionCallback) context;
+
+        openFragmentCallback = (OpenFragmentCallback) context;
 
         headSpannable = new HeadSpannable(context);
         userThumbCallback = (UserThumbCallback) context;
@@ -135,7 +140,11 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             postHolder.txtCountLike.setText(current.likeCount);
             postHolder.txtCountBookmark.setText(current.bookmarkCount);
             postHolder.txtCountComment.setText(current.commentCount);
-
+            if(current.tip.equals("")){
+                //postHolder.txtTip.setVisibility(View.GONE);
+            }else {
+                postHolder.txtTip.setText(current.tip);
+            }
             postHolder.userId = current.userId;
 
             if (current.restaurantIsActive.equals("1")) {
@@ -159,8 +168,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             if(current.iLikedIt != null){
                 if (current.iLikedIt.equals("1")){
-                    //postHolder.likeIconImg.setImageResource(R.drawable.heart_active);
-                    postHolder.likeIconImg.setColorFilter(ContextCompat.getColor(context,R.color.com_facebook_blue));
+                    postHolder.likeIconImg.setImageResource(R.drawable.ic_heart_filled);
+                    //postHolder.likeIconImg.setColorFilter(ContextCompat.getColor(context,R.color.com_facebook_blue));
                 }else {
                     postHolder.likeIconImg.setImageResource(R.drawable.ic_like_card_24);
                 }
@@ -169,9 +178,9 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
             if(current.iBookark != null){
                 if(current.iBookark.equals("1")){
-                    postHolder.bookmarImg.setImageResource(R.drawable.bookmark_active);
+                    postHolder.bookmarImg.setImageResource(R.drawable.ic_bookmark_filled);
                 }else {
-                    postHolder.bookmarImg.setImageResource(R.drawable.bookmark);
+                    postHolder.bookmarImg.setImageResource(R.drawable.ic_bookmark_card_24);
                 }
             }else {
                 Log.e("HomeFeedAdapter","null iBookark position: "+position);
@@ -294,6 +303,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView txtCountBookmark;
         TextView txtCountComment;
 
+        TextView txtTip;
+
         ImageView likeHeart;
         ImageView likeIconImg;
         ImageView bookmarImg;
@@ -312,7 +323,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         //String postId;
         PostObj postObj1;
 
-        LinearLayout iconLike, iconBookmark, iconComment, iconOption;
+        LinearLayout iconLike, iconBookmark, iconComment, iconOption, btnLike, btnBookmark, btnComment;
 
         public PostHolder(final View itemView) {
             super(itemView);
@@ -320,11 +331,16 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             txtHeadLine = (TextView) itemView.findViewById(R.id.txt_post_headline);
             txtTime = (TextView) itemView.findViewById(R.id.txt_time);
             dishImage = (ImageView) itemView.findViewById(R.id.dish_img);
-            txtCountLike = (TextView) itemView.findViewById(R.id.txt_count_like);
-            txtCountBookmark = (TextView) itemView.findViewById(R.id.txt_count_bookmark);
-            txtCountComment = (TextView) itemView.findViewById(R.id.txt_count_comment);
+            txtCountLike = (TextView) itemView.findViewById(R.id.txt_like_count);
+            txtCountBookmark = (TextView) itemView.findViewById(R.id.txt_bookmark_count);
+            txtCountComment = (TextView) itemView.findViewById(R.id.txt_comment_count);
             likeIconImg = (ImageView) itemView.findViewById(R.id.icon_heart_img);
+            txtTip = (TextView) itemView.findViewById(R.id.txt_tip);
             bookmarImg = (ImageView) itemView.findViewById(R.id.img_icon_bookmark);
+
+            btnLike = (LinearLayout) itemView.findViewById(R.id.btn_like);
+            btnBookmark = (LinearLayout) itemView.findViewById(R.id.btn_bookmark);
+            btnComment = (LinearLayout) itemView.findViewById(R.id.btn_comment);
 
             likeHeart = (ImageView) itemView.findViewById(R.id.like_heart);
 
@@ -348,6 +364,10 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             iconComment.setOnTouchListener(this);
             iconOption.setOnTouchListener(this);
             userThumbnail.setOnTouchListener(this);
+
+            btnLike.setOnTouchListener(this);
+            btnBookmark.setOnTouchListener(this);
+            btnComment.setOnTouchListener(this);
 
 
 
@@ -397,7 +417,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 likeHeart.startAnimation(mAnimation);
                                 if (postObj1.iLikedIt.equals("0")){
                                     //-----update image when click on like icon--
-                                    likeIconImg.setImageResource(R.drawable.heart_active);
+                                    likeIconImg.setImageResource(R.drawable.ic_heart_filled);
                                     String likeCount = String.valueOf(Integer.parseInt(txtCountLike.getText().toString())+1);
                                     txtCountLike.setText(likeCount);
 
@@ -431,7 +451,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         case MotionEvent.ACTION_UP:
                             Log.d("clicked", "icon like");
                             if (postObj1.iLikedIt.equals("0")){
-                                likeIconImg.setImageResource(R.drawable.heart_active);
+                                likeIconImg.setImageResource(R.drawable.ic_heart_filled);
                                 String likeCount = String.valueOf(Integer.parseInt(txtCountLike.getText().toString())+1);
                                 txtCountLike.setText(likeCount);
 
@@ -473,7 +493,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 String bookmarkCount = String.valueOf(Integer.parseInt(txtCountBookmark.getText().toString())+1);
                                 txtCountBookmark.setText(bookmarkCount);
 
-                                bookmarImg.setImageResource(R.drawable.bookmark_active);
+                                bookmarImg.setImageResource(R.drawable.ic_bookmark_filled);
 
                                 //----update postObj for runtime-----------
                                 postObj1.iBookark = "1";
@@ -485,7 +505,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 String bookmarkCount = String.valueOf(Integer.parseInt(txtCountBookmark.getText().toString())-1);
                                 txtCountBookmark.setText(bookmarkCount);
 
-                                bookmarImg.setImageResource(R.drawable.bookmark);
+                                bookmarImg.setImageResource(R.drawable.ic_bookmark_card_24);
 
                                 //----update postObj for runtime-----------
                                 postObj1.iBookark = "0";
@@ -522,6 +542,28 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         case MotionEvent.ACTION_UP:
                             Log.d("clicked", "user thumnails");
                             userThumbCallback.thumbClick(userId);
+                            break;
+                    }
+                    break;
+                case R.id.btn_like:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("HomeFeedAdapter", "btn like clicked");
+                            openFragmentCallback.openFragment("likeListFragment", postObj1.id);
+                            break;
+                    }
+                    break;
+                case R.id.btn_bookmark:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("HomeFeedAdapter", "btn bookmark clicked");
+                            break;
+                    }
+                    break;
+                case R.id.btn_comment:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("HomeFeedAdapter", "btn comment clicked");
                             break;
                     }
                     break;

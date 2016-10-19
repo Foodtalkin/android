@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/tools">
+
     <android.support.v7.widget.CardView
         android:id="@+id/post_card_view"
         android:layout_width="match_parent"
@@ -12,7 +13,9 @@
         app:cardCornerRadius="0dp"
         card_view:cardElevation="0dp"
         card_view:cardPreventCornerOverlap="false"
-        >
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -238,7 +241,99 @@
                 android:layout_height="0.33dp"
                 android:layout_above="@+id/comment_send_holder"
                 android:alpha=".4"
-                android:background="#000"/>
+                android:background="#000"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="6dp">
+                <LinearLayout
+                    android:id="@+id/btn_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/txt_like_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="20"
+                        android:textColor="@color/silver"
+                        android:clickable="false"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:text="Likes"
+                        android:textColor="@color/silver"
+                        android:clickable="false"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/btn_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="10dp">
+                    <TextView
+                            android:id="@+id/txt_comment_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="6"
+                        android:textColor="@color/silver"
+                        android:clickable="false"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:text="Comments"
+                        android:clickable="false"
+                        android:textColor="@color/silver"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/btn_bookmark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="10dp">
+                    <TextView
+                        android:id="@+id/txt_bookmark_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="11"
+                        android:clickable="false"
+                        android:textColor="@color/silver"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:text="Bookmarks"
+                        android:clickable="false"
+                        android:textColor="@color/silver"/>
+                </LinearLayout>
+
+            </LinearLayout>
+            <TextView
+                android:id="@+id/txt_tip"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:textColor="@color/slate"
+                android:text=""/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.33dp"
+                android:layout_above="@+id/comment_send_holder"
+                android:background="@color/silver"
+                android:layout_marginTop="5dp"
+                />
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </RelativeLayout>

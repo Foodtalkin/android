@@ -58,6 +58,7 @@ import in.foodtalk.android.communicator.DishTaggingCallback;
 import in.foodtalk.android.communicator.HeadSpannableCallback;
 import in.foodtalk.android.communicator.MoreBtnCallback;
 import in.foodtalk.android.communicator.NotificationCallback;
+import in.foodtalk.android.communicator.OpenFragmentCallback;
 import in.foodtalk.android.communicator.OpenRestaurantCallback;
 import in.foodtalk.android.communicator.PhoneCallback;
 import in.foodtalk.android.communicator.PostBookmarkCallback;
@@ -78,6 +79,7 @@ import in.foodtalk.android.fragment.CuratedFragment;
 import in.foodtalk.android.fragment.DiscoverFragment;
 import in.foodtalk.android.fragment.FavouritesFragment;
 import in.foodtalk.android.fragment.HomeFragment;
+import in.foodtalk.android.fragment.LikeListFragment;
 import in.foodtalk.android.fragment.MoreFragment;
 import in.foodtalk.android.fragment.SearchFragment;
 import in.foodtalk.android.fragment.StoreHistoryFragment;
@@ -111,7 +113,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         HeadSpannableCallback, UserThumbCallback, ProfileRPostOpenCallback, PhoneCallback,
         CheckInCallback, CamBitmapCallback, DishTaggingCallback , RatingCallback , ReviewCallback, AddRestaurantCallback,
         AddedRestaurantCallback, SearchResultCallback, CommentCallback, NotificationCallback, OpenRestaurantCallback,
-        ApiCallback, StoreCallback, ShareNewPostCallback {
+        ApiCallback, StoreCallback, ShareNewPostCallback, OpenFragmentCallback {
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
     ImageView homeIcon, discoverIcon, newpostIcon, notiIcon, moreIcon;
@@ -147,6 +149,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     StoreFragment storeFragment;
     StoreHistoryFragment storeHistoryFragment;
     NewPostShare newPostShare;
+    LikeListFragment likeListFragment;
 
     //-------dummy fragment created for temporary use to set Legal screen title----
     Fragment legalFragment = new Fragment();
@@ -1918,5 +1921,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             txtUploadingDish.setText("Posting "+dishName+" at "+restaurantNameNewPost);
         }
         clearBackStack();
+    }
+
+    @Override
+    public void openFragment(String fragmentName, String value) {
+        if (fragmentName.equals("likeListFragment")){
+            likeListFragment = new LikeListFragment();
+            likeListFragment.postId = value;
+            setFragmentView(likeListFragment, R.id.container1, 0, true);
+        }
     }
 }
