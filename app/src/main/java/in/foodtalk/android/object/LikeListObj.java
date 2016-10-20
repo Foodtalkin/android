@@ -10,4 +10,5 @@ public class LikeListObj {
     public String email;
     public String fullName;
     public String iFollowIt;
+    public String image;
 }

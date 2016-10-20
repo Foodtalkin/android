@@ -79,7 +79,7 @@ import in.foodtalk.android.fragment.CuratedFragment;
 import in.foodtalk.android.fragment.DiscoverFragment;
 import in.foodtalk.android.fragment.FavouritesFragment;
 import in.foodtalk.android.fragment.HomeFragment;
-import in.foodtalk.android.fragment.LikeListFragment;
+import in.foodtalk.android.fragment.postdetails.LikeListFragment;
 import in.foodtalk.android.fragment.MoreFragment;
 import in.foodtalk.android.fragment.SearchFragment;
 import in.foodtalk.android.fragment.StoreHistoryFragment;
