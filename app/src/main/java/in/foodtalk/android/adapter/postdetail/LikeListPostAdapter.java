@@ -13,9 +13,12 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+
 import java.util.List;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.apicall.UserFollow;
 import in.foodtalk.android.fragment.postdetails.LikeListFragment;
 import in.foodtalk.android.object.LikeListObj;
 
@@ -28,12 +31,14 @@ public class LikeListPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     LayoutInflater layoutInflater;
     List<LikeListObj> likeList;
     Context context;
+    UserFollow userFollow;
 
     public LikeListPostAdapter (Context context, List<LikeListObj> likeList){
         this.context = context;
         this.likeList = likeList;
         layoutInflater = layoutInflater.from(context);
-        Log.d("likelistpost adapter","size "+likeList.size());
+        userFollow = new UserFollow(context);
+        //Log.d ("likelistpost adapter","size "+likeList.size());
     }
 
     @Override
@@ -50,25 +55,32 @@ public class LikeListPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         likeHolder.txtUsername.setText(current.userName);
         likeHolder.txtFullname.setText(current.fullName);
         likeHolder.iFollowIt = current.iFollowIt;
-        if (current.iFollowIt.equals("0")){
-            likeHolder.txtFollow.setText("Follow");
-            likeHolder.txtFollow.setTextColor(ContextCompat.getColor(context, R.color.active));
+        likeHolder.userId = current.id;
+        if (current.iFollowIt != null){
+            if (current.iFollowIt.equals("0")){
+                likeHolder.txtFollow.setText("Follow");
+                likeHolder.txtFollow.setTextColor(ContextCompat.getColor(context, R.color.active));
+            }else {
+                likeHolder.txtFollow.setText("Following");
+                likeHolder.txtFollow.setTextColor(ContextCompat.getColor(context, R.color.positive));
+            }
         }else {
-            likeHolder.txtFollow.setText("Following");
-            likeHolder.txtFollow.setTextColor(ContextCompat.getColor(context, R.color.positive));
+            likeHolder.txtFollow.setVisibility(View.GONE);
         }
+
+
         Picasso.with(context)
                 .load(current.image)
                 .fit()
                 .placeholder(R.drawable.user_placeholder)
                 .into(likeHolder.userThumb);
-        Log.d("likelist post adapter","position: "+position+" userName: "+current.userName);
+        //Log.d("likelist post adapter","position: "+position+" userName: "+current.userName);
 
     }
 
     @Override
     public int getItemCount() {
-        Log.d("likelistpost adapter1","size "+likeList.size());
+        //Log.d("likelistpost adapter1","size "+likeList.size());
 
         return likeList.size();
     }
@@ -77,6 +89,7 @@ public class LikeListPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         TextView txtUsername, txtFullname, txtFollow;
         ImageView userThumb;
         String iFollowIt;
+        String userId;
         public LikeHolder(View itemView) {
             super(itemView);
             txtUsername = (TextView) itemView.findViewById(R.id.txt_username);
@@ -95,8 +108,30 @@ public class LikeListPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         case MotionEvent.ACTION_UP:
                             if (iFollowIt.equals("0")){
                                 Log.d("Likelist adapter", "follow");
+                                LikeListObj likeListObj = likeList.get(getPosition());
+                                likeListObj.iFollowIt = "1";
+                                iFollowIt = "1";
+                                likeList.set(getPosition(),likeListObj);
+                                txtFollow.setText("Following");
+                                txtFollow.setTextColor(ContextCompat.getColor(context, R.color.positive));
+                                try {
+                                    userFollow.follow(true, userId);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }else if (iFollowIt.equals("1")){
+                                LikeListObj likeListObj = likeList.get(getPosition());
+                                likeListObj.iFollowIt = "0";
+                                iFollowIt = "0";
+                                likeList.set(getPosition(),likeListObj);
+                                txtFollow.setText("Follow");
                                 Log.d("Likelist adapter", "unfollow");
+                                txtFollow.setTextColor(ContextCompat.getColor(context, R.color.active));
+                                try {
+                                    userFollow.follow(false, userId);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
                             break;
                     }

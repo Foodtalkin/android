@@ -149,6 +149,8 @@
                     android:maxLines="1"
                     android:maxLength="140"
                     android:textSize="16sp"
+                    android:ellipsize="end"
+                    android:inputType="textUri"
                     android:textColorHint="@color/silver"/>
                 <View
                     android:layout_width="match_parent"

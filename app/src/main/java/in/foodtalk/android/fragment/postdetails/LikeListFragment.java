@@ -84,7 +84,9 @@ public class LikeListFragment extends Fragment implements ApiCallback {
             current.id = likeListArray.getJSONObject(i).getString("id");
             current.userName = likeListArray.getJSONObject(i).getString("userName");
             current.fullName = likeListArray.getJSONObject(i).getString("fullName");
-            current.iFollowIt = likeListArray.getJSONObject(i).getString("iFollowIt");
+            if (!current.id.equals(db.getUserDetails().get("userId"))){
+                current.iFollowIt = likeListArray.getJSONObject(i).getString("iFollowIt");
+            }
             current.image = likeListArray.getJSONObject(i).getString("image");
             likeList.add(current);
         }

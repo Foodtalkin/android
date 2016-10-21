@@ -514,7 +514,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 //------------------------------------------
                                 bookmarkCallback.bookmark(getPosition(),postObj1.id, false);
                             }
-
                             break;
                     }
                 }
