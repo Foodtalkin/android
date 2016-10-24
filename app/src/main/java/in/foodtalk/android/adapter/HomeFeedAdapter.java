@@ -323,7 +323,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         //String postId;
         PostObj postObj1;
 
-        LinearLayout iconLike, iconBookmark, iconComment, iconOption, btnLike, btnBookmark, btnComment;
+        LinearLayout iconLike, iconBookmark, iconComment, iconOption, btnLike, btnBookmark, btnComment, btnDetails;
 
         public PostHolder(final View itemView) {
             super(itemView);
@@ -350,6 +350,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             imgRating4 = (ImageView) itemView.findViewById(R.id.img_rating4);
             imgRating5 = (ImageView) itemView.findViewById(R.id.img_rating5);
 
+            btnDetails = (LinearLayout) itemView.findViewById(R.id.btn_details);
+
             starHolder = (LinearLayout) itemView.findViewById(R.id.star_rating_holder);
 
 
@@ -365,9 +367,14 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             iconOption.setOnTouchListener(this);
             userThumbnail.setOnTouchListener(this);
 
-            btnLike.setOnTouchListener(this);
-            btnBookmark.setOnTouchListener(this);
-            btnComment.setOnTouchListener(this);
+            //btnLike.setOnTouchListener(this);
+           // btnBookmark.setOnTouchListener(this);
+           // btnComment.setOnTouchListener(this);
+
+            btnDetails.setOnTouchListener(this);
+
+
+
 
 
 
@@ -548,7 +555,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("HomeFeedAdapter", "btn like clicked");
-                            openFragmentCallback.openFragment("likeListFragment", postObj1.id);
+
                             break;
                     }
                     break;
@@ -563,6 +570,13 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("HomeFeedAdapter", "btn comment clicked");
+                            break;
+                    }
+                    break;
+                case R.id.btn_details:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            openFragmentCallback.openFragment("likeListFragment", postObj1.id);
                             break;
                     }
                     break;

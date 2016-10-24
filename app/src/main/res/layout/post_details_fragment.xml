@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@color/snow"
     android:clickable="true">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -93,16 +92,11 @@
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
-    <LinearLayout
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_below="@+id/headerroot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/headerroot">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            />
-    </LinearLayout>
-
+        android:overScrollMode="never"
+        />
 </RelativeLayout>

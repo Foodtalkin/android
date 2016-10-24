@@ -5,7 +5,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
+//import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -31,11 +32,22 @@ public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSele
 
     PagerAdapterPd adapter;
 
+    ViewPager viewPager;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+        layout = inflater.inflate(R.layout.post_details_fragment, container, false);
+        viewPager = (ViewPager) layout.findViewById(R.id.viewpager);
+
+        return layout;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initialisePaging();
     }
 
     @Override
@@ -59,12 +71,14 @@ public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSele
     public void onTabReselected(TabLayout.Tab tab) {
 
     }
-
+    List<android.support.v4.app.Fragment> fragments;
     private void initialisePaging(){
-        final List<Fragment> fragments = new Vector<Fragment>();
-        fragments.add(Fragment.instantiate(getActivity(), LikeListFragment.class.getName()));
-        fragments.add(Fragment.instantiate(getActivity(), CommentsPostFragment.class.getName()));
-        fragments.add(Fragment.instantiate(getActivity(), BookmarkListFragment.class.getName()));
+       //final List<Fragment> fragments = new Vector<Fragment>();
+        fragments = new Vector<android.support.v4.app.Fragment>();
+        fragments.add(android.support.v4.app.Fragment.instantiate(getActivity(),LikeListFragment.class.getName()));
+        fragments.add(android.support.v4.app.Fragment.instantiate(getActivity(),CommentsPostFragment.class.getName()));
+        fragments.add(android.support.v4.app.Fragment.instantiate(getActivity(),BookmarkListFragment.class.getName()));
+        //fragments.add(Fragment.instantiate())
 
 
         adapter = new PagerAdapterPd(fm, fragments);
@@ -79,7 +93,6 @@ public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSele
 
             @Override
             public void onPageSelected(int position) {
-
                 Log.d("onPageSelected",position+"");
             }
 

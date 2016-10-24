@@ -12,6 +12,8 @@ import java.util.List;
 
 public class PagerAdapterPd extends FragmentPagerAdapter {
     private List<Fragment> fragments;
+
+
     public PagerAdapterPd(FragmentManager fm, List<Fragment>fragments) {
         super(fm);
         this.fragments = fragments;

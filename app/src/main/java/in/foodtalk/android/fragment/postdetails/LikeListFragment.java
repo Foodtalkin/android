@@ -1,6 +1,7 @@
 package in.foodtalk.android.fragment.postdetails;
 
-import android.app.Fragment;
+//import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,7 +44,7 @@ public class LikeListFragment extends Fragment implements ApiCallback {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        layout = inflater.inflate(R.layout.like_list_fragment, container, false);
+        layout = inflater.inflate(R.layout.post_likes_fragment, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view);
         linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);

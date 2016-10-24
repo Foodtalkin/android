@@ -98,6 +98,7 @@ import in.foodtalk.android.fragment.newpost.NewPostShare;
 import in.foodtalk.android.fragment.newpost.RatingFragment;
 import in.foodtalk.android.fragment.newpost.ReviewFragment;
 import in.foodtalk.android.fragment.StoreFragment;
+import in.foodtalk.android.fragment.postdetails.PostDetailsFragment;
 import in.foodtalk.android.module.CloudinaryUpload;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.NewPostUpload;
@@ -150,6 +151,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     StoreHistoryFragment storeHistoryFragment;
     NewPostShare newPostShare;
     LikeListFragment likeListFragment;
+    PostDetailsFragment postDetailsFragment;
 
     //-------dummy fragment created for temporary use to set Legal screen title----
     Fragment legalFragment = new Fragment();
@@ -1926,9 +1928,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     @Override
     public void openFragment(String fragmentName, String value) {
         if (fragmentName.equals("likeListFragment")){
-            likeListFragment = new LikeListFragment();
+            /*likeListFragment = new LikeListFragment();
             likeListFragment.postId = value;
-            setFragmentView(likeListFragment, R.id.container1, 0, true);
+            setFragmentView(likeListFragment, R.id.container1, 0, true);*/
+            postDetailsFragment = new PostDetailsFragment();
+            setFragmentView(postDetailsFragment, R.id.container1, 0, true);
+
         }
     }
 }
