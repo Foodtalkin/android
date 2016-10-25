@@ -12,20 +12,25 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.module.DatabaseHandler;
 
 
 /**
  * Created by RetailAdmin on 21-10-2016.
  */
 
-public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSelectedListener {
+public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSelectedListener, View.OnTouchListener {
     View layout;
     FragmentManager fm;
     private FragmentActivity myContext;
@@ -34,6 +39,15 @@ public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSele
 
     ViewPager viewPager;
 
+    ImageView iconHeart, iconComment, iconBookmark;
+
+    LinearLayout tabLike, tabComment, tabBookmark;
+
+    ViewPager pager;
+    public String postId;
+
+    DatabaseHandler db;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,6 +55,21 @@ public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSele
         layout = inflater.inflate(R.layout.post_details_fragment, container, false);
         viewPager = (ViewPager) layout.findViewById(R.id.viewpager);
 
+        iconHeart = (ImageView) layout.findViewById(R.id.icon_heart_img);
+        iconComment = (ImageView) layout.findViewById(R.id.icon_comment);
+        iconBookmark = (ImageView) layout.findViewById(R.id.img_icon_bookmark);
+        pager = (ViewPager) layout.findViewById(R.id.viewpager);
+        pager.setOffscreenPageLimit(2);
+
+        tabLike = (LinearLayout) layout.findViewById(R.id.icon_like_holder);
+        tabComment = (LinearLayout) layout.findViewById(R.id.icon_comment_holder);
+        tabBookmark = (LinearLayout) layout.findViewById(R.id.icon_bookmark_holder);
+
+        tabLike.setOnTouchListener(this);
+        tabComment.setOnTouchListener(this);
+        tabBookmark.setOnTouchListener(this);
+
+        db = new DatabaseHandler(getActivity());
         return layout;
     }
 
@@ -73,6 +102,8 @@ public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSele
     }
     List<android.support.v4.app.Fragment> fragments;
     private void initialisePaging(){
+
+        Log.d("PostDetailsFragment","initialisePagin");
        //final List<Fragment> fragments = new Vector<Fragment>();
         fragments = new Vector<android.support.v4.app.Fragment>();
         fragments.add(android.support.v4.app.Fragment.instantiate(getActivity(),LikeListFragment.class.getName()));
@@ -81,19 +112,39 @@ public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSele
         //fragments.add(Fragment.instantiate())
 
 
-        adapter = new PagerAdapterPd(fm, fragments);
-        ViewPager pager = (ViewPager) layout.findViewById(R.id.viewpager);
+        HashMap<String, String> hashMap = new HashMap<String, String>();
+        hashMap.put("postId", postId);
+        hashMap.put("sessionId", db.getUserDetails().get("sessionId"));
+
+        adapter = new PagerAdapterPd(fm, fragments, hashMap);
+
         pager.setAdapter(adapter);
 
-        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
             }
-
             @Override
             public void onPageSelected(int position) {
                 Log.d("onPageSelected",position+"");
+                switch (position){
+                    case 0:
+                        iconHeart.setImageResource(R.drawable.ic_heart_filled);
+                        iconComment.setImageResource(R.drawable.ic_comment_card_24);
+                        iconBookmark.setImageResource(R.drawable.ic_bookmark_card_24);
+                        break;
+                    case 1:
+                        iconHeart.setImageResource(R.drawable.ic_like_card_24);
+                        iconComment.setImageResource(R.drawable.ic_comment_filled);
+                        iconBookmark.setImageResource(R.drawable.ic_bookmark_card_24);
+                        break;
+                    case 2:
+                        iconHeart.setImageResource(R.drawable.ic_like_card_24);
+                        iconComment.setImageResource(R.drawable.ic_comment_card_24);
+                        iconBookmark.setImageResource(R.drawable.ic_bookmark_filled);
+                        break;
+                }
             }
 
             @Override
@@ -101,5 +152,33 @@ public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSele
 
             }
         });
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (v.getId()){
+            case R.id.icon_like_holder:
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_UP:
+                        pager.setCurrentItem(0);
+                        break;
+                }
+                break;
+            case R.id.icon_comment_holder:
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_UP:
+                        pager.setCurrentItem(1);
+                        break;
+                }
+                break;
+            case R.id.icon_bookmark_holder:
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_UP:
+                        pager.setCurrentItem(2);
+                        break;
+                }
+                break;
+        }
+        return true;
     }
 }

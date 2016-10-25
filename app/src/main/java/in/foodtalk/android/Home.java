@@ -1932,6 +1932,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             likeListFragment.postId = value;
             setFragmentView(likeListFragment, R.id.container1, 0, true);*/
             postDetailsFragment = new PostDetailsFragment();
+            postDetailsFragment.postId = value;
             setFragmentView(postDetailsFragment, R.id.container1, 0, true);
 
         }

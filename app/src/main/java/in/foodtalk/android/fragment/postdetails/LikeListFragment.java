@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,11 +36,15 @@ public class LikeListFragment extends Fragment implements ApiCallback {
     ApiCall apiCall;
     ApiCallback apiCallback;
     DatabaseHandler db;
-    public String postId;
     List<LikeListObj> likeList = new ArrayList<>();
     LikeListPostAdapter likeListPostAdapter;
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
+
+    String sessionId;
+    String postId;
+    TextView txtPlaceholder;
+
 
     @Nullable
     @Override
@@ -51,6 +56,15 @@ public class LikeListFragment extends Fragment implements ApiCallback {
         apiCallback = this;
         apiCall = new ApiCall();
         db = new DatabaseHandler(getActivity());
+        txtPlaceholder = (TextView) layout.findViewById(R.id.txt_placeholder);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Log.d("LikeListFragment","sIS "+ bundle.getString("postId")+" : "+bundle.getString("sessionId"));
+            postId = bundle.getString("postId");
+            sessionId = bundle.getString("sessionId");
+        }
+
         try {
             getLikeList();
         } catch (JSONException e) {
@@ -61,7 +75,7 @@ public class LikeListFragment extends Fragment implements ApiCallback {
 
     private void getLikeList() throws JSONException {
         JSONObject obj = new JSONObject();
-        obj.put("sessionId", db.getUserDetails().get("sessionId"));
+        obj.put("sessionId", sessionId);
         obj.put("postId", postId);
         //Log.d("LikeListFragment","obj: "+ obj);
         apiCall.apiRequestPost(getActivity(), obj, Config.URL_LIKE_LIST_POST,"likeListByPost", apiCallback);
@@ -80,6 +94,12 @@ public class LikeListFragment extends Fragment implements ApiCallback {
     }
     private void loadDataIntoView(JSONObject response) throws JSONException {
         JSONArray likeListArray = response.getJSONArray("likes");
+        if (likeListArray.length() == 0){
+            txtPlaceholder.setVisibility(View.VISIBLE);
+            txtPlaceholder.setText("No Likes");
+        }else {
+            txtPlaceholder.setVisibility(View.GONE);
+        }
         for (int i=0; i<likeListArray.length(); i++){
             LikeListObj current = new LikeListObj();
             current.id = likeListArray.getJSONObject(i).getString("id");

@@ -61,4 +61,5 @@ public class Config {
     public static String URL_ADWORD_BOOKSLOT = "http://"+IP+"/index.php/service/adwords/bookslot";
     public static String URL_ADWORD_REDEEMED = "http://"+IP+"/index.php/service/adwords/redeedmed";
     public static String URL_LIKE_LIST_POST = "http://"+IP+"/index.php/service/like/listByPost";
+    public static String URL_BOOKMARK_LIST_POST = "http://"+IP+"/index.php/service/bookmark/listByPost";
 }
