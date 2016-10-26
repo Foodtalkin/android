@@ -146,7 +146,6 @@ public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSele
                         break;
                 }
             }
-
             @Override
             public void onPageScrollStateChanged(int state) {
 

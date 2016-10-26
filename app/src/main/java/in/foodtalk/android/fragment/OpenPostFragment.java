@@ -107,7 +107,6 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_open_post);
         progressBar = (LinearLayout) layout.findViewById(R.id.progress_bar);
 
-
         recyclerView.setOnTouchListener(this);
 
         //--swipeRefreshHome = (SwipeRefreshLayout) layout.findViewById(R.id.swipeRefreshHome);
@@ -121,7 +120,6 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
         }else {
             Log.d("postData","null");
         }
-
 
         /*--swipeRefreshHome.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -148,11 +146,6 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         callScrollClass();
-
-
-
-
-
 
         config = new Config();
         db = new DatabaseHandler(getActivity().getApplicationContext());
