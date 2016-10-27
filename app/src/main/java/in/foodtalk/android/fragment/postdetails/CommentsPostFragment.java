@@ -26,6 +26,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -110,6 +112,8 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
 
     String sessionId;
 
+    RelativeLayout header;
+
 
     /*public CommentFragment (String postId){
         this.postId = postId;
@@ -133,6 +137,9 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
         txtUserName = (TextView) layout.findViewById(R.id.txt_name_comment);
         edit_comment = (EditText) layout.findViewById(R.id.edit_comment);
         linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        header = (RelativeLayout) layout.findViewById(R.id.header_root);
+
+        header.setVisibility(View.GONE);
 
         recyclerViewMention.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -143,13 +150,11 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
             context = getActivity();
         }
 
-
         btnCommentSend = (TextView) layout.findViewById(R.id.txt_send_comment);
 
         btnCommentSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
 
                 if (!edit_comment.getText().toString().equals("")){
                     try {

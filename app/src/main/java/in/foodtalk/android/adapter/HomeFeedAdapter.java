@@ -1,6 +1,7 @@
 package in.foodtalk.android.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.CountDownTimer;
 import android.support.v4.content.ContextCompat;
@@ -140,10 +141,12 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             postHolder.txtCountLike.setText(current.likeCount);
             postHolder.txtCountBookmark.setText(current.bookmarkCount);
             postHolder.txtCountComment.setText(current.commentCount);
-            if(current.tip.equals("")){
-                //postHolder.txtTip.setVisibility(View.GONE);
+            String reviewTip = current.tip.trim();
+            if(reviewTip.equals("")){
+                postHolder.txtTip.setVisibility(View.GONE);
             }else {
-                postHolder.txtTip.setText(current.tip);
+                postHolder.txtTip.setVisibility(View.VISIBLE);
+                postHolder.txtTip.setText(reviewTip);
             }
             postHolder.userId = current.userId;
 
@@ -159,7 +162,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }else {
                     headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName+", "+current.region, current.userId, current.checkedInRestaurantId, false, "HomeFeed");
                 }
-
             }
 
             setStarRating(current.rating, postHolder);
@@ -265,7 +267,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             holder.imgRating4.setImageResource(R.drawable.star_active);
             holder.imgRating5.setImageResource(R.drawable.star_active);
         }
-
     }
 
     // Add a list of items
@@ -323,7 +324,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         //String postId;
         PostObj postObj1;
 
-        LinearLayout iconLike, iconBookmark, iconComment, iconOption, btnLike, btnBookmark, btnComment, btnDetails;
+        LinearLayout iconLike, iconBookmark, iconComment, iconShare, iconOption, btnLike, btnBookmark, btnComment, btnDetails;
 
         public PostHolder(final View itemView) {
             super(itemView);
@@ -342,6 +343,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             btnBookmark = (LinearLayout) itemView.findViewById(R.id.btn_bookmark);
             btnComment = (LinearLayout) itemView.findViewById(R.id.btn_comment);
 
+
             likeHeart = (ImageView) itemView.findViewById(R.id.like_heart);
 
             imgRating1 = (ImageView) itemView.findViewById(R.id.img_rating1);
@@ -359,6 +361,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             iconBookmark = (LinearLayout) itemView.findViewById(R.id.icon_bookmark_holder);
             iconComment = (LinearLayout) itemView.findViewById(R.id.icon_comment_holder);
             iconOption = (LinearLayout) itemView.findViewById(R.id.icon_option_holder);
+            iconShare = (LinearLayout) itemView.findViewById(R.id.icon_share_holder);
+
 
             dishImage.setOnTouchListener(this);
             iconLike.setOnTouchListener(this);
@@ -366,6 +370,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             iconComment.setOnTouchListener(this);
             iconOption.setOnTouchListener(this);
             userThumbnail.setOnTouchListener(this);
+            iconShare.setOnTouchListener(this);
 
             //btnLike.setOnTouchListener(this);
            // btnBookmark.setOnTouchListener(this);
@@ -543,6 +548,14 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
                 }
                 break;
+                case R.id.icon_share_holder:{
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            share(postObj1.id);
+                            break;
+                    }
+                }
+                break;
                 case R.id.userThumb:
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
@@ -583,5 +596,12 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
             return true;
         }
+    }
+
+    private void share(String postId){
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "http://foodtalk.in/post/"+postId);
+        context.startActivity(Intent.createChooser(shareIntent, "Share link using"));
     }
 }
