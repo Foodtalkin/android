@@ -336,6 +336,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
                         hideSoftKeyboard();
                         txtAddDish.setText(StringCase.caseSensitive(newDishName));
                         Log.d("NewPostShare",newDishName);
+                        this.dishName = newDishName;
                         dishSearch.setVisibility(View.GONE);
                         searchView = false;
                         break;
@@ -584,6 +585,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     }
     @Override
     public void dishNameSelected(String dishName) {
+        Log.d("NewPostShare","dishNameSelected: "+dishName);
         this.dishName = dishName;
         Log.d("NewPostShare","dishNameS: "+dishName);
         hideSoftKeyboard();

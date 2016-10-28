@@ -114,6 +114,8 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
 
     RelativeLayout header;
 
+    TextView placeHolder;
+
 
     /*public CommentFragment (String postId){
         this.postId = postId;
@@ -139,6 +141,8 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
         linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         header = (RelativeLayout) layout.findViewById(R.id.header_root);
 
+        placeHolder = (TextView) layout.findViewById(R.id.txt_placeholder);
+
         header.setVisibility(View.GONE);
 
         recyclerViewMention.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
@@ -161,7 +165,6 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
                         sendComment("postComment", edit_comment.getText().toString());
                         edit_comment.setText("");
                         hideSoftKeyboard();
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -294,6 +297,13 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
        // postDataList.add(commentObj);
 
         JSONArray comment = response.getJSONArray("comments");
+
+        if (comment.length()>0){
+            placeHolder.setVisibility(View.GONE);
+        }else {
+            placeHolder.setVisibility(View.VISIBLE);
+            placeHolder.setText("No comments");
+        }
 
         for (int i = 0; comment.length() > i; i++){
             CommentObj current = new CommentObj();
