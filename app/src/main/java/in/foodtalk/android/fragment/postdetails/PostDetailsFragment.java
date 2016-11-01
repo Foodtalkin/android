@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -45,6 +46,7 @@ public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSele
 
     ViewPager pager;
     public String postId;
+    public int setCurrentPage = -1;
 
     DatabaseHandler db;
 
@@ -61,6 +63,8 @@ public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSele
         pager = (ViewPager) layout.findViewById(R.id.viewpager);
         pager.setOffscreenPageLimit(2);
 
+
+
         tabLike = (LinearLayout) layout.findViewById(R.id.icon_like_holder);
         tabComment = (LinearLayout) layout.findViewById(R.id.icon_comment_holder);
         tabBookmark = (LinearLayout) layout.findViewById(R.id.icon_bookmark_holder);
@@ -70,13 +74,14 @@ public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSele
         tabBookmark.setOnTouchListener(this);
 
         db = new DatabaseHandler(getActivity());
+        initialisePaging();
         return layout;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        initialisePaging();
+
     }
 
     @Override
@@ -128,6 +133,7 @@ public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSele
             @Override
             public void onPageSelected(int position) {
                 Log.d("onPageSelected",position+"");
+                hideSoftKeyboard();
                 switch (position){
                     case 0:
                         iconHeart.setImageResource(R.drawable.ic_heart_filled);
@@ -151,6 +157,16 @@ public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSele
 
             }
         });
+        if (setCurrentPage != -1){
+            pager.setCurrentItem(setCurrentPage);
+        }
+
+    }
+    public void hideSoftKeyboard() {
+        if(getActivity().getCurrentFocus()!=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
     @Override

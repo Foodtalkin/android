@@ -265,7 +265,8 @@ public class HomeFragment extends Fragment {
                 }
                 if(tag.equals("loadMore")){
                     remove(null);
-                    //callScrollClass();
+                    callScrollClass();
+                    loading = false;
                     pageNo--;
                 }
                 // hideProgressDialog();

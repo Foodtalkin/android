@@ -75,7 +75,7 @@
                     android:layout_height="34dp"
                     android:background="@drawable/round_bg_white"
                     android:textSize="16sp"
-                    android:text="Search dishes, users and restaurant"
+                    android:text="Search dishes, users and places"
                     android:paddingLeft="5dp"
                     android:padding="5dp"
                     android:drawablePadding="5dp"
@@ -279,9 +279,13 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/container1">
+        android:id="@+id/container1"
+        android:layout_below="@+id/btn_logout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
     </FrameLayout>
 </RelativeLayout>

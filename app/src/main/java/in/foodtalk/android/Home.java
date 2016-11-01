@@ -1927,14 +1927,18 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
     @Override
     public void openFragment(String fragmentName, String value) {
-        if (fragmentName.equals("likeListFragment")){
+        if (fragmentName.equals("postDetails")){
             /*likeListFragment = new LikeListFragment();
             likeListFragment.postId = value;
             setFragmentView(likeListFragment, R.id.container1, 0, true);*/
             postDetailsFragment = new PostDetailsFragment();
             postDetailsFragment.postId = value;
             setFragmentView(postDetailsFragment, R.id.container1, 0, true);
-
+        }else if (fragmentName.equals("commentListPost")){
+            postDetailsFragment = new PostDetailsFragment();
+            postDetailsFragment.postId = value;
+            postDetailsFragment.setCurrentPage = 1;
+            setFragmentView(postDetailsFragment, R.id.container1, 0, true);
         }
     }
 }

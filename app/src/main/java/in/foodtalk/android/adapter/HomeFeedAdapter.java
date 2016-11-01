@@ -141,6 +141,23 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             postHolder.txtCountLike.setText(current.likeCount);
             postHolder.txtCountBookmark.setText(current.bookmarkCount);
             postHolder.txtCountComment.setText(current.commentCount);
+
+            if (current.likeCount.equals("1")){
+                postHolder.txtLikeCopy.setText("Like");
+            }else {
+                postHolder.txtLikeCopy.setText("Likes");
+            }
+            if (current.bookmarkCount.equals("1")){
+                postHolder.txtBookmarkCopy.setText("Bookmark");
+            }else {
+                postHolder.txtBookmarkCopy.setText("Bookmarks");
+            }
+            if (current.commentCount.equals("1")){
+                postHolder.txtCommentCopy.setText("Comment");
+            }else {
+                postHolder.txtCommentCopy.setText("Comments");
+            }
+
             String reviewTip = current.tip.trim();
             if(reviewTip.equals("")){
                 postHolder.txtTip.setVisibility(View.GONE);
@@ -326,8 +343,13 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         LinearLayout iconLike, iconBookmark, iconComment, iconShare, iconOption, btnLike, btnBookmark, btnComment, btnDetails;
 
+        TextView txtLikeCopy, txtCommentCopy, txtBookmarkCopy;
+
         public PostHolder(final View itemView) {
             super(itemView);
+            txtLikeCopy = (TextView) itemView.findViewById(R.id.txt_like_copy);
+            txtCommentCopy = (TextView) itemView.findViewById(R.id.txt_comment_copy);
+            txtBookmarkCopy = (TextView) itemView.findViewById(R.id.txt_bookmark_copy);
             userThumbnail = (ImageView) itemView.findViewById(R.id.userThumb);
             txtHeadLine = (TextView) itemView.findViewById(R.id.txt_post_headline);
             txtTime = (TextView) itemView.findViewById(R.id.txt_time);
@@ -534,7 +556,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("clicked", "icon comment");
-                            commentCallback.openComment(postObj1.id);
+                           //commentCallback.openComment(postObj1.id);
+                            openFragmentCallback.openFragment("commentListPost", postObj1.id);
                             break;
                     }
                 }
@@ -589,7 +612,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 case R.id.btn_details:
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
-                            openFragmentCallback.openFragment("likeListFragment", postObj1.id);
+                            openFragmentCallback.openFragment("postDetails", postObj1.id);
                             break;
                     }
                     break;
@@ -597,7 +620,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return true;
         }
     }
-
     private void share(String postId){
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");

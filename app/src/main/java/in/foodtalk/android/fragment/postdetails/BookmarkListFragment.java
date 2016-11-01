@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -47,6 +48,8 @@ public class BookmarkListFragment extends Fragment implements ApiCallback {
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
 
+    LinearLayout tapToRetry;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,6 +60,19 @@ public class BookmarkListFragment extends Fragment implements ApiCallback {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         txtPlaceholder = (TextView) layout.findViewById(R.id.txt_placeholder);
+        tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
+
+        tapToRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tapToRetry.setVisibility(View.GONE);
+                try {
+                    getBookmarkList();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         apiCallback = this;
         apiCall = new ApiCall();
@@ -93,6 +109,8 @@ public class BookmarkListFragment extends Fragment implements ApiCallback {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }else if (response == null){
+            tapToRetry.setVisibility(View.VISIBLE);
         }
     }
     private void loadDataIntoView(JSONObject response) throws JSONException {

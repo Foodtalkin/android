@@ -62,7 +62,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
         searchTabLayout.addTab(searchTabLayout.newTab().setText("Dishes"));
         searchTabLayout.addTab(searchTabLayout.newTab().setText("Users"));
-        searchTabLayout.addTab(searchTabLayout.newTab().setText("Restaurant"));
+        searchTabLayout.addTab(searchTabLayout.newTab().setText("Places"));
         searchTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         searchViewPager = (ViewPager) layout.findViewById(R.id.search_pager);

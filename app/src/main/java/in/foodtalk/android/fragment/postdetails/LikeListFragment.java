@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -45,6 +46,8 @@ public class LikeListFragment extends Fragment implements ApiCallback {
     String postId;
     TextView txtPlaceholder;
 
+    LinearLayout tapToRetry;
+
 
     @Nullable
     @Override
@@ -57,6 +60,7 @@ public class LikeListFragment extends Fragment implements ApiCallback {
         apiCall = new ApiCall();
         db = new DatabaseHandler(getActivity());
         txtPlaceholder = (TextView) layout.findViewById(R.id.txt_placeholder);
+        tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -70,6 +74,17 @@ public class LikeListFragment extends Fragment implements ApiCallback {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        tapToRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tapToRetry.setVisibility(View.GONE);
+                try {
+                    getLikeList();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         return layout;
     }
 
@@ -85,11 +100,14 @@ public class LikeListFragment extends Fragment implements ApiCallback {
     public void apiResponse(JSONObject response, String tag) {
         Log.d("LikeListFragment","tag: "+ tag+" respose: "+ response);
         if (tag.equals("likeListByPost") && response != null){
+            tapToRetry.setVisibility(View.GONE);
             try {
                 loadDataIntoView(response);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }else if (response == null){
+            tapToRetry.setVisibility(View.VISIBLE);
         }
     }
     private void loadDataIntoView(JSONObject response) throws JSONException {
