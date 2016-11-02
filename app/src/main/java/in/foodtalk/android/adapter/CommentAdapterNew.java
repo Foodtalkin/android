@@ -186,6 +186,10 @@ public class CommentAdapterNew extends RecyclerView.Adapter<RecyclerView.ViewHol
             //commentHolder.txtComment.setText(current.comment);
             commentHolder.txtComment.setMovementMethod(LinkMovementMethod.getInstance());
 
+            commentHolder.commentId = current.id;
+            commentHolder.commentUserId = current.userId;
+
+
             commentHolder.userName.measure(0, 0);
             int textWidth = commentHolder.userName.getMeasuredWidth();
             commentHolder.txtComment.setText(spannable.commentSpannable(current.userName, current.userId, current.comment, current.userMentionsList, textWidth), TextView.BufferType.SPANNABLE);
@@ -516,6 +520,9 @@ public class CommentAdapterNew extends RecyclerView.Adapter<RecyclerView.ViewHol
         TextView txtComment;
         private final int USER_PROFILE = 1;
 
+        String commentId;
+        String commentUserId;
+
         ImageView btnFlag;
 
         public CommentHolder(View itemView) {
@@ -544,6 +551,7 @@ public class CommentAdapterNew extends RecyclerView.Adapter<RecyclerView.ViewHol
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("CommentAdapterNew","btn flag clicked");
+                            commentNewCallback.commentAdapter(commentUserId, commentId, getAdapterPosition());
                             break;
                     }
                     break;

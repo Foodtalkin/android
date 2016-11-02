@@ -5,5 +5,5 @@ package in.foodtalk.android.communicator;
  */
 
 public interface CommentNewCallback {
-    public void commentAdapter(String commentUserId);
+    public void commentAdapter(String commentUserId, String commentId, int position);
 }

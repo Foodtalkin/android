@@ -942,7 +942,15 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
     }
 
     @Override
-    public void commentAdapter(String commentUserId) {
+    public void commentAdapter(String commentUserId, String commentId, int position) {
+        Log.d("commentpostFragment", commentUserId + " : " + commentId + " : " + position);
+        if (commentUserId.equals(userId)) {
+            // Log.d("show popup","delete comment");
+            dialogCommentAlert("delete", commentId, position);
+            //adapter.removeItem(position);
+        } else {
+            dialogCommentAlert("report", commentId, position);
 
+        }
     }
 }
