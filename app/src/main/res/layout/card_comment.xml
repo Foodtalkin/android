@@ -4,7 +4,7 @@
     android:background="#fff">
     <LinearLayout
         android:id="@+id/btn_profile_more"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="8dp"
@@ -18,17 +18,19 @@
             android:visibility="gone"
             />
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             >
             <TextView
                 android:id="@+id/txt_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="  "
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:layout_marginRight="10dp"/>
             <TextView
                 android:id="@+id/txt_username"
                 android:layout_width="wrap_content"
@@ -40,7 +42,6 @@
                 android:visibility="gone"
                 android:layout_marginRight="5dp"
                 />
-
             <TextView
                 android:id="@+id/txt_username_full"
                 android:layout_width="wrap_content"
@@ -52,8 +53,15 @@
                 android:textColor="@color/blackText1"
                 android:visibility="gone"
                 />
-
         </RelativeLayout>
+        <ImageView
+            android:id="@+id/btn_flag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_more_card_24"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            />
     </LinearLayout>
 
 </RelativeLayout>

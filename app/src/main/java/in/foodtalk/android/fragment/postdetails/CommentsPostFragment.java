@@ -51,11 +51,13 @@ import java.util.Map;
 
 import in.foodtalk.android.R;
 import in.foodtalk.android.adapter.CommentAdapter;
+import in.foodtalk.android.adapter.CommentAdapterNew;
 import in.foodtalk.android.adapter.FollowedListAdapter;
 import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;
+import in.foodtalk.android.communicator.CommentNewCallback;
 import in.foodtalk.android.communicator.MentionCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.UserAgent;
@@ -68,7 +70,7 @@ import in.foodtalk.android.object.UserMention;
  * Created by RetailAdmin on 21-10-2016.
  */
 
-public class CommentsPostFragment extends Fragment implements ApiCallback, MentionCallback{
+public class CommentsPostFragment extends Fragment implements ApiCallback, MentionCallback, CommentNewCallback{
     View layout;
     Config config;
     DatabaseHandler db;
@@ -83,6 +85,7 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
     List<FollowedUsersObj> mentionUser = new ArrayList<>();
 
     JSONArray mentionUArray = new JSONArray();
+    CommentNewCallback commentNewCallback;
 
 
 
@@ -90,7 +93,7 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
 
 
 
-    CommentAdapter commentAdapter;
+    CommentAdapterNew commentAdapterNew;
     FollowedListAdapter followedListAdapter;
 
     RecyclerView recyclerView , recyclerViewMention;
@@ -132,6 +135,8 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
             postId = bundle.getString("postId");
             sessionId = bundle.getString("sessionId");
         }
+
+        commentNewCallback = this;
 
         recyclerViewMention = (RecyclerView) layout.findViewById(R.id.recycler_view_mention);
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_comment);
@@ -337,9 +342,9 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
             //Log.d("comment", comment.getJSONObject(i).getString("id"));
         }
         if (getActivity() != null ){
-            commentAdapter = new CommentAdapter(getActivity(), postDataList, postObj);
-            recyclerView.setAdapter(commentAdapter);
-            initSwipe();
+            commentAdapterNew = new CommentAdapterNew(getActivity(), postDataList, postObj, commentNewCallback);
+            recyclerView.setAdapter(commentAdapterNew);
+            //initSwipe();
         }
         Log.d("post", post+"");
     }
@@ -543,7 +548,7 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
         postDataList.add(commentObj);
 
         linearLayoutManager.scrollToPosition(postDataList.size());
-        commentAdapter.notifyDataSetChanged();
+        commentAdapterNew.notifyDataSetChanged();
 
         Log.d("addnew comment response", comment.getString("comment")+"");
     }
@@ -556,7 +561,7 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
 
             @Override
             public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                if (viewHolder instanceof CommentAdapter.PostHolder) return 0;
+                if (viewHolder instanceof CommentAdapterNew.PostHolder) return 0;
                 return super.getSwipeDirs(recyclerView, viewHolder);
             }
 
@@ -576,7 +581,6 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
                         // Log.d("show popup","delete comment");
                         dialogCommentAlert("delete", postDataList.get(viewHolder.getAdapterPosition()).id,viewHolder.getAdapterPosition());
                         //adapter.removeItem(position);
-
                     }else {
                         dialogCommentAlert("report", postDataList.get(viewHolder.getAdapterPosition()).id,viewHolder.getAdapterPosition());
                         // Log.d("show popup","report comment");
@@ -645,13 +649,13 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
 
     public void removeItem(int position) {
         postDataList.remove(position);
-        commentAdapter.notifyItemRemoved(position);
-        commentAdapter.notifyItemRangeChanged(position, postDataList.size());
+        commentAdapterNew.notifyItemRemoved(position);
+        commentAdapterNew.notifyItemRangeChanged(position, postDataList.size());
     }
     public void notifiy(int position) {
         //postDataList.remove(position);
-        commentAdapter.notifyDataSetChanged();
-        commentAdapter.notifyItemRangeChanged(position, postDataList.size());
+        commentAdapterNew.notifyDataSetChanged();
+        commentAdapterNew.notifyItemRangeChanged(position, postDataList.size());
     }
 
     private void dialogCommentAlert(final String flagType, final String commentId, final int position){
@@ -934,6 +938,11 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
 
     @Override
     public void apiResponse(JSONObject response, String tag) {
+
+    }
+
+    @Override
+    public void commentAdapter(String commentUserId) {
 
     }
 }

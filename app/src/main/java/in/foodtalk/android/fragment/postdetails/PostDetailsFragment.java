@@ -64,7 +64,6 @@ public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSele
         pager.setOffscreenPageLimit(2);
 
 
-
         tabLike = (LinearLayout) layout.findViewById(R.id.icon_like_holder);
         tabComment = (LinearLayout) layout.findViewById(R.id.icon_comment_holder);
         tabBookmark = (LinearLayout) layout.findViewById(R.id.icon_bookmark_holder);
