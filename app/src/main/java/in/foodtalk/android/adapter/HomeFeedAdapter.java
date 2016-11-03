@@ -142,6 +142,27 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             postHolder.txtCountBookmark.setText(current.bookmarkCount);
             postHolder.txtCountComment.setText(current.commentCount);
 
+            if (current.likeCount.equals("0") && current.commentCount.equals("0") && current.bookmarkCount.equals("0")){
+                postHolder.countHolder.setVisibility(View.GONE);
+            }else {
+                postHolder.countHolder.setVisibility(View.VISIBLE);
+            }
+
+            if (current.likeCount.equals("0")){
+                postHolder.btnLike.setVisibility(View.GONE);
+            }else {
+                postHolder.btnLike.setVisibility(View.VISIBLE);
+            }
+            if (current.commentCount.equals("0")){
+                postHolder.btnComment.setVisibility(View.GONE);
+            }else {
+                postHolder.btnComment.setVisibility(View.VISIBLE);
+            }
+            if (current.bookmarkCount.equals("0")){
+                postHolder.btnBookmark.setVisibility(View.GONE);
+            }else {
+                postHolder.btnBookmark.setVisibility(View.VISIBLE);
+            }
             if (current.likeCount.equals("1")){
                 postHolder.txtLikeCopy.setText("Like");
             }else {
@@ -345,6 +366,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         TextView txtLikeCopy, txtCommentCopy, txtBookmarkCopy;
 
+        LinearLayout countHolder;
+
         public PostHolder(final View itemView) {
             super(itemView);
             txtLikeCopy = (TextView) itemView.findViewById(R.id.txt_like_copy);
@@ -360,6 +383,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             likeIconImg = (ImageView) itemView.findViewById(R.id.icon_heart_img);
             txtTip = (TextView) itemView.findViewById(R.id.txt_tip);
             bookmarImg = (ImageView) itemView.findViewById(R.id.img_icon_bookmark);
+
+            countHolder = (LinearLayout) itemView.findViewById(R.id.count_holder);
 
             btnLike = (LinearLayout) itemView.findViewById(R.id.btn_like);
             btnBookmark = (LinearLayout) itemView.findViewById(R.id.btn_bookmark);

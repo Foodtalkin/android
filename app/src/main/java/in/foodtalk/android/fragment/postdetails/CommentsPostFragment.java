@@ -947,6 +947,7 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
         if (commentUserId.equals(userId)) {
             // Log.d("show popup","delete comment");
             dialogCommentAlert("delete", commentId, position);
+
             //adapter.removeItem(position);
         } else {
             dialogCommentAlert("report", commentId, position);
