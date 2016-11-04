@@ -3,6 +3,7 @@ package in.foodtalk.android.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +31,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import in.foodtalk.android.R;
@@ -271,39 +274,39 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             starHolder.setVisibility(View.GONE);
         }
         if(rating.equals("1")){
-            holder.imgRating1.setImageResource(R.drawable.star_active);
-            holder.imgRating2.setImageResource(R.drawable.star_passive);
-            holder.imgRating3.setImageResource(R.drawable.star_passive);
-            holder.imgRating4.setImageResource(R.drawable.star_passive);
-            holder.imgRating5.setImageResource(R.drawable.star_passive);
+            holder.imgRating1.setVisibility(View.VISIBLE);
+            holder.imgRating2.setVisibility(View.GONE);
+            holder.imgRating3.setVisibility(View.GONE);
+            holder.imgRating4.setVisibility(View.GONE);
+            holder.imgRating5.setVisibility(View.GONE);
         }
         if(rating.equals("2")){
-            holder.imgRating1.setImageResource(R.drawable.star_active);
-            holder.imgRating2.setImageResource(R.drawable.star_active);
-            holder.imgRating3.setImageResource(R.drawable.star_passive);
-            holder.imgRating4.setImageResource(R.drawable.star_passive);
-            holder.imgRating5.setImageResource(R.drawable.star_passive);
+            holder.imgRating1.setVisibility(View.VISIBLE);
+            holder.imgRating2.setVisibility(View.VISIBLE);
+            holder.imgRating3.setVisibility(View.GONE);
+            holder.imgRating4.setVisibility(View.GONE);
+            holder.imgRating5.setVisibility(View.GONE);
         }
         if(rating.equals("3")){
-            holder.imgRating1.setImageResource(R.drawable.star_active);
-            holder.imgRating2.setImageResource(R.drawable.star_active);
-            holder.imgRating3.setImageResource(R.drawable.star_active);
-            holder.imgRating4.setImageResource(R.drawable.star_passive);
-            holder.imgRating5.setImageResource(R.drawable.star_passive);
+            holder.imgRating1.setVisibility(View.VISIBLE);
+            holder.imgRating2.setVisibility(View.VISIBLE);
+            holder.imgRating3.setVisibility(View.VISIBLE);
+            holder.imgRating4.setVisibility(View.GONE);
+            holder.imgRating5.setVisibility(View.GONE);
         }
         if(rating.equals("4")){
-            holder.imgRating1.setImageResource(R.drawable.star_active);
-            holder.imgRating2.setImageResource(R.drawable.star_active);
-            holder.imgRating3.setImageResource(R.drawable.star_active);
-            holder.imgRating4.setImageResource(R.drawable.star_active);
-            holder.imgRating5.setImageResource(R.drawable.star_passive);
+            holder.imgRating1.setVisibility(View.VISIBLE);
+            holder.imgRating2.setVisibility(View.VISIBLE);
+            holder.imgRating3.setVisibility(View.VISIBLE);
+            holder.imgRating4.setVisibility(View.VISIBLE);
+            holder.imgRating5.setVisibility(View.GONE);
         }
         if(rating.equals("5")){
-            holder.imgRating1.setImageResource(R.drawable.star_active);
-            holder.imgRating2.setImageResource(R.drawable.star_active);
-            holder.imgRating3.setImageResource(R.drawable.star_active);
-            holder.imgRating4.setImageResource(R.drawable.star_active);
-            holder.imgRating5.setImageResource(R.drawable.star_active);
+            holder.imgRating1.setVisibility(View.VISIBLE);
+            holder.imgRating2.setVisibility(View.VISIBLE);
+            holder.imgRating3.setVisibility(View.VISIBLE);
+            holder.imgRating4.setVisibility(View.VISIBLE);
+            holder.imgRating5.setVisibility(View.VISIBLE);
         }
     }
 
@@ -417,7 +420,28 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             iconComment.setOnTouchListener(this);
             iconOption.setOnTouchListener(this);
             userThumbnail.setOnTouchListener(this);
-            iconShare.setOnTouchListener(this);
+            //iconShare.setOnTouchListener(this);
+            iconShare.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    switch (event.getAction()){
+
+                        case MotionEvent.ACTION_UP:
+                           // iconShare.setBackgroundColor(Color.TRANSPARENT);
+                            new Timer().schedule(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    // this code will be executed after 2 seconds
+                                    share(postObj1.id);
+                                }
+                            }, 500);
+
+                            break;
+                    }
+                    return false;
+                }
+            });
 
             //btnLike.setOnTouchListener(this);
            // btnBookmark.setOnTouchListener(this);
