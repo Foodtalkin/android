@@ -21,12 +21,14 @@ import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -78,7 +80,7 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
     String postId;
 
     PostObj postObj;
-
+    ProgressBar progressBar;
     EditText edit_comment;
     List<CommentObj> postDataList  = new ArrayList<>();
     List<FollowedUsersObj> fUserList = new ArrayList<>();
@@ -118,6 +120,7 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
     RelativeLayout header;
 
     TextView placeHolder;
+    LinearLayout tapToRetry;
 
 
     /*public CommentFragment (String postId){
@@ -146,9 +149,34 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
         linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         header = (RelativeLayout) layout.findViewById(R.id.header_root);
 
+        tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
+
+        progressBar = (ProgressBar) layout.findViewById(R.id.progress_bar);
+
         placeHolder = (TextView) layout.findViewById(R.id.txt_placeholder);
 
         header.setVisibility(View.GONE);
+
+        tapToRetry.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (v.getId()){
+                    case R.id.tap_to_retry:
+                        switch (event.getAction()){
+                            case MotionEvent.ACTION_UP:
+                                tapToRetry.setVisibility(View.GONE);
+                                try {
+                                    getPostFeed("load");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                        }
+                        break;
+                }
+                return true;
+            }
+        });
 
         recyclerViewMention.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -200,6 +228,8 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
         }
     }
     public void getPostFeed(final String tag) throws JSONException {
+
+        progressBar.setVisibility(View.VISIBLE);
         Log.d("getPostFeed", "post data");
         JSONObject obj = new JSONObject();
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
@@ -239,6 +269,8 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d("Response", "Error: " + error.getMessage());
+                progressBar.setVisibility(View.GONE);
+                tapToRetry.setVisibility(View.VISIBLE);
                 // showToast("Please check your internet connection");
 
                 if(tag.equals("refresh")){
@@ -273,6 +305,11 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
     }
 
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
+
+        Log.d("commentpostFragment","loadDataIntoView");
+
+        progressBar.setVisibility(View.GONE);
+
         JSONObject post = response.getJSONObject("post");
         postObj.id = post.getString("id");
         postObj.userId = post.getString("userId");

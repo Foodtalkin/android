@@ -193,6 +193,6 @@ public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSele
                 }
                 break;
         }
-        return true;
+        return false;
     }
 }

@@ -61,6 +61,7 @@
             android:src="@drawable/ic_more_card_24"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
+
             />
     </LinearLayout>
 

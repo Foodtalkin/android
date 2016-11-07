@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -344,9 +345,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView txtCountLike;
         TextView txtCountBookmark;
         TextView txtCountComment;
-
         TextView txtTip;
-
         ImageView likeHeart;
         ImageView likeIconImg;
         ImageView bookmarImg;
@@ -420,8 +419,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             iconComment.setOnTouchListener(this);
             iconOption.setOnTouchListener(this);
             userThumbnail.setOnTouchListener(this);
-            //iconShare.setOnTouchListener(this);
-            iconShare.setOnTouchListener(new View.OnTouchListener() {
+            iconShare.setOnTouchListener(this);
+            /*iconShare.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
 
@@ -441,13 +440,25 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
                     return false;
                 }
-            });
+            });*/
 
             //btnLike.setOnTouchListener(this);
            // btnBookmark.setOnTouchListener(this);
            // btnComment.setOnTouchListener(this);
 
             btnDetails.setOnTouchListener(this);
+           /* btnDetails.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+
+                            openFragmentCallback.openFragment("postDetails", postObj1.id);
+                            break;
+                    }
+                    return true;
+                }
+            });*/
 
 
 
@@ -495,7 +506,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             long thisTime = System.currentTimeMillis();
                             if (thisTime - lastTouchTime < 250) {
                                 Log.d("clicked", "img double");
-
                                 likeHeart.setVisibility(View.VISIBLE);
                                 likeHeart.startAnimation(mAnimation);
                                 if (postObj1.iLikedIt.equals("0")){
@@ -503,7 +513,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                     likeIconImg.setImageResource(R.drawable.ic_heart_filled);
                                     String likeCount = String.valueOf(Integer.parseInt(txtCountLike.getText().toString())+1);
                                     txtCountLike.setText(likeCount);
-
                                     //----update postObj for runtime-----------
                                     postObj1.iLikedIt = "1";
                                     postObj1.likeCount = likeCount;
@@ -606,7 +615,22 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         case MotionEvent.ACTION_UP:
                             Log.d("clicked", "icon comment");
                            //commentCallback.openComment(postObj1.id);
-                            openFragmentCallback.openFragment("commentListPost", postObj1.id);
+                           // openFragmentCallback.openFragment("commentListPost", postObj1.id);
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Second fragment after 5 seconds appears
+                                    openFragmentCallback.openFragment("commentListPost", postObj1.id);
+                                }
+                            }, 300);
+                           /* new Timer().schedule(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    // this code will be executed after 2 seconds
+                                    openFragmentCallback.openFragment("commentListPost", postObj1.id);
+                                }
+                            }, 500);*/
                             break;
                     }
                 }
@@ -615,7 +639,15 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("clicked", "post user id"+postObj1.userId +"post id: "+postObj1.id );
-                            optionCallback.option(getPosition(),postObj1.id,postObj1.userId);
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Second fragment after 5 seconds appears
+                                    optionCallback.option(getPosition(),postObj1.id,postObj1.userId);
+                                }
+                            }, 300);
+
                             break;
                     }
                 }
@@ -623,7 +655,15 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 case R.id.icon_share_holder:{
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
-                            share(postObj1.id);
+
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Second fragment after 5 seconds appears
+                                    share(postObj1.id);
+                                }
+                            }, 300);
                             break;
                     }
                 }
@@ -661,12 +701,13 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 case R.id.btn_details:
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
+                            Log.d("HomeFeedAdapter","btn_details clicked");
                             openFragmentCallback.openFragment("postDetails", postObj1.id);
                             break;
                     }
                     break;
             }
-            return true;
+            return false;
         }
     }
     private void share(String postId){

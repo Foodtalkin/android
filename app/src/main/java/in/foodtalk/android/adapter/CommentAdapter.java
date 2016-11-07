@@ -508,6 +508,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         TextView fullUserName;
         TextView txtComment;
         private final int USER_PROFILE = 1;
+        ImageView btnFlag;
 
         public CommentHolder(View itemView) {
             super(itemView);
@@ -515,7 +516,10 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             fullUserName = (TextView) itemView.findViewById(R.id.txt_username_full);
             userName = (TextView) itemView.findViewById(R.id.txt_username);
             txtComment = (TextView) itemView.findViewById(R.id.txt_comment);
+            btnFlag = (ImageView) itemView.findViewById(R.id.btn_flag);
             userName.setOnTouchListener(this);
+
+            btnFlag.setVisibility(View.GONE);
         }
 
         @Override

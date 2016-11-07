@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -48,6 +49,8 @@ public class LikeListFragment extends Fragment implements ApiCallback {
 
     LinearLayout tapToRetry;
 
+    ProgressBar progressBar;
+
 
     @Nullable
     @Override
@@ -61,6 +64,7 @@ public class LikeListFragment extends Fragment implements ApiCallback {
         db = new DatabaseHandler(getActivity());
         txtPlaceholder = (TextView) layout.findViewById(R.id.txt_placeholder);
         tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
+        progressBar = (ProgressBar) layout.findViewById(R.id.progress_bar);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -89,6 +93,8 @@ public class LikeListFragment extends Fragment implements ApiCallback {
     }
 
     private void getLikeList() throws JSONException {
+
+        progressBar.setVisibility(View.VISIBLE);
         JSONObject obj = new JSONObject();
         obj.put("sessionId", sessionId);
         obj.put("postId", postId);
@@ -99,6 +105,7 @@ public class LikeListFragment extends Fragment implements ApiCallback {
     @Override
     public void apiResponse(JSONObject response, String tag) {
         Log.d("LikeListFragment","tag: "+ tag+" respose: "+ response);
+        progressBar.setVisibility(View.GONE);
         if (tag.equals("likeListByPost") && response != null){
             tapToRetry.setVisibility(View.GONE);
             try {

@@ -331,7 +331,7 @@ public class HomeFragment extends Fragment {
             current.iBookark = postArray.getJSONObject(i).getString("iBookark");
             current.rating = postArray.getJSONObject(i).getString("rating");
             current.restaurantIsActive = postArray.getJSONObject(i).getString("restaurantIsActive");
-            current.region = postArray.getJSONObject(i).getString("region");
+            current.region = postArray.getJSONObject(i).getString("cityName");
             current.tip = postArray.getJSONObject(i).getString("tip");
            // postData.clear();
             postData.add(current);

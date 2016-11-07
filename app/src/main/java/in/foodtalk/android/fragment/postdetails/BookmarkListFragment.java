@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -48,6 +49,8 @@ public class BookmarkListFragment extends Fragment implements ApiCallback {
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
 
+    ProgressBar progressBar;
+
     LinearLayout tapToRetry;
 
     @Nullable
@@ -61,6 +64,8 @@ public class BookmarkListFragment extends Fragment implements ApiCallback {
 
         txtPlaceholder = (TextView) layout.findViewById(R.id.txt_placeholder);
         tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
+
+        progressBar = (ProgressBar) layout.findViewById(R.id.progress_bar);
 
         tapToRetry.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +98,8 @@ public class BookmarkListFragment extends Fragment implements ApiCallback {
     }
 
     private void getBookmarkList() throws JSONException {
+
+        progressBar.setVisibility(View.VISIBLE);
         JSONObject obj = new JSONObject();
         obj.put("sessionId", sessionId);
         obj.put("postId", postId);
@@ -102,6 +109,7 @@ public class BookmarkListFragment extends Fragment implements ApiCallback {
 
     @Override
     public void apiResponse(JSONObject response, String tag) {
+        progressBar.setVisibility(View.GONE);
         if (tag.equals("likeBookmarkByPost") && response != null){
             Log.d("BookmarkListFragment", "response: "+ response);
             try {

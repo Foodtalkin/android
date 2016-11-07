@@ -10,6 +10,14 @@
         android:textColor="@color/silver"
         android:layout_centerInParent="true"
         />
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminateTint="#000"
+        android:progressDrawable="@drawable/progress_bar"
+        />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
@@ -115,4 +123,28 @@
                 ></android.support.v7.widget.RecyclerView>
         </LinearLayout>
     </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/tap_to_retry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:padding="20dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_portable_wifi_off_black_48dp"
+            android:layout_gravity="center_horizontal"
+            android:tint="@color/blackText1"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Cannot connect to internet \n tap to retry."
+            android:textAlignment="center"
+            android:textColor="@color/blackText1"
+            android:textSize="16sp"
+            android:clickable="false"/>
+    </LinearLayout>
 </RelativeLayout>

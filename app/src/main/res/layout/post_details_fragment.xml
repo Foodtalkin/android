@@ -23,18 +23,19 @@
         <LinearLayout
             android:id="@+id/post_footer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:paddingTop="@dimen/home_card_padding"
-            android:paddingBottom="@dimen/home_card_padding"
-            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
             >
             <LinearLayout
                 android:id="@+id/icon_like_holder"
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:gravity="center_horizontal"
+                android:padding="15dp"
+                android:background="@drawable/ripple_effect1"
+                android:clickable="true"
                 >
                 <ImageView
                     android:id="@+id/icon_heart_img"
@@ -44,24 +45,17 @@
                     android:clickable="false"
                     android:layout_gravity="center"
                     />
-                <TextView
-                    android:id="@+id/txt_count_like"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="16"
-                    android:textSize="@dimen/txt_size_card_icon"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/margin_txt_icon_card"
-                    android:visibility="gone"
-                    />
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/icon_comment_holder"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
-
                 android:gravity="center_horizontal"
+                android:padding="15dp"
+                android:background="@drawable/ripple_effect1"
+                android:clickable="true"
                 >
                 <ImageView
                     android:id="@+id/icon_comment"
@@ -79,13 +73,16 @@
                     android:layout_marginLeft="@dimen/margin_txt_icon_card"
                     android:visibility="gone"/>
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/icon_bookmark_holder"
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-
-                android:gravity="center_horizontal">
+                android:gravity="center_horizontal"
+                android:padding="15dp"
+                android:background="@drawable/ripple_effect1"
+                android:clickable="true">
                 <ImageView
                     android:id="@+id/img_icon_bookmark"
                     android:layout_width="wrap_content"
@@ -104,5 +101,9 @@
                     android:visibility="gone"/>
             </LinearLayout>
         </LinearLayout>
+
+
     </RelativeLayout>
+
+
 </RelativeLayout>
