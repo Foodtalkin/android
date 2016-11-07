@@ -360,7 +360,6 @@
                             android:textColor="@color/silver"
                             android:textStyle="bold"/>
                     </LinearLayout>
-
                 </LinearLayout>
                 <TextView
                     android:id="@+id/txt_tip"
@@ -370,7 +369,7 @@
                     android:textSize="15sp"
                     android:textColor="@color/slate"
                     android:layout_marginLeft="26dp"
-                    android:layout_marginRight="26dp"
+                    android:layout_marginRight="16dp"
                     android:text=""
                     android:clickable="false"/>
                 <View
