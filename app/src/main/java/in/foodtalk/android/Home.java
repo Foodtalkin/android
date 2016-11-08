@@ -29,6 +29,8 @@ import com.facebook.FacebookSdk;
 import com.facebook.applinks.AppLinkData;
 import com.facebook.login.LoginManager;
 import com.flurry.android.FlurryAgent;
+import com.parse.ParseInstallation;
+import com.parse.ParseUser;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -254,6 +256,16 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
 
 
+
+
+
+
+
+
+
+
+
+
         //getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
 
@@ -349,7 +361,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         storeFragment.title = titleHome;
         storeHistoryFragment = new StoreHistoryFragment();
 
-        openHomeFirst();
+
         //deepLinkfb();
 
         dialogImgFrom = new Dialog(this);
@@ -395,6 +407,24 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }
         //----------------------------
         getUserInfo();
+
+        //---------------------
+        if (ParseInstallation.getCurrentInstallation() != null){
+            Log.e("Home", "ParseIns: "+ ParseInstallation.getCurrentInstallation().getString("userId"));
+           /* if (ParseInstallation.getCurrentInstallation().getString("userId").equals("")){
+                Log.e("Home", "ParseIns: userId is blank");
+            }*/
+            if (ParseInstallation.getCurrentInstallation().getString("userId") == null){
+                Log.e("Home", "ParseIns: userId is null");
+                logOut();
+            }else {
+                openHomeFirst();
+            }
+        }else {
+            Log.e("Home","parseInstallation is null");
+        }
+
+
 
     }
 

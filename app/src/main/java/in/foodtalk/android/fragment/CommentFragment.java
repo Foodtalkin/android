@@ -94,7 +94,6 @@ public class CommentFragment extends Fragment implements MentionCallback  {
     MentionCallback mentionCallback;
 
 
-
     TextView txtUserName;
 
     TextView btnCommentSend;

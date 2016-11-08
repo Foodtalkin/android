@@ -599,6 +599,12 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
 
                             String str = "android,ios,web,desktop";
 
+                            parseInfo(response.getString("userId"),
+                                    jObj.getString("channels"),
+                                    jObj.getString("cityId"),
+                                    jObj.getString("stateId"),
+                                    jObj.getString("countryId"),
+                                    jObj.getString("regionId"));
                            // parseInst(uId);
                             //subscribeWithInfo(String userId,String locationIdentifire, String work, String channels);
                            /*parseUtils.subscribeWithInfo(uId,"en-IN","development", region);
@@ -679,6 +685,16 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         AppController.getInstance().addToRequestQueue(jsonObjReq,tag);
         // Cancelling request
         // ApplicationController.getInstance().getRequestQueue().cancelAll(tag_json_obj);
+    }
+
+    private void parseInfo(String uId, String channels, String cityId, String stateId, String countryId, String regionId){
+        parseUtils.subscribeWithInfo(uId,"en-IN","development", cityId, stateId, countryId, regionId);
+
+        List<String> items = Arrays.asList(channels.split("\\s*,\\s*"));
+        for (int i=0;i<items.size();i++){
+            Log.d("items", items.get(i));
+            parseUtils.subscribeToChannels(items.get(i));
+        }
     }
 
     private void gotoOnboarding(String email){
