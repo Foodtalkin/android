@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -77,6 +78,8 @@ public class CommentFragment extends Fragment implements MentionCallback  {
 
     JSONArray mentionUArray = new JSONArray();
 
+    ProgressBar progressBar;
+
 
 
 
@@ -102,6 +105,8 @@ public class CommentFragment extends Fragment implements MentionCallback  {
 
     Context context;
 
+    TextView txtPlaceHolder;
+
 
     /*public CommentFragment (String postId){
         this.postId = postId;
@@ -120,6 +125,9 @@ public class CommentFragment extends Fragment implements MentionCallback  {
         txtUserName = (TextView) layout.findViewById(R.id.txt_name_comment);
         edit_comment = (EditText) layout.findViewById(R.id.edit_comment);
         linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+
+        progressBar = (ProgressBar) layout.findViewById(R.id.progress_bar);
+        txtPlaceHolder = (TextView) layout.findViewById(R.id.txt_placeholder);
 
         recyclerViewMention.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -199,7 +207,13 @@ public class CommentFragment extends Fragment implements MentionCallback  {
                                     Log.d("Response error", "Session has expired");
                                    // logOut();
                                 }else {
-                                    Log.e("Response status", "some error");
+                                    if (errorCode.equals("3")){
+                                        Log.e("Response status", "error no post avilable");
+                                        txtPlaceHolder.setText("This post is not available");
+                                        progressBar.setVisibility(View.GONE);
+                                    }else {
+                                        Log.e("Response status", "some error");
+                                    }
                                 }
                             }
                         } catch (JSONException e) {
@@ -273,11 +287,14 @@ public class CommentFragment extends Fragment implements MentionCallback  {
         txtUserName.setText(postObj.dishName);
         CommentObj commentObj = new CommentObj();
         commentObj.viewType = "post";
+        if (postDataList.size()>0){
+            postDataList.clear();
+        }
         postDataList.add(commentObj);
 
         JSONArray comment = response.getJSONArray("comments");
 
-        for (int i = 0; comment.length() > i; i++){
+        /*for (int i = 0; comment.length() > i; i++){
             CommentObj current = new CommentObj();
             current.viewType = "comment";
             current.id = comment.getJSONObject(i).getString("id");
@@ -307,7 +324,7 @@ public class CommentFragment extends Fragment implements MentionCallback  {
             postDataList.add(current);
            // current.id = comment.
             //Log.d("comment", comment.getJSONObject(i).getString("id"));
-        }
+        }*/
         if (getActivity() != null ){
             commentAdapter = new CommentAdapter(getActivity(), postDataList, postObj);
             recyclerView.setAdapter(commentAdapter);
@@ -344,7 +361,11 @@ public class CommentFragment extends Fragment implements MentionCallback  {
                                     Log.d("Response error", "Session has expired");
                                     // logOut();
                                 }else {
-                                    Log.e("Response status", "some error");
+
+
+
+                                        Log.e("Response status", "some error");
+
                                 }
                             }
                         } catch (JSONException e) {
@@ -394,6 +415,8 @@ public class CommentFragment extends Fragment implements MentionCallback  {
     private void setListFollowed(JSONObject response) throws JSONException {
 
         this.response = response;
+
+        txtPlaceHolder.setVisibility(View.GONE);
 
         JSONArray followedList = response.getJSONArray("followedUsers");
         //Log.d("followerList", followedList.length()+"");

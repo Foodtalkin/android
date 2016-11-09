@@ -1,7 +1,9 @@
 package in.foodtalk.android.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -25,6 +27,7 @@ import java.util.zip.Inflater;
 
 import in.foodtalk.android.R;
 import in.foodtalk.android.communicator.HeadSpannableCallback;
+import in.foodtalk.android.communicator.OpenFragmentCallback;
 import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.communicator.PostOptionCallback;
@@ -64,6 +67,8 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     HeadSpannable spannable;
     HeadSpannableCallback headSpannableCallback;
 
+    OpenFragmentCallback openFragmentCallback;
+
 
 
 
@@ -84,6 +89,8 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         bookmarkCallback = (PostBookmarkCallback) context;
         optionCallback = (PostOptionCallback) context;
         dateTimeDifference = new DateTimeDifference();
+
+        openFragmentCallback = (OpenFragmentCallback) context;
 
         spannable = new HeadSpannable(context);
 
@@ -145,18 +152,18 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             if(postObj.iLikedIt != null){
                 if (postObj.iLikedIt.equals("1")){
-                    postHolder.likeIconImg.setImageResource(R.drawable.heart_active);
+                    postHolder.likeIconImg.setImageResource(R.drawable.ic_heart_filled);
                 }else {
-                    postHolder.likeIconImg.setImageResource(R.drawable.heart);
+                    postHolder.likeIconImg.setImageResource(R.drawable.ic_like_card_24);
                 }
             }else{
                 Log.e("HomeFeedAdapter","null iLikeIt position: "+ position);
             }
             if(postObj.iBookark != null){
                 if(postObj.iBookark.equals("1")){
-                    postHolder.bookmarImg.setImageResource(R.drawable.bookmark_active);
+                    postHolder.bookmarImg.setImageResource(R.drawable.ic_bookmark_filled);
                 }else {
-                    postHolder.bookmarImg.setImageResource(R.drawable.bookmark);
+                    postHolder.bookmarImg.setImageResource(R.drawable.ic_bookmark_card_24);
                 }
             }else {
                 Log.e("HomeFeedAdapter","null iBookark position: "+position);
@@ -265,15 +272,11 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         TextView txtCountLike;
         TextView txtCountBookmark;
         TextView txtCountComment;
-
+        TextView txtTip;
         ImageView likeHeart;
         ImageView likeIconImg;
         ImageView bookmarImg;
         Animation mAnimation;
-
-        TextView txtTip;
-
-        LinearLayout iconLike, iconBookmark, iconComment, iconOption;
 
         ImageView imgRating1;
         ImageView imgRating2;
@@ -283,28 +286,41 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         String userId;
 
+
+
+        //String postId;
+        PostObj postObj1;
+
+        LinearLayout iconLike, iconBookmark, iconComment, iconShare, iconOption, btnLike, btnBookmark, btnComment, btnDetails;
+
+        TextView txtLikeCopy, txtCommentCopy, txtBookmarkCopy;
+
+        LinearLayout countHolder;
+
         public PostHolder(final View itemView) {
             super(itemView);
+            txtLikeCopy = (TextView) itemView.findViewById(R.id.txt_like_copy);
+            txtCommentCopy = (TextView) itemView.findViewById(R.id.txt_comment_copy);
+            txtBookmarkCopy = (TextView) itemView.findViewById(R.id.txt_bookmark_copy);
             userThumbnail = (ImageView) itemView.findViewById(R.id.userThumb);
             txtHeadLine = (TextView) itemView.findViewById(R.id.txt_post_headline);
             txtTime = (TextView) itemView.findViewById(R.id.txt_time);
             dishImage = (ImageView) itemView.findViewById(R.id.dish_img);
-            txtCountLike = (TextView) itemView.findViewById(R.id.txt_count_like);
-            txtCountBookmark = (TextView) itemView.findViewById(R.id.txt_count_bookmark);
-            txtCountComment = (TextView) itemView.findViewById(R.id.txt_count_comment);
+            txtCountLike = (TextView) itemView.findViewById(R.id.txt_like_count);
+            txtCountBookmark = (TextView) itemView.findViewById(R.id.txt_bookmark_count);
+            txtCountComment = (TextView) itemView.findViewById(R.id.txt_comment_count);
             likeIconImg = (ImageView) itemView.findViewById(R.id.icon_heart_img);
+            txtTip = (TextView) itemView.findViewById(R.id.txt_tip);
             bookmarImg = (ImageView) itemView.findViewById(R.id.img_icon_bookmark);
 
-            txtTip = (TextView) itemView.findViewById(R.id.txt_tip);
+            countHolder = (LinearLayout) itemView.findViewById(R.id.count_holder);
+
+            btnLike = (LinearLayout) itemView.findViewById(R.id.btn_like);
+            btnBookmark = (LinearLayout) itemView.findViewById(R.id.btn_bookmark);
+            btnComment = (LinearLayout) itemView.findViewById(R.id.btn_comment);
+
 
             likeHeart = (ImageView) itemView.findViewById(R.id.like_heart);
-
-            iconLike = (LinearLayout) itemView.findViewById(R.id.icon_like_holder);
-            iconBookmark = (LinearLayout) itemView.findViewById(R.id.icon_bookmark_holder);
-            iconComment = (LinearLayout) itemView.findViewById(R.id.icon_comment_holder);
-            iconOption = (LinearLayout) itemView.findViewById(R.id.icon_option_holder);
-
-            starHolder = (LinearLayout) itemView.findViewById(R.id.star_rating_holder);
 
             imgRating1 = (ImageView) itemView.findViewById(R.id.img_rating1);
             imgRating2 = (ImageView) itemView.findViewById(R.id.img_rating2);
@@ -312,12 +328,67 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             imgRating4 = (ImageView) itemView.findViewById(R.id.img_rating4);
             imgRating5 = (ImageView) itemView.findViewById(R.id.img_rating5);
 
+            btnDetails = (LinearLayout) itemView.findViewById(R.id.btn_details);
+
+            starHolder = (LinearLayout) itemView.findViewById(R.id.star_rating_holder);
+
+
+            iconLike = (LinearLayout) itemView.findViewById(R.id.icon_like_holder);
+            iconBookmark = (LinearLayout) itemView.findViewById(R.id.icon_bookmark_holder);
+            iconComment = (LinearLayout) itemView.findViewById(R.id.icon_comment_holder);
+            iconOption = (LinearLayout) itemView.findViewById(R.id.icon_option_holder);
+            iconShare = (LinearLayout) itemView.findViewById(R.id.icon_share_holder);
+
+
             dishImage.setOnTouchListener(this);
             iconLike.setOnTouchListener(this);
             iconBookmark.setOnTouchListener(this);
-//            iconComment.setOnTouchListener(this);
+            iconComment.setOnTouchListener(this);
             iconOption.setOnTouchListener(this);
             userThumbnail.setOnTouchListener(this);
+            iconShare.setOnTouchListener(this);
+            /*iconShare.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    switch (event.getAction()){
+
+                        case MotionEvent.ACTION_UP:
+                           // iconShare.setBackgroundColor(Color.TRANSPARENT);
+                            new Timer().schedule(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    // this code will be executed after 2 seconds
+                                    share(postObj1.id);
+                                }
+                            }, 500);
+
+                            break;
+                    }
+                    return false;
+                }
+            });*/
+
+            //btnLike.setOnTouchListener(this);
+            // btnBookmark.setOnTouchListener(this);
+            // btnComment.setOnTouchListener(this);
+
+            btnDetails.setOnTouchListener(this);
+           /* btnDetails.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+
+                            openFragmentCallback.openFragment("postDetails", postObj1.id);
+                            break;
+                    }
+                    return true;
+                }
+            });*/
+
+
+
 
 
 
@@ -340,7 +411,6 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             Log.d("timer","finish");
                             likeHeart.setVisibility(itemView.GONE);
                         }
-
                         public void onTick(long millisUntilFinished) {
                             // millisUntilFinished    The amount of time until finished.
                             Log.d("timer","onTicker");
@@ -364,15 +434,13 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             long thisTime = System.currentTimeMillis();
                             if (thisTime - lastTouchTime < 250) {
                                 Log.d("clicked", "img double");
-
                                 likeHeart.setVisibility(View.VISIBLE);
                                 likeHeart.startAnimation(mAnimation);
                                 if (postObj.iLikedIt.equals("0")){
                                     //-----update image when click on like icon--
-                                    likeIconImg.setImageResource(R.drawable.heart_active);
+                                    likeIconImg.setImageResource(R.drawable.ic_heart_filled);
                                     String likeCount = String.valueOf(Integer.parseInt(txtCountLike.getText().toString())+1);
                                     txtCountLike.setText(likeCount);
-
                                     //----update postObj for runtime-----------
                                     postObj.iLikedIt = "1";
                                     postObj.likeCount = likeCount;
@@ -403,7 +471,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         case MotionEvent.ACTION_UP:
                             Log.d("clicked", "icon like");
                             if (postObj.iLikedIt.equals("0")){
-                                likeIconImg.setImageResource(R.drawable.heart_active);
+                                likeIconImg.setImageResource(R.drawable.ic_heart_filled);
                                 String likeCount = String.valueOf(Integer.parseInt(txtCountLike.getText().toString())+1);
                                 txtCountLike.setText(likeCount);
 
@@ -418,7 +486,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                     Log.e("HomeFeedAdapter","null likeCallback");
                                 }
                             }else {
-                                likeIconImg.setImageResource(R.drawable.heart);
+                                likeIconImg.setImageResource(R.drawable.ic_like_card_24);
                                 String likeCount = String.valueOf(Integer.parseInt(txtCountLike.getText().toString())-1);
                                 txtCountLike.setText(likeCount);
 
@@ -445,7 +513,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                 String bookmarkCount = String.valueOf(Integer.parseInt(txtCountBookmark.getText().toString())+1);
                                 txtCountBookmark.setText(bookmarkCount);
 
-                                bookmarImg.setImageResource(R.drawable.bookmark_active);
+                                bookmarImg.setImageResource(R.drawable.ic_bookmark_filled);
 
                                 //----update postObj for runtime-----------
                                 postObj.iBookark = "1";
@@ -457,7 +525,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                 String bookmarkCount = String.valueOf(Integer.parseInt(txtCountBookmark.getText().toString())-1);
                                 txtCountBookmark.setText(bookmarkCount);
 
-                                bookmarImg.setImageResource(R.drawable.bookmark);
+                                bookmarImg.setImageResource(R.drawable.ic_bookmark_card_24);
 
                                 //----update postObj for runtime-----------
                                 postObj.iBookark = "0";
@@ -474,7 +542,23 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("clicked", "icon comment");
-                           // commentCallback.openComment(postObj.id);
+                            //commentCallback.openComment(postObj1.id);
+                            // openFragmentCallback.openFragment("commentListPost", postObj1.id);
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Second fragment after 5 seconds appears
+                                    openFragmentCallback.openFragment("commentListPost", postObj.id);
+                                }
+                            }, 300);
+                           /* new Timer().schedule(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    // this code will be executed after 2 seconds
+                                    openFragmentCallback.openFragment("commentListPost", postObj1.id);
+                                }
+                            }, 500);*/
                             break;
                     }
                 }
@@ -483,7 +567,31 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("clicked", "post user id"+postObj.userId +"post id: "+postObj.id );
-                            optionCallback.option(getPosition(),postObj.id,postObj.userId);
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Second fragment after 5 seconds appears
+                                    optionCallback.option(getPosition(),postObj.id,postObj.userId);
+                                }
+                            }, 300);
+
+                            break;
+                    }
+                }
+                break;
+                case R.id.icon_share_holder:{
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Second fragment after 5 seconds appears
+                                    share(postObj.id);
+                                }
+                            }, 300);
                             break;
                     }
                 }
@@ -496,9 +604,45 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             break;
                     }
                     break;
+                case R.id.btn_like:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("HomeFeedAdapter", "btn like clicked");
+
+                            break;
+                    }
+                    break;
+                case R.id.btn_bookmark:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("HomeFeedAdapter", "btn bookmark clicked");
+                            break;
+                    }
+                    break;
+                case R.id.btn_comment:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("HomeFeedAdapter", "btn comment clicked");
+                            break;
+                    }
+                    break;
+                case R.id.btn_details:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("HomeFeedAdapter","btn_details clicked");
+                            openFragmentCallback.openFragment("postDetails", postObj.id);
+                            break;
+                    }
+                    break;
             }
-            return true;
+            return false;
         }
+    }
+    private void share(String postId){
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "http://foodtalk.in/post/"+postId);
+        context.startActivity(Intent.createChooser(shareIntent, "Share link using"));
     }
     private class CommentHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
 

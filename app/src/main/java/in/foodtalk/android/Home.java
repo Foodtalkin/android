@@ -423,16 +423,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }else {
             Log.e("Home","parseInstallation is null");
         }
-
-
-
     }
 
     private void openHomeFirst(){
         getFragmentManager().beginTransaction()
                 .add(R.id.container, homeFragment).commit();
         pageNo = 0;
-
         getFragmentManager().addOnBackStackChangedListener(this);
     }
 
@@ -487,7 +483,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 openRProfile(elementId);
                 break;
             case "Home":
-                setFragmentView(homeFragment, R.id.container, 0, false);
+                //setFragmentView(homeFragment, R.id.container, 0, false);
                 break;
             case "Discover":
                 discoverFragment.pageType = DISCOVER_SCREEN;
