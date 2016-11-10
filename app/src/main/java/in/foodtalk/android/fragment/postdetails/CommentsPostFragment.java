@@ -130,7 +130,7 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        layout = inflater.inflate(R.layout.comment_fragment, container, false);
+        layout = inflater.inflate(R.layout.comment_list_fragment, container, false);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {

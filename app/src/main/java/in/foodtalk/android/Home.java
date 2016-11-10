@@ -1135,11 +1135,37 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     @Override
     public void postDelete() {
         Log.d("postDelete","update recyclerview");
-        try {
-            homeFragment.getPostFeed("refresh");
-        } catch (JSONException e) {
-            e.printStackTrace();
+        currentFragment = this.getFragmentManager().findFragmentById(R.id.container1);
+        //Log.d("postDeleted","name: "+ currentFragment.getClass().getSimpleName());
+        if (currentFragment != null){
+            if (currentFragment == commentFragment){
+                getFragmentManager().popBackStack();
+                currentFragment = this.getFragmentManager().findFragmentById(R.id.container);
+                if (currentFragment == homeFragment){
+                    try {
+                        homeFragment.getPostFeed("refresh");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Log.d("postDeleted","popBack");
+            }else {
+                Log.d("postDeleted","home feed refresh");
+                try {
+                    homeFragment.getPostFeed("refresh");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }else {
+            try {
+                homeFragment.getPostFeed("refresh");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
+
+
     }
     @Override
     public void btnClick(String type, int position) {
@@ -1959,12 +1985,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             setFragmentView(likeListFragment, R.id.container1, 0, true);*/
             postDetailsFragment = new PostDetailsFragment();
             postDetailsFragment.postId = value;
-            setFragmentView(postDetailsFragment, R.id.container1, 0, true);
+            setFragmentView(postDetailsFragment, R.id.container1, -1, true);
         }else if (fragmentName.equals("commentListPost")){
             postDetailsFragment = new PostDetailsFragment();
             postDetailsFragment.postId = value;
             postDetailsFragment.setCurrentPage = 1;
-            setFragmentView(postDetailsFragment, R.id.container1, 0, true);
+            setFragmentView(postDetailsFragment, R.id.container1, -1, true);
         }
     }
 }

@@ -1,5 +1,6 @@
 package in.foodtalk.android.receiver;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -10,6 +11,8 @@ import com.parse.PushService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 import in.foodtalk.android.Home;
 import in.foodtalk.android.ResultNotification;
@@ -43,7 +46,6 @@ public class CustomPushReceiver extends ParsePushBroadcastReceiver {
             JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
 
             Log.e(TAG, "Push received: " + json);
-
            // parseIntent = intent;
            // Intent resultIntent = new Intent(context, ResultNotification.class);
             //showNotificationMessage(context, json.getString("alert"), "", resultIntent);
@@ -64,7 +66,10 @@ public class CustomPushReceiver extends ParsePushBroadcastReceiver {
     @Override
     protected void onPushOpen(Context context, Intent intent) {
         super.onPushOpen(context, intent);
+        //isRunning(context);
+       // Log.d(TAG, "onPushOpen: "+ isRunning(context));
         try {
+            Log.d(TAG,"onPushOpen");
             //super.onPushOpen(context, intent);
             ParseAnalytics.trackAppOpenedInBackground(intent);
             //PushService.setDefaultPushCallback(context, Home.class);
@@ -76,6 +81,18 @@ public class CustomPushReceiver extends ParsePushBroadcastReceiver {
         } catch (Exception e) {
             Log.d("Tag parse", "onPushOpen Error : " + e);
         }
+    }
+
+    public boolean isRunning(Context ctx) {
+        ActivityManager activityManager = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
+
+        for (ActivityManager.RunningTaskInfo task : tasks) {
+            if (ctx.getPackageName().equalsIgnoreCase(task.baseActivity.getPackageName()))
+                return true;
+        }
+
+        return false;
     }
 
 

@@ -1,6 +1,7 @@
 package in.foodtalk.android.fragment.postdetails;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -72,6 +73,8 @@ public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSele
         tabComment.setOnTouchListener(this);
         tabBookmark.setOnTouchListener(this);
 
+
+
         db = new DatabaseHandler(getActivity());
         initialisePaging();
         return layout;
@@ -84,10 +87,10 @@ public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSele
     }
 
     @Override
-    public void onAttach(Context context) {
-        myContext = (FragmentActivity) context;
+    public void onAttach(Activity activity) {
+        myContext=(FragmentActivity) activity;
         fm = myContext.getSupportFragmentManager();
-        super.onAttach(context);
+        super.onAttach(activity);
     }
 
     @Override
