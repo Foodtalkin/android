@@ -3,6 +3,7 @@ package in.foodtalk.android.receiver;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.parse.ParseAnalytics;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import in.foodtalk.android.Home;
 import in.foodtalk.android.ResultNotification;
+import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.helper.NotificationUtils;
 
 /**
@@ -37,14 +39,10 @@ public class CustomPushReceiver extends ParsePushBroadcastReceiver {
     @Override
     protected void onPushReceive(Context context, Intent intent) {
         super.onPushReceive(context, intent);
-
-
         if (intent == null)
             return;
-
         try {
             JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
-
             Log.e(TAG, "Push received: " + json);
            // parseIntent = intent;
            // Intent resultIntent = new Intent(context, ResultNotification.class);
@@ -67,22 +65,43 @@ public class CustomPushReceiver extends ParsePushBroadcastReceiver {
     protected void onPushOpen(Context context, Intent intent) {
         super.onPushOpen(context, intent);
         //isRunning(context);
-       // Log.d(TAG, "onPushOpen: "+ isRunning(context));
-        try {
-            Log.d(TAG,"onPushOpen");
-            //super.onPushOpen(context, intent);
-            ParseAnalytics.trackAppOpenedInBackground(intent);
-            //PushService.setDefaultPushCallback(context, Home.class);
-            ParseAnalytics.trackAppOpenedInBackground(intent);
-            Intent i = new Intent(context, Home.class);
-            i.putExtras(intent.getExtras());
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(i);
-        } catch (Exception e) {
-            Log.d("Tag parse", "onPushOpen Error : " + e);
+        Log.d(TAG, "onPushOpen: isHomeActivity: "+ AppController.getInstance().isHomeActivity);
+        if (AppController.getInstance().isHomeActivity){
+            String jsonData = intent.getExtras().getString("com.parse.Data");
+            try {
+                JSONObject jsonObject = new JSONObject(jsonData);
+                final String screenName = jsonObject.getString("class");
+                final String elementId = jsonObject.getString("elementId");
+                Log.d(TAG+" onPushOpen",screenName+" "+elementId);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            sendMessage(context, jsonData);
+        }else {
+            try {
+                Log.d(TAG,"onPushOpen");
+                //super.onPushOpen(context, intent);
+                ParseAnalytics.trackAppOpenedInBackground(intent);
+                //PushService.setDefaultPushCallback(context, Home.class);
+                ParseAnalytics.trackAppOpenedInBackground(intent);
+                Intent i = new Intent(context, Home.class);
+                i.putExtras(intent.getExtras());
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+            } catch (Exception e) {
+                Log.d("Tag parse", "onPushOpen Error : " + e);
+            }
         }
-    }
 
+
+    }
+    private void sendMessage(Context context, String jsonData) {
+        Log.d("sender", "Broadcasting message");
+        Intent intent = new Intent("custom-event-name");
+        // You can also include some extra data.
+        intent.putExtra("message", jsonData);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
     public boolean isRunning(Context ctx) {
         ActivityManager activityManager = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
@@ -91,7 +110,6 @@ public class CustomPushReceiver extends ParsePushBroadcastReceiver {
             if (ctx.getPackageName().equalsIgnoreCase(task.baseActivity.getPackageName()))
                 return true;
         }
-
         return false;
     }
 

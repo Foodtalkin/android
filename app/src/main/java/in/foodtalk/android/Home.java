@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -13,6 +16,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -48,6 +52,7 @@ import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.apicall.PostBookmarkApi;
 import in.foodtalk.android.apicall.PostLikeApi;
 import in.foodtalk.android.apicall.PostReportApi;
+import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.AddRestaurantCallback;
 import in.foodtalk.android.communicator.AddedRestaurantCallback;
@@ -240,6 +245,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         apiCall = new ApiCall();
 
+        AppController.getInstance().isHomeActivity = true;
+
        // imageCapture = new ImageCapture(this);
 
        // requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -369,6 +376,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         //homeIcon.setColorFilter(ContextCompat.getColor(this, R.color.icon));
 
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+                new IntentFilter("custom-event-name"));
+
         //----------get extra------
         String newString;
         if (savedInstanceState == null) {
@@ -458,6 +468,23 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                     }
                 });
     }
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            String message = intent.getStringExtra("message");
+            Log.d("receiver", "Got message: " + message);
+            try {
+                JSONObject jsonObject = new JSONObject(message);
+                final String screenName = jsonObject.getString("class");
+                final String elementId = jsonObject.getString("elementId");
+                getFragmentManager().popBackStack();
+                openNotificationFragment(screenName, elementId);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    };
     private void openNotificationFragment(String fragmentName, String elementId){
         Log.d("Notification screen", fragmentName);
         switch (fragmentName){
@@ -1378,6 +1405,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         super.onDestroy();
         hideSoftKeyboard();
         Log.d("onDestroy", "distroy");
+        AppController.getInstance().isHomeActivity = false;
     }
 
     @Override

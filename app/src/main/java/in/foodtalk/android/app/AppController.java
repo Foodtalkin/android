@@ -55,6 +55,7 @@ public class AppController extends Application {
 
     private static AppController mInstance;
 
+    public Boolean isHomeActivity = false;
 
     public String sessionId;
 
