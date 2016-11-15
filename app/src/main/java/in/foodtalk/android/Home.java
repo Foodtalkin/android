@@ -1241,6 +1241,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         //Double pointValue = Double.parseDouble(points);
         subTitleHome.setText(Integer.toString(v3)+" Points");
         titleHome.setText(userName);
+        profileUserName = userName;
         //Log.d("points", points);
     }
     @Override
@@ -1646,6 +1647,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         return null;
     }
 
+    private String profileUserName;
+
     private void setTitle(Fragment fragment){
         /*if (fragment == homeFragment){
             header.setVisibility(View.VISIBLE);
@@ -1731,6 +1734,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         if(fragment == openPostFragment){
             //header.setVisibility(View.GONE);
             //Log.d("setTitle", "header gone");
+            titleHome.setText(profileUserName+"'s post");
         }
 
         if (fragment == restaurantProfileFragment){

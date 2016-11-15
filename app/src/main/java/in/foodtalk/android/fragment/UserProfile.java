@@ -317,6 +317,7 @@ public class UserProfile extends Fragment implements LatLonCallback, UserProfile
             current.iFlaggedIt = postArray.getJSONObject(i).getString("iFlaggedIt");
             current.iBookark = postArray.getJSONObject(i).getString("iBookark");
             current.timeElapsed = postArray.getJSONObject(i).getString("timeElapsed");
+            current.region = postArray.getJSONObject(i).getString("region");
             //current.restaurantDistance = postArray.getJSONObject(i).getString("restaurantDistance");
             //Log.d("postImage", current.postImage);
             postList.add(current);

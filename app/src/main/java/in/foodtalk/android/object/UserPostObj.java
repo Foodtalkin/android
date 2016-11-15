@@ -38,4 +38,5 @@ public class UserPostObj {
     public String iBookark;
     public String timeElapsed;
     public String restaurantDistance;
+    public String region;
 }

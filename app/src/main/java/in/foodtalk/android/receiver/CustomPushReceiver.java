@@ -48,9 +48,7 @@ public class CustomPushReceiver extends ParsePushBroadcastReceiver {
            // Intent resultIntent = new Intent(context, ResultNotification.class);
             //showNotificationMessage(context, json.getString("alert"), "", resultIntent);
             //showNotificationMessage(context, "Title set android", "Description", resultIntent);
-
             //parsePushJson(context, json);
-
         } catch (JSONException e) {
             Log.e(TAG, "Push message json exception: " + e.getMessage());
         }

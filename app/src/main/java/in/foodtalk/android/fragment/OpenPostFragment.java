@@ -141,7 +141,7 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
         //recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
 
         linearLayoutManager
-                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+                = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -299,6 +299,9 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
             current.iLikedIt = postArray.getJSONObject(i).getString("iLikedIt");
             current.iBookark = postArray.getJSONObject(i).getString("iBookark");
             current.rating = postArray.getJSONObject(i).getString("rating");
+            current.region = postArray.getJSONObject(i).getString("region");
+            current.tip = postArray.getJSONObject(i).getString("tip");
+            current.restaurantIsActive = postArray.getJSONObject(i).getString("restaurantIsActive");
             //current.restaurantDistance = postArray.getJSONObject(i).getString("restaurantDistance");
             // postData.clear();
             postData.add(current);
@@ -402,7 +405,7 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
                         break;
                     case MotionEvent.ACTION_UP:
                         Log.d("recycler view", "action up");
-                        if (dx1 > 0){
+                        /*if (dx1 > 0){
                              recyclerView.smoothScrollToPosition(lastVItem);
                             int vl = lastVItem*280;
                             Log.d("value scrol", vl+"");
@@ -415,7 +418,7 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
                             int vl = lastVItem*280;
                             //recyclerView.scrollTo(vl, 0);
                             recyclerView.smoothScrollToPosition(lastVItem);
-                        }
+                        }*/
                         break;
                 }
                 break;
