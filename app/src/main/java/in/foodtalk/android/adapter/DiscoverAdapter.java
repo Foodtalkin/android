@@ -1,7 +1,12 @@
 package in.foodtalk.android.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
@@ -23,9 +28,12 @@ import java.util.List;
 
 import in.foodtalk.android.R;
 import in.foodtalk.android.communicator.CommentCallback;
+import in.foodtalk.android.communicator.OpenFragmentCallback;
 import in.foodtalk.android.communicator.PostBookmarkCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.communicator.PostOptionCallback;
+import in.foodtalk.android.communicator.UserThumbCallback;
+import in.foodtalk.android.module.DateTimeDifference;
 import in.foodtalk.android.module.HeadSpannable;
 import in.foodtalk.android.object.PostObj;
 
@@ -47,9 +55,14 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
 
+    LinearLayout starHolder;
+
     HeadSpannable headSpannable;
 
     CommentCallback commentCallback;
+
+    DateTimeDifference dateTimeDifference;
+    OpenFragmentCallback openFragmentCallback;
 
     public DiscoverAdapter(Context context, List<PostObj> postObj, PostLikeCallback postLikeCallback){
         layoutInflater = LayoutInflater.from(context);
@@ -67,6 +80,8 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         optionCallback = (PostOptionCallback) context;
         //likeCallback = postLikeCallback;
 
+        dateTimeDifference = new DateTimeDifference();
+
     }
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -74,7 +89,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ProgressViewHolder progressViewHolder;
 
         if(viewType == VIEW_ITEM){
-            View view = layoutInflater.inflate(R.layout.card_discover_post, parent, false);
+            View view = layoutInflater.inflate(R.layout.card_search_post, parent, false);
             postHolder = new PostHolder(view);
             return postHolder;
         }else if(viewType == VIEW_PROG) {
@@ -123,18 +138,18 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             if(current.iLikedIt != null){
                 if (current.iLikedIt.equals("1")){
-                    postHolder.likeIconImg.setImageResource(R.drawable.heart_active);
+                    postHolder.likeIconImg.setImageResource(R.drawable.ic_heart_filled);
                 }else {
-                    postHolder.likeIconImg.setImageResource(R.drawable.heart);
+                    postHolder.likeIconImg.setImageResource(R.drawable.ic_like_card_24);
                 }
             }else{
                 Log.e("HomeFeedAdapter","null iLikeIt position: "+ position);
             }
             if(current.iBookark != null){
                 if(current.iBookark.equals("1")){
-                    postHolder.bookmarImg.setImageResource(R.drawable.bookmark_active);
+                    postHolder.bookmarImg.setImageResource(R.drawable.ic_bookmark_filled);
                 }else {
-                    postHolder.bookmarImg.setImageResource(R.drawable.bookmark);
+                    postHolder.bookmarImg.setImageResource(R.drawable.ic_bookmark_card_24);
                 }
             }else {
                 Log.e("HomeFeedAdapter","null iBookark position: "+position);
@@ -176,40 +191,43 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public void setStarRating(String rating, PostHolder holder){
+        if (rating.equals("0")){
+            starHolder.setVisibility(View.GONE);
+        }
         if(rating.equals("1")){
-            holder.imgRating1.setImageResource(R.drawable.star_active);
-            holder.imgRating2.setImageResource(R.drawable.star_passive);
-            holder.imgRating3.setImageResource(R.drawable.star_passive);
-            holder.imgRating4.setImageResource(R.drawable.star_passive);
-            holder.imgRating5.setImageResource(R.drawable.star_passive);
+            holder.imgRating1.setVisibility(View.VISIBLE);
+            holder.imgRating2.setVisibility(View.GONE);
+            holder.imgRating3.setVisibility(View.GONE);
+            holder.imgRating4.setVisibility(View.GONE);
+            holder.imgRating5.setVisibility(View.GONE);
         }
         if(rating.equals("2")){
-            holder.imgRating1.setImageResource(R.drawable.star_active);
-            holder.imgRating2.setImageResource(R.drawable.star_active);
-            holder.imgRating3.setImageResource(R.drawable.star_passive);
-            holder.imgRating4.setImageResource(R.drawable.star_passive);
-            holder.imgRating5.setImageResource(R.drawable.star_passive);
+            holder.imgRating1.setVisibility(View.VISIBLE);
+            holder.imgRating2.setVisibility(View.VISIBLE);
+            holder.imgRating3.setVisibility(View.GONE);
+            holder.imgRating4.setVisibility(View.GONE);
+            holder.imgRating5.setVisibility(View.GONE);
         }
         if(rating.equals("3")){
-            holder.imgRating1.setImageResource(R.drawable.star_active);
-            holder.imgRating2.setImageResource(R.drawable.star_active);
-            holder.imgRating3.setImageResource(R.drawable.star_active);
-            holder.imgRating4.setImageResource(R.drawable.star_passive);
-            holder.imgRating5.setImageResource(R.drawable.star_passive);
+            holder.imgRating1.setVisibility(View.VISIBLE);
+            holder.imgRating2.setVisibility(View.VISIBLE);
+            holder.imgRating3.setVisibility(View.VISIBLE);
+            holder.imgRating4.setVisibility(View.GONE);
+            holder.imgRating5.setVisibility(View.GONE);
         }
         if(rating.equals("4")){
-            holder.imgRating1.setImageResource(R.drawable.star_active);
-            holder.imgRating2.setImageResource(R.drawable.star_active);
-            holder.imgRating3.setImageResource(R.drawable.star_active);
-            holder.imgRating4.setImageResource(R.drawable.star_active);
-            holder.imgRating5.setImageResource(R.drawable.star_passive);
+            holder.imgRating1.setVisibility(View.VISIBLE);
+            holder.imgRating2.setVisibility(View.VISIBLE);
+            holder.imgRating3.setVisibility(View.VISIBLE);
+            holder.imgRating4.setVisibility(View.VISIBLE);
+            holder.imgRating5.setVisibility(View.GONE);
         }
         if(rating.equals("5")){
-            holder.imgRating1.setImageResource(R.drawable.star_active);
-            holder.imgRating2.setImageResource(R.drawable.star_active);
-            holder.imgRating3.setImageResource(R.drawable.star_active);
-            holder.imgRating4.setImageResource(R.drawable.star_active);
-            holder.imgRating5.setImageResource(R.drawable.star_active);
+            holder.imgRating1.setVisibility(View.VISIBLE);
+            holder.imgRating2.setVisibility(View.VISIBLE);
+            holder.imgRating3.setVisibility(View.VISIBLE);
+            holder.imgRating4.setVisibility(View.VISIBLE);
+            holder.imgRating5.setVisibility(View.VISIBLE);
         }
 
     }
@@ -286,6 +304,8 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             iconComment = (LinearLayout) itemView.findViewById(R.id.icon_comment_holder);
             txtKm = (TextView) itemView.findViewById(R.id.txt_km);
 
+            starHolder = (LinearLayout) itemView.findViewById(R.id.star_rating_holder);
+
             cardHolder = (LinearLayout) itemView.findViewById(R.id.card_contaner);
 
             likeHeart = (ImageView) itemView.findViewById(R.id.like_heart);
@@ -360,7 +380,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 likeHeart.startAnimation(mAnimation);
                                 if (postObj1.iLikedIt.equals("0")){
                                     //-----update image when click on like icon--
-                                    likeIconImg.setImageResource(R.drawable.heart_active);
+                                    likeIconImg.setImageResource(R.drawable.ic_heart_filled);
                                     String likeCount = String.valueOf(Integer.parseInt(txtCountLike.getText().toString())+1);
                                     txtCountLike.setText(likeCount);
 
@@ -394,7 +414,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         case MotionEvent.ACTION_UP:
                             Log.d("clicked", "icon like");
                             if (postObj1.iLikedIt.equals("0")){
-                                likeIconImg.setImageResource(R.drawable.heart_active);
+                                likeIconImg.setImageResource(R.drawable.ic_heart_filled);
                                 String likeCount = String.valueOf(Integer.parseInt(txtCountLike.getText().toString())+1);
                                 txtCountLike.setText(likeCount);
 
@@ -409,7 +429,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                     Log.e("HomeFeedAdapter","null likeCallback");
                                 }
                             }else {
-                                likeIconImg.setImageResource(R.drawable.heart);
+                                likeIconImg.setImageResource(R.drawable.ic_like_card_24);
                                 String likeCount = String.valueOf(Integer.parseInt(txtCountLike.getText().toString())-1);
                                 txtCountLike.setText(likeCount);
 
@@ -445,7 +465,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 String bookmarkCount = String.valueOf(Integer.parseInt(txtCountBookmark.getText().toString())+1);
                                 txtCountBookmark.setText(bookmarkCount);
 
-                                bookmarImg.setImageResource(R.drawable.bookmark_active);
+                                bookmarImg.setImageResource(R.drawable.ic_bookmark_filled);
 
                                 //----update postObj for runtime-----------
                                 postObj1.iBookark = "1";
@@ -457,7 +477,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 String bookmarkCount = String.valueOf(Integer.parseInt(txtCountBookmark.getText().toString())-1);
                                 txtCountBookmark.setText(bookmarkCount);
 
-                                bookmarImg.setImageResource(R.drawable.bookmark);
+                                bookmarImg.setImageResource(R.drawable.ic_bookmark_card_24);
 
                                 //----update postObj for runtime-----------
                                 postObj1.iBookark = "0";

@@ -1250,7 +1250,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         openPostFragment.openPostFragment1(postObj, postId, userId);
         setFragmentView (openPostFragment, R.id.container, -1, true);
         Log.d("postOpen","userId: "+userId+" postId: "+postId);
-
     }
 
     @Override
@@ -1266,7 +1265,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                         getFragmentManager().beginTransaction().remove(commentFragment).commit();
                     }
                 }
-
                 break;
             case RESTAURANT_PROFILE:
 

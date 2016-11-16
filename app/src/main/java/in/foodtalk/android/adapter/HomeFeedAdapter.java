@@ -498,6 +498,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
         @Override
         public boolean onTouch(View v, MotionEvent event) {
+
+            Log.d("HomeFeedAdapter","view:"+v.getId()+": userThumb id:"+R.id.userThumb);
             switch (v.getId()){
                 case R.id.dish_img: {
                     switch (event.getAction()){

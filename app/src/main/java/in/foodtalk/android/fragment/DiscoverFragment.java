@@ -115,7 +115,7 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
     private static final int DISH_RESULT = 1;
     public String dishName;
 
-    ImageView arrowIndicator;
+    //ImageView arrowIndicator;
 
     TextView errorTxt;
 
@@ -130,7 +130,7 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         tapToEnableLocation = (LinearLayout) layout.findViewById(R.id.tap_to_on_gps);
         recyclerView.setOnTouchListener(this);
 
-        arrowIndicator = (ImageView) layout.findViewById(R.id.arrow_indicator);
+        //arrowIndicator = (ImageView) layout.findViewById(R.id.arrow_indicator);
 
         errorTxt = (TextView) layout.findViewById(R.id.txt_error);
 
@@ -205,8 +205,7 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         }
 
         linearLayoutManager
-                = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
-
+                = new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false);
         mLayoutManager = new LinearLayoutManager(activity.getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
@@ -407,7 +406,7 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
                 errorTxt.setVisibility(View.VISIBLE);
             }else {
                 errorTxt.setVisibility(View.GONE);
-                arrowIndicator.setVisibility(View.VISIBLE);
+               // arrowIndicator.setVisibility(View.VISIBLE);
             }
         }
 
@@ -509,7 +508,7 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
             }
             @Override
             public void onScrolled1(int dx, int dy, int firstVisibleItem, int lastVisibleItem) {
-                arrowIndicator.setVisibility(View.GONE);
+                //arrowIndicator.setVisibility(View.GONE);
                 dx1 = dx;
                 firstVItem = firstVisibleItem;
                 lastVItem = lastVisibleItem;
@@ -545,7 +544,7 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
                         break;
                     case MotionEvent.ACTION_UP:
                         Log.d("recycler view", "action up");
-                        if (dx1 > 0){
+                        /*if (dx1 > 0){
                              recyclerView.smoothScrollToPosition(lastVItem);
                             int vl = lastVItem*280;
                             Log.d("value scrol", vl+"");
@@ -558,7 +557,7 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
                             int vl = lastVItem*280;
                             //recyclerView.scrollTo(vl, 0);
                             recyclerView.smoothScrollToPosition(lastVItem);
-                        }
+                        }*/
                         break;
                 }
                 break;
