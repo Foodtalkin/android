@@ -52,6 +52,7 @@
                     android:text="5m"
                     android:textColor="@color/colorText1"
                     android:layout_gravity="center_vertical"
+                    android:visibility="gone"
                     />
             </LinearLayout>
             <LinearLayout

@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import in.foodtalk.android.R;
 import in.foodtalk.android.apicall.UserFollow;
+import in.foodtalk.android.communicator.OpenFragmentCallback;
 import in.foodtalk.android.fragment.postdetails.LikeListFragment;
 import in.foodtalk.android.object.LikeListObj;
 
@@ -32,8 +34,10 @@ public class LikeListPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     List<LikeListObj> likeList;
     Context context;
     UserFollow userFollow;
+    OpenFragmentCallback openFragmentCallback;
 
     public LikeListPostAdapter (Context context, List<LikeListObj> likeList){
+        openFragmentCallback = (OpenFragmentCallback) context;
         this.context = context;
         this.likeList = likeList;
         layoutInflater = layoutInflater.from(context);
@@ -87,12 +91,16 @@ public class LikeListPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ImageView userThumb;
         String iFollowIt;
         String userId;
+        LinearLayout btnUser;
         public LikeHolder(View itemView) {
             super(itemView);
             txtUsername = (TextView) itemView.findViewById(R.id.txt_username);
             txtFullname = (TextView) itemView.findViewById(R.id.txt_fullname);
             txtFollow = (TextView) itemView.findViewById(R.id.txt_follow);
             userThumb = (ImageView) itemView.findViewById(R.id.user_thumb);
+            btnUser = (LinearLayout) itemView.findViewById(R.id.btn_user);
+
+            btnUser.setOnTouchListener(this);
 
             txtFollow.setOnTouchListener(this);
         }
@@ -130,6 +138,15 @@ public class LikeListPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                                     e.printStackTrace();
                                 }
                             }
+                            break;
+
+                    }
+                    break;
+                case R.id.btn_user:
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_UP:
+                            Log.d("LikeListPostAdapter","Acton up clicked");
+                            openFragmentCallback.openFragment("userProfileFLikeList",likeList.get(getAdapterPosition()).id);
                             break;
                     }
                     break;

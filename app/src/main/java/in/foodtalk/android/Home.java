@@ -2022,5 +2022,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             postDetailsFragment.setCurrentPage = 1;
             setFragmentView(postDetailsFragment, R.id.container1, -1, true);
         }
+        if (fragmentName.equals("userProfileFLikeList")){
+            userProfileOpen(value);
+            getFragmentManager().beginTransaction().remove(postDetailsFragment).commit();
+        }
     }
 }

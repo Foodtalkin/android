@@ -113,10 +113,23 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
            // postHolder.txtHeadLine.setText(Html.fromHtml(htmlHeadline));
 
 
-            if (current.restaurantIsActive.equals("1")) {
+            /*if (current.restaurantIsActive.equals("1")) {
                 headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, true, "Discover");
             }else {
                 headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, false, "Discover");
+            }*/
+            if (current.restaurantIsActive.equals("1")) {
+                if (current.region.equals("")){
+                    headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, true , "Discover");
+                }else {
+                    headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName+", "+current.region, current.userId, current.checkedInRestaurantId, true , "Discover");
+                }
+            }else {
+                if (current.region.equals("")){
+                    headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, false, "Discover");
+                }else {
+                    headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName+", "+current.region, current.userId, current.checkedInRestaurantId, false, "Discover");
+                }
             }
             //postHolder.txtTime.setText("4d");
             postHolder.txtCountLike.setText(current.likeCount);
@@ -365,6 +378,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             btnLike = (LinearLayout) itemView.findViewById(R.id.btn_like);
             btnBookmark = (LinearLayout) itemView.findViewById(R.id.btn_bookmark);
             btnComment = (LinearLayout) itemView.findViewById(R.id.btn_comment);
+            btnDetails = (LinearLayout) itemView.findViewById(R.id.btn_details);
 
             likeHeart = (ImageView) itemView.findViewById(R.id.like_heart);
 
@@ -393,6 +407,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             iconComment.setOnTouchListener(this);
             userThumbnail.setOnTouchListener(this);
             iconShare.setOnTouchListener(this);
+            btnDetails.setOnTouchListener(this);
 
 
             mAnimation = AnimationUtils.loadAnimation(context, R.anim.like_anim);
@@ -402,7 +417,6 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 public void onAnimationStart(Animation animation) {
 
                 }
-
                 @Override
                 public void onAnimationEnd(Animation arg0) {
                     //Functionality here
@@ -592,14 +606,15 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
                 }
                 break;
-                case R.id.btn_details:
+                case R.id.btn_details:{
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("HomeFeedAdapter","btn_details clicked");
                             openFragmentCallback.openFragment("postDetails", postObj1.id);
                             break;
                     }
-                    break;
+                }
+                break;
             }
             return false;
         }
