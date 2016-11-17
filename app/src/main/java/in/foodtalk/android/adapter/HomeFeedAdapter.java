@@ -626,13 +626,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                     openFragmentCallback.openFragment("commentListPost", postObj1.id);
                                 }
                             }, 300);
-                           /* new Timer().schedule(new TimerTask() {
-                                @Override
-                                public void run() {
-                                    // this code will be executed after 2 seconds
-                                    openFragmentCallback.openFragment("commentListPost", postObj1.id);
-                                }
-                            }, 500);*/
                             break;
                     }
                 }

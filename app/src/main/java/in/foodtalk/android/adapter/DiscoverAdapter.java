@@ -58,6 +58,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     LinearLayout starHolder;
 
     HeadSpannable headSpannable;
+    UserThumbCallback userThumbCallback;
 
     CommentCallback commentCallback;
 
@@ -74,10 +75,12 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
        // Log.d("from adapter function", postObj.get(1).dishName);
 
         headSpannable = new HeadSpannable(context);
+        openFragmentCallback = (OpenFragmentCallback) context;
 
         likeCallback = (PostLikeCallback) context;
         bookmarkCallback = (PostBookmarkCallback) context;
         optionCallback = (PostOptionCallback) context;
+        userThumbCallback = (UserThumbCallback) context;
         //likeCallback = postLikeCallback;
 
         dateTimeDifference = new DateTimeDifference();
@@ -121,14 +124,57 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             postHolder.txtCountComment.setText(current.commentCount);
 
 
+
+            if (current.likeCount.equals("0") && current.commentCount.equals("0") && current.bookmarkCount.equals("0")){
+                postHolder.countHolder.setVisibility(View.GONE);
+            }else {
+                postHolder.countHolder.setVisibility(View.VISIBLE);
+            }
+
             double distance = Double.parseDouble(current.restaurantDistance);
             String km = new DecimalFormat("##.##").format(distance/1000);
 
             postHolder.txtKm.setText(km+" KM");
 
-            //Log.d("distance m", distance+"");
-            //new DecimalFormat("##.##").format(i2)
-           // Log.d("distance km", new DecimalFormat("##.##").format(km)+"");
+            if (current.likeCount.equals("0")){
+                postHolder.btnLike.setVisibility(View.GONE);
+            }else {
+                postHolder.btnLike.setVisibility(View.VISIBLE);
+            }
+            if (current.commentCount.equals("0")){
+                postHolder.btnComment.setVisibility(View.GONE);
+            }else {
+                postHolder.btnComment.setVisibility(View.VISIBLE);
+            }
+            if (current.bookmarkCount.equals("0")){
+                postHolder.btnBookmark.setVisibility(View.GONE);
+            }else {
+                postHolder.btnBookmark.setVisibility(View.VISIBLE);
+            }
+            if (current.likeCount.equals("1")){
+                postHolder.txtLikeCopy.setText("Like");
+            }else {
+                postHolder.txtLikeCopy.setText("Likes");
+            }
+            if (current.bookmarkCount.equals("1")){
+                postHolder.txtBookmarkCopy.setText("Bookmark");
+            }else {
+                postHolder.txtBookmarkCopy.setText("Bookmarks");
+            }
+            if (current.commentCount.equals("1")){
+                postHolder.txtCommentCopy.setText("Comment");
+            }else {
+                postHolder.txtCommentCopy.setText("Comments");
+            }
+
+            String reviewTip = current.tip.trim();
+            if(reviewTip.equals("")){
+                postHolder.txtTip.setVisibility(View.GONE);
+            }else {
+                postHolder.txtTip.setVisibility(View.VISIBLE);
+                postHolder.txtTip.setText(reviewTip);
+            }
+            postHolder.userId = current.userId;
 
             //postHolder.txtKm.setText(Double.valueOf(current.restaurantDistance)/1000+" KM");
 
@@ -266,7 +312,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView txtCountLike;
         TextView txtCountBookmark;
         TextView txtCountComment;
-
+        TextView txtTip;
         ImageView likeHeart;
         ImageView likeIconImg;
         ImageView bookmarImg;
@@ -279,34 +325,46 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ImageView imgRating5;
 
         LinearLayout cardHolder;
+        String userId;
 
         TextView txtKm;
-        LinearLayout iconComment;
+
 
 
 
         //String postId;
         PostObj postObj1;
 
-        LinearLayout iconLike, iconBookmark, iconOption;
+        LinearLayout iconLike, iconBookmark, iconComment, iconShare, iconOption, btnLike, btnBookmark, btnComment, btnDetails;
+
+        TextView txtLikeCopy, txtCommentCopy, txtBookmarkCopy;
+
+        LinearLayout countHolder;
 
         public PostHolder(final View itemView) {
             super(itemView);
+            txtLikeCopy = (TextView) itemView.findViewById(R.id.txt_like_copy);
+            txtCommentCopy = (TextView) itemView.findViewById(R.id.txt_comment_copy);
+            txtBookmarkCopy = (TextView) itemView.findViewById(R.id.txt_bookmark_copy);
             userThumbnail = (ImageView) itemView.findViewById(R.id.userThumb);
             txtHeadLine = (TextView) itemView.findViewById(R.id.txt_post_headline);
             //txtTime = (TextView) itemView.findViewById(R.id.txt_time);
             dishImage = (ImageView) itemView.findViewById(R.id.dish_img);
-            txtCountLike = (TextView) itemView.findViewById(R.id.txt_count_like);
-            txtCountBookmark = (TextView) itemView.findViewById(R.id.txt_count_bookmark);
-            txtCountComment = (TextView) itemView.findViewById(R.id.txt_count_comment);
+            txtCountLike = (TextView) itemView.findViewById(R.id.txt_like_count);
+            txtCountBookmark = (TextView) itemView.findViewById(R.id.txt_bookmark_count);
+            txtCountComment = (TextView) itemView.findViewById(R.id.txt_comment_count);
             likeIconImg = (ImageView) itemView.findViewById(R.id.icon_heart_img);
+            txtTip = (TextView) itemView.findViewById(R.id.txt_tip);
             bookmarImg = (ImageView) itemView.findViewById(R.id.img_icon_bookmark);
             iconComment = (LinearLayout) itemView.findViewById(R.id.icon_comment_holder);
             txtKm = (TextView) itemView.findViewById(R.id.txt_km);
 
             starHolder = (LinearLayout) itemView.findViewById(R.id.star_rating_holder);
-
+            countHolder = (LinearLayout) itemView.findViewById(R.id.count_holder);
             cardHolder = (LinearLayout) itemView.findViewById(R.id.card_contaner);
+            btnLike = (LinearLayout) itemView.findViewById(R.id.btn_like);
+            btnBookmark = (LinearLayout) itemView.findViewById(R.id.btn_bookmark);
+            btnComment = (LinearLayout) itemView.findViewById(R.id.btn_comment);
 
             likeHeart = (ImageView) itemView.findViewById(R.id.like_heart);
 
@@ -322,15 +380,19 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             iconLike = (LinearLayout) itemView.findViewById(R.id.icon_like_holder);
             iconBookmark = (LinearLayout) itemView.findViewById(R.id.icon_bookmark_holder);
+            iconComment = (LinearLayout) itemView.findViewById(R.id.icon_comment_holder);
             iconOption = (LinearLayout) itemView.findViewById(R.id.icon_option_holder);
-
+            iconShare = (LinearLayout) itemView.findViewById(R.id.icon_share_holder);
 
 
             dishImage.setOnTouchListener(this);
             iconLike.setOnTouchListener(this);
             iconBookmark.setOnTouchListener(this);
+            iconComment.setOnTouchListener(this);
             iconOption.setOnTouchListener(this);
             iconComment.setOnTouchListener(this);
+            userThumbnail.setOnTouchListener(this);
+            iconShare.setOnTouchListener(this);
 
 
             mAnimation = AnimationUtils.loadAnimation(context, R.anim.like_anim);
@@ -452,11 +514,33 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("clicked", "post user id"+postObj1.userId +"post id: "+postObj1.id );
-                            optionCallback.option(getPosition(),postObj1.id,postObj1.userId);
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Second fragment after 5 seconds appears
+                                    optionCallback.option(getPosition(),postObj1.id,postObj1.userId);
+                                }
+                            }, 300);
                             break;
                     }
                 }
                 break;
+                case R.id.icon_share_holder:{
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Second fragment after 5 seconds appears
+                                    share(postObj1.id);
+                                }
+                            }, 300);
+                            break;
+                    }
+                }
                 case R.id.icon_bookmark_holder:{
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
@@ -494,12 +578,36 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("clicked", "icon comment");
-                            commentCallback.openComment(postObj1.id);
+                           //commentCallback.openComment(postObj1.id);
+                           // openFragmentCallback.openFragment("commentListPost", postObj1.id);
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //Second fragment after 5 seconds appears
+                                    openFragmentCallback.openFragment("commentListPost", postObj1.id);
+                                }
+                            }, 300);
                             break;
                     }
                 }
+                break;
+                case R.id.btn_details:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("HomeFeedAdapter","btn_details clicked");
+                            openFragmentCallback.openFragment("postDetails", postObj1.id);
+                            break;
+                    }
+                    break;
             }
-            return true;
+            return false;
         }
+    }
+    private void share(String postId){
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "http://foodtalk.in/post/"+postId);
+        context.startActivity(Intent.createChooser(shareIntent, "Share link using"));
     }
 }
