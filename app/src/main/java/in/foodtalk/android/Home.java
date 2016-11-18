@@ -1262,7 +1262,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                     setFragmentView(userProfile, R.id.container, -1, true);*/
                     userProfileOpen(userId);
                     if(requestFrom.equals("commentFragment")){
-                        getFragmentManager().beginTransaction().remove(commentFragment).commit();
+                        //getFragmentManager().beginTransaction().remove(commentFragment).commit();
+                        //getFragmentManager().beginTransaction().remove(postDetailsFragment).commit();
+                        //getFragmentManager().beginTransaction().remove(postDetailsFragment).commit();
+                        getFragmentManager().beginTransaction().addToBackStack(postDetailsFragment.getClass().getName());
+                        getFragmentManager().beginTransaction().remove(postDetailsFragment).commit();
+
                     }
                 }
                 break;
@@ -1273,6 +1278,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 }
                 if (requestFrom.equals("commentFragment")){
                     getFragmentManager().beginTransaction().remove(commentFragment).commit();
+                    //getFragmentManager().beginTransaction().remove(postDetailsFragment).commit();
                 }
                 openRProfile(checkinRestaurantId);
                 Log.d("clicked","for restaurant");
@@ -1866,6 +1872,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
            // commentFragment = new CommentFragment(elementId);
             Bundle bundle = new Bundle();
             bundle.putString("postId", elementId);
+            bundle.putString("eventType", eventType);
             commentFragment = new CommentFragment();
             commentFragment.setArguments(bundle);
             setFragmentView(commentFragment, R.id.container1, -1, true);
@@ -2026,5 +2033,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             userProfileOpen(value);
             getFragmentManager().beginTransaction().remove(postDetailsFragment).commit();
         }
+        if (fragmentName.equals("bookmarkListPost")){
+            postDetailsFragment = new PostDetailsFragment();
+            postDetailsFragment.postId = value;
+            postDetailsFragment.setCurrentPage = 2;
+            setFragmentView(postDetailsFragment, R.id.container1, -1, true);
+        }
+
     }
 }

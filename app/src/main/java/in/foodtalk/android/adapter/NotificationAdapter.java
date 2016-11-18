@@ -45,7 +45,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         notificationCallback = (NotificationCallback) context;
         userThumbCallback = (UserThumbCallback) context;
     }
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = layoutInflater.inflate(R.layout.card_notification,parent, false);
@@ -65,11 +64,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         //notiHolder.txtMsg.setText(headSpannable.notificationSpannable(current.raiserName, current.raiserId,msg), TextView.BufferType.SPANNABLE);
         switch (current.eventType){
             case "2":
-                notiHolder.notificationIcon.setImageResource(R.drawable.like_icon_noti);
+                notiHolder.notificationIcon.setImageResource(R.drawable.ic_like_card_24);
                 break;
             case "12":
             case "4":
-                notiHolder.notificationIcon.setImageResource(R.drawable.commen_icon_noti);
+                notiHolder.notificationIcon.setImageResource(R.drawable.ic_comment_card_24);
                 break;
             case "5":
                 notiHolder.notificationIcon.setImageResource(R.drawable.user_icon_noti);
@@ -78,7 +77,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 notiHolder.notificationIcon.setImageResource(R.drawable.mentions_icon_noti);
                 break;
             case "11":
-                notiHolder.notificationIcon.setImageResource(R.drawable.more_fav);
+                notiHolder.notificationIcon.setImageResource(R.drawable.ic_bookmark_card_24);
                 break;
         }
 

@@ -52,6 +52,7 @@ import in.foodtalk.android.adapter.FollowedListAdapter;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.MentionCallback;
+import in.foodtalk.android.communicator.OpenFragmentCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.UserAgent;
 import in.foodtalk.android.object.CommentObj;
@@ -68,6 +69,7 @@ public class CommentFragment extends Fragment implements MentionCallback  {
     DatabaseHandler db;
 
     String postId;
+    String eventType;
 
     PostObj postObj;
 
@@ -79,6 +81,7 @@ public class CommentFragment extends Fragment implements MentionCallback  {
     JSONArray mentionUArray = new JSONArray();
 
     ProgressBar progressBar;
+
 
 
 
@@ -106,6 +109,7 @@ public class CommentFragment extends Fragment implements MentionCallback  {
     Context context;
 
     TextView txtPlaceHolder;
+    OpenFragmentCallback openFragmentCallback;
 
 
     /*public CommentFragment (String postId){
@@ -117,7 +121,10 @@ public class CommentFragment extends Fragment implements MentionCallback  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.comment_fragment, container, false);
 
+        openFragmentCallback = (OpenFragmentCallback) getActivity();
+
         postId =  getArguments().getString("postId");
+
 
         recyclerViewMention = (RecyclerView) layout.findViewById(R.id.recycler_view_mention);
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_comment);
@@ -173,6 +180,34 @@ public class CommentFragment extends Fragment implements MentionCallback  {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        if (getArguments().getString("eventType")!= null && eventType == null){
+            eventType = getArguments().getString("eventType");
+            Log.e("CommentFragment", "eventType: "+eventType);
+            if (eventType!= null){
+                if (eventType.equals("2")){
+                    openFragmentCallback.openFragment("postDetails", postId);
+                }else if (eventType.equals("4")){
+                    openFragmentCallback.openFragment("commentListPost", postId);
+
+                }else if (eventType.equals("11")){
+                    openFragmentCallback.openFragment("bookmarkListPost", postId);
+
+                }
+            }else {
+                openFragmentCallback.openFragment("postDetails", postId);
+            }
+
+
+        }
+        else {
+            Log.d("CommentFragment", "eventType: null");
+        }
+
+        /*if (eventType != null){
+
+        }*/
+
         return layout;
     }
     public void hideSoftKeyboard() {

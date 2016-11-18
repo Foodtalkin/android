@@ -73,8 +73,6 @@ public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSele
         tabComment.setOnTouchListener(this);
         tabBookmark.setOnTouchListener(this);
 
-
-
         db = new DatabaseHandler(getActivity());
         initialisePaging();
         return layout;
