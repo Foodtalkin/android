@@ -390,7 +390,6 @@ public class SearchResult extends Fragment implements SearchCallback {
                         current.id = rListArray.getJSONObject(i).getString("id");
                         current.txt1 = rListArray.getJSONObject(i).getString("dishName");
                         current.txt2 = rListArray.getJSONObject(i).getString("postCount")+" Dishes";
-
                         searchResultList.add(current);
                     }
                     Log.d("searchResult","array length: "+rListArray.length());

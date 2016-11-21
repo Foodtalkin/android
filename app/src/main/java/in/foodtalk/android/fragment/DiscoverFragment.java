@@ -455,7 +455,6 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
                 Log.d("DiscoverAdapter call", "getActivity null");
             }
             // recyclerView.invalidate();
-
             callScrollClass();
             Log.d("Response LoadData", "Load");
         }else if (tag.equals("refresh")){

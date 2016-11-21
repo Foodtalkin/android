@@ -35,6 +35,7 @@ public class RestaurantPostObj {
     public String iFlaggedIt;
     public String iBookark;
     public String timeElapsed;
+    public String region;
 
 
 

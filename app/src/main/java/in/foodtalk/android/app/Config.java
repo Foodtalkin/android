@@ -31,6 +31,7 @@ public class Config {
     public static String URL_UNFOLLOW = "http://"+IP+"/index.php/service/follower/unfollow";
 
     public static String URL_RESTAURANT_PROFILE = "http://"+IP+"/index.php/service/restaurant/getProfile";
+    public static String URL_RESTAURANT_POST_IMAGE = "http://"+IP+"/index.php/service/restaurant/getImagePosts";
 
     public static String URL_NEAR_BY_RESTAURANT = "http://"+IP+"/index.php/service/restaurant/list";
     public static String URL_RESTAURANT_LIST_CHECKIN = "http://"+IP+"/index.php/service/search/es";

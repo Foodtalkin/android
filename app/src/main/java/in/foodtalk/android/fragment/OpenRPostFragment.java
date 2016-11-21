@@ -145,7 +145,7 @@ public class OpenRPostFragment extends Fragment implements View.OnTouchListener 
         //recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
 
         linearLayoutManager
-                = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+                = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -206,7 +206,7 @@ public class OpenRPostFragment extends Fragment implements View.OnTouchListener 
 
         Log.d("post page number param", pageNo+"");
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                config.URL_RESTAURANT_PROFILE, obj,
+                config.URL_RESTAURANT_POST_IMAGE, obj,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -310,6 +310,8 @@ public class OpenRPostFragment extends Fragment implements View.OnTouchListener 
             current.iBookark = postArray.getJSONObject(i).getString("iBookark");
             current.rating = postArray.getJSONObject(i).getString("rating");
             current.restaurantIsActive = postArray.getJSONObject(i).getString("restaurantIsActive");
+            current.region = postArray.getJSONObject(i).getString("region");
+            current.tip = postArray.getJSONObject(i).getString("tip");
             //current.restaurantDistance = postArray.getJSONObject(i).getString("restaurantDistance");
             // postData.clear();
             postData.add(current);
@@ -412,7 +414,7 @@ public class OpenRPostFragment extends Fragment implements View.OnTouchListener 
                         break;
                     case MotionEvent.ACTION_UP:
                         Log.d("recycler view", "action up");
-                        if (dx1 > 0){
+                        /*if (dx1 > 0){
                              recyclerView.smoothScrollToPosition(lastVItem);
                             int vl = lastVItem*280;
                             Log.d("value scrol", vl+"");
@@ -425,7 +427,7 @@ public class OpenRPostFragment extends Fragment implements View.OnTouchListener 
                             int vl = lastVItem*280;
                             //recyclerView.scrollTo(vl, 0);
                             recyclerView.smoothScrollToPosition(lastVItem);
-                        }
+                        }*/
                         break;
                 }
                 break;

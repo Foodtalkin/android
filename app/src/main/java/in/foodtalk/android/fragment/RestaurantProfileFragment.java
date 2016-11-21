@@ -234,6 +234,7 @@ public class RestaurantProfileFragment extends Fragment {
             current.iBookark = postArray.getJSONObject(i).getString("iBookark");
             current.timeElapsed = postArray.getJSONObject(i).getString("timeElapsed");
             current.restaurantIsActive = postArray.getJSONObject(i).getString("restaurantIsActive");
+            current.region = postArray.getJSONObject(i).getString("region");
 
             rPostList.add(current);
         }
