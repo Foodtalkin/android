@@ -63,8 +63,6 @@ public class SearchResult extends Fragment implements SearchCallback {
 
     private int mPageNumber;
 
-
-
     List<SearchResultObj> searchResultList = new ArrayList<>();
 
     String sessionId;
@@ -226,12 +224,10 @@ public class SearchResult extends Fragment implements SearchCallback {
         }
         if (keyword.length()<2 && searchResultLoaded == true){
             searchAdapter.notifyDataSetChanged();
-
             searchResultLoaded = false;
             searchResultList.clear();
             iconHolder.setVisibility(View.VISIBLE);
         }
-
         //AppController.getInstance().cancelPendingRequests(TAG);
         if (keyword.length()>1 && searchResultLoaded == false){
             try {
@@ -261,21 +257,25 @@ public class SearchResult extends Fragment implements SearchCallback {
         //Log.d("getPostFeed", "post data");
         JSONObject obj = new JSONObject();
         obj.put("sessionId", AppController.getInstance().sessionId);
-        obj.put(pageNumber == RESTAURANT_SEARCH ? "searchText" : "search", keyword);
-        obj.put("region", "delhi");
+        //obj.put(pageNumber == RESTAURANT_SEARCH ? "searchText" : "search", keyword);
+        obj.put("searchText", keyword);
+        //obj.put("region", "delhi");
         String url;
         if (searchType.equals("dish")){
+            obj.put("type", "dish");
             url = config.URL_DISH_LIST;
         }else if (searchType.equals("user")){
+            obj.put("type", "user");
             url = config.URL_USER_LIST;
         }else if (searchType.equals("restaurant")){
+            obj.put("type", "restaurant");
             url = config.URL_RESTAURANT_LIST;
         }else {
             url = null;
         }
         Log.d("json Obj", obj+"");
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                url, obj,
+                config.URL_RESTAURANT_LIST_CHECKIN, obj,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
