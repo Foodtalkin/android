@@ -61,7 +61,9 @@ public class FavouritesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 FavoritesObj current = favList.get(position);
                 FavHolder favHolder = (FavHolder) holder;
                 favHolder.txtDishName.setText(current.dishName);
-                favHolder.txtRestaurantName.setText(current.restaurantName);
+                if (!current.restaurantName.equals("")){
+                    favHolder.txtRestaurantName.setText(current.restaurantName+", "+current.cityName);
+                }
             }else if (holder instanceof ProgressViewHolder){
                 ProgressViewHolder progressViewHolder = (ProgressViewHolder) holder;
                 progressViewHolder.progressBar.setIndeterminate(true);

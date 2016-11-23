@@ -206,6 +206,7 @@ public class FavouritesFragment extends Fragment {
             current.dishName = favArray.getJSONObject(i).getString("dishName");
             current.restaurantName = favArray.getJSONObject(i).getString("restaurantName");
             current.id = favArray.getJSONObject(i).getString("id");
+            current.cityName = favArray.getJSONObject(i).getString("cityName");
             favList.add(current);
         }
         if (tag.equals("load")){

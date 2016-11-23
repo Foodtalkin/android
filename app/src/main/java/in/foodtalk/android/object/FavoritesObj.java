@@ -7,4 +7,5 @@ public class FavoritesObj {
     public String dishName;
     public String id;
     public String restaurantName;
+    public String cityName;
 }

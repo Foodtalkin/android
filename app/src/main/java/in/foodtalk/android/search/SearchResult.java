@@ -222,24 +222,26 @@ public class SearchResult extends Fragment implements SearchCallback {
         if (keyword.length() == 0){
             placeholder.setVisibility(View.GONE);
         }
-        if (keyword.length()<2 && searchResultLoaded == true){
+        /*if (keyword.length()<2 && searchResultLoaded == true){
             searchAdapter.notifyDataSetChanged();
             searchResultLoaded = false;
             searchResultList.clear();
             iconHolder.setVisibility(View.VISIBLE);
-        }
+        }*/
         //AppController.getInstance().cancelPendingRequests(TAG);
-        if (keyword.length()>1 && searchResultLoaded == false){
+        if (keyword.length()>1){
             try {
                 getDishList(TAG, searchType);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }else {
+            recyclerView.setVisibility(View.GONE);
         }
 
-        if (searchResultLoaded){
+        /*if (searchResultLoaded){
             onTexChange(keyword);
-        }
+        }*/
 
        // Log.d("check list size", "searchRList: "+searchResultList.size() );
 
@@ -253,6 +255,7 @@ public class SearchResult extends Fragment implements SearchCallback {
         //Log.d("pageNo loaded", pageNumber+"");
 
         progressBar.setVisibility(View.VISIBLE);
+        placeholder.setVisibility(View.GONE);
         //Log.d("session Id global", AppController.getInstance().sessionId+"");
         //Log.d("getPostFeed", "post data");
         JSONObject obj = new JSONObject();
@@ -287,10 +290,10 @@ public class SearchResult extends Fragment implements SearchCallback {
                             if (!status.equals("error")){
                                 //-- getAndSave(response);
 
-                                if (!searchResultLoaded){
+                                //if (!searchResultLoaded){
                                     loadDataIntoView(response , tag);
                                     Log.d("respons","loadDataIntoView");
-                                }
+                                //}
                             }else {
                                 String errorCode = response.getString("errorCode");
                                 if(errorCode.equals("6")){
@@ -351,22 +354,32 @@ public class SearchResult extends Fragment implements SearchCallback {
 
         this.response = response;
 
+        Log.d("check length of arrey",response.getJSONObject("result").getJSONObject("hits").getJSONArray("hits").length()+"");
+        if (response.getJSONObject("result").getJSONObject("hits").getJSONArray("hits").length() == 0){
+            placeholder.setVisibility(View.VISIBLE);
+        }
+
 
 
         setListArray(response);
 
-        searchAdapter = new SearchAdapter(getActivity(),searchResultList, pageNumber);
-        recyclerView.setAdapter(searchAdapter);
+        if (searchResultLoaded == true){
+            searchAdapter.notifyDataSetChanged();
+        }else {
+            searchAdapter = new SearchAdapter(getActivity(),searchResultList, pageNumber);
+            recyclerView.setAdapter(searchAdapter);
+            searchResultLoaded = true;
+        }
+        recyclerView.setVisibility(View.VISIBLE);
         //Log.d("send list", "total: "+restaurantList.size());
         if (getActivity() != null ){
 
         }else {
             //Log.d("getActivity", "null");
         }
-        if (keyword.length()>2 && !searchResultLoaded){
+        /*if (keyword.length()>2 && !searchResultLoaded){
             onTexChange(keyword);
-        }
-        searchResultLoaded = true;
+        }*/
     }
     private void onTexChange(String newText){
 
@@ -383,37 +396,45 @@ public class SearchResult extends Fragment implements SearchCallback {
         try {
             switch (pageNumber){
                 case DISH_SEARCH:
-                    JSONArray rListArray = response.getJSONArray("result");
+                    //JSONArray rListArray = response.getJSONArray("result");
+                    JSONArray rListArray = response.getJSONObject("result").getJSONObject("hits").getJSONArray("hits");
+                    //Log.d("SearchResult",response.getJSONObject("result").getJSONObject("hits").getJSONArray("hits").length()+"");
                     searchResultList.clear();
                     for (int i=0;i<rListArray.length();i++){
                         SearchResultObj current = new SearchResultObj();
-                        current.id = rListArray.getJSONObject(i).getString("id");
-                        current.txt1 = rListArray.getJSONObject(i).getString("dishName");
-                        current.txt2 = rListArray.getJSONObject(i).getString("postCount")+" Dishes";
-                        searchResultList.add(current);
+                        current.id = rListArray.getJSONObject(i).getJSONObject("_source").getString("id");
+                        current.txt1 = rListArray.getJSONObject(i).getJSONObject("_source").getString("dishname");
+                        if (rListArray.getJSONObject(i).getJSONObject("_source").has("postcount")){
+                            current.txt2 = rListArray.getJSONObject(i).getJSONObject("_source").getString("postcount")+" Dishes";
+                            searchResultList.add(current);
+                        }
+
                     }
-                    Log.d("searchResult","array length: "+rListArray.length());
+                    //Log.d("searchResult","array length: "+rListArray.length());
                     break;
                 case USER_SEARCH:
-                    JSONArray rListArray1 = response.getJSONArray("users");
+                    //JSONArray rListArray1 = response.getJSONArray("users");
+                    JSONArray rListArray1 = response.getJSONObject("result").getJSONObject("hits").getJSONArray("hits");
                     searchResultList.clear();
                     for (int i=0;i<rListArray1.length();i++){
                         SearchResultObj current = new SearchResultObj();
-                        current.id = rListArray1.getJSONObject(i).getString("id");
-                        current.txt1 = rListArray1.getJSONObject(i).getString("userName");
-                        current.txt2 = rListArray1.getJSONObject(i).getString("fullName");
-                        current.image = rListArray1.getJSONObject(i).getString("image");
+                        current.id = rListArray1.getJSONObject(i).getJSONObject("_source").getString("id");
+                        current.txt1 = rListArray1.getJSONObject(i).getJSONObject("_source").getString("username");
+                        current.txt2 = rListArray1.getJSONObject(i).getJSONObject("_source").getString("fullname");
+                        current.image = rListArray1.getJSONObject(i).getJSONObject("_source").getString("image");
                         searchResultList.add(current);
                     }
                     break;
                 case RESTAURANT_SEARCH:
-                    JSONArray rListArray2 = response.getJSONArray("restaurants");
+                    //JSONArray rListArray2 = response.getJSONArray("restaurants");
+                    JSONArray rListArray2 = response.getJSONObject("result").getJSONObject("hits").getJSONArray("hits");
                     searchResultList.clear();
                     for (int i=0;i<rListArray2.length();i++){
                         SearchResultObj current = new SearchResultObj();
-                        current.id = rListArray2.getJSONObject(i).getString("id");
-                        current.txt1 = rListArray2.getJSONObject(i).getString("restaurantName");
-                        current.txt2 = rListArray2.getJSONObject(i).getString("area");
+                        current.id = rListArray2.getJSONObject(i).getJSONObject("_source").getString("id");
+                        current.txt1 = rListArray2.getJSONObject(i).getJSONObject("_source").getString("restaurantname");
+                        current.txt2 = rListArray2.getJSONObject(i).getJSONObject("_source").getString("area")+", "+
+                                rListArray2.getJSONObject(i).getJSONObject("_source").getString("cityname");
                         searchResultList.add(current);
                     }
                     break;
