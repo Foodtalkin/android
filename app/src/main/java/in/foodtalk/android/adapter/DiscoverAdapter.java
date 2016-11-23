@@ -408,6 +408,11 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             userThumbnail.setOnTouchListener(this);
             iconShare.setOnTouchListener(this);
             btnDetails.setOnTouchListener(this);
+            txtTip.setOnTouchListener(this);
+
+            btnLike.setOnTouchListener(this);
+            btnBookmark.setOnTouchListener(this);
+            btnComment.setOnTouchListener(this);
 
 
             mAnimation = AnimationUtils.loadAnimation(context, R.anim.like_anim);
@@ -606,15 +611,39 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
                 }
                 break;
-                case R.id.btn_details:{
+                case R.id.btn_like:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("HomeFeedAdapter", "btn like clicked");
+                            openFragmentCallback.openFragment("postDetails", postObj1.id);
+
+                            break;
+                    }
+                    break;
+                case R.id.btn_bookmark:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("HomeFeedAdapter", "btn bookmark clicked");
+                            openFragmentCallback.openFragment("bookmarkListPost", postObj1.id);
+                            break;
+                    }
+                    break;
+                case R.id.btn_comment:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("HomeFeedAdapter", "btn comment clicked");
+                            openFragmentCallback.openFragment("commentListPost", postObj1.id);
+                            break;
+                    }
+                    break;
+                case R.id.txt_tip:
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("HomeFeedAdapter","btn_details clicked");
                             openFragmentCallback.openFragment("postDetails", postObj1.id);
                             break;
                     }
-                }
-                break;
+                    break;
             }
             return false;
         }

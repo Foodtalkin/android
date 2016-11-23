@@ -277,7 +277,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:clickable="true">
+                >
                 <LinearLayout
                     android:id="@+id/count_holder"
                     android:layout_width="wrap_content"
@@ -291,7 +291,8 @@
                         android:id="@+id/btn_like"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:clickable="true">
                         <TextView
                             android:id="@+id/txt_like_count"
                             android:layout_width="wrap_content"
@@ -316,7 +317,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginLeft="10dp">
+                        android:layout_marginLeft="10dp"
+                        android:clickable="true">
                         <TextView
                             android:id="@+id/txt_comment_count"
                             android:layout_width="wrap_content"
@@ -341,7 +343,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginLeft="10dp">
+                        android:layout_marginLeft="10dp"
+                        android:clickable="true">
                         <TextView
                             android:id="@+id/txt_bookmark_count"
                             android:layout_width="wrap_content"
@@ -372,7 +375,7 @@
                     android:layout_marginLeft="26dp"
                     android:layout_marginRight="16dp"
                     android:text=""
-                    android:clickable="false"/>
+                    android:clickable="true"/>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.66dp"
