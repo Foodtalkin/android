@@ -725,7 +725,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             Log.d("setFragmentview","going to commit");
             if(newFragment == homeFragment || newFragment == discoverFragment || newFragment == notiFragment || newFragment == moreFragment){
                 clearBackStack();
-
             }
             transaction.commit();
 

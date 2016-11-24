@@ -161,7 +161,6 @@
                     android:layout_gravity="center_horizontal"
                     android:clickable="false"
                     android:tint="@color/snow"
-
                     />
                 <TextView
                     android:id="@+id/home_txt_icon"

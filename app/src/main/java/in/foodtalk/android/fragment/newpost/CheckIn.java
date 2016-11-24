@@ -288,6 +288,7 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
             current.area = rListArray.getJSONObject(i).getString("area");
             current.restaurantName = rListArray.getJSONObject(i).getString("restaurantName");
             current.restaurantIsActive = rListArray.getJSONObject(i).getString("restaurantIsActive");
+            current.cityName = rListArray.getJSONObject(i).getString("cityname");
             restaurantList.add(current);
         }
         //Log.d("send list", "total: "+restaurantList.size());

@@ -395,12 +395,13 @@ public class OpenRPostFragment extends Fragment implements View.OnTouchListener 
         getActivity().finish();
     }
     public void showToast(String msg){
-        Toast toast= Toast.makeText(getActivity(),
-                msg, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 300);
-        toast.show();
+        if (getActivity() != null){
+            Toast toast= Toast.makeText(getActivity(),
+                    msg, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 300);
+            toast.show();
+        }
     }
-
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         Log.d("onTouch","call");
@@ -408,7 +409,6 @@ public class OpenRPostFragment extends Fragment implements View.OnTouchListener 
             case R.id.recycler_view_open_post:
                 Log.d("clicked","recycler view");
                 switch (event.getAction()){
-
                     case MotionEvent.ACTION_DOWN:
                         Log.d("recycler view","action down");
                         break;

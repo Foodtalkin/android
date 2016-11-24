@@ -382,7 +382,6 @@
                     android:layout_above="@+id/comment_send_holder"
                     android:background="@color/silver"
                     android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
                     />
             </LinearLayout>
         </LinearLayout>

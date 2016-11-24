@@ -422,11 +422,12 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 }
             });*/
 
-            //btnLike.setOnTouchListener(this);
-            // btnBookmark.setOnTouchListener(this);
-            // btnComment.setOnTouchListener(this);
+            btnLike.setOnTouchListener(this);
+            btnBookmark.setOnTouchListener(this);
+            btnComment.setOnTouchListener(this);
+            txtTip.setOnTouchListener(this);
 
-            btnDetails.setOnTouchListener(this);
+            //btnDetails.setOnTouchListener(this);
            /* btnDetails.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -660,6 +661,7 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("HomeFeedAdapter", "btn like clicked");
+                            openFragmentCallback.openFragment("postDetails", postObj1.id);
 
                             break;
                     }
@@ -668,6 +670,7 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("HomeFeedAdapter", "btn bookmark clicked");
+                            openFragmentCallback.openFragment("bookmarkListPost", postObj1.id);
                             break;
                     }
                     break;
@@ -675,10 +678,11 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("HomeFeedAdapter", "btn comment clicked");
+                            openFragmentCallback.openFragment("commentListPost", postObj1.id);
                             break;
                     }
                     break;
-                case R.id.btn_details:
+                case R.id.txt_tip:
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("HomeFeedAdapter","btn_details clicked");

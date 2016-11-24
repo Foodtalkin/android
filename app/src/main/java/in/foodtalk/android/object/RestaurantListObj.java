@@ -10,4 +10,5 @@ public class RestaurantListObj {
     public String restaurantIsActive;
     public String distance;
     public String priceRange;
+    public String cityName;
 }
