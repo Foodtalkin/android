@@ -64,6 +64,7 @@
                     android:textSize="@dimen/txt_size_icon"/>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/btn_followers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -85,6 +86,7 @@
                     android:textSize="@dimen/txt_size_icon"/>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/btn_following"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"

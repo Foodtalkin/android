@@ -62,6 +62,7 @@ import in.foodtalk.android.communicator.CheckInCallback;
 import in.foodtalk.android.communicator.CloudinaryCallback;
 import in.foodtalk.android.communicator.CommentCallback;
 import in.foodtalk.android.communicator.DishTaggingCallback;
+import in.foodtalk.android.communicator.FollowListCallback;
 import in.foodtalk.android.communicator.HeadSpannableCallback;
 import in.foodtalk.android.communicator.MoreBtnCallback;
 import in.foodtalk.android.communicator.NotificationCallback;
@@ -85,6 +86,7 @@ import in.foodtalk.android.fragment.CommentFragment;
 import in.foodtalk.android.fragment.CuratedFragment;
 import in.foodtalk.android.fragment.DiscoverFragment;
 import in.foodtalk.android.fragment.FavouritesFragment;
+import in.foodtalk.android.fragment.FollowListFragment;
 import in.foodtalk.android.fragment.HomeFragment;
 import in.foodtalk.android.fragment.postdetails.LikeListFragment;
 import in.foodtalk.android.fragment.MoreFragment;
@@ -121,7 +123,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         HeadSpannableCallback, UserThumbCallback, ProfileRPostOpenCallback, PhoneCallback,
         CheckInCallback, CamBitmapCallback, DishTaggingCallback , RatingCallback , ReviewCallback, AddRestaurantCallback,
         AddedRestaurantCallback, SearchResultCallback, CommentCallback, NotificationCallback, OpenRestaurantCallback,
-        ApiCallback, StoreCallback, ShareNewPostCallback, OpenFragmentCallback {
+        ApiCallback, StoreCallback, ShareNewPostCallback, OpenFragmentCallback, FollowListCallback {
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
     ImageView homeIcon, discoverIcon, newpostIcon, notiIcon, moreIcon;
@@ -159,6 +161,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     NewPostShare newPostShare;
     LikeListFragment likeListFragment;
     PostDetailsFragment postDetailsFragment;
+    FollowListFragment followListFragment;
 
     //-------dummy fragment created for temporary use to set Legal screen title----
     Fragment legalFragment = new Fragment();
@@ -259,27 +262,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         stringCase = new StringCase();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         //getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-
 
         setContentView(R.layout.activity_home);
 
         createPostObj = new CreatePostObj();
-
 
        // ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         //progressBar.setIndeterminate(false);
@@ -1763,6 +1750,18 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             header1.setVisibility(View.GONE);
             titleHome.setText("Purchases");
         }
+
+        if (fragment == followListFragment){
+            searchHeader.setVisibility(View.GONE);
+            header.setVisibility(View.VISIBLE);
+            header1.setVisibility(View.GONE);
+            if (listType.equals("followers")){
+                titleHome.setText("Followers");
+            }else if (listType.equals("following")){
+                titleHome.setText("Following");
+            }
+
+        }
        // Log.d("check ids","myId:"+userId+" userId:"+currentProfileUserId+" f: "+fragment.getClass().getSimpleName());
        /* if (fragment == userProfile && currentProfileUserId.equals(userId)){
             btnOption.setVisibility(View.VISIBLE);
@@ -2038,6 +2037,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             postDetailsFragment.setCurrentPage = 2;
             setFragmentView(postDetailsFragment, R.id.container1, -1, true);
         }
-
+    }
+    String listType;
+    @Override
+    public void openFollowList(String userId, String listType) {
+        this.listType = listType;
+        Log.d("openFollow callback","userId: "+userId+" listType: "+listType);
+        followListFragment = new FollowListFragment();
+        setFragmentView(followListFragment,R.id.container,-1, true);
     }
 }

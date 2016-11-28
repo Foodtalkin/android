@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ import java.util.List;
 
 import in.foodtalk.android.R;
 import in.foodtalk.android.apicall.UserFollow;
+import in.foodtalk.android.communicator.FollowListCallback;
 import in.foodtalk.android.communicator.ProfilePostOpenCallback;
 import in.foodtalk.android.communicator.UserProfileImgCallback;
 import in.foodtalk.android.module.StringCase;
@@ -59,6 +61,8 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     int imgWidth;
     UserProfileImgCallback userProfileImgCallback;
 
+    FollowListCallback followListCallback;
+
     private ProfilePostOpenCallback postOpenCallback;
     public UserProfileAdapter (Context context, List<UserPostObj> postList, UserProfileObj userProfile, Boolean followBtnVisible, UserProfileImgCallback userProfileImgCallback){
         layoutInflater = LayoutInflater.from(context);
@@ -67,6 +71,8 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         this.userProfileObj = userProfile;
         this.followBtnVisible = followBtnVisible;
         this.userProfileImgCallback = userProfileImgCallback;
+
+        this.followListCallback = (FollowListCallback) context;
 
 
 
@@ -236,6 +242,8 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         Boolean apiFollow;
 
+        LinearLayout btnFollowers, btnFollowing;
+
         String userId;
         public ProfileHolder(View itemView) {
             super(itemView);
@@ -245,9 +253,13 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             followers = (TextView) itemView.findViewById(R.id.txt_followers_profile);
             following = (TextView) itemView.findViewById(R.id.txt_following_profile);
             btnFollow = (Button) itemView.findViewById(R.id.btn_follow_profile);
+            btnFollowers = (LinearLayout) itemView.findViewById(R.id.btn_followers);
+            btnFollowing = (LinearLayout) itemView.findViewById(R.id.btn_following);
 
             btnFollow.setOnTouchListener(this);
             profileImg.setOnTouchListener(this);
+            btnFollowers.setOnTouchListener(this);
+            btnFollowing.setOnTouchListener(this);
         }
 
         @Override
@@ -286,6 +298,22 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                     //.fit()
                                     //.placeholder(R.drawable.user_placeholder)
                                     .into(userImg);*/
+                            break;
+                    }
+                    break;
+                case R.id.btn_followers:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("UserProfileAdapter","btn followers clicked");
+                            followListCallback.openFollowList(postList.get(getAdapterPosition()).userId,"followers");
+                            break;
+                    }
+                    break;
+                case R.id.btn_following:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("UserProfileAdapter","btn following clicked");
+                            followListCallback.openFollowList(postList.get(getAdapterPosition()).userId,"following");
                             break;
                     }
                     break;
