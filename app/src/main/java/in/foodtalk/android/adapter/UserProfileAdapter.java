@@ -242,6 +242,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         Boolean apiFollow;
 
+
         LinearLayout btnFollowers, btnFollowing;
 
         String userId;
@@ -305,7 +306,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("UserProfileAdapter","btn followers clicked");
-                            followListCallback.openFollowList(postList.get(getAdapterPosition()).userId,"followers");
+                            followListCallback.openFollowList(userId,"followers");
                             break;
                     }
                     break;
@@ -313,7 +314,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("UserProfileAdapter","btn following clicked");
-                            followListCallback.openFollowList(postList.get(getAdapterPosition()).userId,"following");
+                            followListCallback.openFollowList(userId,"following");
                             break;
                     }
                     break;

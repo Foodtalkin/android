@@ -1760,7 +1760,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             }else if (listType.equals("following")){
                 titleHome.setText("Following");
             }
-
         }
        // Log.d("check ids","myId:"+userId+" userId:"+currentProfileUserId+" f: "+fragment.getClass().getSimpleName());
        /* if (fragment == userProfile && currentProfileUserId.equals(userId)){
@@ -2042,8 +2041,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     @Override
     public void openFollowList(String userId, String listType) {
         this.listType = listType;
+        Bundle bundle = new Bundle();
+        bundle.putString("userId", userId);
+        bundle.putString("listType", listType);
         Log.d("openFollow callback","userId: "+userId+" listType: "+listType);
         followListFragment = new FollowListFragment();
+        followListFragment.setArguments(bundle);
         setFragmentView(followListFragment,R.id.container,-1, true);
     }
 }

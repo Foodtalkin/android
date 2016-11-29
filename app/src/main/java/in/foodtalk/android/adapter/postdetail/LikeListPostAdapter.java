@@ -71,18 +71,18 @@ public class LikeListPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }else {
             likeHolder.txtFollow.setVisibility(View.GONE);
         }
-
-        Picasso.with(context)
-                .load(current.image)
-                .fit()
-                .placeholder(R.drawable.user_placeholder)
-                .into(likeHolder.userThumb);
+        if (!current.image.equals("") && current.image != null){
+            Picasso.with(context)
+                    .load(current.image)
+                    .fit()
+                    .placeholder(R.drawable.user_placeholder)
+                    .into(likeHolder.userThumb);
+        }
         //Log.d("likelist post adapter","position: "+position+" userName: "+current.userName);
     }
     @Override
     public int getItemCount() {
         //Log.d("likelistpost adapter1","size "+likeList.size());
-
         return likeList.size();
     }
 
@@ -139,7 +139,6 @@ public class LikeListPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                                 }
                             }
                             break;
-
                     }
                     break;
                 case R.id.btn_user:

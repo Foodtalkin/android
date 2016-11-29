@@ -55,6 +55,7 @@ public class Config {
 
     public static String URL_NOTIFICATION = "http://"+IP+"/index.php/service/notification/list";
     public static String URL_LIST_FOLLOWED = "http://"+IP+"/index.php/service/follower/listFollowed";
+    public static String URL_LIST_FOLLOWER = "http://"+IP+"/index.php/service/follower/listFollowers";
 
     public static String URL_REPORT_COMMENT  = "http://"+IP+"/index.php/service/flag/comment";
     public static String URL_DELETE_COMMENT  = "http://"+IP+"/index.php/service/comment/delete";
@@ -65,4 +66,6 @@ public class Config {
     public static String URL_ADWORD_REDEEMED = "http://"+IP+"/index.php/service/adwords/redeedmed";
     public static String URL_LIKE_LIST_POST = "http://"+IP+"/index.php/service/like/listByPost";
     public static String URL_BOOKMARK_LIST_POST = "http://"+IP+"/index.php/service/bookmark/listByPost";
+
+
 }
