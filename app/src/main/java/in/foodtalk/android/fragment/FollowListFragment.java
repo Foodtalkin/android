@@ -22,11 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.adapter.FollowListAdapter;
+import in.foodtalk.android.adapter.FollowedListAdapter;
 import in.foodtalk.android.adapter.postdetail.LikeListPostAdapter;
 import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.module.DatabaseHandler;
+import in.foodtalk.android.object.FollowListObj;
 import in.foodtalk.android.object.LikeListObj;
 
 /**
@@ -45,8 +48,9 @@ public class FollowListFragment extends Fragment implements ApiCallback {
     String listType;
     LinearLayout tapToRetry;
 
-    List<LikeListObj> likeList = new ArrayList<>();
+    List<FollowListObj> followList = new ArrayList<>();
     LikeListPostAdapter likeListPostAdapter;
+    FollowListAdapter followListAdapter;
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
     String loginUserId;
@@ -60,8 +64,6 @@ public class FollowListFragment extends Fragment implements ApiCallback {
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view);
         linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-
-
 
         apiCall = new ApiCall();
         apiCallback = this;
@@ -104,8 +106,9 @@ public class FollowListFragment extends Fragment implements ApiCallback {
             apiCall.apiRequestPost(getActivity(),obj, Config.URL_LIST_FOLLOWED,listType,apiCallback);
         }
     }
-    private void loadDataIntoView(JSONObject response) throws JSONException {
-        JSONArray likeListArray = response.getJSONArray("followers");
+    private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
+
+        JSONArray likeListArray = (tag.endsWith("followers"))? response.getJSONArray("followers") : response.getJSONArray("followedUsers") ;
         if (likeListArray.length() == 0){
            // txtPlaceholder.setVisibility(View.VISIBLE);
            // txtPlaceholder.setText("No bookmarks");
@@ -113,25 +116,27 @@ public class FollowListFragment extends Fragment implements ApiCallback {
            // txtPlaceholder.setVisibility(View.GONE);
         }
         for (int i=0; i<likeListArray.length(); i++){
-            LikeListObj current = new LikeListObj();
+            FollowListObj current = new FollowListObj();
             current.id = likeListArray.getJSONObject(i).getString("id");
             current.userName = likeListArray.getJSONObject(i).getString("userName");
             current.fullName = likeListArray.getJSONObject(i).getString("fullName");
-            if (!current.id.equals(loginUserId)){
+            if (!current.id.equals(loginUserId) && tag.endsWith("followers")){
                 current.iFollowIt = likeListArray.getJSONObject(i).getString("iFollowIt");
             }
             current.image = likeListArray.getJSONObject(i).getString("image");
-            likeList.add(current);
+            followList.add(current);
         }
-        likeListPostAdapter = new LikeListPostAdapter(getActivity(), likeList);
-        recyclerView.setAdapter(likeListPostAdapter);
+        if (getActivity()!= null){
+            followListAdapter = new FollowListAdapter(getActivity(), followList, tag);
+            recyclerView.setAdapter(followListAdapter);
+        }
     }
     @Override
     public void apiResponse(JSONObject response, String tag) {
         progressBar.setVisibility(View.GONE);
         if (tag.equals(listType) && response != null){
             try {
-                loadDataIntoView(response);
+                loadDataIntoView(response, tag);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

@@ -71,10 +71,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 notiHolder.notificationIcon.setImageResource(R.drawable.ic_comment_card_24);
                 break;
             case "5":
-                notiHolder.notificationIcon.setImageResource(R.drawable.user_icon_noti);
+                notiHolder.notificationIcon.setImageResource(R.drawable.ic_follow_24);
                 break;
             case "9":
-                notiHolder.notificationIcon.setImageResource(R.drawable.mentions_icon_noti);
+                notiHolder.notificationIcon.setImageResource(R.drawable.ic_mention_24);
                 break;
             case "11":
                 notiHolder.notificationIcon.setImageResource(R.drawable.ic_bookmark_card_24);

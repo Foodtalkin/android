@@ -1,4 +1,4 @@
-package in.foodtalk.android.adapter.postdetail;
+package in.foodtalk.android.adapter;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
@@ -21,78 +21,76 @@ import java.util.List;
 import in.foodtalk.android.R;
 import in.foodtalk.android.apicall.UserFollow;
 import in.foodtalk.android.communicator.OpenFragmentCallback;
-import in.foodtalk.android.fragment.postdetails.LikeListFragment;
+import in.foodtalk.android.object.FollowListObj;
 import in.foodtalk.android.object.LikeListObj;
 
 /**
- * Created by RetailAdmin on 19-10-2016.
+ * Created by RetailAdmin on 30-11-2016.
  */
 
-public class LikeListPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-    LayoutInflater layoutInflater;
-    List<LikeListObj> likeList;
+public class FollowListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    List<FollowListObj> followList;
     Context context;
-    UserFollow userFollow;
+    LayoutInflater layoutInflater;
     OpenFragmentCallback openFragmentCallback;
-
-    public LikeListPostAdapter (Context context, List<LikeListObj> likeList){
-        openFragmentCallback = (OpenFragmentCallback) context;
+    UserFollow userFollow;
+    String tag;
+    public FollowListAdapter(Context context, List<FollowListObj> followList, String tag){
         this.context = context;
-        this.likeList = likeList;
+        this.followList = followList;
         layoutInflater = layoutInflater.from(context);
+        openFragmentCallback = (OpenFragmentCallback) context;
         userFollow = new UserFollow(context);
-        //Log.d ("likelistpost adapter","size "+likeList.size());
+        this.tag = tag;
     }
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = layoutInflater.inflate(R.layout.card_like,parent, false);
-        LikeHolder likeHolder = new LikeHolder(view);
-        return likeHolder;
+        FollowHolder followHolder = new FollowHolder(view);
+        return followHolder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        LikeListObj current = likeList.get(position);
-        LikeHolder likeHolder = (LikeHolder) holder;
-        likeHolder.txtUsername.setText(current.userName);
-        likeHolder.txtFullname.setText(current.fullName);
-        likeHolder.iFollowIt = current.iFollowIt;
-        likeHolder.userId = current.id;
+        FollowListObj current = followList.get(position);
+        FollowHolder followHolder = (FollowHolder) holder;
+        followHolder.txtUsername.setText(current.userName);
+        followHolder.txtFullname.setText(current.fullName);
+        followHolder.iFollowIt = current.iFollowIt;
+        followHolder.userId = current.id;
         if (current.iFollowIt != null){
             if (current.iFollowIt.equals("0")){
-                likeHolder.txtFollow.setText("Follow");
-                likeHolder.txtFollow.setTextColor(ContextCompat.getColor(context, R.color.active));
+                followHolder.txtFollow.setText("Follow");
+                followHolder.txtFollow.setTextColor(ContextCompat.getColor(context, R.color.active));
             }else {
-                likeHolder.txtFollow.setText("Following");
-                likeHolder.txtFollow.setTextColor(ContextCompat.getColor(context, R.color.positive));
+                followHolder.txtFollow.setText("Following");
+                followHolder.txtFollow.setTextColor(ContextCompat.getColor(context, R.color.positive));
             }
         }else {
-            likeHolder.txtFollow.setVisibility(View.GONE);
+            followHolder.txtFollow.setVisibility(View.GONE);
         }
         if (!current.image.equals("") && current.image != null){
             Picasso.with(context)
                     .load(current.image)
                     .fit()
                     .placeholder(R.drawable.user_placeholder)
-                    .into(likeHolder.userThumb);
+                    .into(followHolder.userThumb);
         }
-        //Log.d("likelist post adapter","position: "+position+" userName: "+current.userName);
-    }
-    @Override
-    public int getItemCount() {
-        //Log.d("likelistpost adapter1","size "+likeList.size());
-        return likeList.size();
     }
 
-    class LikeHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
+    @Override
+    public int getItemCount() {
+        return followList.size();
+    }
+
+    class FollowHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
         TextView txtUsername, txtFullname, txtFollow;
         ImageView userThumb;
         String iFollowIt;
         String userId;
         LinearLayout btnUser;
-        public LikeHolder(View itemView) {
+
+        public FollowHolder(View itemView) {
             super(itemView);
             txtUsername = (TextView) itemView.findViewById(R.id.txt_username);
             txtFullname = (TextView) itemView.findViewById(R.id.txt_fullname);
@@ -112,10 +110,10 @@ public class LikeListPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         case MotionEvent.ACTION_UP:
                             if (iFollowIt.equals("0")){
                                 Log.d("Likelist adapter", "follow");
-                                LikeListObj likeListObj = likeList.get(getPosition());
-                                likeListObj.iFollowIt = "1";
+                                FollowListObj followListObj = followList.get(getPosition());
+                                followListObj.iFollowIt = "1";
                                 iFollowIt = "1";
-                                likeList.set(getPosition(),likeListObj);
+                                followList.set(getPosition(),followListObj);
                                 txtFollow.setText("Following");
                                 txtFollow.setTextColor(ContextCompat.getColor(context, R.color.positive));
                                 try {
@@ -124,10 +122,10 @@ public class LikeListPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                                     e.printStackTrace();
                                 }
                             }else if (iFollowIt.equals("1")){
-                                LikeListObj likeListObj = likeList.get(getPosition());
-                                likeListObj.iFollowIt = "0";
+                                FollowListObj followListObj = followList.get(getPosition());
+                                followListObj.iFollowIt = "0";
                                 iFollowIt = "0";
-                                likeList.set(getPosition(),likeListObj);
+                                followList.set(getPosition(),followListObj);
                                 txtFollow.setText("Follow");
                                 Log.d("Likelist adapter", "unfollow");
                                 txtFollow.setTextColor(ContextCompat.getColor(context, R.color.active));
@@ -144,7 +142,7 @@ public class LikeListPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_UP:
                             Log.d("LikeListPostAdapter","Acton up clicked");
-                            openFragmentCallback.openFragment("userProfileFLikeList",likeList.get(getAdapterPosition()).id);
+                            openFragmentCallback.openFragment("openUserProfile",followList.get(getAdapterPosition()).id);
                             break;
                     }
                     break;

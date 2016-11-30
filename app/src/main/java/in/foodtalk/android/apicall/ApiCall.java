@@ -6,6 +6,7 @@ import android.view.Gravity;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -95,6 +96,9 @@ public class ApiCall {
                 return headers;
             }
         };
+        final int DEFAULT_TIMEOUT = 6000;
+        // Adding request to request queue
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         AppController.getInstance().cancelPendingRequests(tag);
         AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag);
     }

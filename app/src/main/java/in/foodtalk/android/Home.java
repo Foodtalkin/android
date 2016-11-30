@@ -2030,6 +2030,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             userProfileOpen(value);
             getFragmentManager().beginTransaction().remove(postDetailsFragment).commit();
         }
+        if (fragmentName.equals("openUserProfile")){
+            userProfileOpen(value);
+        }
         if (fragmentName.equals("bookmarkListPost")){
             postDetailsFragment = new PostDetailsFragment();
             postDetailsFragment.postId = value;
