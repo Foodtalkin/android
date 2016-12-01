@@ -80,7 +80,6 @@ public class FollowListFragment extends Fragment implements ApiCallback {
                 e.printStackTrace();
             }
         }
-
         tapToRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -62,7 +62,6 @@ public class CloudinaryUpload extends AsyncTask<File, Void, Map> {
     @Override
     protected void onPostExecute(Map s) {
         super.onPostExecute(s);
-
         if (s != null){
             cloudinaryCallback.uploaded(s);
         }

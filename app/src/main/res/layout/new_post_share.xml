@@ -236,7 +236,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
-        android:visibility="gone">
+        android:visibility="visible">
         <RelativeLayout
             android:id="@+id/add_dish_header"
             android:layout_width="match_parent"
@@ -278,7 +278,7 @@
                 android:digits="@string/alphanumberspace"
                 />
             <android.support.v7.widget.RecyclerView
-                android:layout_below="@+id/input_dish_search"
+                android:layout_below="@+id/btn_add_dish_name"
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -307,7 +307,6 @@
                     android:layout_gravity="center_vertical"
                     android:clickable="false"
                     />
-
             </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>

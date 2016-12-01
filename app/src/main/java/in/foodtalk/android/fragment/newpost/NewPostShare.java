@@ -633,7 +633,14 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         dishTaggingAdapter.animateTo(filteredModelList);
         recyclerView.scrollToPosition(0);
 
-        if (filteredModelList.size() == 0){
+        /*if (filteredModelList.size() == 0){
+            btnAddDishName.setVisibility(View.VISIBLE);
+            txtNewDish.setText("Add "+newText);
+            newDishName = newText;
+        }else {
+            btnAddDishName.setVisibility(View.GONE);
+        }*/
+        if (newText.length() > 1){
             btnAddDishName.setVisibility(View.VISIBLE);
             txtNewDish.setText("Add "+newText);
             newDishName = newText;
