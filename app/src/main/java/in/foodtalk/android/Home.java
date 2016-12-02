@@ -680,8 +680,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 icons[pageNo].setColorFilter(ContextCompat.getColor(this, R.color.icon));
                 icons[pageN].setColorFilter(ContextCompat.getColor(this, R.color.snow));
 
-                txtIcons[pageN].setTextColor(getResources().getColor(R.color.snow));
+
                 txtIcons[pageNo].setTextColor(getResources().getColor(R.color.icon));
+                txtIcons[pageN].setTextColor(getResources().getColor(R.color.snow));
             }
             else {
                 //Log.d("fragment","newpostFragment");
@@ -698,7 +699,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 transaction.remove(newpostFragment);
             }
 
-
+            //transaction.setCustomAnimations(R.anim.slide_in_animation, R.anim.slide_out_animation,R.anim.slide_in_animation, R.anim.slide_out_animation);
 
             transaction.replace(container, newFragment);
             if (bStack) {
@@ -716,9 +717,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             transaction.commit();
 
         FragmentManager fm = getFragmentManager();
-
-
-
 
         for(int entry = 0; entry < fm.getBackStackEntryCount(); entry++){
             Log.e("Fragment bstack entry", "Found fragment: " + fm.getBackStackEntryAt(entry).getName());

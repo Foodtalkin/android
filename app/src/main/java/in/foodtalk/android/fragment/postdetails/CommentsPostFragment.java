@@ -122,6 +122,8 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
     TextView placeHolder;
     LinearLayout tapToRetry;
 
+    String postUserId;
+
 
     /*public CommentFragment (String postId){
         this.postId = postId;
@@ -339,6 +341,8 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
        // postDataList.add(commentObj);
 
         JSONArray comment = response.getJSONArray("comments");
+
+        postUserId = response.getJSONObject("post").getString("userId");
 
         if (comment.length()>0){
             placeHolder.setVisibility(View.GONE);
@@ -694,18 +698,30 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
         commentAdapterNew.notifyDataSetChanged();
         commentAdapterNew.notifyItemRangeChanged(position, postDataList.size());
     }
-
+    String flagType1;
     private void dialogCommentAlert(final String flagType, final String commentId, final int position){
+        flagType1 = flagType;
         final Dialog dialogComm = new Dialog(context);
         dialogComm.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogComm.setContentView(R.layout.dialog_comment);
-        TextView txtComm = (TextView) dialogComm.findViewById(R.id.txt_comment_alert);
+        final LinearLayout alertDeleteReport = (LinearLayout) dialogComm.findViewById(R.id.alert_delete);
+        final LinearLayout alertOption = (LinearLayout) dialogComm.findViewById(R.id.alert_option);
+        final TextView txtComm = (TextView) dialogComm.findViewById(R.id.txt_comment_alert);
         TextView btnCancel = (TextView) dialogComm.findViewById(R.id.btn_cancel);
         TextView btnYes = (TextView) dialogComm.findViewById(R.id.btn_yes);
-        if (flagType.equals("report")){
+        TextView btnReport = (TextView) dialogComm.findViewById(R.id.btn_report_comment);
+        TextView btnDelete = (TextView) dialogComm.findViewById(R.id.btn_delete_comment);
+        if (flagType1.equals("report")){
+            alertDeleteReport.setVisibility(View.VISIBLE);
+            alertOption.setVisibility(View.GONE);
             txtComm.setText("Report Comment ?");
-        }else if (flagType.equals("delete")){
+        }else if (flagType1.equals("delete")){
+            alertDeleteReport.setVisibility(View.VISIBLE);
+            alertOption.setVisibility(View.GONE);
             txtComm.setText("Delete Comment ?");
+        }else if (flagType1.equals("option")){
+            alertDeleteReport.setVisibility(View.GONE);
+            alertOption.setVisibility(View.VISIBLE);
         }
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -721,12 +737,31 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
             @Override
             public void onClick(View v) {
                 try {
-                    commentFlag(flagType+"Request", flagType, commentId, position);
+                    commentFlag(flagType1+"Request", flagType1, commentId, position);
                     dialogComm.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 Log.d("btnClick", "yes");
+            }
+        });
+        btnReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDeleteReport.setVisibility(View.VISIBLE);
+                alertOption.setVisibility(View.GONE);
+                txtComm.setText("Report Comment ?");
+                flagType1 = "report";
+
+            }
+        });
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDeleteReport.setVisibility(View.VISIBLE);
+                alertOption.setVisibility(View.GONE);
+                txtComm.setText("Delete Comment ?");
+                flagType1 = "delete";
             }
         });
 
@@ -981,14 +1016,22 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
     @Override
     public void commentAdapter(String commentUserId, String commentId, int position) {
         Log.d("commentpostFragment", commentUserId + " : " + commentId + " : " + position);
-        if (commentUserId.equals(userId)) {
-            // Log.d("show popup","delete comment");
-            dialogCommentAlert("delete", commentId, position);
+        if (postUserId.equals(userId)){
+            dialogCommentAlert("option", commentId, position);
+        }else {
+            if (commentUserId.equals(userId)) {
+                // Log.d("show popup","delete comment");
+                dialogCommentAlert("delete", commentId, position);
 
-            //adapter.removeItem(position);
-        } else {
-            dialogCommentAlert("report", commentId, position);
+                //adapter.removeItem(position);
+            } else {
+                dialogCommentAlert("report", commentId, position);
 
+            }
         }
+
+
+
+
     }
 }

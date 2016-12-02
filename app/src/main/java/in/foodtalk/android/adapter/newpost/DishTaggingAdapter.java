@@ -44,8 +44,6 @@ public class DishTaggingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = layoutInflater.inflate(R.layout.card_checkin_dish, parent, false);
         DishHolder dishHolder = new DishHolder(view);
-
-
         return dishHolder;
     }
 
@@ -56,8 +54,6 @@ public class DishTaggingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         DishHolder dishHolder = (DishHolder) holder;
 
         dishHolder.dishname.setText(current.name);
-
-
     }
 
     @Override
