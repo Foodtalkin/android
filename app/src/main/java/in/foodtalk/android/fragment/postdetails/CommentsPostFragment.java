@@ -1001,8 +1001,6 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
         mentionUArray.put(mentionObject);
         //String lastWord = str.substring(str.lastIndexOf(" ")+1);
         Log.d("mentionUser", "user: "+userName+" userId: "+userId);
@@ -1022,16 +1020,10 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
             if (commentUserId.equals(userId)) {
                 // Log.d("show popup","delete comment");
                 dialogCommentAlert("delete", commentId, position);
-
                 //adapter.removeItem(position);
             } else {
                 dialogCommentAlert("report", commentId, position);
-
             }
         }
-
-
-
-
     }
 }

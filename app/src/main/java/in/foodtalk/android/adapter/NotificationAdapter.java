@@ -58,9 +58,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         NotiHolder notiHolder = (NotiHolder) holder;
         notiHolder.raiserName = current.raiserName;
         notiHolder.eventDate = current.eventDate;
-        String msg = current.message.replace(current.raiserName,"");
+       // String msg = current.message.replace(current.raiserName,"");
+       // str.substring(str.indexOf(" ")+1);
+        String msg = current.message.substring(current.message.indexOf(" ")+1);
         notiHolder.txtNameTransparent.setText(current.raiserName);
-        notiHolder.txtMsg.setText(Html.fromHtml("<font color='#1d6bd5'>"+current.raiserName+"</font>"+msg));
+        notiHolder.txtMsg.setText(Html.fromHtml("<font color='#1d6bd5'>"+current.raiserName+"</font> "+msg));
         //notiHolder.txtMsg.setText(headSpannable.notificationSpannable(current.raiserName, current.raiserId,msg), TextView.BufferType.SPANNABLE);
         switch (current.eventType){
             case "2":
@@ -80,7 +82,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 notiHolder.notificationIcon.setImageResource(R.drawable.ic_bookmark_card_24);
                 break;
         }
-
         Picasso.with(context)
                 .load(current.raiserImage)
                 .fit()

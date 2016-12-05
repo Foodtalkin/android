@@ -455,6 +455,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                     }
                 });
     }
+    Boolean isAppPause = false;
+    String screenName;
+    String elementId;
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -463,10 +466,17 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             Log.d("receiver", "Got message: " + message);
             try {
                 JSONObject jsonObject = new JSONObject(message);
-                final String screenName = jsonObject.getString("class");
-                final String elementId = jsonObject.getString("elementId");
-                getFragmentManager().popBackStack();
-                openNotificationFragment(screenName, elementId);
+                screenName = jsonObject.getString("class");
+                elementId = jsonObject.getString("elementId");
+                Log.d("Home broadcastR",screenName);
+                if (!isAppPause){
+                    getFragmentManager().popBackStack();
+                    openNotificationFragment(screenName, elementId);
+                    screenName = null;
+                }else {
+                    Log.d("broadcastR", "app is paused");
+                }
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -478,6 +488,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             case "OpenPost":
                 Bundle bundle = new Bundle();
                 bundle.putString("postId", elementId);
+
                 commentFragment = new CommentFragment();
                 commentFragment.setArguments(bundle);
                 setFragmentView(commentFragment, R.id.container1, 0, true);
@@ -695,11 +706,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             android.app.FragmentTransaction transaction = manager.beginTransaction();
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back stack if needed
+            //transaction.setCustomAnimations(R.animator.slide_in_animation, R.animator.slide_out_animation);
             if(newFragment == newpostFragment){
                 transaction.remove(newpostFragment);
             }
 
-            //transaction.setCustomAnimations(R.anim.slide_in_animation, R.anim.slide_out_animation,R.anim.slide_in_animation, R.anim.slide_out_animation);
+            //transaction.setCustomAnimations(R.animator.slide_in_animation, R.animator.slide_out_animation,R.animator.slide_in_animation, R.animator.slide_out_animation);
 
             transaction.replace(container, newFragment);
             if (bStack) {
@@ -1401,7 +1413,20 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     protected void onPause() {
         super.onPause();
         hideSoftKeyboard();
+        isAppPause = true;
+        //AppController.getInstance().isHomeActivity = false;
         Log.d("onPause", "activity pause");
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isAppPause = false;
+        if (screenName != null){
+            getFragmentManager().popBackStack();
+            openNotificationFragment(screenName, elementId);
+            screenName = null;
+        }
+        Log.d("onResume","activity resume");
     }
 
     @Override
