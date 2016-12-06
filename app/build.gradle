@@ -8,8 +8,8 @@ android {
         applicationId "in.foodtalk.android"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 19
-        versionName "1.1.8"
+        versionCode 20
+        versionName "1.1.9"
         multiDexEnabled true
     }
     buildTypes {

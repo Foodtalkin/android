@@ -384,7 +384,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                     JSONObject jsonObject = new JSONObject(jsonData);
                     final String screenName = jsonObject.getString("class");
                     final String elementId = jsonObject.getString("elementId");
-                    openNotificationFragment(screenName, elementId);
+                    final String eventType = jsonObject.getString("eventType");
+                    openNotificationFragment(screenName, elementId, eventType);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -392,9 +393,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 //openNotificationFragment();
             }else if (extras.getString("FRAGMENT_NAME") != null){
                 if (extras.getString("ELEMENT_ID") != null){
-                    openNotificationFragment(extras.getString("FRAGMENT_NAME"), extras.getString("ELEMENT_ID"));
+                    openNotificationFragment(extras.getString("FRAGMENT_NAME"), extras.getString("ELEMENT_ID"), null);
                 }else {
-                    openNotificationFragment(extras.getString("FRAGMENT_NAME"), "");
+                    openNotificationFragment(extras.getString("FRAGMENT_NAME"), "", null);
                 }
             }
         } else {
@@ -429,35 +430,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         getFragmentManager().addOnBackStackChangedListener(this);
     }
 
-    private void deepLinkfb(){
-        FacebookSdk.sdkInitialize(this);
-        AppLinkData.fetchDeferredAppLinkData(this,
-                new AppLinkData.CompletionHandler() {
-                    @Override
-                    public void onDeferredAppLinkDataFetched(AppLinkData appLinkData) {
-                        if (appLinkData != null) {
-                            Bundle bundle = appLinkData.getArgumentBundle();
-                            Log.i("DEBUG_FACEBOOK_SDK", bundle.getString("target_url"));
-                            String url = bundle.getString("target_url");
-                            List<String> items = Arrays.asList(url.split("\\s*/\\s*"));
 
-                            if (items.size() > 3){
-                                Log.e("DebugFb urlvalue", items.get(2));
-                                Log.e("DebugFb urlvalue", items.get(3));
-                                openNotificationFragment(items.get(2), items.get(3));
-                            }else if (items.size() > 2){
-                                openNotificationFragment(items.get(2), "");
-                                Log.e("DebugFb urlvalue", items.get(2));
-                            }
-                        } else {
-                            Log.i("DEBUG_FACEBOOK_SDK", "AppLinkData is Null");
-                        }
-                    }
-                });
-    }
     Boolean isAppPause = false;
     String screenName;
     String elementId;
+    String eventType;
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -468,10 +445,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 JSONObject jsonObject = new JSONObject(message);
                 screenName = jsonObject.getString("class");
                 elementId = jsonObject.getString("elementId");
+                eventType = jsonObject.getString("eventType");
                 Log.d("Home broadcastR",screenName);
                 if (!isAppPause){
                     getFragmentManager().popBackStack();
-                    openNotificationFragment(screenName, elementId);
+                    openNotificationFragment(screenName, elementId, eventType);
                     screenName = null;
                 }else {
                     Log.d("broadcastR", "app is paused");
@@ -482,13 +460,15 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             }
         }
     };
-    private void openNotificationFragment(String fragmentName, String elementId){
+    private void openNotificationFragment(String fragmentName, String elementId, String eventType){
         Log.d("Notification screen", fragmentName);
         switch (fragmentName){
             case "OpenPost":
                 Bundle bundle = new Bundle();
                 bundle.putString("postId", elementId);
-
+                if (eventType != null){
+                    bundle.putString("eventType", eventType);
+                }
                 commentFragment = new CommentFragment();
                 commentFragment.setArguments(bundle);
                 setFragmentView(commentFragment, R.id.container1, 0, true);
@@ -1423,7 +1403,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         isAppPause = false;
         if (screenName != null){
             getFragmentManager().popBackStack();
-            openNotificationFragment(screenName, elementId);
+            openNotificationFragment(screenName, elementId, eventType);
             screenName = null;
         }
         Log.d("onResume","activity resume");
