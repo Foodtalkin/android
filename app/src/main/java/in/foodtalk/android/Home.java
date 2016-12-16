@@ -1,6 +1,8 @@
 package in.foodtalk.android;
 
+import android.*;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -9,12 +11,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +34,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.desmond.squarecamera.CameraActivity;
 import com.facebook.FacebookSdk;
 import com.facebook.applinks.AppLinkData;
 import com.facebook.login.LoginManager;
@@ -233,6 +239,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     Dialog dialogImgFrom;
 
     Boolean imgDialogCanDisplay = true;
+
+    private static final int REQUEST_CAMERA_PERMISSION = 11;
 
     private int REQUEST_CAMERA = 0, SELECT_FILE = 1, REQUEST_CROP = 2;
     //private File destination = new File(Environment.getExternalStorageDirectory(), System.currentTimeMillis() + ".jpg");
@@ -1320,13 +1328,80 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         restaurantNameNewPost = restaurantName;
 
         if (photo == null){
-            dialogImgFrom();
+            //dialogImgFrom();
+            requestForCameraPermission();
+            Log.d("picImage","dialogImageFrom");
         }else {
             startDishTagging();
         }
         //setFragmentView (cameraFragment, R.id.container1, 4, true);
         hideSoftKeyboard();
     }
+
+    //-------------square camera---------------------
+    public void requestForCameraPermission() {
+        final String permission = android.Manifest.permission.CAMERA;
+        if (ContextCompat.checkSelfPermission(Home.this, permission)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(Home.this, permission)) {
+                showPermissionRationaleDialog("Test", permission);
+                Log.d("rForCameraP","showPermissionRationaleDialog");
+            } else {
+                Log.d("rForCameraP","requestForPermission");
+                requestForPermission(permission);
+            }
+        } else {
+            launch();
+            Log.d("rForCameraP","launch()");
+        }
+
+    }
+    private void launch() {
+        Intent startCustomCameraIntent = new Intent(this, CameraActivity.class);
+        startActivityForResult(startCustomCameraIntent, REQUEST_CAMERA);
+
+        Log.d("Launch","launch the camera");
+    }
+    private void showPermissionRationaleDialog(final String message, final String permission) {
+        new AlertDialog.Builder(Home.this)
+                .setMessage(message)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Home.this.requestForPermission(permission);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .create()
+                .show();
+    }
+    private void requestForPermission(final String permission) {
+        ActivityCompat.requestPermissions(Home.this, new String[]{permission}, REQUEST_CAMERA_PERMISSION);
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.d("onRPermisisonsR",requestCode+" : "+REQUEST_CAMERA_PERMISSION);
+        switch (requestCode) {
+            case REQUEST_CAMERA_PERMISSION:
+                final int numOfRequest = grantResults.length;
+                Log.d("numOfRequest", PackageManager.PERMISSION_GRANTED+" : "+grantResults[numOfRequest - 1]);
+                final boolean isGranted = numOfRequest == 1
+                        && PackageManager.PERMISSION_GRANTED == grantResults[numOfRequest - 1];
+                if (isGranted) {
+                    launch();
+                }
+                break;
+
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+    //-----------------------------------------------
 
     @Override
     public void capturedBitmap(Bitmap photo , File file) {

@@ -24,6 +24,10 @@
     <uses-permission android:name="in.foodtalk.android.permission.C2D_MESSAGE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera2" />
+
 
     <uses-feature android:name="android.hardware.camera"
         android:required="true" />
@@ -37,6 +41,7 @@
     <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
+        tools:replace="android:theme"
         android:name=".app.AppController"
         android:allowBackup="true"
         android:largeHeap="true"
@@ -114,6 +119,7 @@
             </intent-filter>
         </receiver>
         <activity android:name=".ResultNotification"></activity>
+        <activity android:name="com.desmond.squarecamera.CameraActivity" />
     </application>
 
 </manifest>

@@ -43,6 +43,8 @@ dependencies {
     compile 'com.cloudinary:cloudinary-android:1.4.1'
     compile files('libs/Parse-1.9.1.jar')
     compile 'com.parse.bolts:bolts-android:1.4.0'
+
+    compile project(path: ':squarecamera')
     //compile 'com.parse:parse-android:1.13.1'
 }
 
