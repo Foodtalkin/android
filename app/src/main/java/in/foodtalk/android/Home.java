@@ -14,6 +14,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.net.Uri;
 
 import android.os.Environment;
@@ -25,6 +26,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -35,6 +37,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.desmond.squarecamera.CameraActivity;
+import com.desmond.squarecamera.ImageUtility;
 import com.facebook.FacebookSdk;
 import com.facebook.applinks.AppLinkData;
 import com.facebook.login.LoginManager;
@@ -246,7 +249,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     //private File destination = new File(Environment.getExternalStorageDirectory(), System.currentTimeMillis() + ".jpg");
     private File destination = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), System.currentTimeMillis() + ".jpg");
 
-
+    private Point mSize;
    // ImageCapture imageCapture;
 
     @Override
@@ -275,6 +278,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         setContentView(R.layout.activity_home);
 
         createPostObj = new CreatePostObj();
+
+        Display display = getWindowManager().getDefaultDisplay();
+        mSize = new Point();
+        display.getSize(mSize);
 
        // ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         //progressBar.setIndeterminate(false);
@@ -1589,7 +1596,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             bundle.putString("rId", rId);
             newpostFragment.setArguments(bundle);
         }
-
         Log.e("StartCheckIn","pickImage "+rId);
 
         if (rId == null){
@@ -1625,6 +1631,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        //Log.d("onActivityResult","requestCode: "+ requestCode+" resultCode: "+resultCode+" data"+ data.getData());
+
         if (resultCode == Activity.RESULT_OK){
             if (requestCode == SELECT_FILE){
                 //Log.d("requeestCode", "SELECT_FILE");
@@ -1639,8 +1647,19 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             }
             if (requestCode == REQUEST_CAMERA){
                 //Log.d("requeestCode", "REQUEST_CAMERA");
-                cropIntent(Uri.fromFile(destination));
-                //onCaptureImageResult(data);
+                if (data.getData() != null){
+                    Log.d("onActivityResult", "request_camera "+data.getData());
+                    Uri photoUri = data.getData();
+                    Bitmap bitmap = ImageUtility.decodeSampledBitmapFromPath(photoUri.getPath(), mSize.x, mSize.x);
+
+                    capturedBitmap1(bitmap , new File(data.getData().getPath()));
+                    //cropIntent(data.getData());
+                    //cropIntent(Uri.fromFile(destination));
+                    //onCaptureImageResult(data);
+                }else {
+                    galleryIntent();
+                }
+
             }
             if (requestCode == REQUEST_CROP){
                // Log.d("requeestCode", "REQUEST_CROP");
@@ -2070,7 +2089,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         Log.d("shareNewPost", "review: "+review1+" rating: "+ rating+" restaurantIdNewpost: "+restaurantId);
 
-
         imgDialogCanDisplay = false;
         //Log.d("review call back", review);
         //review1 = review;
@@ -2088,7 +2106,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }
         clearBackStack();
     }
-
     @Override
     public void openFragment(String fragmentName, String value) {
         if (fragmentName.equals("postDetails")){
