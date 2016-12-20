@@ -36,6 +36,8 @@
 
     <color name="navigation">#005B7F</color>
 
+    <color name="navigation1">#295A7D</color>
+
     <color name="active">#1FB6FF</color>
     <color name="positive">#13CE66</color>
     <color name="negetive">#FF4949</color>

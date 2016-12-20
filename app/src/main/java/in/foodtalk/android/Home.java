@@ -783,15 +783,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     @Override
     public void onBackStackChanged() {
        // String fName = f.getClass().getSimpleName();
+        Log.d("onBackStackChanged","on back");
+
 
              //Log.i("onBackStackChanged", f.getClass().getSimpleName());
             //setTitle(f);
         if(backPressed){
             Fragment f = this.getFragmentManager().findFragmentById(R.id.container);
-
             setTitle(f);
-
-
             backPressed = false;
         }
     }
@@ -1631,7 +1630,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //Log.d("onActivityResult","requestCode: "+ requestCode+" resultCode: "+resultCode+" data"+ data.getData());
+        //Log.d("onActivityResult","requestCode: "+ requestCode+" resultCode: "+resultCode);
 
         if (resultCode == Activity.RESULT_OK){
             if (requestCode == SELECT_FILE){
@@ -1687,6 +1686,20 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                     Log.e("onActivityResult", "data null");
                 }
 
+            }
+        }else {
+            if (requestCode == SELECT_FILE){
+                //Log.d("requeestCode", "SELECT_FILE");
+
+                launch();
+
+                //cropIntent(data.getData());
+                /*try {
+                    Bitmap  mBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
+                    imgV.setImageBitmap(mBitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }*/
             }
         }
     }
