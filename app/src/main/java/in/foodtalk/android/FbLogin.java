@@ -74,6 +74,7 @@ import in.foodtalk.android.fragment.intro.PagerAdapter;
 import in.foodtalk.android.fragment.intro.ShareIntro;
 import in.foodtalk.android.helper.ParseUtils;
 import in.foodtalk.android.module.DatabaseHandler;
+import in.foodtalk.android.module.DepthPageTransformer;
 import in.foodtalk.android.module.Login;
 import in.foodtalk.android.module.UserAgent;
 import in.foodtalk.android.object.LoginInfo;
@@ -737,6 +738,7 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         mPagerAdapter = new PagerAdapter(this.getSupportFragmentManager(), fragments);
         ViewPager pager = (ViewPager) findViewById(R.id.viewpager);
         pager.setAdapter(mPagerAdapter);
+        pager.setPageTransformer(true, new DepthPageTransformer());
 
         pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

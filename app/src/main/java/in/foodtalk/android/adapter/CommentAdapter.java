@@ -141,9 +141,19 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
 
             if (postObj.restaurantIsActive.equals("1")) {
-                headSpannable.code(postHolder.txtHeadLine, postObj.userName, postObj.dishName, postObj.restaurantName, postObj.userId, postObj.checkedInRestaurantId, true , "commentFragment");
+                if (postObj.region.equals("")){
+                    headSpannable.code(postHolder.txtHeadLine, postObj.userName, postObj.dishName, postObj.restaurantName, postObj.userId, postObj.checkedInRestaurantId, true , "commentFragment");
+                }else {
+                    headSpannable.code(postHolder.txtHeadLine, postObj.userName, postObj.dishName, postObj.restaurantName+", "+postObj.region, postObj.userId, postObj.checkedInRestaurantId, true , "commentFragment");
+                }
+
             }else {
-                headSpannable.code(postHolder.txtHeadLine, postObj.userName, postObj.dishName, postObj.restaurantName, postObj.userId, postObj.checkedInRestaurantId, false, "commentFragment");
+                if (postObj.region.equals("")){
+                    headSpannable.code(postHolder.txtHeadLine, postObj.userName, postObj.dishName, postObj.restaurantName, postObj.userId, postObj.checkedInRestaurantId, false, "commentFragment");
+                }else {
+                    headSpannable.code(postHolder.txtHeadLine, postObj.userName, postObj.dishName, postObj.restaurantName+", "+postObj.region, postObj.userId, postObj.checkedInRestaurantId, false, "commentFragment");
+                }
+
             }
 
            setStarRating(postObj.rating, postHolder);

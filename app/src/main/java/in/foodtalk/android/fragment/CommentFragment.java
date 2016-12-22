@@ -82,13 +82,6 @@ public class CommentFragment extends Fragment implements MentionCallback  {
 
     ProgressBar progressBar;
 
-
-
-
-
-
-
-
     CommentAdapter commentAdapter;
     FollowedListAdapter followedListAdapter;
 
@@ -319,6 +312,9 @@ public class CommentFragment extends Fragment implements MentionCallback  {
         postObj.comment_count = post.getString("comment_count");
         postObj.like_count = post.getString("like_count");
         postObj.timeElapsed = post.getString("timeElapsed");
+
+        postObj.region = post.getString("cityName");
+
         txtUserName.setText(postObj.dishName);
         CommentObj commentObj = new CommentObj();
         commentObj.viewType = "post";

@@ -97,6 +97,7 @@ import in.foodtalk.android.fragment.DiscoverFragment;
 import in.foodtalk.android.fragment.FavouritesFragment;
 import in.foodtalk.android.fragment.FollowListFragment;
 import in.foodtalk.android.fragment.HomeFragment;
+import in.foodtalk.android.fragment.news.NewsFragment;
 import in.foodtalk.android.fragment.postdetails.LikeListFragment;
 import in.foodtalk.android.fragment.MoreFragment;
 import in.foodtalk.android.fragment.SearchFragment;
@@ -171,6 +172,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     LikeListFragment likeListFragment;
     PostDetailsFragment postDetailsFragment;
     FollowListFragment followListFragment;
+    NewsFragment newsFragment;
 
     //-------dummy fragment created for temporary use to set Legal screen title----
     Fragment legalFragment = new Fragment();
@@ -558,6 +560,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 break;
             case "BookStore":
                 setFragmentView(storeHistoryFragment, R.id.container, -1, true);
+
                 break;
         }
     }
@@ -1221,6 +1224,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
            case "store":
                setFragmentView(storeFragment, R.id.container, -1, true);
                break;
+           case "news":
+               Log.d("More","news clicked");
+               newsFragment = new NewsFragment();
+               setFragmentView(newsFragment, R.id.container1, -1, true);
+               break;
        }
     }
     @Override
@@ -1402,7 +1410,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                     launch();
                 }
                 break;
-
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
@@ -1630,7 +1637,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //Log.d("onActivityResult","requestCode: "+ requestCode+" resultCode: "+resultCode);
+        Log.d("onActivityResult","requestCode: "+ requestCode+" resultCode: "+resultCode);
 
         if (resultCode == Activity.RESULT_OK){
             if (requestCode == SELECT_FILE){
@@ -1700,6 +1707,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 } catch (IOException e) {
                     e.printStackTrace();
                 }*/
+            }
+            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
+
             }
         }
     }
