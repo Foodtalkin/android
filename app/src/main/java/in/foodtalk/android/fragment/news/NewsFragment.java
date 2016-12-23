@@ -13,26 +13,72 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.apicall.ApiCall;
+import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.ApiCallback;
+import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.DepthPageTransformer;
 import in.foodtalk.android.module.VerticalViewPager;
+import in.foodtalk.android.object.NewsObj;
 
 /**
  * Created by RetailAdmin on 22-12-2016.
  */
 
-public class NewsFragment extends Fragment {
+public class NewsFragment extends Fragment implements ApiCallback {
     View layout;
     private NewsPagerAdapter mPagerAdapter;
     FragmentManager fm;
     private FragmentActivity myContext;
+    ApiCall apiCall;
+    DatabaseHandler db;
+    ApiCallback apiCallback;
+    List<NewsObj> newsList = new ArrayList<>();
+
+    ProgressBar progressBar;
+    LinearLayout tapToRetry;
+    int pagerCurrentPosition = 0;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.news_fragment, container, false);
-        initialisePaging();
+
+        db = new DatabaseHandler(getActivity());
+        apiCallback = this;
+
+        progressBar = (ProgressBar) layout.findViewById(R.id.progress_bar);
+        tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
+        tapToRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+                    getNewsData();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+
+        try {
+            getNewsData();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return layout;
     }
 
@@ -41,13 +87,23 @@ public class NewsFragment extends Fragment {
         super.onAttach(context);
         myContext = (FragmentActivity) context;
         fm = myContext.getSupportFragmentManager();
+       // fm = myContext.getSupportFragmentManager();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initialisePaging();
     }
 
     private void initialisePaging(){
-        mPagerAdapter = new NewsPagerAdapter(fm, 6, getActivity());
+        mPagerAdapter = new NewsPagerAdapter(fm, newsList, getActivity());
         VerticalViewPager pager = (VerticalViewPager) layout.findViewById(R.id.viewpager);
         pager.setAdapter(mPagerAdapter);
         pager.setPageTransformer(true, new DepthPageTransformer());
+
+        pager.setCurrentItem(pagerCurrentPosition);
 
         pager.setOnPageChangeListener(new VerticalViewPager.OnPageChangeListener() {
             @Override
@@ -57,15 +113,57 @@ public class NewsFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-
-
                 Log.d("onPageSelected",position+"");
+                pagerCurrentPosition = position;
             }
-
             @Override
             public void onPageScrollStateChanged(int state) {
 
             }
         });
+    }
+
+    private void getNewsData() throws JSONException {
+        tapToRetry.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        JSONObject obj = new JSONObject();
+        obj.put("sessionId", db.getUserDetails().get("sessionId"));
+        apiCall = new ApiCall();
+        apiCall.apiRequestPost(getActivity(),obj, Config.URL_NEWS,"news",apiCallback);
+    }
+
+    @Override
+    public void apiResponse(JSONObject response, String tag) {
+        progressBar.setVisibility(View.GONE);
+        Log.d("new api response", response+"");
+        if (response != null){
+            if (tag.equals("news")){
+                try {
+                    sendDataIntoAdapter(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }else {
+            tapToRetry.setVisibility(View.VISIBLE);
+        }
+    }
+    private void sendDataIntoAdapter(JSONObject response) throws JSONException {
+        JSONArray newsListArray = response.getJSONArray("news");
+        Log.d("sendDataIntoAdapter", newsListArray.length()+"");
+        newsList.clear();
+        for (int i=0; i<newsListArray.length();i++){
+            NewsObj current = new NewsObj();
+            current.id = newsListArray.getJSONObject(i).getString("id");
+            current.title = newsListArray.getJSONObject(i).getString("title");
+            current.coverImage = newsListArray.getJSONObject(i).getString("coverImage");
+            current.source = newsListArray.getJSONObject(i).getString("source");
+            current.sourceUrl = newsListArray.getJSONObject(i).getString("sourceUrl");
+            current.description = newsListArray.getJSONObject(i).getString("description");
+            current.startDate = newsListArray.getJSONObject(i).getString("startDate");
+            current.isDisabled = newsListArray.getJSONObject(i).getString("isDisabled");
+            newsList.add(current);
+        }
+        initialisePaging();
     }
 }

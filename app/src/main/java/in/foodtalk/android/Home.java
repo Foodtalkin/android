@@ -2070,6 +2070,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             titleHome.setText(title);
         }
     }
+    public void openWebPageNews(String url){
+        webViewFragment = new WebViewFragment();
+        webViewFragment.webViewFragment1(url);
+        setFragmentView (webViewFragment, R.id.container1, -1, true);
+    }
     @Override
     public void storeHistory(String type, String value) {
         //db.getUserDetails().get("facebooId");
@@ -2156,6 +2161,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             postDetailsFragment.postId = value;
             postDetailsFragment.setCurrentPage = 2;
             setFragmentView(postDetailsFragment, R.id.container1, -1, true);
+        }
+        if (fragmentName.equals("newsWebView")){
+            Log.d("openWebPage", value);
+            //openWebPage(value, "News");
+            openWebPageNews(value);
         }
     }
     String listType;

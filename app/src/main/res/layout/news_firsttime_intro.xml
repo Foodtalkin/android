@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Food Talk News"
+        android:textAllCaps="true"
+        android:textColor="@color/active"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:textSize="18sp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_centerVertical="true"
+        android:layout_margin="20dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_news_180"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Get all the food news and latest buzz in the town, all in one place. Get updated on the new openings, shutdowns and shutdown all the other stuff in one place."
+            android:textSize="18sp"
+            android:textColor="@color/active"
+            android:layout_marginTop="30dp"
+            android:lineSpacingExtra="5sp"
+            android:layout_gravity=""
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:padding="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Swipe up"
+            android:textAllCaps="true"
+            android:textColor="@color/active"
+            android:textSize="18sp"/>
+    </LinearLayout>
+
+</RelativeLayout>

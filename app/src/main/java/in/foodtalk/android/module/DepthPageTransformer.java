@@ -12,25 +12,28 @@ public class DepthPageTransformer implements ViewPager.PageTransformer {
     private static final float MIN_SCALE = 0.75f;
 
     public void transformPage(View view, float position) {
-        int pageWidth = view.getWidth();
-
         if (position < -1) { // [-Infinity,-1)
             // This page is way off-screen to the left.
             view.setAlpha(0);
 
-        } else if (position <= 0) { // [-1,0]
+        }  else if (position <= 0) { // [-1,0]
             // Use the default slide transition when moving to the left page
             view.setAlpha(1);
-            view.setTranslationX(0);
+            // Counteract the default slide transition
+            view.setTranslationX(view.getWidth() * -position);
+
+            //set Y position to swipe in from top
+            float yPosition = position * view.getHeight();
+            view.setTranslationY(yPosition);
             view.setScaleX(1);
             view.setScaleY(1);
 
-        } else if (position <= 1) { // (0,1]
-            // Fade the page out.
-            view.setAlpha(1 - position);
+        } else if (position <= 1) { // [0,1]
+            view.setAlpha(1);
 
             // Counteract the default slide transition
-            view.setTranslationX(pageWidth * -position);
+            view.setTranslationX(view.getWidth() * -position);
+
 
             // Scale the page down (between MIN_SCALE and 1)
             float scaleFactor = MIN_SCALE
