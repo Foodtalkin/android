@@ -13,9 +13,9 @@
             <ImageView
                 android:id="@+id/cover_img"
                 android:layout_width="match_parent"
-                android:layout_height="320dp"
+                android:layout_height="wrap_content"
                 android:src="@drawable/placeholder"
-                android:scaleType="centerCrop"
+
                 android:adjustViewBounds="true"
                 />
         </LinearLayout>
@@ -45,7 +45,7 @@
                 android:lineSpacingExtra="5sp"
                 android:textSize="15sp"
                 android:text="In non nisl non ipsum iaculis maximus. Donec consequat nisi eget rutrum vulputate. Cras rutrum lacus nisi, condimentum ultrices nunc hendrerit ac. Ut dictum, nisl eget consequat sodales, justo urna egestas sem, quis fringilla eros enim ut odio."
-                android:textColor="@color/slate"
+                android:textColor="@color/silver"
                 />
 
         </LinearLayout>

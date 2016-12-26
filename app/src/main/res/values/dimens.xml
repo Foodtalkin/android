@@ -11,7 +11,7 @@
     <dimen name="txt_size_more">14sp</dimen>
     <dimen name="paddint_top_bottom_options">12dp</dimen>
     <dimen name="circle_r_vp">12dp</dimen>
-    
+
     <dimen name="font_onboarding1">24sp</dimen>
     <dimen name="font_onboarding2">15sp</dimen>
     <dimen name="font_onboarding3">14sp</dimen>

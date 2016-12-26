@@ -3,6 +3,7 @@ package in.foodtalk.android.fragment.news;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,8 +39,20 @@ public class NewsCardFragment extends Fragment {
         coverImg = (ImageView) layout.findViewById(R.id.cover_img);
         openFragmentCallback = (OpenFragmentCallback) getActivity();
         upArrow = (ImageView) layout.findViewById(R.id.up_arrow);
+        setImageSize();
         setContent();
         return layout;
+    }
+
+    private void setImageSize(){
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int height = displaymetrics.heightPixels;
+        int width = displaymetrics.widthPixels;
+
+        int imgHeight = Math.round(width * .75f);
+
+        coverImg.getLayoutParams().height = imgHeight;
     }
 
     private void setContent(){
@@ -57,8 +70,8 @@ public class NewsCardFragment extends Fragment {
 
         Picasso.with(getActivity())
                 .load(newsObj.coverImage)
-                //.fit().centerCrop()
-                .fit()
+                .fit().centerCrop()
+                //.fit()
                 .placeholder(R.drawable.placeholder)
                 .into(coverImg);
 
