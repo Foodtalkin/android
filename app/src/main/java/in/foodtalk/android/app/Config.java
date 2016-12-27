@@ -68,5 +68,7 @@ public class Config {
     public static String URL_LIKE_LIST_POST = "http://"+IP+"/index.php/service/like/listByPost";
     public static String URL_BOOKMARK_LIST_POST = "http://"+IP+"/index.php/service/bookmark/listByPost";
 
+    public static String URL_STORE_LIST = "http://"+IP+"/index.php/service/storeItem/listItems";
+
 
 }

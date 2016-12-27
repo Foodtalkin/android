@@ -21,44 +21,60 @@
             >
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="150dp"
                 android:id="@+id/img">
                 <ImageView
+                    android:id="@+id/img_card"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="wrap_content"
                     android:scaleType="centerCrop"
                     android:src="@drawable/placeholder"/>
                 <TextView
+                    android:id="@+id/txt_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/active"
+                    android:background="#ED4A25"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
                     android:layout_margin="15dp"
+                    android:textColor="@color/snow"
                     android:text="OFFER"/>
                 <TextView
+                    android:id="@+id/txt_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Instapizza: Buy one get one free"
+                    android:layout_alignParentBottom="true"
+                    android:layout_margin="15dp"
+                    android:textColor="@color/snow"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     />
             </RelativeLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp">
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
                 <TextView
+                    android:id="@+id/txt_des"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
+                    android:lineSpacingExtra="3sp"
                     android:text="Enjoy the best deep dish experience in town, now by one and get another free on deep dish pizza using this food talk gift code."/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_margin="10dp">
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="10dp">
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -68,12 +84,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Valid till"
-                        android:textColor="@color/slate"/>
+                        android:textColor="@color/silver"/>
                     <TextView
+                        android:id="@+id/txt_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="31 Des"
-                        android:textSize="24sp"
+                        android:textSize="26sp"
                         android:textStyle="bold"
                         android:textColor="@color/black"/>
                 </LinearLayout>
@@ -88,6 +105,7 @@
                         android:paddingLeft="20dp"
                         android:layout_gravity="center">
                         <TextView
+                            android:id="@+id/txt_pts"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="200 Pts"
@@ -97,5 +115,4 @@
             </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
-
 </RelativeLayout>

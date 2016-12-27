@@ -4,20 +4,22 @@ package in.foodtalk.android.object;
  * Created by RetailAdmin on 12-08-2016.
  */
 public class StoreObj {
-    public String id;
-    public String entityId;
+    public String storeItemId;
     public String title;
-    public String adImage;
-    public String adThumb;
-    public String points;
-    public String couponCode;
-    public String paymentUrl;
+    public String coverImage;
+    public String cardImage;
+    public String actionButtonText;
     public String description;
-    public String totalSlots;
-    public String bookedSlots;
-    public String description2;
-    public String expiry;
-    public String iRedeemed;
+    public String cardActionButtonText;
+    public String shortDescription;
+    public String costType;
+    public String costOnline;
+    public String costPoints;
+    public String termConditionsLink;
     public String type;
-    public String avilablePoints;
+    public String thankYouText;
+    public String postPurchaseInstructions;
+    public String startDate;
+    public String endDate;
+
 }

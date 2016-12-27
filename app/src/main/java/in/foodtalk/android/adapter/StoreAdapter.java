@@ -27,6 +27,7 @@ import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.module.DatabaseHandler;
+import in.foodtalk.android.module.SetDateFormat;
 import in.foodtalk.android.object.StoreObj;
 
 /**
@@ -40,7 +41,11 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     DatabaseHandler db;
     ApiCallback apiCallback;
 
+    private final int VIEW_OFFER = 0;
+
     public StoreAdapter (Context context, List<StoreObj>listStore){
+
+        Log.d("store adapter", "list length "+listStore.size());
         this.context = context;
         this.listStore = listStore;
         layoutInflater = LayoutInflater.from(context);
@@ -50,14 +55,41 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = layoutInflater.inflate(R.layout.card_store, parent, false);
-        StoreCardHolder storeCardHolder = new StoreCardHolder(view);
-        return storeCardHolder;
+        View view;
+        StoreCardHolder storeCardHolder;
+        if (viewType == VIEW_OFFER){
+            view = layoutInflater.inflate(R.layout.card_store1, parent, false);
+            storeCardHolder = new StoreCardHolder(view);
+            return storeCardHolder;
+        }else {
+            return null;
+        }
+
+
+
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        StoreObj current = listStore.get(position);
+
+        if (holder instanceof StoreCardHolder){
+            StoreObj storeObj = listStore.get(position);
+            StoreCardHolder storeCardHolder = (StoreCardHolder) holder;
+            Log.d("onBindV", storeObj.type+"");
+            storeCardHolder.txtType.setText(storeObj.type);
+            storeCardHolder.txtTitle.setText(storeObj.title);
+            storeCardHolder.txtDes.setText(storeObj.description);
+            storeCardHolder.txtPts.setText(storeObj.costPoints+" Pts");
+            String date1 = SetDateFormat.convertFormat(storeObj.endDate,"yyyy/MM/dd HH:mm:ss","MMM dd");
+            storeCardHolder.txtDate.setText(date1);
+            Picasso.with(context)
+                    .load(storeObj.cardImage)
+                    .fit().centerCrop()
+                    //.fit()
+                    .placeholder(R.drawable.placeholder)
+                    .into(storeCardHolder.imgCard);
+        }
+        /*StoreObj current = listStore.get(position);
         StoreCardHolder storeCardHolder = (StoreCardHolder) holder;
         storeCardHolder.txtDes1.setText(current.description);
         storeCardHolder.txtDes2.setText(current.description2);
@@ -74,9 +106,9 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 //.fit().centerCrop()
                 .fit()
                 .placeholder(R.drawable.placeholder)
-                .into(storeCardHolder.thumbImg);
+                .into(storeCardHolder.thumbImg);*/
 
-        switch (current.type){
+        /*switch (current.type){
             case "event":
                 double rPoint = Double.parseDouble(current.points);
                 //storeCardHolder.havePoints = (long) point;
@@ -105,18 +137,35 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     storeCardHolder.btn.getBackground().setAlpha(128);
                 }
                 break;
-        }
+        }*/
     }
     @Override
     public int getItemCount() {
         return listStore.size();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        int viewType = -1;
+        switch (listStore.get(position).type){
+            case "OFFER":
+                viewType = VIEW_OFFER;
+                break;
+        }
+        return viewType;
+    }
+
     class StoreCardHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
-        TextView txtDes1, txtDes2, txtTitle, txtPoints;
-        ImageView thumbImg;
+
         Button btn;
         String type;
+
+        ImageView imgCard;
+        TextView txtType, txtTitle, txtDes, txtDate, txtPts;
+
+
+
+
 
         long requiredPoints;
         long havePoints;
@@ -125,13 +174,15 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public StoreCardHolder(View itemView) {
             super(itemView);
 
-            txtDes1 = (TextView) itemView.findViewById(R.id.txt_des);
-            txtDes2 = (TextView) itemView.findViewById(R.id.txt_des1);
+            imgCard = (ImageView) itemView.findViewById(R.id.img_card);
+            txtType = (TextView) itemView.findViewById(R.id.txt_type);
             txtTitle = (TextView) itemView.findViewById(R.id.txt_title);
-            txtPoints = (TextView) itemView.findViewById(R.id.txt_points);
-            thumbImg = (ImageView) itemView.findViewById(R.id.thumb_img);
-            btn = (Button) itemView.findViewById(R.id.btn_book);
-            btn.setOnTouchListener(this);
+            txtDate = (TextView) itemView.findViewById(R.id.txt_date);
+            txtDes = (TextView) itemView.findViewById(R.id.txt_des);
+            txtPts = (TextView) itemView.findViewById(R.id.txt_pts);
+
+            // btn = (Button) itemView.findViewById(R.id.btn_book);
+           // btn.setOnTouchListener(this);
         }
 
         @Override
@@ -194,7 +245,7 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     JSONObject jsonObject = new JSONObject();
                     try {
                         jsonObject.put("sessionId", db.getUserDetails().get("sessionId"));
-                        jsonObject.put("adId", listStore.get(position).id);
+                        //--jsonObject.put("adId", listStore.get(position).id);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

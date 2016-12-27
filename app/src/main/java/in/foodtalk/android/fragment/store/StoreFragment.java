@@ -1,4 +1,4 @@
-package in.foodtalk.android.fragment;
+package in.foodtalk.android.fragment.store;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -9,9 +9,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +29,7 @@ import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.module.DatabaseHandler;
+import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.object.StoreObj;
 
 /**
@@ -49,6 +53,12 @@ public class StoreFragment extends Fragment implements ApiCallback {
     StoreAdapter storeAdapter;
     TextView placeholder;
 
+    //------user object-----
+    ImageView imgUserThumb;
+    TextView txtFullName, txtUsername, txtEventInfo, txtPoints;
+
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,6 +67,13 @@ public class StoreFragment extends Fragment implements ApiCallback {
         progressHolder = (LinearLayout) layout.findViewById(R.id.progress_h);
         tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
         placeholder = (TextView) layout.findViewById(R.id.placeholder);
+
+        imgUserThumb = (ImageView) layout.findViewById(R.id.img_user_thumb);
+        txtFullName = (TextView) layout.findViewById(R.id.txt_fullname);
+        txtUsername = (TextView) layout.findViewById(R.id.txt_username);
+        txtEventInfo = (TextView) layout.findViewById(R.id.txt_event_info);
+        txtPoints = (TextView) layout.findViewById(R.id.txt_pts);
+
         apiCallback = this;
         tapToRetry.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +103,7 @@ public class StoreFragment extends Fragment implements ApiCallback {
         placeholder.setVisibility(View.GONE);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("sessionId", db.getUserDetails().get("sessionId"));
-        apiCall.apiRequestPost(getActivity(),jsonObject, Config.URL_ADWORD_LIST, "storeList", apiCallback);
+        apiCall.apiRequestPost(getActivity(),jsonObject, Config.URL_STORE_LIST, "storeList", apiCallback);
     }
 
     @Override
@@ -114,9 +131,11 @@ public class StoreFragment extends Fragment implements ApiCallback {
         progressHolder.setVisibility(View.GONE);
         tapToRetry.setVisibility(View.GONE);
 
+        setUserData(response.getJSONObject("profile"));
+
 
         // this.response = response;
-        JSONArray listArray = response.getJSONArray("result");
+        JSONArray listArray = response.getJSONArray("storeItems");
 
         if (listArray.length() == 0){
             placeholder.setVisibility(View.VISIBLE);
@@ -124,30 +143,49 @@ public class StoreFragment extends Fragment implements ApiCallback {
 
         // Log.d("rListArray", "total: "+ rListArray.length());
         for (int i=0;i<listArray.length();i++){
+            //Log.d("store frag", listArray.getJSONObject(i).getString("type")+"");
             StoreObj current = new StoreObj();
-            current.id = listArray.getJSONObject(i).getString("id");
-            current.entityId = listArray.getJSONObject(i).getString("entityId");
+            current.storeItemId = listArray.getJSONObject(i).getString("storeItemId");
             current.title = listArray.getJSONObject(i).getString("title");
-            current.adImage = listArray.getJSONObject(i).getString("adImage");
-            current.adThumb = listArray.getJSONObject(i).getString("adThumb");
-            current.points = listArray.getJSONObject(i).getString("points");
-            current.couponCode = listArray.getJSONObject(i).getString("couponCode");
-            current.paymentUrl = listArray.getJSONObject(i).getString("paymentUrl");
+            current.coverImage = listArray.getJSONObject(i).getString("coverImage");
+            current.cardImage = listArray.getJSONObject(i).getString("cardImage");
+            current.actionButtonText = listArray.getJSONObject(i).getString("actionButtonText");
             current.description = listArray.getJSONObject(i).getString("description");
-            current.bookedSlots = listArray.getJSONObject(i).getString("bookedSlots");
-            current.description2 = listArray.getJSONObject(i).getString("description2");
-            current.expiry = listArray.getJSONObject(i).getString("expiry");
-            current.iRedeemed = listArray.getJSONObject(i).getString("iRedeemed");
+            current.cardActionButtonText = listArray.getJSONObject(i).getString("cardActionButtonText");
+            current.shortDescription = listArray.getJSONObject(i).getString("shortDescription");
+            current.costType = listArray.getJSONObject(i).getString("costType");
+            current.costOnline = listArray.getJSONObject(i).getString("costOnline");
+            current.costPoints = listArray.getJSONObject(i).getString("costPoints");
+            current.termConditionsLink = listArray.getJSONObject(i).getString("termConditionsLink");
             current.type = listArray.getJSONObject(i).getString("type");
-            current.avilablePoints = listArray.getJSONObject(i).getString("avilablePoints");
-            title.setText(String.valueOf((long)Double.parseDouble(current.avilablePoints))+" Points");
+            current.thankYouText = listArray.getJSONObject(i).getString("thankYouText");
+
+            current.postPurchaseInstructions = listArray.getJSONObject(i).getString("postPurchaseInstructions");
+            current.startDate = listArray.getJSONObject(i).getString("startDate");
+            current.endDate = listArray.getJSONObject(i).getString("endDate");
+
+
+           // title.setText(String.valueOf((long)Double.parseDouble(current.avilablePoints))+" Points");
             listStore.add(current);
         }
+
+
         //Log.d("send list", "total: "+restaurantList.size());
         if (getActivity() != null){
             storeAdapter = new StoreAdapter(getActivity(),listStore);
             //checkInAdapter = new CheckInAdapter(getActivity(),restaurantList);
             recyclerView.setAdapter(storeAdapter);
         }
+    }
+    private void setUserData(JSONObject profile) throws JSONException {
+        Picasso.with(getActivity())
+                .load(profile.getString("image"))
+                .fit()
+                .placeholder(R.drawable.placeholder)
+                .into(imgUserThumb);
+        txtFullName.setText(StringCase.caseSensitive(profile.getString("fullName")));
+        txtUsername.setText(profile.getString("userName"));
+        txtPoints.setText(profile.getString("avilablePoints"));
+       // txtEventInfo.setText(profile.getString(""));
     }
 }

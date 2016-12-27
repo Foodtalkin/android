@@ -1,6 +1,5 @@
 package in.foodtalk.android;
 
-import android.*;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -38,12 +37,9 @@ import android.widget.TextView;
 
 import com.desmond.squarecamera.CameraActivity;
 import com.desmond.squarecamera.ImageUtility;
-import com.facebook.FacebookSdk;
-import com.facebook.applinks.AppLinkData;
 import com.facebook.login.LoginManager;
 import com.flurry.android.FlurryAgent;
 import com.parse.ParseInstallation;
-import com.parse.ParseUser;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -53,7 +49,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -116,7 +111,7 @@ import in.foodtalk.android.fragment.newpost.DishTagging;
 import in.foodtalk.android.fragment.newpost.NewPostShare;
 import in.foodtalk.android.fragment.newpost.RatingFragment;
 import in.foodtalk.android.fragment.newpost.ReviewFragment;
-import in.foodtalk.android.fragment.StoreFragment;
+import in.foodtalk.android.fragment.store.StoreFragment;
 import in.foodtalk.android.fragment.postdetails.PostDetailsFragment;
 import in.foodtalk.android.module.CloudinaryUpload;
 import in.foodtalk.android.module.DatabaseHandler;
