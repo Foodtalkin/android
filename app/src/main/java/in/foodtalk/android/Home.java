@@ -111,6 +111,7 @@ import in.foodtalk.android.fragment.newpost.DishTagging;
 import in.foodtalk.android.fragment.newpost.NewPostShare;
 import in.foodtalk.android.fragment.newpost.RatingFragment;
 import in.foodtalk.android.fragment.newpost.ReviewFragment;
+import in.foodtalk.android.fragment.store.StoreDetailsFragment;
 import in.foodtalk.android.fragment.store.StoreFragment;
 import in.foodtalk.android.fragment.postdetails.PostDetailsFragment;
 import in.foodtalk.android.module.CloudinaryUpload;
@@ -120,6 +121,7 @@ import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.object.CreatePostObj;
 import in.foodtalk.android.object.LoginValue;
 import in.foodtalk.android.object.RestaurantPostObj;
+import in.foodtalk.android.object.StoreObj;
 import in.foodtalk.android.object.UserPostObj;
 
 public class Home extends AppCompatActivity implements View.OnClickListener,
@@ -2076,6 +2078,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         //Log.d("home callback store", db.getUserDetails().get("facebooId")+" : "+ value);
         openWebPage(value, null);
         titleHome.setText("");
+    }
+    @Override
+    public void openDetailsStore(String type, StoreObj storeObj){
+        StoreDetailsFragment storeDetailsFragment = new StoreDetailsFragment();
+        storeDetailsFragment.storeObj = storeObj;
+        setFragmentView(storeDetailsFragment, R.id.container1, -1, true);
+        Log.d("openDetails","call");
     }
     private void getUserInfo(){
         Log.d("home GetUserInfo",""+db.getUserDetails().get("cityId").equals("blank")+" : "+ db.getUserDetails());

@@ -69,6 +69,7 @@ public class Config {
     public static String URL_BOOKMARK_LIST_POST = "http://"+IP+"/index.php/service/bookmark/listByPost";
 
     public static String URL_STORE_LIST = "http://"+IP+"/index.php/service/storeItem/listItems";
+    public static String URL_STORE_DETAIL = "http://"+IP+"/index.php/service/storeOffer/get";
 
 
 }

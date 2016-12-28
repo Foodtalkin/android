@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.fitness.request.ListSubscriptionsRequest;
@@ -26,6 +27,7 @@ import in.foodtalk.android.R;
 import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;
+import in.foodtalk.android.communicator.StoreCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.SetDateFormat;
 import in.foodtalk.android.object.StoreObj;
@@ -40,6 +42,7 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     ApiCall apiCall = new ApiCall();
     DatabaseHandler db;
     ApiCallback apiCallback;
+    StoreCallback storeCallback;
 
     private final int VIEW_OFFER = 0;
 
@@ -51,6 +54,7 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         layoutInflater = LayoutInflater.from(context);
         db = new DatabaseHandler(context);
         apiCallback = (ApiCallback) context;
+        storeCallback = (StoreCallback) context;
 
     }
     @Override
@@ -64,9 +68,6 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }else {
             return null;
         }
-
-
-
     }
 
     @Override
@@ -163,6 +164,8 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         ImageView imgCard;
         TextView txtType, txtTitle, txtDes, txtDate, txtPts;
 
+        LinearLayout btnCard;
+
 
 
 
@@ -180,6 +183,9 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             txtDate = (TextView) itemView.findViewById(R.id.txt_date);
             txtDes = (TextView) itemView.findViewById(R.id.txt_des);
             txtPts = (TextView) itemView.findViewById(R.id.txt_pts);
+            btnCard = (LinearLayout) itemView.findViewById(R.id.btn_card);
+
+            btnCard.setOnTouchListener(this);
 
             // btn = (Button) itemView.findViewById(R.id.btn_book);
            // btn.setOnTouchListener(this);
@@ -188,6 +194,15 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             switch (v.getId()){
+                case R.id.btn_card:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("StoreAdapter", "card clicked");
+                            storeCallback.openDetailsStore(listStore.get(getAdapterPosition()).type,listStore.get(getAdapterPosition()));
+                            break;
+                    }
+
+                    break;
                 case R.id.btn_book:
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
@@ -210,13 +225,11 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                             }
                             break;
                     }
-
                     break;
             }
             return true;
         }
     }
-
     private void callDialog(final int position){
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -225,8 +238,6 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         TextView btnCancel = (TextView) dialog.findViewById(R.id.btn_cancel);
         TextView btnYes = (TextView) dialog.findViewById(R.id.btn_yes);
-
-
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override

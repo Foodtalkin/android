@@ -105,7 +105,6 @@ public class StoreFragment extends Fragment implements ApiCallback {
         jsonObject.put("sessionId", db.getUserDetails().get("sessionId"));
         apiCall.apiRequestPost(getActivity(),jsonObject, Config.URL_STORE_LIST, "storeList", apiCallback);
     }
-
     @Override
     public void apiResponse(JSONObject response, String tag) {
         Log.d("apiResponse", tag+" : " +response);
@@ -163,6 +162,8 @@ public class StoreFragment extends Fragment implements ApiCallback {
             current.postPurchaseInstructions = listArray.getJSONObject(i).getString("postPurchaseInstructions");
             current.startDate = listArray.getJSONObject(i).getString("startDate");
             current.endDate = listArray.getJSONObject(i).getString("endDate");
+            current.cityText= listArray.getJSONObject(i).getString("cityText");
+
 
 
            // title.setText(String.valueOf((long)Double.parseDouble(current.avilablePoints))+" Points");
