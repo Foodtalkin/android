@@ -28,6 +28,7 @@ import in.foodtalk.android.adapter.StoreAdapter;
 import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;
+import in.foodtalk.android.communicator.OpenFragmentCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.object.StoreObj;
@@ -53,9 +54,13 @@ public class StoreFragment extends Fragment implements ApiCallback {
     StoreAdapter storeAdapter;
     TextView placeholder;
 
+    ImageView btnPurchases;
+
     //------user object-----
     ImageView imgUserThumb;
     TextView txtFullName, txtUsername, txtEventInfo, txtPoints;
+
+    OpenFragmentCallback openFragmentCallback;
 
 
 
@@ -73,6 +78,17 @@ public class StoreFragment extends Fragment implements ApiCallback {
         txtUsername = (TextView) layout.findViewById(R.id.txt_username);
         txtEventInfo = (TextView) layout.findViewById(R.id.txt_event_info);
         txtPoints = (TextView) layout.findViewById(R.id.txt_pts);
+
+        openFragmentCallback = (OpenFragmentCallback) getActivity();
+
+        btnPurchases = (ImageView) layout.findViewById(R.id.btn_purchases);
+        btnPurchases.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("storeFragment", "btnPurchanse");
+                openFragmentCallback.openFragment("storePurchases", "");
+            }
+        });
 
         apiCallback = this;
         tapToRetry.setOnClickListener(new View.OnClickListener() {
@@ -187,6 +203,6 @@ public class StoreFragment extends Fragment implements ApiCallback {
         txtFullName.setText(StringCase.caseSensitive(profile.getString("fullName")));
         txtUsername.setText(profile.getString("userName"));
         txtPoints.setText(profile.getString("avilablePoints"));
-       // txtEventInfo.setText(profile.getString(""));
+        //txtEventInfo.setText(profile.getString(""));
     }
 }

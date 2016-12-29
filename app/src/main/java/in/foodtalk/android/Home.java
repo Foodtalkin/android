@@ -114,6 +114,7 @@ import in.foodtalk.android.fragment.newpost.ReviewFragment;
 import in.foodtalk.android.fragment.store.StoreDetailsFragment;
 import in.foodtalk.android.fragment.store.StoreFragment;
 import in.foodtalk.android.fragment.postdetails.PostDetailsFragment;
+import in.foodtalk.android.fragment.store.StorePurchasesFragment;
 import in.foodtalk.android.module.CloudinaryUpload;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.NewPostUpload;
@@ -2170,6 +2171,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             Log.d("openWebPage", value);
             //openWebPage(value, "News");
             openWebPageNews(value);
+        }
+        if (fragmentName.equals("storePurchases")){
+            StorePurchasesFragment storePurchasesFragment = new StorePurchasesFragment();
+            setFragmentView(storePurchasesFragment, R.id.container1, -1, true);
         }
     }
     String listType;

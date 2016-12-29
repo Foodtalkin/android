@@ -79,7 +79,7 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             Log.d("onBindV", storeObj.type+"");
             storeCardHolder.txtType.setText(storeObj.type);
             storeCardHolder.txtTitle.setText(storeObj.title);
-            storeCardHolder.txtDes.setText(storeObj.description);
+            storeCardHolder.txtDes.setText(storeObj.shortDescription);
             storeCardHolder.txtPts.setText(storeObj.costPoints+" Pts");
             String date1 = SetDateFormat.convertFormat(storeObj.endDate,"yyyy/MM/dd HH:mm:ss","MMM dd");
             storeCardHolder.txtDate.setText(date1);

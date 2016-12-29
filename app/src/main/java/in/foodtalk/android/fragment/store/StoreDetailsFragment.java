@@ -37,7 +37,7 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
     public StoreObj storeObj;
     TabLayout tabLayout;
     ImageView imgCard;
-    TextView txtTitle, txtDate, txtVanue, txtCost;
+    TextView txtTitle, txtDate, txtVanue, txtCost, txtEventInfo;
 
     ApiCall apiCall = new ApiCall();
     ApiCallback apiCallback;
@@ -61,13 +61,14 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
         txtDate = (TextView) layout.findViewById(R.id.txt_date);
         txtVanue = (TextView) layout.findViewById(R.id.txt_vanue);
         txtCost = (TextView) layout.findViewById(R.id.txt_cost);
+        txtEventInfo = (TextView) layout.findViewById(R.id.txt_event_info);
 
         tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
-        progressHolder = (LinearLayout) layout.findViewById(R.id.progress_bar);
+        progressHolder = (LinearLayout) layout.findViewById(R.id.progress_h);
 
         apiCallback = this;
 
-        txtDate.setText(SetDateFormat.convertFormat(storeObj.endDate,"yyyy/MM/dd HH:mm:ss","MMM dd, yyyy h:mm a"));
+
 
         try {
             getStoreList();
@@ -85,15 +86,7 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
             }
         });
 
-        Picasso.with(getActivity())
-                .load(storeObj.cardImage)
-                .fit().centerCrop()
-                //.fit()
-                .placeholder(R.drawable.placeholder)
-                .into(imgCard);
-        txtTitle.setText(storeObj.title);
-        txtCost.setText(storeObj.costPoints+" Points");
-        txtVanue.setText(storeObj.cityText);
+
 
         StorePagerAdapter adapter = new StorePagerAdapter();
         final ViewPager pager = (ViewPager) layout.findViewById(R.id.view_pager);
@@ -139,7 +132,8 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
         //placeholder.setVisibility(View.GONE);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("sessionId", db.getUserDetails().get("sessionId"));
-        apiCall.apiRequestPost(getActivity(),jsonObject, Config.URL_STORE_DETAIL, "storeList", apiCallback);
+        jsonObject.put("storeItemId", storeObj.storeItemId);
+        apiCall.apiRequestPost(getActivity(),jsonObject, Config.URL_STORE_DETAIL, "storeDetails", apiCallback);
     }
 
     @Override
@@ -158,8 +152,28 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
     }
 
     private void loadDataIntoView(JSONObject response, String tag)throws JSONException{
+        Log.d("loadDataInfotView","loaded");
         progressHolder.setVisibility(View.GONE);
         tapToRetry.setVisibility(View.GONE);
+
+        JSONObject storeOffer = response.getJSONObject("storeOffer");
+
+        //----
+        if (!storeOffer.getString("coverImage").equals("")){
+            Picasso.with(getActivity())
+                    .load(storeOffer.getString("coverImage"))
+                    .fit().centerCrop()
+                    //.fit()
+                    .placeholder(R.drawable.placeholder)
+                    .into(imgCard);
+        }
+
+
+        txtTitle.setText(storeOffer.getString("title"));
+        txtCost.setText(storeOffer.getString("costPoints")+" Points");
+        txtVanue.setText(storeOffer.getString("cityText"));
+        txtEventInfo.setText(storeOffer.getString("description"));
+        txtDate.setText(SetDateFormat.convertFormat(storeOffer.getString("endDate"),"yyyy/MM/dd HH:mm:ss","MMM dd, yyyy h:mm a"));
     }
 
     public class StorePagerAdapter extends PagerAdapter {
