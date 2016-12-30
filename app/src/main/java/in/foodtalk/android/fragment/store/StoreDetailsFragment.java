@@ -47,6 +47,8 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
 
     DatabaseHandler db;
 
+    LinearLayout btnBuyNow;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,10 +68,20 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
         tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
         progressHolder = (LinearLayout) layout.findViewById(R.id.progress_h);
 
+        btnBuyNow = (LinearLayout) layout.findViewById(R.id.btn_buy_now);
+        btnBuyNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("StoreDetailsFragment","buynow clicked");
+                try {
+                    buyNow();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         apiCallback = this;
-
-
-
         try {
             getStoreList();
         } catch (JSONException e) {
@@ -135,20 +147,34 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
         jsonObject.put("storeItemId", storeObj.storeItemId);
         apiCall.apiRequestPost(getActivity(),jsonObject, Config.URL_STORE_DETAIL, "storeDetails", apiCallback);
     }
+    private void buyNow() throws JSONException {
+       // progressHolder.setVisibility(View.VISIBLE);
+        //tapToRetry.setVisibility(View.GONE);
+        //placeholder.setVisibility(View.GONE);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("sessionId", db.getUserDetails().get("sessionId"));
+        jsonObject.put("storeItemId", storeObj.storeItemId);
+        apiCall.apiRequestPost(getActivity(),jsonObject, Config.URL_STORE_BUY, "storeItemBuy", apiCallback);
+    }
 
     @Override
     public void apiResponse(JSONObject response, String tag) {
         Log.d("apiResponse", tag+" : " +response);
-        if (response != null){
-            try {
-                loadDataIntoView(response, tag);
-            } catch (JSONException e) {
-                e.printStackTrace();
+        if (tag.equals("storeDetails")){
+            if (response != null){
+                try {
+                    loadDataIntoView(response, tag);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else {
+                tapToRetry.setVisibility(View.VISIBLE);
+                progressHolder.setVisibility(View.GONE);
             }
-        }else {
-            tapToRetry.setVisibility(View.VISIBLE);
-            progressHolder.setVisibility(View.GONE);
         }
+
+
+
     }
 
     private void loadDataIntoView(JSONObject response, String tag)throws JSONException{

@@ -86,9 +86,11 @@ public class StoreFragment extends Fragment implements ApiCallback {
             @Override
             public void onClick(View v) {
                 Log.d("storeFragment", "btnPurchanse");
+                
                 openFragmentCallback.openFragment("storePurchases", "");
             }
         });
+
 
         apiCallback = this;
         tapToRetry.setOnClickListener(new View.OnClickListener() {

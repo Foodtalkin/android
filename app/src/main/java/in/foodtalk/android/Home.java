@@ -114,6 +114,7 @@ import in.foodtalk.android.fragment.newpost.ReviewFragment;
 import in.foodtalk.android.fragment.store.StoreDetailsFragment;
 import in.foodtalk.android.fragment.store.StoreFragment;
 import in.foodtalk.android.fragment.postdetails.PostDetailsFragment;
+import in.foodtalk.android.fragment.store.StorePurchasesCard;
 import in.foodtalk.android.fragment.store.StorePurchasesFragment;
 import in.foodtalk.android.module.CloudinaryUpload;
 import in.foodtalk.android.module.DatabaseHandler;
