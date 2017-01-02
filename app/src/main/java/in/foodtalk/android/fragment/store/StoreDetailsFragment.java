@@ -1,5 +1,6 @@
 package in.foodtalk.android.fragment.store;
 
+import android.app.Dialog;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,8 +11,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.animation.AlphaAnimation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -23,6 +28,7 @@ import in.foodtalk.android.R;
 import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;
+import in.foodtalk.android.communicator.OpenFragmentCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.SetDateFormat;
 import in.foodtalk.android.object.StoreObj;
@@ -49,12 +55,44 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
 
     LinearLayout btnBuyNow;
 
+    //----alert popup--
+    RelativeLayout viewSuccess;
+    RelativeLayout viewError;
+    TextView txtSuccess;
+    TextView txtError;
+    LinearLayout btnGotoPurchases;
+    LinearLayout btnGotoStore;
+
+    LinearLayout alertPopupView;
+
+    FrameLayout progressBarHolder;
+
+    AlphaAnimation inAnimation;
+    AlphaAnimation outAnimation;
+
+
+    OpenFragmentCallback openFragmentCallback;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.store_details_fragment, container, false);
 
         db = new DatabaseHandler(getActivity());
+
+        openFragmentCallback = (OpenFragmentCallback) getActivity();
+
+        progressBarHolder = (FrameLayout) layout.findViewById(R.id.progressBarHolder);
+
+        //--alert popup--
+        viewSuccess =  (RelativeLayout) layout.findViewById(R.id.view_success);
+        viewError = (RelativeLayout) layout.findViewById(R.id.view_error);
+        txtSuccess = (TextView) layout.findViewById(R.id.txt_success);
+        txtError = (TextView) layout.findViewById(R.id.txt_error);
+        alertPopupView = (LinearLayout) layout.findViewById(R.id.alert_popup);
+        btnGotoPurchases = (LinearLayout) layout.findViewById(R.id.btn_goto_purchases);
+        btnGotoStore = (LinearLayout) layout.findViewById(R.id.btn_goto_store);
+        //----
 
         tabLayout = (TabLayout) layout.findViewById(R.id.tab_layout);
         imgCard = (ImageView) layout.findViewById(R.id.img_card);
@@ -80,6 +118,22 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
                 }
             }
         });
+
+        btnGotoPurchases.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFragmentCallback.openFragment("storePurchases", "");
+            }
+        });
+        btnGotoStore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().popBackStack();
+            }
+        });
+
+
+        //alertDialog("success", "Your Purchase was successful.");
 
         apiCallback = this;
         try {
@@ -155,6 +209,7 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
         jsonObject.put("sessionId", db.getUserDetails().get("sessionId"));
         jsonObject.put("storeItemId", storeObj.storeItemId);
         apiCall.apiRequestPost(getActivity(),jsonObject, Config.URL_STORE_BUY, "storeItemBuy", apiCallback);
+        progressBarView(true);
     }
 
     @Override
@@ -172,9 +227,29 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
                 progressHolder.setVisibility(View.GONE);
             }
         }
-
-
-
+        if (tag.equals("storeItemBuy")){
+            progressBarView(false);
+            if (response != null){
+                Log.d("storeItemBuy","enter");
+                try {
+                    String status = response.getString("status");
+                    String message = "";
+                    if (status.equals("success")){
+                        Log.d("storeItemBuy","success");
+                        alertPopup("success", "");
+                    }else if (status.equals("error")){
+                        if (response.has("apiMessage")){
+                            message = response.getString("apiMessage");
+                        }
+                        Log.d("storeItemBuy","error");
+                        alertPopup("error", message);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                //alertPopup(String view, String value);
+            }
+        }
     }
 
     private void loadDataIntoView(JSONObject response, String tag)throws JSONException{
@@ -193,8 +268,6 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
                     .placeholder(R.drawable.placeholder)
                     .into(imgCard);
         }
-
-
         txtTitle.setText(storeOffer.getString("title"));
         txtCost.setText(storeOffer.getString("costPoints")+" Points");
         txtVanue.setText(storeOffer.getString("cityText"));
@@ -226,6 +299,54 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
         @Override
         public boolean isViewFromObject(View view, Object object) {
             return view == ((View) object);
+        }
+    }
+
+    /*private void alertDialog(String view, String value){
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.store_popup);
+        RelativeLayout viewSuccess = (RelativeLayout) dialog.findViewById(R.id.view_success);
+        RelativeLayout viewError = (RelativeLayout) dialog.findViewById(R.id.view_error);
+        TextView txtSuccess = (TextView) dialog.findViewById(R.id.txt_success);
+        TextView txtError = (TextView) dialog.findViewById(R.id.txt_error);
+
+
+        if (view.equals("success")){
+            viewSuccess.setVisibility(View.VISIBLE);
+            viewError.setVisibility(View.GONE);
+            txtSuccess.setText(value);
+        }else if (view.equals("error")){
+            viewSuccess.setVisibility(View.GONE);
+            viewError.setVisibility(View.VISIBLE);
+            txtError.setText(value);
+        }
+        dialog.show();
+    }*/
+    private void alertPopup(String view, String value){
+        alertPopupView.setVisibility(View.VISIBLE);
+        if (view.equals("success")){
+            viewSuccess.setVisibility(View.VISIBLE);
+            viewError.setVisibility(View.GONE);
+            //txtSuccess.setText(value);
+        }else if (view.equals("error")){
+            viewSuccess.setVisibility(View.GONE);
+            viewError.setVisibility(View.VISIBLE);
+            txtError.setText(value);
+        }
+    }
+
+    private void progressBarView(boolean show){
+        if (show){
+            inAnimation = new AlphaAnimation(0f, 1f);
+            inAnimation.setDuration(200);
+            progressBarHolder.setAnimation(inAnimation);
+            progressBarHolder.setVisibility(View.VISIBLE);
+        }else {
+            outAnimation = new AlphaAnimation(1f, 0f);
+            outAnimation.setDuration(200);
+            progressBarHolder.setAnimation(outAnimation);
+            progressBarHolder.setVisibility(View.GONE);
         }
     }
 }

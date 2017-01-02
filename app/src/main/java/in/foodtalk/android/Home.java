@@ -2177,6 +2177,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             StorePurchasesFragment storePurchasesFragment = new StorePurchasesFragment();
             setFragmentView(storePurchasesFragment, R.id.container1, -1, true);
         }
+        if (fragmentName.equals("storeFragment")){
+            setFragmentView(storeFragment, R.id.container1, -1, true);
+        }
     }
     String listType;
     @Override
