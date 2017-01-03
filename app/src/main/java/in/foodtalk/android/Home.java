@@ -86,6 +86,7 @@ import in.foodtalk.android.communicator.ShareNewPostCallback;
 import in.foodtalk.android.communicator.StoreCallback;
 import in.foodtalk.android.communicator.UserProfileCallback;
 import in.foodtalk.android.communicator.UserThumbCallback;
+import in.foodtalk.android.communicator.WebpageCallback;
 import in.foodtalk.android.fragment.CommentFragment;
 import in.foodtalk.android.fragment.CuratedFragment;
 import in.foodtalk.android.fragment.DiscoverFragment;
@@ -132,7 +133,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         HeadSpannableCallback, UserThumbCallback, ProfileRPostOpenCallback, PhoneCallback,
         CheckInCallback, CamBitmapCallback, DishTaggingCallback , RatingCallback , ReviewCallback, AddRestaurantCallback,
         AddedRestaurantCallback, SearchResultCallback, CommentCallback, NotificationCallback, OpenRestaurantCallback,
-        ApiCallback, StoreCallback, ShareNewPostCallback, OpenFragmentCallback, FollowListCallback {
+        ApiCallback, StoreCallback, ShareNewPostCallback, OpenFragmentCallback, FollowListCallback, WebpageCallback {
     DatabaseHandler db;
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
     ImageView homeIcon, discoverIcon, newpostIcon, notiIcon, moreIcon;
@@ -2192,5 +2193,21 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         followListFragment = new FollowListFragment();
         followListFragment.setArguments(bundle);
         setFragmentView(followListFragment,R.id.container,-1, true);
+    }
+
+    @Override
+    public void inAppBrowser(boolean isTitle, String title, String url) {
+        webViewFragment = new WebViewFragment();
+        webViewFragment.webViewFragment1(url);
+        if (isTitle){
+            setFragmentView (webViewFragment, R.id.container, -1, true);
+            //titleHome.setText("Legal");
+            if (title != null){
+                titleHome.setText(title);
+            }
+        }else {
+            setFragmentView (webViewFragment, R.id.container1, -1, true);
+        }
+
     }
 }

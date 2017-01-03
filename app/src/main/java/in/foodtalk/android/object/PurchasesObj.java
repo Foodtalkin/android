@@ -28,6 +28,7 @@ public class PurchasesObj {
     public String paidCostOnline;
     public String paidCostPoints;
     public String createDate;
+    public String metaData;
 
 
 }

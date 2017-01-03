@@ -46,6 +46,7 @@ public class StorePurchasesFragment extends Fragment implements ApiCallback {
     DatabaseHandler db;
     ApiCallback apiCallback;
     ApiCall apiCall;
+    int pagerCurrentPosition = 0;
 
     List<PurchasesObj> purchaseList = new ArrayList<>();
 
@@ -89,13 +90,19 @@ public class StorePurchasesFragment extends Fragment implements ApiCallback {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        initialisePaging();
+    }
+
     private void initialisePaging(){
         mPagerAdapter = new PurchasesPagerAdapter(fm, purchaseList, getActivity());
         ViewPager pager = (ViewPager) layout.findViewById(R.id.viewpager);
         pager.setAdapter(mPagerAdapter);
        // pager.setPageTransformer(true, new DepthPageTransformer());
 
-        //pager.setCurrentItem(pagerCurrentPosition);
+        pager.setCurrentItem(pagerCurrentPosition);
 
         pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -106,7 +113,7 @@ public class StorePurchasesFragment extends Fragment implements ApiCallback {
             @Override
             public void onPageSelected(int position) {
                 Log.d("onPageSelected",position+"");
-                //pagerCurrentPosition = position;
+                pagerCurrentPosition = position;
             }
             @Override
             public void onPageScrollStateChanged(int state) {
@@ -144,6 +151,8 @@ public class StorePurchasesFragment extends Fragment implements ApiCallback {
     private void sendDataIntoAdapter(JSONObject response) throws JSONException{
         JSONArray purchasesList = response.getJSONArray("storePurchase");
 
+        purchaseList.clear();
+
         for (int i=0; i<purchasesList.length(); i++){
             PurchasesObj purchasesObj = new PurchasesObj();
             purchasesObj.storeItemId = purchasesList.getJSONObject(i).getString("storeItemId");
@@ -170,6 +179,7 @@ public class StorePurchasesFragment extends Fragment implements ApiCallback {
             purchasesObj.paidCostOnline = purchasesList.getJSONObject(i).getString("paidCostOnline");
             purchasesObj.paidCostPoints = purchasesList.getJSONObject(i).getString("paidCostPoints");
             purchasesObj.createDate = purchasesList.getJSONObject(i).getString("createDate");
+            purchasesObj.metaData = purchasesList.getJSONObject(i).getString("metaData");
             purchaseList.add(purchasesObj);
         }
         initialisePaging();
