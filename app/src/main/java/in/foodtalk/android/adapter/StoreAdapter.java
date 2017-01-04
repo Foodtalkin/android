@@ -3,7 +3,6 @@ package in.foodtalk.android.adapter;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -15,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.fitness.request.ListSubscriptionsRequest;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -29,7 +27,7 @@ import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.communicator.StoreCallback;
 import in.foodtalk.android.module.DatabaseHandler;
-import in.foodtalk.android.module.SetDateFormat;
+import in.foodtalk.android.module.DateFunction;
 import in.foodtalk.android.object.StoreObj;
 
 /**
@@ -81,7 +79,7 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             storeCardHolder.txtTitle.setText(storeObj.title);
             storeCardHolder.txtDes.setText(storeObj.shortDescription);
             storeCardHolder.txtPts.setText(storeObj.costPoints+" Pts");
-            String date1 = SetDateFormat.convertFormat(storeObj.endDate,"yyyy/MM/dd HH:mm:ss","MMM dd");
+            String date1 = DateFunction.convertFormat(storeObj.endDate,"yyyy-MM-dd HH:mm:ss","MMM dd");
             storeCardHolder.txtDate.setText(date1);
             Picasso.with(context)
                     .load(storeObj.cardImage)

@@ -23,11 +23,11 @@
                 android:id="@+id/btn_purchases"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_help_white_24dp"
+                android:src="@drawable/ic_purchase_24"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
-                android:padding="10dp"/>
+                android:paddingRight="10dp"/>
 
         </RelativeLayout>
         <RelativeLayout
@@ -36,7 +36,7 @@
             >
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="70dp"
                 android:orientation="vertical"
                 >
                 <LinearLayout
@@ -116,7 +116,8 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp">
+                            android:layout_marginTop="20dp"
+                            android:visibility="gone">
                             <TextView
                                 android:id="@+id/txt_event_info"
                                 android:layout_width="wrap_content"
@@ -158,6 +159,7 @@
                             android:paddingLeft="12dp"
                             android:paddingRight="12dp"
                             android:layout_marginTop="8dp"
+                            android:visibility="gone"
                             >
                             <TextView
                                 android:layout_width="wrap_content"

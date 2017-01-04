@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
@@ -27,7 +26,7 @@ import java.util.Date;
 
 import in.foodtalk.android.R;
 import in.foodtalk.android.communicator.WebpageCallback;
-import in.foodtalk.android.module.SetDateFormat;
+import in.foodtalk.android.module.DateFunction;
 import in.foodtalk.android.object.PurchasesObj;
 
 /**
@@ -39,10 +38,10 @@ public class StorePurchasesCard extends Fragment {
 
     public PurchasesObj purchasesObj;
 
-    TextView txtEventPass, txtTitle, txtDate, txtTime, txtCoupon, txtName, txtAdmitCount, txtRefNo, txtTapToCopy, txtUrl;
+    TextView txtEventPass, txtTitle, txtDate, txtTime, txtCoupon, txtName, txtAdmitCount, txtRefNo, txtTapToCopy, txtUrl, txtExpired;
     ImageView imgCard;
 
-    LinearLayout couponHolder, redeemTab;
+    LinearLayout couponHolder, redeemTab, redeemTab1;
     WebpageCallback webpageCallback;
 
 
@@ -61,8 +60,10 @@ public class StorePurchasesCard extends Fragment {
         imgCard = (ImageView) layout.findViewById(R.id.img_card);
         txtTapToCopy = (TextView) layout.findViewById(R.id.txt_taptoCopy);
         txtUrl = (TextView) layout.findViewById(R.id.txt_url);
+        txtExpired = (TextView) layout.findViewById(R.id.txt_expired);
 
         redeemTab = (LinearLayout) layout.findViewById(R.id.redeem_tab);
+        redeemTab1 = (LinearLayout) layout.findViewById(R.id.redeem_tab1);
 
         webpageCallback = (WebpageCallback) getActivity();
 
@@ -73,6 +74,7 @@ public class StorePurchasesCard extends Fragment {
         txtDate.setTypeface(face);
         txtTime.setTypeface(face);
         txtCoupon.setTypeface(face);
+        txtExpired.setTypeface(face);
         //txtName.setTypeface(face);
         txtAdmitCount.setTypeface(face);
         txtRefNo.setTypeface(face);
@@ -110,10 +112,11 @@ public class StorePurchasesCard extends Fragment {
 
 
         txtTitle.setText(purchasesObj.title);
-        txtDate.setText(SetDateFormat.convertFormat(purchasesObj.endDate,"yyyy/MM/dd HH:mm:ss","MMM dd, yyyy"));
-        txtTime.setText(SetDateFormat.convertFormat(purchasesObj.endDate,"yyyy/MM/dd HH:mm:ss","h:mm a"));
+        txtDate.setText(DateFunction.convertFormat(purchasesObj.endDate,"yyyy-MM-dd HH:mm:ss","MMM dd, yyyy"));
+        txtTime.setText(DateFunction.convertFormat(purchasesObj.endDate,"yyyy-MM-dd HH:mm:ss","h:mm a"));
         txtCoupon.setText(couponCode);
         txtUrl.setText(redemptionUrl);
+        txtEventPass.setText(purchasesObj.type);
 
         if (!purchasesObj.cardImage.equals("")){
             Picasso.with(getActivity())
@@ -126,12 +129,40 @@ public class StorePurchasesCard extends Fragment {
 
         //---compair dates--------
         Calendar c = Calendar.getInstance();
-        System.out.println("Current time => " + c.getTime());
+       // System.out.println("Current time => " + c.getTime());
 
         SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         String formattedDate = df.format(c.getTime());
 
-        //Log.d("compair date", compareToDay(Date date1, Date date2))
+        //----
+        //String dtStart = "2016-01-01 13:33:59";
+       // Log.d("compairToCurrentDate", DateFunction.compareToCurrentDate("yyyy-MM-dd HH:mm:ss",dtStart)+"");
+
+
+        /*SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            //Date date = format.parse(purchasesObj.endDate);
+            Date date = format.parse(dtStart);
+            Date todayDate = new Date();
+            Log.d("compair date", compareToDay(date, todayDate)+"");
+
+            //System.out.println(date);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }*/
+
+        if (DateFunction.compareToCurrentDate("yyyy-MM-dd HH:mm:ss",purchasesObj.endDate) < 0){
+            redeemTab.setVisibility(View.GONE);
+            redeemTab1.setVisibility(View.VISIBLE);
+        }else {
+            redeemTab.setVisibility(View.VISIBLE);
+            redeemTab1.setVisibility(View.GONE);
+        }
+
+
+
+
 
 
 

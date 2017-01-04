@@ -6,6 +6,7 @@
     android:background="@color/snow"
     android:clickable="true">
     <LinearLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -22,211 +23,234 @@
                 android:textSize="20sp"
                 android:layout_centerInParent="true"/>
             <ImageView
+                android:id="@+id/btn_purchases"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_help_white_24dp"
+                android:src="@drawable/ic_purchase_24"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="20dp"/>
+                android:layout_marginRight="20dp"
+                android:padding="3dp"/>
 
         </RelativeLayout>
-
-        <ScrollView
+        <RelativeLayout
+            android:id="@+id/root_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <RelativeLayout
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-                <LinearLayout
+                android:layout_height="match_parent">
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:orientation="vertical"
+                    android:layout_height="wrap_content"
                     >
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@color/navigation">
+                        android:layout_height="100dp"
+                        android:orientation="vertical"
+                        >
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@color/navigation">
 
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                        </LinearLayout>
                     </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
 
-                    </LinearLayout>
-                </LinearLayout>
-
-                <android.support.v7.widget.CardView
-                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/card_view"
-                    android:layout_gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    card_view:cardCornerRadius="0dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="-5dp"
-                    card_view:cardUseCompatPadding="true"
-                    card_view:cardBackgroundColor="@color/snow">
-                    <ImageView
-                        android:id="@+id/img_card"
+                    <android.support.v7.widget.CardView
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/card_view"
+                        android:layout_gravity="center"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/placeholder"
-                        android:adjustViewBounds="true"
-                        android:scaleType="centerCrop"/>
-                </android.support.v7.widget.CardView>
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/card_view">
-                    <LinearLayout
-                        android:id="@+id/heading"
+                        android:layout_height="150dp"
+                        card_view:cardCornerRadius="0dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="-5dp"
+                        card_view:cardUseCompatPadding="true"
+                        card_view:cardBackgroundColor="@color/snow">
+                        <ImageView
+                            android:id="@+id/img_card"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/placeholder"
+                            android:adjustViewBounds="true"
+                            android:scaleType="centerCrop"/>
+                    </android.support.v7.widget.CardView>
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp">
-                        <TextView
-                            android:id="@+id/txt_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Chi Ashian Cookhouse come to Delhi"
-                            android:textSize="22sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/black"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_below="@+id/heading">
-                        <android.support.design.widget.TabLayout
-                            android:layout_below="@+id/search_header"
-                            android:id="@+id/tab_layout"
+                        android:layout_below="@+id/card_view">
+                        <LinearLayout
+                            android:id="@+id/heading"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:tabTextColor="@color/silver"
-                            app:tabSelectedTextColor="@color/active"
-                            app:tabIndicatorColor="@color/active"
-                            android:layout_marginRight="20dp"
-                            android:layout_marginLeft="20dp"
-                            >
-                            <android.support.design.widget.TabItem
-                                android:text="Quick View"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                />
-
-                            <android.support.design.widget.TabItem
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Details"/>
-                        </android.support.design.widget.TabLayout>
-
-
-                        <!-- View pager to swipe views -->
-                        <android.support.v4.view.ViewPager
-                            android:id="@+id/view_pager"
-                            android:layout_width="match_parent"
-                            android:layout_height="300dp"
+                            android:layout_height="match_parent"
                             android:layout_marginTop="15dp"
-                            >
-                            <LinearLayout
-                                android:id="@+id/quick_view"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp">
+                            <TextView
+                                android:id="@+id/txt_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Chi Ashian Cookhouse come to Delhi"
+                                android:textSize="22sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/black"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_below="@+id/heading">
+                            <android.support.design.widget.TabLayout
+                                android:layout_below="@+id/search_header"
+                                android:id="@+id/tab_layout"
                                 android:layout_width="match_parent"
-                                android:layout_height="200dp"
-                                android:orientation="vertical"
+                                android:layout_height="wrap_content"
+                                app:tabTextColor="@color/silver"
+                                app:tabSelectedTextColor="@color/active"
+                                app:tabIndicatorColor="@color/active"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginLeft="20dp"
                                 >
-                                <LinearLayout
-                                    android:layout_width="match_parent"
+                                <android.support.design.widget.TabItem
+                                    android:text="Quick View"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginRight="15dp"
-                                    android:layout_marginLeft="15dp"
-                                    android:orientation="vertical">
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="When"
-                                        android:textColor="@color/silver"
-                                        android:textSize="16sp"/>
-                                    <TextView
-                                        android:id="@+id/txt_date"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="31 Dec, 2016 8:00 PM Onward"
-                                        android:textSize="18sp"
-                                        android:textStyle="bold"
-                                        android:textColor="@color/slate" />
-                                </LinearLayout>
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="15dp"
-                                    android:layout_marginLeft="15dp"
-                                    android:layout_marginTop="15dp"
-                                    android:orientation="vertical">
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Where"
-                                        android:textColor="@color/silver"
-                                        android:textSize="16sp"/>
-                                    <TextView
-                                        android:id="@+id/txt_vanue"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Perch, Vasant Kunj, Delhi"
-                                        android:textSize="18sp"
-                                        android:textStyle="bold"
-                                        android:textColor="@color/slate" />
-                                </LinearLayout>
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="15dp"
-                                    android:layout_marginLeft="15dp"
-                                    android:layout_marginTop="15dp"
-                                    android:orientation="vertical">
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="How much"
-                                        android:textColor="@color/silver"
-                                        android:textSize="16sp"/>
-                                    <TextView
-                                        android:id="@+id/txt_cost"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="1200 Points/2000 INR"
-                                        android:textSize="18sp"
-                                        android:textStyle="bold"
-                                        android:textColor="@color/slate" />
-                                </LinearLayout>
-                            </LinearLayout>
-                            <LinearLayout
-                                android:id="@+id/details"
-                                android:layout_width="match_parent"
-                                android:layout_height="200dp"
-                                android:orientation="vertical"
+                                    />
 
-                                >
-                                <TextView
-                                    android:id="@+id/txt_event_info"
-                                    android:layout_marginLeft="15dp"
-                                    android:layout_marginRight="15dp"
-                                    android:layout_width="match_parent"
+                                <android.support.design.widget.TabItem
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Hello, \nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod id lectus eget efficitur. Fusce convallis, risus at sodales tincidunt, arcu dui varius diam, vitae pulvinar justo est eget leo. Nullam tincidunt enim purus, in volutpat elit elementum ac. In rhoncus, mi vitae laoreet ornare, ligula sapien maximus purus,"
-                                    android:lineSpacingExtra="3sp"/>
-                            </LinearLayout>
-                        </android.support.v4.view.ViewPager>
-                    </LinearLayout>
+                                    android:text="Details"/>
+                            </android.support.design.widget.TabLayout>
+
+
+                            <!-- View pager to swipe views -->
+                            <android.support.v4.view.ViewPager
+                                android:id="@+id/view_pager"
+                                android:layout_width="match_parent"
+                                android:layout_height="300dp"
+                                android:layout_marginTop="15dp"
+                                >
+                                <LinearLayout
+                                    android:id="@+id/quick_view"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="200dp"
+                                    android:orientation="vertical"
+                                    >
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="15dp"
+                                        android:layout_marginLeft="15dp"
+                                        android:orientation="vertical">
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="When"
+                                            android:textColor="@color/silver"
+                                            android:textSize="16sp"/>
+                                        <TextView
+                                            android:id="@+id/txt_date"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="31 Dec, 2016 8:00 PM Onward"
+                                            android:textSize="18sp"
+                                            android:textStyle="bold"
+                                            android:textColor="@color/slate" />
+                                    </LinearLayout>
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="15dp"
+                                        android:layout_marginLeft="15dp"
+                                        android:layout_marginTop="15dp"
+                                        android:orientation="vertical">
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Where"
+                                            android:textColor="@color/silver"
+                                            android:textSize="16sp"/>
+                                        <TextView
+                                            android:id="@+id/txt_vanue"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Perch, Vasant Kunj, Delhi"
+                                            android:textSize="18sp"
+                                            android:textStyle="bold"
+                                            android:textColor="@color/slate" />
+                                    </LinearLayout>
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="15dp"
+                                        android:layout_marginLeft="15dp"
+                                        android:layout_marginTop="15dp"
+                                        android:orientation="vertical">
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="How much"
+                                            android:textColor="@color/silver"
+                                            android:textSize="16sp"/>
+                                        <TextView
+                                            android:id="@+id/txt_cost"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="1200 Points/2000 INR"
+                                            android:textSize="18sp"
+                                            android:textStyle="bold"
+                                            android:textColor="@color/slate" />
+                                    </LinearLayout>
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:id="@+id/details"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="200dp"
+                                    android:orientation="vertical"
+
+                                    >
+                                    <TextView
+                                        android:id="@+id/txt_event_info"
+                                        android:layout_marginLeft="15dp"
+                                        android:layout_marginRight="15dp"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Hello, \nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod id lectus eget efficitur. Fusce convallis, risus at sodales tincidunt, arcu dui varius diam, vitae pulvinar justo est eget leo. Nullam tincidunt enim purus, in volutpat elit elementum ac. In rhoncus, mi vitae laoreet ornare, ligula sapien maximus purus,"
+                                        android:lineSpacingExtra="3sp"/>
+                                </LinearLayout>
+                            </android.support.v4.view.ViewPager>
+                        </LinearLayout>
+                    </RelativeLayout>
                 </RelativeLayout>
-            </RelativeLayout>
-        </ScrollView>
+            </ScrollView>
+            <LinearLayout
+                android:id="@+id/btn_buy_now"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_corner1"
+                android:gravity="center"
+                android:padding="20dp"
+                android:layout_margin="20dp"
+                android:layout_alignParentBottom="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Buy Now"
+                    android:textColor="@color/snow"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+
     </LinearLayout>
 
     <TextView
@@ -237,22 +261,7 @@
         android:textColor="@color/blackText1"
         android:text="Nothing in your store :("
         android:visibility="gone"/>
-    <LinearLayout
-        android:id="@+id/btn_buy_now"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/round_corner1"
-        android:gravity="center"
-        android:padding="20dp"
-        android:layout_margin="20dp"
-        android:layout_alignParentBottom="true">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Buy Now"
-            android:textColor="@color/snow"
-            />
-    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/progress_h"
         android:layout_width="wrap_content"

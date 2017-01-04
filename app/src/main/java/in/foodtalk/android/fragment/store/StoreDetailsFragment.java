@@ -1,6 +1,5 @@
 package in.foodtalk.android.fragment.store;
 
-import android.app.Dialog;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.animation.AlphaAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -30,7 +28,7 @@ import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.communicator.OpenFragmentCallback;
 import in.foodtalk.android.module.DatabaseHandler;
-import in.foodtalk.android.module.SetDateFormat;
+import in.foodtalk.android.module.DateFunction;
 import in.foodtalk.android.object.StoreObj;
 
 /**
@@ -73,6 +71,9 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
 
     OpenFragmentCallback openFragmentCallback;
 
+    RelativeLayout rootView;
+    ImageView btnPurchases;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -92,11 +93,15 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
         alertPopupView = (LinearLayout) layout.findViewById(R.id.alert_popup);
         btnGotoPurchases = (LinearLayout) layout.findViewById(R.id.btn_goto_purchases);
         btnGotoStore = (LinearLayout) layout.findViewById(R.id.btn_goto_store);
+        btnPurchases = (ImageView) layout.findViewById(R.id.btn_purchases);
         //----
 
         tabLayout = (TabLayout) layout.findViewById(R.id.tab_layout);
         imgCard = (ImageView) layout.findViewById(R.id.img_card);
         txtTitle = (TextView) layout.findViewById(R.id.txt_title);
+
+        rootView = (RelativeLayout) layout.findViewById(R.id.root_view);
+        rootView.setVisibility(View.GONE);
 
         txtDate = (TextView) layout.findViewById(R.id.txt_date);
         txtVanue = (TextView) layout.findViewById(R.id.txt_vanue);
@@ -129,6 +134,12 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
             @Override
             public void onClick(View v) {
                 getFragmentManager().popBackStack();
+            }
+        });
+        btnPurchases.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFragmentCallback.openFragment("storePurchases", "");
             }
         });
 
@@ -217,6 +228,7 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
         Log.d("apiResponse", tag+" : " +response);
         if (tag.equals("storeDetails")){
             if (response != null){
+                rootView.setVisibility(View.VISIBLE);
                 try {
                     loadDataIntoView(response, tag);
                 } catch (JSONException e) {
@@ -272,7 +284,7 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
         txtCost.setText(storeOffer.getString("costPoints")+" Points");
         txtVanue.setText(storeOffer.getString("cityText"));
         txtEventInfo.setText(storeOffer.getString("description"));
-        txtDate.setText(SetDateFormat.convertFormat(storeOffer.getString("endDate"),"yyyy/MM/dd HH:mm:ss","MMM dd, yyyy h:mm a"));
+        txtDate.setText(DateFunction.convertFormat(storeOffer.getString("endDate"),"yyyy-MM-dd HH:mm:ss","MMM dd, yyyy h:mm a"));
     }
 
     public class StorePagerAdapter extends PagerAdapter {
