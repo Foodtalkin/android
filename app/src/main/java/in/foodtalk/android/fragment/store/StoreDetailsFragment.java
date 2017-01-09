@@ -8,6 +8,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -27,6 +28,7 @@ import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.communicator.OpenFragmentCallback;
+import in.foodtalk.android.communicator.WebpageCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.DateFunction;
 import in.foodtalk.android.object.StoreObj;
@@ -53,6 +55,8 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
 
     LinearLayout btnBuyNow;
 
+    ImageView btnClose;
+
     //----alert popup--
     RelativeLayout viewSuccess;
     RelativeLayout viewError;
@@ -67,12 +71,16 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
 
     AlphaAnimation inAnimation;
     AlphaAnimation outAnimation;
+    TextView txtGotoPurchases;
 
 
     OpenFragmentCallback openFragmentCallback;
 
     RelativeLayout rootView;
     ImageView btnPurchases;
+
+    LinearLayout btnTermsCondition;
+    WebpageCallback webpageCallback;
 
     @Nullable
     @Override
@@ -85,6 +93,8 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
 
         progressBarHolder = (FrameLayout) layout.findViewById(R.id.progressBarHolder);
 
+        webpageCallback = (WebpageCallback) getActivity();
+
         //--alert popup--
         viewSuccess =  (RelativeLayout) layout.findViewById(R.id.view_success);
         viewError = (RelativeLayout) layout.findViewById(R.id.view_error);
@@ -94,6 +104,9 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
         btnGotoPurchases = (LinearLayout) layout.findViewById(R.id.btn_goto_purchases);
         btnGotoStore = (LinearLayout) layout.findViewById(R.id.btn_goto_store);
         btnPurchases = (ImageView) layout.findViewById(R.id.btn_purchases);
+        btnClose = (ImageView) layout.findViewById(R.id.btn_close);
+        txtGotoPurchases = (TextView) layout.findViewById(R.id.txt_goto_purchases);
+        btnTermsCondition = (LinearLayout) layout.findViewById(R.id.btn_terms_condition);
         //----
 
         tabLayout = (TabLayout) layout.findViewById(R.id.tab_layout);
@@ -140,6 +153,13 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
             @Override
             public void onClick(View v) {
                 openFragmentCallback.openFragment("storePurchases", "");
+            }
+        });
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //alertPopup();
+                alertPopupView.setVisibility(View.GONE);
             }
         });
 
@@ -246,7 +266,7 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
                 try {
                     String status = response.getString("status");
                     String message = "";
-                    if (status.equals("success")){
+                    if (status.equals("OK")){
                         Log.d("storeItemBuy","success");
                         alertPopup("success", "");
                     }else if (status.equals("error")){
@@ -269,7 +289,7 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
         progressHolder.setVisibility(View.GONE);
         tapToRetry.setVisibility(View.GONE);
 
-        JSONObject storeOffer = response.getJSONObject("storeOffer");
+        final JSONObject storeOffer = response.getJSONObject("storeOffer");
 
         //----
         if (!storeOffer.getString("coverImage").equals("")){
@@ -285,6 +305,23 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
         txtVanue.setText(storeOffer.getString("cityText"));
         txtEventInfo.setText(storeOffer.getString("description"));
         txtDate.setText(DateFunction.convertFormat(storeOffer.getString("endDate"),"yyyy-MM-dd HH:mm:ss","MMM dd, yyyy h:mm a"));
+
+        btnTermsCondition.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_UP:
+                        try {
+                            Log.d("StoreDetailsFragment", "btnTermsCondition"+storeOffer.getString("termConditionsLink"));
+                            webpageCallback.inAppBrowser(false,"",storeOffer.getString("termConditionsLink"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     public class StorePagerAdapter extends PagerAdapter {
@@ -340,11 +377,13 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
         if (view.equals("success")){
             viewSuccess.setVisibility(View.VISIBLE);
             viewError.setVisibility(View.GONE);
+            txtGotoPurchases.setTextColor(getResources().getColor(R.color.green_shamrock));
             //txtSuccess.setText(value);
         }else if (view.equals("error")){
             viewSuccess.setVisibility(View.GONE);
             viewError.setVisibility(View.VISIBLE);
             txtError.setText(value);
+            txtGotoPurchases.setTextColor(getResources().getColor(R.color.red_persian));
         }
     }
 

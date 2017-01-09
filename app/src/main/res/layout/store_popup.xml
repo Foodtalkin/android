@@ -44,7 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/gradient_red"
-        android:visibility="visible">
+        android:visibility="gone">
         <LinearLayout
             android:layout_width="150dp"
             android:layout_height="wrap_content"
@@ -82,10 +82,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_alignParentBottom="true">
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.75dp"
-            android:background="@color/snow"/>
+
         <LinearLayout
             android:id="@+id/btn_goto_purchases"
             android:layout_width="match_parent"
@@ -93,27 +90,38 @@
             android:gravity="center"
             android:padding="15dp"
             android:clickable="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/round_corner_white"
             >
             <TextView
+                android:id="@+id/txt_goto_purchases"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Go to Purchases"
-                android:textColor="@color/snow"/>
+                android:textColor="@color/green_shamrock"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/btn_goto_store"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="15dp"
-            android:background="@color/snow"
             android:clickable="true"
+            android:layout_gravity="center"
             >
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Go to Store"
-                android:textColor="@color/slate"/>
+                android:textColor="@color/snow"/>
         </LinearLayout>
     </LinearLayout>
+    <ImageView
+        android:id="@+id/btn_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_close_white_36dp"
+        android:padding="20dp"/>
+
 </RelativeLayout>

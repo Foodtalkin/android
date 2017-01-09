@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,6 +51,9 @@ public class StorePurchasesFragment extends Fragment implements ApiCallback {
 
     List<PurchasesObj> purchaseList = new ArrayList<>();
 
+
+    TextView txtPlaceholder;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,6 +65,7 @@ public class StorePurchasesFragment extends Fragment implements ApiCallback {
 
         progressBar = (ProgressBar) layout.findViewById(R.id.progress_bar);
         tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
+        txtPlaceholder = (TextView) layout.findViewById(R.id.txt_placeholder);
         tapToRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,6 +155,12 @@ public class StorePurchasesFragment extends Fragment implements ApiCallback {
 
     private void sendDataIntoAdapter(JSONObject response) throws JSONException{
         JSONArray purchasesList = response.getJSONArray("storePurchase");
+
+        if (purchasesList.length() == 0){
+            txtPlaceholder.setVisibility(View.VISIBLE);
+        }else {
+            txtPlaceholder.setVisibility(View.GONE);
+        }
 
         purchaseList.clear();
 

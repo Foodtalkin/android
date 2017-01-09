@@ -137,7 +137,7 @@
                             <android.support.v4.view.ViewPager
                                 android:id="@+id/view_pager"
                                 android:layout_width="match_parent"
-                                android:layout_height="300dp"
+                                android:layout_height="330dp"
                                 android:layout_marginTop="15dp"
                                 >
                                 <LinearLayout
@@ -211,6 +211,29 @@
                                             android:textStyle="bold"
                                             android:textColor="@color/slate" />
                                     </LinearLayout>
+                                    <LinearLayout
+                                        android:id="@+id/btn_terms_condition"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:layout_marginRight="15dp"
+                                        android:layout_marginLeft="15dp"
+                                        android:layout_marginTop="15dp"
+                                        android:clickable="true">
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="By purchasing you agree to our"
+                                            android:textSize="18sp"
+                                            android:clickable="false"/>
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="terms &amp; conditions"
+                                            android:textColor="@color/com_facebook_blue"
+                                            android:textSize="16sp"
+                                            android:clickable="false"/>
+                                    </LinearLayout>
                                 </LinearLayout>
                                 <LinearLayout
                                     android:id="@+id/details"
@@ -234,20 +257,29 @@
                 </RelativeLayout>
             </ScrollView>
             <LinearLayout
-                android:id="@+id/btn_buy_now"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/round_corner1"
-                android:gravity="center"
-                android:padding="20dp"
-                android:layout_margin="20dp"
+                android:background="@color/snow"
                 android:layout_alignParentBottom="true">
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/btn_buy_now"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Buy Now"
-                    android:textColor="@color/snow"
-                    />
+                    android:background="@drawable/round_corner1"
+                    android:gravity="center"
+                    android:padding="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_alignParentBottom="true">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Buy Now"
+                        android:textColor="@color/snow"
+                        />
+                </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
 
@@ -313,7 +345,6 @@
         android:layout_height="match_parent"
         android:visibility="gone">
         <include layout="@layout/store_popup"
-
             />
     </LinearLayout>
 

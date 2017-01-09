@@ -204,7 +204,12 @@ public class StoreFragment extends Fragment implements ApiCallback {
                 .into(imgUserThumb);
         txtFullName.setText(StringCase.caseSensitive(profile.getString("fullName")));
         txtUsername.setText(profile.getString("userName"));
-        txtPoints.setText(profile.getString("avilablePoints"));
+        double point = Double.parseDouble(profile.getString("avilablePoints"));
+        if (point < 1 ){
+            txtPoints.setText("0");
+        }else {
+            txtPoints.setText(String.valueOf((long) point));
+        }
         //txtEventInfo.setText(profile.getString(""));
     }
 }

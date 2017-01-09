@@ -2208,6 +2208,5 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }else {
             setFragmentView (webViewFragment, R.id.container1, -1, true);
         }
-
     }
 }
