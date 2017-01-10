@@ -278,7 +278,7 @@ public class SearchResult extends Fragment implements SearchCallback {
         }
         Log.d("json Obj", obj+"");
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                config.URL_RESTAURANT_LIST_CHECKIN, obj,
+                config.URL_SEARCH, obj,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {

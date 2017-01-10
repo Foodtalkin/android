@@ -78,7 +78,18 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             storeCardHolder.txtType.setText(storeObj.type);
             storeCardHolder.txtTitle.setText(storeObj.title);
             storeCardHolder.txtDes.setText(storeObj.shortDescription);
-            storeCardHolder.txtPts.setText(storeObj.costPoints+" Pts");
+            if (storeObj.iPurchasedIt.equals("0")){
+                if (storeObj.costPoints.equals("")){
+                    storeCardHolder.ptsBorder.setBackgroundResource(0);
+                    storeCardHolder.txtPts.setText("Free");
+                }else {
+                    storeCardHolder.txtPts.setText(storeObj.costPoints+" Pts");
+                }
+            }else {
+                storeCardHolder.ptsBorder.setBackgroundResource(0);
+                storeCardHolder.txtPts.setText("Purchased");
+            }
+
             String date1 = DateFunction.convertFormat(storeObj.endDate,"yyyy-MM-dd HH:mm:ss","MMM dd");
             storeCardHolder.txtDate.setText(date1);
             Picasso.with(context)
@@ -162,7 +173,7 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         ImageView imgCard;
         TextView txtType, txtTitle, txtDes, txtDate, txtPts;
 
-        LinearLayout btnCard;
+        LinearLayout btnCard, ptsBorder;
 
 
 
@@ -182,6 +193,7 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             txtDes = (TextView) itemView.findViewById(R.id.txt_des);
             txtPts = (TextView) itemView.findViewById(R.id.txt_pts);
             btnCard = (LinearLayout) itemView.findViewById(R.id.btn_card);
+            ptsBorder = (LinearLayout) itemView.findViewById(R.id.pts_border);
 
             btnCard.setOnTouchListener(this);
 

@@ -34,7 +34,8 @@ public class Config {
     public static String URL_RESTAURANT_POST_IMAGE = "http://"+IP+"/index.php/service/restaurant/getImagePosts";
 
     public static String URL_NEAR_BY_RESTAURANT = "http://"+IP+"/index.php/service/restaurant/list";
-    public static String URL_RESTAURANT_LIST_CHECKIN = "http://"+IP+"/index.php/service/search/es";
+    //public static String URL_RESTAURANT_LIST_CHECKIN = "http://"+IP+"/index.php/service/search/es";
+    public static String URL_SEARCH = "http://"+IP+"/index.php/service/search/es";
 
     public static String URL_DISH_NAME = "http://"+IP+"/index.php/service/dish/list";
 

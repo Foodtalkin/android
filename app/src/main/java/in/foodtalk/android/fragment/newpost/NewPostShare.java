@@ -232,11 +232,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         }
         focusListener();
         textListener();
-        try {
-            getDishList();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
 
         latLonCallback = this;
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
@@ -415,9 +411,17 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
                     //btnNext.setTextColor(getResources().getColor(R.color.btn_disable));
                    // btnNextEnable = false;
                 }else {
-                    if (dishNameLoaded){
-                        onTexChange(s.toString());
+                    if (s.toString().length()>1){
+                        try {
+                            getDishList(s.toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
+
+                    /*if (dishNameLoaded){
+                        onTexChange(s.toString());
+                    }*/
                     //recyclerView.setVisibility(View.VISIBLE);
                     Log.d("NewPostShare","onTextChange: "+s.toString());
                     //btnNext.setTextColor(getResources().getColor(R.color.btn_enable));
@@ -475,10 +479,13 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
 
     }
 
-    private void getDishList() throws JSONException {
+    private void getDishList(String keyword) throws JSONException {
         JSONObject obj = new JSONObject();
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
-        apiCall.apiRequestPost(getActivity(),obj, Config.URL_DISH_NAME, "loadDishNameList", apiCallback);
+        obj.put("searchText", keyword);
+        obj.put("type", "dish");
+        //apiCall.apiRequestPost(getActivity(),obj, Config.URL_DISH_NAME, "loadDishNameList", apiCallback);
+        apiCall.apiRequestPost(getActivity(),obj, Config.URL_SEARCH, "loadDishNameList", apiCallback);
     }
     private void getRestaurantList(String lat, String lon) throws JSONException {
         JSONObject obj = new JSONObject();
@@ -490,7 +497,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
             obj.put("latitude",lat);
             obj.put("longitude",lon);
         }
-        apiCall.apiRequestPost(getActivity(),obj, Config.URL_RESTAURANT_LIST_CHECKIN, "loadRestaurantListCheckin", apiCallback);
+        apiCall.apiRequestPost(getActivity(),obj, Config.URL_SEARCH, "loadRestaurantListCheckin", apiCallback);
     }
     private void getRestaurantListSearch(String key) throws JSONException {
         JSONObject obj = new JSONObject();
@@ -502,7 +509,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
 
         obj.put("searchText", key);
 
-        apiCall.apiRequestPost(getActivity(),obj, Config.URL_RESTAURANT_LIST_CHECKIN, "loadRestaurantListCheckin", apiCallback);
+        apiCall.apiRequestPost(getActivity(),obj, Config.URL_SEARCH, "loadRestaurantListCheckin", apiCallback);
     }
     @Override
     public void apiResponse(JSONObject response, String tag) {
@@ -529,21 +536,42 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
 
         this.response = response;
-        JSONArray rListArray = response.getJSONArray("result");
+        //JSONArray rListArray = response.getJSONArray("result");
 
         // Log.d("rListArray", "total: "+ rListArray.length());
-        for (int i=0;i<rListArray.length();i++){
+       /* for (int i=0;i<rListArray.length();i++){
             DishListObj current = new DishListObj();
             current.id = rListArray.getJSONObject(i).getString("id");
             current.name = rListArray.getJSONObject(i).getString("name");
             current.postCount = rListArray.getJSONObject(i).getString("postCount");
             dishList.add(current);
+        }*/
+
+        //-------
+        JSONArray rListArray = response.getJSONObject("result").getJSONObject("hits").getJSONArray("hits");
+        //Log.d("SearchResult",response.getJSONObject("result").getJSONObject("hits").getJSONArray("hits").length()+"");
+        dishList.clear();
+        for (int i=0;i<rListArray.length();i++){
+            DishListObj current = new DishListObj();
+            current.id = rListArray.getJSONObject(i).getJSONObject("_source").getString("id");
+            current.name = rListArray.getJSONObject(i).getJSONObject("_source").getString("dishname");
+            if (rListArray.getJSONObject(i).getJSONObject("_source").has("postcount")){
+                current.postCount = rListArray.getJSONObject(i).getJSONObject("_source").getString("postcount")+" Dishes";
+                dishList.add(current);
+            }
+
         }
+
+
+
+
         //Log.d("send list", "total: "+restaurantList.size());
-        if (getActivity() != null){
+        if (getActivity() != null && dishNameLoaded == false){
             dishTaggingAdapter = new DishTaggingAdapter(getActivity(),dishList , dishTaggingCallback);
             recyclerView.setAdapter(dishTaggingAdapter);
             dishNameLoaded = true;
+        }else {
+            dishTaggingAdapter.notifyDataSetChanged();
         }
     }
 

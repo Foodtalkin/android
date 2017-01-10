@@ -12,8 +12,13 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import in.foodtalk.android.R;
 import in.foodtalk.android.communicator.OpenFragmentCallback;
+import in.foodtalk.android.module.DateFunction;
 import in.foodtalk.android.object.NewsObj;
 
 /**
@@ -23,9 +28,10 @@ import in.foodtalk.android.object.NewsObj;
 public class NewsCardFragment extends Fragment {
     View layout;
     public NewsObj newsObj;
-    TextView txtTitle, txtDes, txtSource, btnReadmore;
+    TextView txtTitle, txtDes, txtSource, btnReadmore, txtTime;
     ImageView coverImg, upArrow;
     OpenFragmentCallback openFragmentCallback;
+
 
 
     @Nullable
@@ -39,6 +45,7 @@ public class NewsCardFragment extends Fragment {
         coverImg = (ImageView) layout.findViewById(R.id.cover_img);
         openFragmentCallback = (OpenFragmentCallback) getActivity();
         upArrow = (ImageView) layout.findViewById(R.id.up_arrow);
+        txtTitle = (TextView) layout.findViewById(R.id.txt_time);
         setImageSize();
         setContent();
         return layout;
@@ -59,6 +66,18 @@ public class NewsCardFragment extends Fragment {
         txtTitle.setText(newsObj.title);
         txtDes.setText(newsObj.description);
         txtSource.setText(newsObj.source);
+
+        SimpleDateFormat simpleDateFormat =
+                new SimpleDateFormat("yyyy-M-dd hh:mm:ss");
+
+        try {
+            Date createdate = simpleDateFormat.parse(newsObj.startDate);
+            txtTitle.setText(DateFunction.timeDiffCurrent(createdate)+" ago");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
 
         if (newsObj.source.equals("")){
             btnReadmore.setVisibility(View.INVISIBLE);

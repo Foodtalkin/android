@@ -738,7 +738,7 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         mPagerAdapter = new PagerAdapter(this.getSupportFragmentManager(), fragments);
         ViewPager pager = (ViewPager) findViewById(R.id.viewpager);
         pager.setAdapter(mPagerAdapter);
-        pager.setPageTransformer(true, new DepthPageTransformer());
+        //pager.setPageTransformer(true, new DepthPageTransformer());
 
         pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

@@ -181,8 +181,7 @@ public class StoreFragment extends Fragment implements ApiCallback {
             current.startDate = listArray.getJSONObject(i).getString("startDate");
             current.endDate = listArray.getJSONObject(i).getString("endDate");
             current.cityText= listArray.getJSONObject(i).getString("cityText");
-
-
+            current.iPurchasedIt = listArray.getJSONObject(i).getString("iPurchasedIt");
 
            // title.setText(String.valueOf((long)Double.parseDouble(current.avilablePoints))+" Points");
             listStore.add(current);

@@ -1,6 +1,7 @@
 package in.foodtalk.android.fragment.store;
 
 import android.app.Fragment;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -43,7 +44,7 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
     public StoreObj storeObj;
     TabLayout tabLayout;
     ImageView imgCard;
-    TextView txtTitle, txtDate, txtVanue, txtCost, txtEventInfo;
+    TextView txtTitle, txtDate, txtVanue, txtCost, txtEventInfo, txtBtnBuy;
 
     ApiCall apiCall = new ApiCall();
     ApiCallback apiCallback;
@@ -81,6 +82,8 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
 
     LinearLayout btnTermsCondition;
     WebpageCallback webpageCallback;
+
+    String iPurchasedIt;
 
     @Nullable
     @Override
@@ -124,16 +127,23 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
         tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
         progressHolder = (LinearLayout) layout.findViewById(R.id.progress_h);
 
+        txtBtnBuy = (TextView) layout.findViewById(R.id.txt_btn_buy);
+
         btnBuyNow = (LinearLayout) layout.findViewById(R.id.btn_buy_now);
         btnBuyNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("StoreDetailsFragment","buynow clicked");
-                try {
-                    buyNow();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if (iPurchasedIt.equals("0")){
+                    try {
+                        buyNow();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    openFragmentCallback.openFragment("storePurchases", "");
                 }
+
             }
         });
 
@@ -300,6 +310,19 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
                     .placeholder(R.drawable.placeholder)
                     .into(imgCard);
         }
+
+        if (storeOffer.getString("iPurchasedIt").equals("1")){
+            txtBtnBuy.setText("Purchased");
+            final int sdk = Build.VERSION.SDK_INT;
+            if(sdk < Build.VERSION_CODES.JELLY_BEAN) {
+                btnBuyNow.setBackgroundDrawable( getResources().getDrawable(R.drawable.gradient_green_0) );
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    btnBuyNow.setBackground( getResources().getDrawable(R.drawable.gradient_green_0));
+                }
+            }
+        }
+        iPurchasedIt = storeOffer.getString("iPurchasedIt");
         txtTitle.setText(storeOffer.getString("title"));
         txtCost.setText(storeOffer.getString("costPoints")+" Points");
         txtVanue.setText(storeOffer.getString("cityText"));

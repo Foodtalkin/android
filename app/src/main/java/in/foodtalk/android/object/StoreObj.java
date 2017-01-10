@@ -22,5 +22,6 @@ public class StoreObj {
     public String startDate;
     public String endDate;
     public String cityText;
+    public String iPurchasedIt;
 
 }
