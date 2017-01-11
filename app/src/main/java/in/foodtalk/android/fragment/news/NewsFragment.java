@@ -48,7 +48,8 @@ public class NewsFragment extends Fragment implements ApiCallback {
 
     ProgressBar progressBar;
     LinearLayout tapToRetry;
-    int pagerCurrentPosition = 0;
+    public int pagerCurrentPosition = 0;
+    public String newsId;
 
     @Nullable
     @Override
@@ -163,7 +164,20 @@ public class NewsFragment extends Fragment implements ApiCallback {
             current.startDate = newsListArray.getJSONObject(i).getString("startDate");
             current.isDisabled = newsListArray.getJSONObject(i).getString("isDisabled");
             newsList.add(current);
+            Log.d("NewsFragment","newsId:"+ newsId);
+            if (newsId != null){
+                if (newsId.equals(current.id)){
+                    pagerCurrentPosition = i;
+                    Log.d("newFragment","newId "+i);
+                }
+            }else {
+
+            }
         }
         initialisePaging();
+      //  NewsObj newsObj = new NewsObj();
+
+       // int index = newsList.indexOf("7");
+        //Log.d("NewsFragment", "index: "+ index);
     }
 }

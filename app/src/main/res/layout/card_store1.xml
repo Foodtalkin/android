@@ -42,13 +42,21 @@
                     android:layout_margin="15dp"
                     android:textColor="@color/snow"
                     android:text="OFFER"/>
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:background="@drawable/gradient"
+                    android:layout_alignParentBottom="true">
+
+                </View>
                 <TextView
                     android:id="@+id/txt_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Instapizza: Buy one get one free"
                     android:layout_alignParentBottom="true"
-                    android:layout_margin="15dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="15dp"
                     android:textColor="@color/snow"
                     android:textSize="18sp"
                     android:textStyle="bold"

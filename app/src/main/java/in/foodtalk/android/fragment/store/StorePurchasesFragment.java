@@ -48,6 +48,7 @@ public class StorePurchasesFragment extends Fragment implements ApiCallback {
     ApiCallback apiCallback;
     ApiCall apiCall;
     int pagerCurrentPosition = 0;
+    public String storeItemId;
 
     List<PurchasesObj> purchaseList = new ArrayList<>();
 
@@ -192,6 +193,11 @@ public class StorePurchasesFragment extends Fragment implements ApiCallback {
             purchasesObj.createDate = purchasesList.getJSONObject(i).getString("createDate");
             purchasesObj.metaData = purchasesList.getJSONObject(i).getString("metaData");
             purchaseList.add(purchasesObj);
+            if (storeItemId != null){
+                if (storeItemId.equals(purchasesObj.storeItemId)){
+                    pagerCurrentPosition = i;
+                }
+            }
         }
         initialisePaging();
     }

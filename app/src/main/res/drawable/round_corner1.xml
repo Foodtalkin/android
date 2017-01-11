@@ -6,7 +6,7 @@
 
     <!-- view background color -->
     <solid
-        android:color="@color/navigation" >
+        android:color="@color/fun_blue" >
     </solid>
 
     <!-- view border color and width -->

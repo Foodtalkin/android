@@ -87,6 +87,7 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
             }else {
                 storeCardHolder.ptsBorder.setBackgroundResource(0);
+                storeCardHolder.txtPts.setTextColor(context.getResources().getColor(R.color.green_shamrock));
                 storeCardHolder.txtPts.setText("Purchased");
             }
 

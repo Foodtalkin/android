@@ -233,42 +233,42 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public void setStarRating(String rating, PostHolder holder){
         if (rating.equals("0")){
-            //starHolder.setVisibility(View.GONE);
+            starHolder.setVisibility(View.GONE);
         }
         if(rating.equals("1")){
-            holder.imgRating1.setImageResource(R.drawable.star_active);
-            holder.imgRating2.setImageResource(R.drawable.star_passive);
-            holder.imgRating3.setImageResource(R.drawable.star_passive);
-            holder.imgRating4.setImageResource(R.drawable.star_passive);
-            holder.imgRating5.setImageResource(R.drawable.star_passive);
+            holder.imgRating1.setVisibility(View.VISIBLE);
+            holder.imgRating2.setVisibility(View.GONE);
+            holder.imgRating3.setVisibility(View.GONE);
+            holder.imgRating4.setVisibility(View.GONE);
+            holder.imgRating5.setVisibility(View.GONE);
         }
         if(rating.equals("2")){
-            holder.imgRating1.setImageResource(R.drawable.star_active);
-            holder.imgRating2.setImageResource(R.drawable.star_active);
-            holder.imgRating3.setImageResource(R.drawable.star_passive);
-            holder.imgRating4.setImageResource(R.drawable.star_passive);
-            holder.imgRating5.setImageResource(R.drawable.star_passive);
+            holder.imgRating1.setVisibility(View.VISIBLE);
+            holder.imgRating2.setVisibility(View.VISIBLE);
+            holder.imgRating3.setVisibility(View.GONE);
+            holder.imgRating4.setVisibility(View.GONE);
+            holder.imgRating5.setVisibility(View.GONE);
         }
         if(rating.equals("3")){
-            holder.imgRating1.setImageResource(R.drawable.star_active);
-            holder.imgRating2.setImageResource(R.drawable.star_active);
-            holder.imgRating3.setImageResource(R.drawable.star_active);
-            holder.imgRating4.setImageResource(R.drawable.star_passive);
-            holder.imgRating5.setImageResource(R.drawable.star_passive);
+            holder.imgRating1.setVisibility(View.VISIBLE);
+            holder.imgRating2.setVisibility(View.VISIBLE);
+            holder.imgRating3.setVisibility(View.VISIBLE);
+            holder.imgRating4.setVisibility(View.GONE);
+            holder.imgRating5.setVisibility(View.GONE);
         }
         if(rating.equals("4")){
-            holder.imgRating1.setImageResource(R.drawable.star_active);
-            holder.imgRating2.setImageResource(R.drawable.star_active);
-            holder.imgRating3.setImageResource(R.drawable.star_active);
-            holder.imgRating4.setImageResource(R.drawable.star_active);
-            holder.imgRating5.setImageResource(R.drawable.star_passive);
+            holder.imgRating1.setVisibility(View.VISIBLE);
+            holder.imgRating2.setVisibility(View.VISIBLE);
+            holder.imgRating3.setVisibility(View.VISIBLE);
+            holder.imgRating4.setVisibility(View.VISIBLE);
+            holder.imgRating5.setVisibility(View.GONE);
         }
         if(rating.equals("5")){
-            holder.imgRating1.setImageResource(R.drawable.star_active);
-            holder.imgRating2.setImageResource(R.drawable.star_active);
-            holder.imgRating3.setImageResource(R.drawable.star_active);
-            holder.imgRating4.setImageResource(R.drawable.star_active);
-            holder.imgRating5.setImageResource(R.drawable.star_active);
+            holder.imgRating1.setVisibility(View.VISIBLE);
+            holder.imgRating2.setVisibility(View.VISIBLE);
+            holder.imgRating3.setVisibility(View.VISIBLE);
+            holder.imgRating4.setVisibility(View.VISIBLE);
+            holder.imgRating5.setVisibility(View.VISIBLE);
         }
 
     }

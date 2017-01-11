@@ -560,7 +560,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 break;
             case "BookStore":
                 setFragmentView(storeHistoryFragment, R.id.container, -1, true);
-
+                break;
+            case "News":
+                openNews(elementId);
+                break;
+            case "StoreDescribe":
+                break;
+            case "Purchases":
+                openStorePurchases(elementId);
                 break;
         }
     }
@@ -1226,10 +1233,15 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                break;
            case "news":
                Log.d("More","news clicked");
-               newsFragment = new NewsFragment();
-               setFragmentView(newsFragment, R.id.container1, -1, true);
+               openNews(null);
                break;
        }
+    }
+    private void openNews(String newId){
+        newsFragment = new NewsFragment();
+        //newsFragment.pagerCurrentPosition = pageNum;
+        newsFragment.newsId = newId;
+        setFragmentView(newsFragment, R.id.container1, -1, true);
     }
     @Override
     public void getUserInfo(String points, String userName) {
@@ -2175,12 +2187,16 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             openWebPageNews(value);
         }
         if (fragmentName.equals("storePurchases")){
-            StorePurchasesFragment storePurchasesFragment = new StorePurchasesFragment();
-            setFragmentView(storePurchasesFragment, R.id.container1, -1, true);
+            openStorePurchases(value);
         }
         if (fragmentName.equals("storeFragment")){
             setFragmentView(storeFragment, R.id.container1, -1, true);
         }
+    }
+    private void openStorePurchases(String storeItemId){
+        StorePurchasesFragment storePurchasesFragment = new StorePurchasesFragment();
+        storePurchasesFragment.storeItemId = storeItemId;
+        setFragmentView(storePurchasesFragment, R.id.container1, -1, true);
     }
     String listType;
     @Override

@@ -84,6 +84,7 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
     WebpageCallback webpageCallback;
 
     String iPurchasedIt;
+    String storeItemId;
 
     @Nullable
     @Override
@@ -141,7 +142,7 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
                         e.printStackTrace();
                     }
                 }else {
-                    openFragmentCallback.openFragment("storePurchases", "");
+                    openFragmentCallback.openFragment("storePurchases", storeItemId);
                 }
 
             }
@@ -322,6 +323,7 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
                 }
             }
         }
+        storeItemId = storeOffer.getString("storeItemId");
         iPurchasedIt = storeOffer.getString("iPurchasedIt");
         txtTitle.setText(storeOffer.getString("title"));
         txtCost.setText(storeOffer.getString("costPoints")+" Points");

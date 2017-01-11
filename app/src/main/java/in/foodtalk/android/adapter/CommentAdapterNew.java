@@ -194,12 +194,20 @@ public class CommentAdapterNew extends RecyclerView.Adapter<RecyclerView.ViewHol
             int textWidth = commentHolder.userName.getMeasuredWidth();
             commentHolder.txtComment.setText(spannable.commentSpannable(current.userName, current.userId, current.comment, current.userMentionsList, textWidth), TextView.BufferType.SPANNABLE);
             //spannable.commentSpannable(current.userName, current.comment, null);
-            Picasso.with(context)
-                    .load(current.userImage)
-                    //.fit().centerCrop()
-                    .fit()
-                    .placeholder(R.drawable.user_placeholder)
-                    .into(commentHolder.userThumb);
+            if (!current.userId.equals("")){
+
+            }
+            if (!current.userImage.isEmpty()){
+                Picasso.with(context)
+                        .load(current.userImage)
+                        //.fit().centerCrop()
+                        .fit()
+                        .placeholder(R.drawable.user_placeholder)
+                        .into(commentHolder.userThumb);
+            }else {
+                Log.e("CommentAdapterNew","userImage is emptry");
+            }
+
         }
     }
 
@@ -223,42 +231,42 @@ public class CommentAdapterNew extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public void setStarRating(String rating, PostHolder holder){
         if (rating.equals("0")){
-            //starHolder.setVisibility(View.GONE);
+            starHolder.setVisibility(View.GONE);
         }
         if(rating.equals("1")){
-            holder.imgRating1.setImageResource(R.drawable.star_active);
-            holder.imgRating2.setImageResource(R.drawable.star_passive);
-            holder.imgRating3.setImageResource(R.drawable.star_passive);
-            holder.imgRating4.setImageResource(R.drawable.star_passive);
-            holder.imgRating5.setImageResource(R.drawable.star_passive);
+            holder.imgRating1.setVisibility(View.VISIBLE);
+            holder.imgRating2.setVisibility(View.GONE);
+            holder.imgRating3.setVisibility(View.GONE);
+            holder.imgRating4.setVisibility(View.GONE);
+            holder.imgRating5.setVisibility(View.GONE);
         }
         if(rating.equals("2")){
-            holder.imgRating1.setImageResource(R.drawable.star_active);
-            holder.imgRating2.setImageResource(R.drawable.star_active);
-            holder.imgRating3.setImageResource(R.drawable.star_passive);
-            holder.imgRating4.setImageResource(R.drawable.star_passive);
-            holder.imgRating5.setImageResource(R.drawable.star_passive);
+            holder.imgRating1.setVisibility(View.VISIBLE);
+            holder.imgRating2.setVisibility(View.VISIBLE);
+            holder.imgRating3.setVisibility(View.GONE);
+            holder.imgRating4.setVisibility(View.GONE);
+            holder.imgRating5.setVisibility(View.GONE);
         }
         if(rating.equals("3")){
-            holder.imgRating1.setImageResource(R.drawable.star_active);
-            holder.imgRating2.setImageResource(R.drawable.star_active);
-            holder.imgRating3.setImageResource(R.drawable.star_active);
-            holder.imgRating4.setImageResource(R.drawable.star_passive);
-            holder.imgRating5.setImageResource(R.drawable.star_passive);
+            holder.imgRating1.setVisibility(View.VISIBLE);
+            holder.imgRating2.setVisibility(View.VISIBLE);
+            holder.imgRating3.setVisibility(View.VISIBLE);
+            holder.imgRating4.setVisibility(View.GONE);
+            holder.imgRating5.setVisibility(View.GONE);
         }
         if(rating.equals("4")){
-            holder.imgRating1.setImageResource(R.drawable.star_active);
-            holder.imgRating2.setImageResource(R.drawable.star_active);
-            holder.imgRating3.setImageResource(R.drawable.star_active);
-            holder.imgRating4.setImageResource(R.drawable.star_active);
-            holder.imgRating5.setImageResource(R.drawable.star_passive);
+            holder.imgRating1.setVisibility(View.VISIBLE);
+            holder.imgRating2.setVisibility(View.VISIBLE);
+            holder.imgRating3.setVisibility(View.VISIBLE);
+            holder.imgRating4.setVisibility(View.VISIBLE);
+            holder.imgRating5.setVisibility(View.GONE);
         }
         if(rating.equals("5")){
-            holder.imgRating1.setImageResource(R.drawable.star_active);
-            holder.imgRating2.setImageResource(R.drawable.star_active);
-            holder.imgRating3.setImageResource(R.drawable.star_active);
-            holder.imgRating4.setImageResource(R.drawable.star_active);
-            holder.imgRating5.setImageResource(R.drawable.star_active);
+            holder.imgRating1.setVisibility(View.VISIBLE);
+            holder.imgRating2.setVisibility(View.VISIBLE);
+            holder.imgRating3.setVisibility(View.VISIBLE);
+            holder.imgRating4.setVisibility(View.VISIBLE);
+            holder.imgRating5.setVisibility(View.VISIBLE);
         }
 
     }
