@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
@@ -27,6 +29,7 @@ import in.foodtalk.android.R;
 import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;
+import in.foodtalk.android.communicator.OpenFragmentCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.DepthPageTransformer;
 import in.foodtalk.android.module.VerticalViewPager;
@@ -36,7 +39,7 @@ import in.foodtalk.android.object.NewsObj;
  * Created by RetailAdmin on 22-12-2016.
  */
 
-public class NewsFragment extends Fragment implements ApiCallback {
+public class NewsFragment extends Fragment implements ApiCallback, OpenFragmentCallback {
     View layout;
     private NewsPagerAdapter mPagerAdapter;
     FragmentManager fm;
@@ -50,6 +53,13 @@ public class NewsFragment extends Fragment implements ApiCallback {
     LinearLayout tapToRetry;
     public int pagerCurrentPosition = 0;
     public String newsId;
+    Boolean loadMore = false;
+    int pageNo = 1;
+
+    public WebView webView;
+    public Boolean webPage = false;
+
+    OpenFragmentCallback openFragmentCallback;
 
     @Nullable
     @Override
@@ -58,13 +68,15 @@ public class NewsFragment extends Fragment implements ApiCallback {
 
         db = new DatabaseHandler(getActivity());
         apiCallback = this;
+        openFragmentCallback = this;
+
+        webView = (WebView) layout.findViewById(R.id.webview);
 
         progressBar = (ProgressBar) layout.findViewById(R.id.progress_bar);
         tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
         tapToRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 try {
                     getNewsData();
                 } catch (JSONException e) {
@@ -74,8 +86,8 @@ public class NewsFragment extends Fragment implements ApiCallback {
         });
 
 
-
         try {
+
             getNewsData();
         } catch (JSONException e) {
             e.printStackTrace();
@@ -99,13 +111,16 @@ public class NewsFragment extends Fragment implements ApiCallback {
     }
 
     private void initialisePaging(){
-        mPagerAdapter = new NewsPagerAdapter(fm, newsList, getActivity());
+        mPagerAdapter = new NewsPagerAdapter(fm, newsList, getActivity(), openFragmentCallback);
         VerticalViewPager pager = (VerticalViewPager) layout.findViewById(R.id.viewpager);
         pager.setAdapter(mPagerAdapter);
         pager.setPageTransformer(true, new DepthPageTransformer());
 
+
         pager.setCurrentItem(pagerCurrentPosition);
 
+        newsId = null;
+        pagerCurrentPosition = 0;
         pager.setOnPageChangeListener(new VerticalViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -116,6 +131,14 @@ public class NewsFragment extends Fragment implements ApiCallback {
             public void onPageSelected(int position) {
                 Log.d("onPageSelected",position+"");
                 pagerCurrentPosition = position;
+                if (newsList.size()-2 == position){
+                    pageNo++;
+                    try {
+                        getNewsData();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
             @Override
             public void onPageScrollStateChanged(int state) {
@@ -126,9 +149,13 @@ public class NewsFragment extends Fragment implements ApiCallback {
 
     private void getNewsData() throws JSONException {
         tapToRetry.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
+        if (loadMore == false){
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
         JSONObject obj = new JSONObject();
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
+        obj.put("page",Integer.toString(pageNo));
         apiCall = new ApiCall();
         apiCall.apiRequestPost(getActivity(),obj, Config.URL_NEWS,"news",apiCallback);
     }
@@ -141,6 +168,7 @@ public class NewsFragment extends Fragment implements ApiCallback {
             if (tag.equals("news")){
                 try {
                     sendDataIntoAdapter(response);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -150,9 +178,12 @@ public class NewsFragment extends Fragment implements ApiCallback {
         }
     }
     private void sendDataIntoAdapter(JSONObject response) throws JSONException {
+        if (loadMore == false){
+            newsList.clear();
+        }
         JSONArray newsListArray = response.getJSONArray("news");
         Log.d("sendDataIntoAdapter", newsListArray.length()+"");
-        newsList.clear();
+
         for (int i=0; i<newsListArray.length();i++){
             NewsObj current = new NewsObj();
             current.id = newsListArray.getJSONObject(i).getString("id");
@@ -174,10 +205,43 @@ public class NewsFragment extends Fragment implements ApiCallback {
 
             }
         }
-        initialisePaging();
+        if (loadMore == false){
+            initialisePaging();
+            loadMore = true;
+        }else {
+            mPagerAdapter.notifyDataSetChanged();
+        }
+
       //  NewsObj newsObj = new NewsObj();
 
        // int index = newsList.indexOf("7");
         //Log.d("NewsFragment", "index: "+ index);
+    }
+
+    private void setWevView(String url){
+
+        //next line explained below
+        //---
+        webView.clearView();
+        webView.setWebViewClient(new CustomWebViewClient());
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.loadUrl(url);
+    }
+
+    @Override
+    public void openFragment(String fragmentName, String value) {
+        Log.d("openFragment web", value);
+
+        setWevView(value);
+        webView.setVisibility(View.VISIBLE);
+        webPage = true;
+    }
+
+    private class CustomWebViewClient extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
+        }
     }
 }

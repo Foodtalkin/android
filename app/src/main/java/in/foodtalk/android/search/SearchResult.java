@@ -359,8 +359,6 @@ public class SearchResult extends Fragment implements SearchCallback {
             placeholder.setVisibility(View.VISIBLE);
         }
 
-
-
         setListArray(response);
 
         if (searchResultLoaded == true){
@@ -382,9 +380,6 @@ public class SearchResult extends Fragment implements SearchCallback {
         }*/
     }
     private void onTexChange(String newText){
-
-
-
         setListArray(response);
         final List<SearchResultObj> filteredModelList = filter(searchResultList, newText);
         searchAdapter.animateTo(filteredModelList);
@@ -392,7 +387,6 @@ public class SearchResult extends Fragment implements SearchCallback {
     }
 
     private void setListArray(JSONObject response){
-
         try {
             switch (pageNumber){
                 case DISH_SEARCH:
@@ -408,7 +402,6 @@ public class SearchResult extends Fragment implements SearchCallback {
                             current.txt2 = rListArray.getJSONObject(i).getJSONObject("_source").getString("postcount")+" Dishes";
                             searchResultList.add(current);
                         }
-
                     }
                     //Log.d("searchResult","array length: "+rListArray.length());
                     break;

@@ -9,6 +9,7 @@ import android.util.Log;
 
 import java.util.List;
 
+import in.foodtalk.android.communicator.OpenFragmentCallback;
 import in.foodtalk.android.object.NewsObj;
 
 /**
@@ -21,14 +22,16 @@ public class NewsPagerAdapter extends FragmentStatePagerAdapter {
 
     int count;
     Context context;
+    OpenFragmentCallback openFragmentCallback;
 
     NewsCardFragment newsCardFragment;
-    public NewsPagerAdapter(FragmentManager fm, List<NewsObj> newsList, Context context) {
+    public NewsPagerAdapter(FragmentManager fm, List<NewsObj> newsList, Context context, OpenFragmentCallback openFragmentCallback) {
         super(fm);
         this.newsList = newsList;
         //count = newsList.size();
         Log.d("NewsPagerAdapter", newsList.size()+"");
         this.context = context;
+        this.openFragmentCallback = openFragmentCallback;
         //newsCardFragment = new NewsCardFragment();
     }
 
@@ -38,6 +41,7 @@ public class NewsPagerAdapter extends FragmentStatePagerAdapter {
         //return this.fragments.get(position);
         newsCardFragment = new NewsCardFragment();
         newsCardFragment.newsObj = newsList.get(position);
+        newsCardFragment.openFragmentCallback = openFragmentCallback;
         return newsCardFragment;
     }
 

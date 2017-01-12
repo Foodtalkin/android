@@ -592,7 +592,6 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         if (hitsArray.length() == 0){
             placeHolderNoRestaurant.setVisibility(View.VISIBLE);
             txtAddRestaurant.setText("You can add '" +inputRestaurantSearch.getText().toString()+ "' to food talk");
-
         }else {
             placeHolderNoRestaurant.setVisibility(View.GONE);
         }

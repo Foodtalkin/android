@@ -30,7 +30,7 @@ public class NewsCardFragment extends Fragment {
     public NewsObj newsObj;
     TextView txtTitle, txtDes, txtSource, btnReadmore, txtTime;
     ImageView coverImg, upArrow;
-    OpenFragmentCallback openFragmentCallback;
+    public OpenFragmentCallback openFragmentCallback;
 
 
 
@@ -43,9 +43,9 @@ public class NewsCardFragment extends Fragment {
         txtSource = (TextView) layout.findViewById(R.id.txt_source);
         btnReadmore = (TextView) layout.findViewById(R.id.btn_readmore);
         coverImg = (ImageView) layout.findViewById(R.id.cover_img);
-        openFragmentCallback = (OpenFragmentCallback) getActivity();
+        //openFragmentCallback = (OpenFragmentCallback) getActivity();
         upArrow = (ImageView) layout.findViewById(R.id.up_arrow);
-        txtTitle = (TextView) layout.findViewById(R.id.txt_time);
+        txtTime = (TextView) layout.findViewById(R.id.txt_time);
         setImageSize();
         setContent();
         return layout;
@@ -72,7 +72,7 @@ public class NewsCardFragment extends Fragment {
 
         try {
             Date createdate = simpleDateFormat.parse(newsObj.startDate);
-            txtTitle.setText(DateFunction.timeDiffCurrent(createdate)+" ago");
+            txtTime.setText(DateFunction.timeDiffCurrent(createdate)+" ago");
         } catch (ParseException e) {
             e.printStackTrace();
         }

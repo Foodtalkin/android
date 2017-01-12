@@ -565,10 +565,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 openNews(elementId);
                 break;
             case "StoreDescribe":
+                openDetailsStore("", elementId);
                 break;
             case "Purchases":
                 openStorePurchases(elementId);
                 break;
+
         }
     }
     @Override
@@ -754,7 +756,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         Log.d("onBackPress", "clicked");
 
         if (this.getFragmentManager().findFragmentById(R.id.container1) != null){
-
             //Log.d("onBackPressd", "checkView "+ newPostShare.searchView);
            if (this.getFragmentManager().findFragmentById(R.id.container1) == newPostShare){
                Log.d("onBackPress", "current == newPOstShare");
@@ -768,6 +769,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                    Log.d("onBackPress", "r search false");
                }else {
                    Log.d("onBackPress", "popback");
+                   getFragmentManager().popBackStack();
+               }
+           }else if (this.getFragmentManager().findFragmentById(R.id.container1) == newsFragment){
+               if (newsFragment.webPage){
+                   newsFragment.webView.setVisibility(View.GONE);
+                   newsFragment.webPage = false;
+               }else {
                    getFragmentManager().popBackStack();
                }
            }else {
@@ -2095,9 +2103,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         titleHome.setText("");
     }
     @Override
-    public void openDetailsStore(String type, StoreObj storeObj){
+    public void openDetailsStore(String type, String storeId){
+        openStoreDetails(type, storeId);
+    }
+    private void openStoreDetails(String type, String storeId){
         StoreDetailsFragment storeDetailsFragment = new StoreDetailsFragment();
-        storeDetailsFragment.storeObj = storeObj;
+        //storeDetailsFragment.storeObj = storeObj;
+        storeDetailsFragment.storeId = storeId;
         setFragmentView(storeDetailsFragment, R.id.container1, -1, true);
         Log.d("openDetails","call");
     }

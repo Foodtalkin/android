@@ -7,5 +7,5 @@ import in.foodtalk.android.object.StoreObj;
  */
 public interface StoreCallback {
     public void storeHistory(String type, String value);
-    public void openDetailsStore(String type, StoreObj storeObj);
+    public void openDetailsStore(String type, String storeId);
 }

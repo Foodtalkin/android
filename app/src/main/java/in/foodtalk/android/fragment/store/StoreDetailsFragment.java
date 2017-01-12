@@ -42,6 +42,7 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
     View layout;
 
     public StoreObj storeObj;
+    public String storeId;
     TabLayout tabLayout;
     ImageView imgCard;
     TextView txtTitle, txtDate, txtVanue, txtCost, txtEventInfo, txtBtnBuy;
@@ -240,7 +241,7 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
         //placeholder.setVisibility(View.GONE);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("sessionId", db.getUserDetails().get("sessionId"));
-        jsonObject.put("storeItemId", storeObj.storeItemId);
+        jsonObject.put("storeItemId", storeId);
         apiCall.apiRequestPost(getActivity(),jsonObject, Config.URL_STORE_DETAIL, "storeDetails", apiCallback);
     }
     private void buyNow() throws JSONException {
@@ -249,7 +250,7 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
         //placeholder.setVisibility(View.GONE);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("sessionId", db.getUserDetails().get("sessionId"));
-        jsonObject.put("storeItemId", storeObj.storeItemId);
+        jsonObject.put("storeItemId", storeId);
         apiCall.apiRequestPost(getActivity(),jsonObject, Config.URL_STORE_BUY, "storeItemBuy", apiCallback);
         progressBarView(true);
     }

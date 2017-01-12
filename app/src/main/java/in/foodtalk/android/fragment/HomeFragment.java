@@ -339,7 +339,6 @@ public class HomeFragment extends Fragment {
         }
         //postData = (List<PostObj>) postObj;
         if (tag.equals("load")){
-
             if(getActivity() != null){
                 homeFeedAdapter = new HomeFeedAdapter(getActivity(), postData, postLikeCallback);
                 recyclerView.setAdapter(homeFeedAdapter);

@@ -126,6 +126,45 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             postHolder.userId = postObj.userId;
 
+            //----------
+            if (postObj.like_count.equals("0") && postObj.comment_count.equals("0") && postObj.bookmarkCount.equals("0")){
+                postHolder.countHolder.setVisibility(View.GONE);
+            }else {
+                postHolder.countHolder.setVisibility(View.VISIBLE);
+            }
+
+            if (postObj.like_count.equals("0")){
+                postHolder.btnLike.setVisibility(View.GONE);
+            }else {
+                postHolder.btnLike.setVisibility(View.VISIBLE);
+            }
+            if (postObj.comment_count.equals("0")){
+                postHolder.btnComment.setVisibility(View.GONE);
+            }else {
+                postHolder.btnComment.setVisibility(View.VISIBLE);
+            }
+            if (postObj.bookmarkCount.equals("0")){
+                postHolder.btnBookmark.setVisibility(View.GONE);
+            }else {
+                postHolder.btnBookmark.setVisibility(View.VISIBLE);
+            }
+            if (postObj.like_count.equals("1")){
+                postHolder.txtLikeCopy.setText("Like");
+            }else {
+                postHolder.txtLikeCopy.setText("Likes");
+            }
+            if (postObj.bookmarkCount.equals("1")){
+                postHolder.txtBookmarkCopy.setText("Bookmark");
+            }else {
+                postHolder.txtBookmarkCopy.setText("Bookmarks");
+            }
+            if (postObj.comment_count.equals("1")){
+                postHolder.txtCommentCopy.setText("Comment");
+            }else {
+                postHolder.txtCommentCopy.setText("Comments");
+            }
+            //----------
+
 
 
             SimpleDateFormat simpleDateFormat =

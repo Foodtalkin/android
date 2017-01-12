@@ -209,10 +209,9 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("StoreAdapter", "card clicked");
-                            storeCallback.openDetailsStore(listStore.get(getAdapterPosition()).type,listStore.get(getAdapterPosition()));
+                            storeCallback.openDetailsStore(listStore.get(getAdapterPosition()).type,listStore.get(getAdapterPosition()).storeItemId);
                             break;
                     }
-
                     break;
                 case R.id.btn_book:
                     switch (event.getAction()){

@@ -53,7 +53,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:background="@color/navigation">
+                            android:background="@color/fun_blue">
 
                         </LinearLayout>
                         <LinearLayout
@@ -99,7 +99,7 @@
                                 android:id="@+id/txt_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Chi Ashian Cookhouse come to Delhi"
+                                android:text="--"
                                 android:textSize="22sp"
                                 android:textStyle="bold"
                                 android:textColor="@color/black"/>
@@ -162,7 +162,7 @@
                                             android:id="@+id/txt_date"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="31 Dec, 2016 8:00 PM Onward"
+                                            android:text="--"
                                             android:textSize="18sp"
                                             android:textStyle="bold"
                                             android:textColor="@color/slate" />
@@ -184,7 +184,7 @@
                                             android:id="@+id/txt_vanue"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="Perch, Vasant Kunj, Delhi"
+                                            android:text="--"
                                             android:textSize="18sp"
                                             android:textStyle="bold"
                                             android:textColor="@color/slate" />
@@ -206,7 +206,7 @@
                                             android:id="@+id/txt_cost"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="1200 Points/2000 INR"
+                                            android:text="--"
                                             android:textSize="18sp"
                                             android:textStyle="bold"
                                             android:textColor="@color/slate" />
@@ -248,7 +248,7 @@
                                         android:layout_marginRight="15dp"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:text="Hello, \nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod id lectus eget efficitur. Fusce convallis, risus at sodales tincidunt, arcu dui varius diam, vitae pulvinar justo est eget leo. Nullam tincidunt enim purus, in volutpat elit elementum ac. In rhoncus, mi vitae laoreet ornare, ligula sapien maximus purus,"
+                                        android:text="--"
                                         android:lineSpacingExtra="3sp"/>
                                 </LinearLayout>
                             </android.support.v4.view.ViewPager>
