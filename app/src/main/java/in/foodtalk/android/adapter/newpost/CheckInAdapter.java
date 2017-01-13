@@ -75,7 +75,7 @@ public class CheckInAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             if (current.restaurantIsActive != null){
                 if (current.restaurantIsActive.equals("true")){
                     //restaurantHolder.txtAria.setText(current.area+", "+current.cityName);
-                    restaurantHolder.txtAria.setText(current.area);
+                    restaurantHolder.txtAria.setText(current.area+", "+ current.cityName);
                     restaurantHolder.txtAria.setTextColor(context.getResources().getColor(R.color.blackText1));
                 }else {
                     restaurantHolder.txtAria.setText("Unverified");

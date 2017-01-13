@@ -72,13 +72,10 @@ public class NewsCardFragment extends Fragment {
 
         try {
             Date createdate = simpleDateFormat.parse(newsObj.startDate);
-            txtTime.setText(DateFunction.timeDiffCurrent(createdate)+" ago");
+            txtTime.setText(DateFunction.timeDiffCurrent(createdate));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-
-
         if (newsObj.source.equals("")){
             btnReadmore.setVisibility(View.INVISIBLE);
             upArrow.setVisibility(View.VISIBLE);

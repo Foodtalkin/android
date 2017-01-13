@@ -48,7 +48,7 @@
                 android:layout_marginTop="@dimen/padding_between_onboarding2"
                 android:theme="@style/MyEditTextTheme"
                 android:textColor="#ffffff"
-                android:hint="Your hometown"
+                android:hint="Your City"
                 android:drawablePadding="7dp"
                 android:textColorHint="#8Cffffff"
                 android:paddingBottom="15dp"

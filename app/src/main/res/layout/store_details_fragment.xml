@@ -16,9 +16,10 @@
             android:layout_height="55dp"
             android:background="@color/fun_blue">
             <TextView
+                android:id="@+id/txt_title1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Chi Asian Cookhouse"
+                android:text=""
                 android:textColor="@color/snow"
                 android:textSize="20sp"
                 android:layout_centerInParent="true"/>

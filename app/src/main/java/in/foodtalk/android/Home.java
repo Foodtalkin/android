@@ -247,7 +247,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
     private static final int REQUEST_CAMERA_PERMISSION = 11;
 
-    private int REQUEST_CAMERA = 0, SELECT_FILE = 1, REQUEST_CROP = 2;
+    private int REQUEST_CAMERA = 0, SELECT_FILE = 1, REQUEST_CROP = 2, CROP_BACK = 203;
     //private File destination = new File(Environment.getExternalStorageDirectory(), System.currentTimeMillis() + ".jpg");
     private File destination = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), System.currentTimeMillis() + ".jpg");
 
@@ -1729,8 +1729,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 }*/
             }
             if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
-
+                Log.d("onActivityResult","back from crop");
+                galleryIntent();
             }
+
         }
     }
     //-----------------end camera gallery and crop

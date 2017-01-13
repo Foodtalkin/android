@@ -38,14 +38,14 @@ import in.foodtalk.android.object.StoreObj;
  * Created by RetailAdmin on 27-12-2016.
  */
 
-public class StoreDetailsFragment extends Fragment implements ApiCallback {
+public class StoreDetailsFragment extends Fragment implements ApiCallback, View.OnTouchListener {
     View layout;
 
     public StoreObj storeObj;
     public String storeId;
     TabLayout tabLayout;
     ImageView imgCard;
-    TextView txtTitle, txtDate, txtVanue, txtCost, txtEventInfo, txtBtnBuy;
+    TextView txtTitle, txtTitle1, txtDate, txtVanue, txtCost, txtEventInfo, txtBtnBuy;
 
     ApiCall apiCall = new ApiCall();
     ApiCallback apiCallback;
@@ -117,6 +117,7 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
         tabLayout = (TabLayout) layout.findViewById(R.id.tab_layout);
         imgCard = (ImageView) layout.findViewById(R.id.img_card);
         txtTitle = (TextView) layout.findViewById(R.id.txt_title);
+        txtTitle1 = (TextView) layout.findViewById(R.id.txt_title1);
 
         rootView = (RelativeLayout) layout.findViewById(R.id.root_view);
         rootView.setVisibility(View.GONE);
@@ -148,6 +149,7 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
 
             }
         });
+        btnTermsCondition.setOnTouchListener(this);
 
         btnGotoPurchases.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -235,6 +237,8 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
         return layout;
     }
 
+
+
     private void getStoreList() throws JSONException {
         progressHolder.setVisibility(View.VISIBLE);
         tapToRetry.setVisibility(View.GONE);
@@ -295,13 +299,13 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
             }
         }
     }
-
+    JSONObject storeOffer;
     private void loadDataIntoView(JSONObject response, String tag)throws JSONException{
         Log.d("loadDataInfotView","loaded");
         progressHolder.setVisibility(View.GONE);
         tapToRetry.setVisibility(View.GONE);
 
-        final JSONObject storeOffer = response.getJSONObject("storeOffer");
+        storeOffer = response.getJSONObject("storeOffer");
 
         //----
         if (!storeOffer.getString("coverImage").equals("")){
@@ -327,12 +331,13 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
         storeItemId = storeOffer.getString("storeItemId");
         iPurchasedIt = storeOffer.getString("iPurchasedIt");
         txtTitle.setText(storeOffer.getString("title"));
+        txtTitle1.setText(storeOffer.getString("title"));
         txtCost.setText(storeOffer.getString("costPoints")+" Points");
         txtVanue.setText(storeOffer.getString("cityText"));
         txtEventInfo.setText(storeOffer.getString("description"));
         txtDate.setText(DateFunction.convertFormat(storeOffer.getString("endDate"),"yyyy-MM-dd HH:mm:ss","MMM dd, yyyy h:mm a"));
 
-        btnTermsCondition.setOnTouchListener(new View.OnTouchListener() {
+        /*btnTermsCondition.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()){
@@ -347,7 +352,26 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback {
                 }
                 return false;
             }
-        });
+        });*/
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (v.getId()){
+            case R.id.btn_terms_condition:
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_UP:
+                        try {
+                            Log.d("StoreDetailsFragment", "btnTermsCondition"+storeOffer.getString("termConditionsLink"));
+                            webpageCallback.inAppBrowser(false,"",storeOffer.getString("termConditionsLink"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                }
+                break;
+        }
+        return false;
     }
 
     public class StorePagerAdapter extends PagerAdapter {

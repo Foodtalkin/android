@@ -233,7 +233,6 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
         focusListener();
         textListener();
 
-
         latLonCallback = this;
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             Boolean a = false;
@@ -600,6 +599,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
             RestaurantListObj current = new RestaurantListObj();
             current.id = hitsArray.getJSONObject(i).getJSONObject("_source").getString("id");
             current.area = hitsArray.getJSONObject(i).getJSONObject("_source").getString("area");
+            current.cityName = hitsArray.getJSONObject(i).getJSONObject("_source").getString("cityname");
             current.restaurantName = hitsArray.getJSONObject(i).getJSONObject("_source").getString("restaurantname");
             current.restaurantIsActive = hitsArray.getJSONObject(i).getJSONObject("_source").getString("isactivated");
             restaurantList.add(current);
@@ -710,7 +710,6 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
             Log.d("NewPostShare", "location disabled");
         }
     }
-
     @Override
     public void checkInRestaurant(String restaurantId, String restaurantName) {
         if (restaurantId == null){
