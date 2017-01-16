@@ -54,6 +54,7 @@ public class NewsFragment extends Fragment implements ApiCallback, OpenFragmentC
     public int pagerCurrentPosition = 0;
     public String newsId;
     Boolean loadMore = false;
+    Boolean haveMore = true;
     int pageNo = 1;
 
     public WebView webView;
@@ -134,7 +135,10 @@ public class NewsFragment extends Fragment implements ApiCallback, OpenFragmentC
                 if (newsList.size()-2 == position){
                     pageNo++;
                     try {
-                        getNewsData();
+                        if (haveMore){
+                            getNewsData();
+                        }
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -184,6 +188,18 @@ public class NewsFragment extends Fragment implements ApiCallback, OpenFragmentC
         JSONArray newsListArray = response.getJSONArray("news");
         Log.d("sendDataIntoAdapter", newsListArray.length()+"");
 
+        if (!loadMore){
+            NewsObj current1 = new NewsObj();
+            current1.screenType = "first";
+            newsList.add(current1);
+        }
+        if (newsListArray.length() == 0){
+            NewsObj current2 = new NewsObj();
+            current2.screenType = "last";
+            newsList.add(current2);
+            haveMore = false;
+        }
+
         for (int i=0; i<newsListArray.length();i++){
             NewsObj current = new NewsObj();
             current.id = newsListArray.getJSONObject(i).getString("id");
@@ -194,6 +210,7 @@ public class NewsFragment extends Fragment implements ApiCallback, OpenFragmentC
             current.description = newsListArray.getJSONObject(i).getString("description");
             current.startDate = newsListArray.getJSONObject(i).getString("startDate");
             current.isDisabled = newsListArray.getJSONObject(i).getString("isDisabled");
+            current.screenType = "news";
             newsList.add(current);
             Log.d("NewsFragment","newsId:"+ newsId);
             if (newsId != null){
@@ -205,6 +222,9 @@ public class NewsFragment extends Fragment implements ApiCallback, OpenFragmentC
 
             }
         }
+
+
+
         if (loadMore == false){
             initialisePaging();
             loadMore = true;

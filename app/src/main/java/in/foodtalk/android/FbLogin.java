@@ -1,6 +1,7 @@
 package in.foodtalk.android;
 
 import android.Manifest;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -67,6 +69,7 @@ import java.util.Vector;
 
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.fragment.WebViewFragment;
 import in.foodtalk.android.fragment.intro.DiscoverIntro;
 import in.foodtalk.android.fragment.intro.EatIntro;
 import in.foodtalk.android.fragment.intro.LandingIntro;
@@ -112,6 +115,9 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
     private ProgressDialog pDialog;
     AppController appController = new AppController();
 
+    LinearLayout btnTermsC;
+    FrameLayout fragmentContainer;
+
 
     View vpNav1;
     View vpNav2;
@@ -137,8 +143,13 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         pDialog.setMessage("Loading...");
         pDialog.setCancelable(true);
 
+        fragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
+
         btnFbAppRemove = (LinearLayout) findViewById(R.id.btn_fbapp_remove);
         btnFbAppRemove.setOnClickListener(this);
+
+        btnTermsC = (LinearLayout) findViewById(R.id.btn_terms_condition);
+        btnTermsC.setOnClickListener(this);
 
         vpNav1 = (View)findViewById(R.id.c1);
         vpNav2 = (View)findViewById(R.id.c2);
@@ -296,6 +307,14 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                 });
     }
 
+    private void setFragmentView(android.app.Fragment newFragment, int container){
+        FragmentManager manager = getFragmentManager();
+        android.app.FragmentTransaction transaction = manager.beginTransaction();
+        transaction.addToBackStack(null);
+        transaction.replace(container, newFragment);
+        transaction.commit();
+    }
+
     private void getGraphInfo(AccessToken accessToken){
         GraphRequest request = GraphRequest.newMeRequest(
                 accessToken.getCurrentAccessToken(),
@@ -406,8 +425,19 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                     removeInt = 0;
                 }
                 break;
-
-
+            case R.id.btn_terms_condition:
+                Log.d("FbLogin", "btn terms condition");
+                openWebPage("http://www.foodtalkindia.com/document.html", "");
+                break;
+        }
+    }
+    public void openWebPage(String url, String title){
+        WebViewFragment webViewFragment = new WebViewFragment();
+        webViewFragment.webViewFragment1(url);
+        setFragmentView (webViewFragment, R.id.fragment_container);
+        //titleHome.setText("Legal");
+        if (title != null){
+            //titleHome.setText(title);
         }
     }
 

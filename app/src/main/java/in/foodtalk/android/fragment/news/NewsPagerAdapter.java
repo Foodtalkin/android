@@ -25,6 +25,7 @@ public class NewsPagerAdapter extends FragmentStatePagerAdapter {
     OpenFragmentCallback openFragmentCallback;
 
     NewsCardFragment newsCardFragment;
+    NewsPlaceholder newsPlaceholder;
     public NewsPagerAdapter(FragmentManager fm, List<NewsObj> newsList, Context context, OpenFragmentCallback openFragmentCallback) {
         super(fm);
         this.newsList = newsList;
@@ -39,10 +40,29 @@ public class NewsPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         //fragments.add(Fragment.instantiate(context ,NewsCardFragment.class.getName()));
         //return this.fragments.get(position);
-        newsCardFragment = new NewsCardFragment();
-        newsCardFragment.newsObj = newsList.get(position);
-        newsCardFragment.openFragmentCallback = openFragmentCallback;
-        return newsCardFragment;
+
+        Fragment fragment = null;
+        Log.d("getItem", newsList.get(position).screenType);
+        switch (newsList.get(position).screenType){
+            case "news":
+                newsCardFragment = new NewsCardFragment();
+                newsCardFragment.newsObj = newsList.get(position);
+                newsCardFragment.openFragmentCallback = openFragmentCallback;
+                fragment = newsCardFragment;
+                break;
+            case "first":
+                newsPlaceholder = new NewsPlaceholder();
+                newsPlaceholder.screenType = newsList.get(position).screenType;
+                fragment = newsPlaceholder;
+                break;
+            case "last":
+                newsPlaceholder = new NewsPlaceholder();
+                newsPlaceholder.screenType = newsList.get(position).screenType;
+                fragment = newsPlaceholder;
+                break;
+        }
+        return fragment;
+
     }
 
     @Override

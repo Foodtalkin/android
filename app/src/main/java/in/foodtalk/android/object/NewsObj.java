@@ -13,4 +13,5 @@ public class NewsObj {
     public String description;
     public String startDate;
     public String isDisabled;
+    public String screenType;
 }

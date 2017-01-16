@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/snow">
+    <RelativeLayout
+        android:id="@+id/first_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/news_cover"
+            android:scaleType="centerCrop"/>
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/gradient"
+            android:layout_alignParentBottom="true">
+        </View>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_margin="35dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Food talk news brings you scoop on all the latest food trends. your daily dose of scandal on a plate."
+                android:textColor="@color/snow"
+                android:textSize="18sp"
+                android:textAlignment="center"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Swipe up to read"
+                android:layout_marginTop="20dp"
+                android:textSize="18sp"
+                android:textColor="@color/snow"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/last_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:visibility="visible">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="That's all folks!"
+                android:textColor="@color/fun_blue"
+                android:textSize="18sp"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic__newspaper_144"
+                android:tint="@color/smoke"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Come back for more scoop tomorrow"
+                android:textColor="@color/fun_blue"
+                android:textSize="18sp"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>
