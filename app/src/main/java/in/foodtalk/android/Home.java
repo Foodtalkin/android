@@ -556,7 +556,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 setFragmentView(curatedFragment, R.id.container, -1, true);
                 break;
             case "Store":
-                setFragmentView(storeFragment, R.id.container, -1, true);
+                setFragmentView(storeFragment, R.id.container1, -1, true);
                 break;
             case "BookStore":
                 setFragmentView(storeHistoryFragment, R.id.container, -1, true);

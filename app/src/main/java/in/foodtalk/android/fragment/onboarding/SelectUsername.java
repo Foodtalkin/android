@@ -91,7 +91,7 @@ public class SelectUsername extends Fragment implements ApiCallback {
                     Log.d("SelectUsername","button clicked send");
                     //onBoardingCallback.onboardingBtnClicked("next", null);
                     boolean atleastOneAlpha = txtUser.getText().toString().matches(".*[a-zA-Z]+.*");
-                    if(atleastOneAlpha){
+                    if(atleastOneAlpha && txtUser.getText().length()>2){
                        /* if (email.matches(emailPattern)){
                             txtEmailError.setAlpha(0);
                             try {

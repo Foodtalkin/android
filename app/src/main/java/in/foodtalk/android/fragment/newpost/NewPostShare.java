@@ -417,6 +417,13 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
                             e.printStackTrace();
                         }
                     }
+                    if (s.toString().length() > 2){
+                        btnAddDishName.setVisibility(View.VISIBLE);
+                        txtNewDish.setText("Add "+s.toString());
+                        newDishName = s.toString();
+                    }else {
+                        btnAddDishName.setVisibility(View.GONE);
+                    }
 
                     /*if (dishNameLoaded){
                         onTexChange(s.toString());

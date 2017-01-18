@@ -145,7 +145,6 @@ public class CommentFragment extends Fragment implements MentionCallback  {
             @Override
             public void onClick(View v) {
 
-
                 if (!edit_comment.getText().toString().equals("")){
                     try {
                         sendComment("postComment", edit_comment.getText().toString());
@@ -180,18 +179,15 @@ public class CommentFragment extends Fragment implements MentionCallback  {
             if (eventType!= null){
                 if (eventType.equals("2")){
                     openFragmentCallback.openFragment("postDetails", postId);
-                }else if (eventType.equals("4")){
+                }else if (eventType.equals("4") || eventType.equals("9") || eventType.equals("12")){
                     openFragmentCallback.openFragment("commentListPost", postId);
 
                 }else if (eventType.equals("11")){
                     openFragmentCallback.openFragment("bookmarkListPost", postId);
-
                 }
             }else {
                 openFragmentCallback.openFragment("postDetails", postId);
             }
-
-
         }
         else {
             Log.d("CommentFragment", "eventType: null");

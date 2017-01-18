@@ -184,14 +184,35 @@
                 android:scrollbars="vertical">
 
             </android.support.v7.widget.RecyclerView>
-            <TextView
+            <LinearLayout
                 android:id="@+id/placeholder"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:gravity="center"
-                android:textColor="@color/blackText1"
-                android:text="Nothing in your store :("
-                android:visibility="gone"/>
+                android:layout_centerInParent="true"
+                android:visibility="gone">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Out of stock"
+                    android:textColor="@color/fun_blue"
+                    android:textSize="16sp"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="30dp"
+                    android:src="@drawable/ic_placeholder_store_144"
+                    android:tint="@color/smoke"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/fun_blue"
+                    android:text="Come back tomorrow for more"
+                    android:textSize="16sp"/>
+            </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/progress_h"
                 android:layout_width="wrap_content"

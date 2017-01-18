@@ -87,6 +87,8 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback, View.
     String iPurchasedIt;
     String storeItemId;
 
+    String thankYouText;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -284,7 +286,7 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback, View.
                     String message = "";
                     if (status.equals("OK")){
                         Log.d("storeItemBuy","success");
-                        alertPopup("success", "");
+                        alertPopup("success", thankYouText);
                     }else if (status.equals("error")){
                         if (response.has("apiMessage")){
                             message = response.getString("apiMessage");
@@ -327,12 +329,21 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback, View.
                     btnBuyNow.setBackground( getResources().getDrawable(R.drawable.gradient_green_0));
                 }
             }
+        }else {
+            txtBtnBuy.setText(storeOffer.getString("actionButtonText"));
         }
         storeItemId = storeOffer.getString("storeItemId");
         iPurchasedIt = storeOffer.getString("iPurchasedIt");
         txtTitle.setText(storeOffer.getString("title"));
         txtTitle1.setText(storeOffer.getString("title"));
-        txtCost.setText(storeOffer.getString("costPoints")+" Points");
+
+        thankYouText = storeOffer.getString("thankYouText");
+        if (storeOffer.getString("costPoints").equals("") || storeOffer.getString("costPoints").equals("0")){
+            txtCost.setText("Free");
+        }else {
+            txtCost.setText(storeOffer.getString("costPoints")+" Points");
+        }
+
         txtVanue.setText(storeOffer.getString("cityText"));
         txtEventInfo.setText(storeOffer.getString("description"));
         txtDate.setText(DateFunction.convertFormat(storeOffer.getString("endDate"),"yyyy-MM-dd HH:mm:ss","MMM dd, yyyy h:mm a"));
@@ -428,7 +439,7 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback, View.
             viewSuccess.setVisibility(View.VISIBLE);
             viewError.setVisibility(View.GONE);
             txtGotoPurchases.setTextColor(getResources().getColor(R.color.green_shamrock));
-            //txtSuccess.setText(value);
+            txtSuccess.setText(value);
         }else if (view.equals("error")){
             viewSuccess.setVisibility(View.GONE);
             viewError.setVisibility(View.VISIBLE);

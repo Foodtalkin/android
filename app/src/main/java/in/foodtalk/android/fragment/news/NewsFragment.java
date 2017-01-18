@@ -120,8 +120,8 @@ public class NewsFragment extends Fragment implements ApiCallback, OpenFragmentC
 
         pager.setCurrentItem(pagerCurrentPosition);
 
-        newsId = null;
-        pagerCurrentPosition = 0;
+       // newsId = null;
+       // pagerCurrentPosition = 0;
         pager.setOnPageChangeListener(new VerticalViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -193,12 +193,7 @@ public class NewsFragment extends Fragment implements ApiCallback, OpenFragmentC
             current1.screenType = "first";
             newsList.add(current1);
         }
-        if (newsListArray.length() == 0){
-            NewsObj current2 = new NewsObj();
-            current2.screenType = "last";
-            newsList.add(current2);
-            haveMore = false;
-        }
+
 
         for (int i=0; i<newsListArray.length();i++){
             NewsObj current = new NewsObj();
@@ -215,12 +210,19 @@ public class NewsFragment extends Fragment implements ApiCallback, OpenFragmentC
             Log.d("NewsFragment","newsId:"+ newsId);
             if (newsId != null){
                 if (newsId.equals(current.id)){
-                    pagerCurrentPosition = i;
+                    pagerCurrentPosition = i+1;
                     Log.d("newFragment","newId "+i);
                 }
             }else {
 
             }
+        }
+
+        if (newsListArray.length() == 0 || newsListArray.length() < 5){
+            NewsObj current2 = new NewsObj();
+            current2.screenType = "last";
+            newsList.add(current2);
+            haveMore = false;
         }
 
 
@@ -229,6 +231,8 @@ public class NewsFragment extends Fragment implements ApiCallback, OpenFragmentC
             initialisePaging();
             loadMore = true;
         }else {
+            // newsId = null;
+            // pagerCurrentPosition = 0;
             mPagerAdapter.notifyDataSetChanged();
         }
 

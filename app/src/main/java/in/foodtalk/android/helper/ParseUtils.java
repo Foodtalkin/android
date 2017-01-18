@@ -31,6 +31,9 @@ public class ParseUtils {
         Parse.initialize(context, context.getString(R.string.parseAppID), context.getString(R.string.parseClientID));
         ParseUser.enableAutomaticUser();
 
+
+
+
         //PushService.setDefaultPushCallback(context, Home.class);
         ParseInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {
             @Override

@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -26,6 +27,7 @@ import in.foodtalk.android.R;
 import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;
+import in.foodtalk.android.communicator.OpenFragmentCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.object.PurchasesObj;
 
@@ -49,6 +51,10 @@ public class StorePurchasesFragment extends Fragment implements ApiCallback {
     ApiCall apiCall;
     int pagerCurrentPosition = 0;
     public String storeItemId;
+    LinearLayout placeholder;
+    LinearLayout btnShopNow;
+
+    OpenFragmentCallback openFragmentCallback;
 
     List<PurchasesObj> purchaseList = new ArrayList<>();
 
@@ -64,9 +70,19 @@ public class StorePurchasesFragment extends Fragment implements ApiCallback {
         apiCallback = this;
         apiCall = new ApiCall();
 
+        openFragmentCallback = (OpenFragmentCallback) getActivity();
+
         progressBar = (ProgressBar) layout.findViewById(R.id.progress_bar);
         tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
         txtPlaceholder = (TextView) layout.findViewById(R.id.txt_placeholder);
+        placeholder = (LinearLayout) layout.findViewById(R.id.placeholder);
+        btnShopNow = (LinearLayout) layout.findViewById(R.id.btn_shop_now);
+        btnShopNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFragmentCallback.openFragment("storeFragment","");
+            }
+        });
         tapToRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,6 +124,12 @@ public class StorePurchasesFragment extends Fragment implements ApiCallback {
         pager.setAdapter(mPagerAdapter);
        // pager.setPageTransformer(true, new DepthPageTransformer());
 
+
+
+        TabLayout tabLayout = (TabLayout) layout.findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(pager);
+
+        Log.d("initialisePagin","size: "+purchaseList.size()+" currentPosition: "+pagerCurrentPosition+" : ");
         pager.setCurrentItem(pagerCurrentPosition);
 
         pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -156,11 +178,10 @@ public class StorePurchasesFragment extends Fragment implements ApiCallback {
 
     private void sendDataIntoAdapter(JSONObject response) throws JSONException{
         JSONArray purchasesList = response.getJSONArray("storePurchase");
-
         if (purchasesList.length() == 0){
-            txtPlaceholder.setVisibility(View.VISIBLE);
+            placeholder.setVisibility(View.VISIBLE);
         }else {
-            txtPlaceholder.setVisibility(View.GONE);
+            placeholder.setVisibility(View.GONE);
         }
 
         purchaseList.clear();
@@ -196,6 +217,7 @@ public class StorePurchasesFragment extends Fragment implements ApiCallback {
             if (storeItemId != null){
                 if (storeItemId.equals(purchasesObj.storeItemId)){
                     pagerCurrentPosition = i;
+                    Log.d("pagerCurrentPosition", storeItemId+" : "+ i);
                 }
             }
         }

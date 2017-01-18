@@ -52,7 +52,7 @@ public class StoreFragment extends Fragment implements ApiCallback {
 
     ApiCallback apiCallback;
     StoreAdapter storeAdapter;
-    TextView placeholder;
+    LinearLayout placeholder;
 
     ImageView btnPurchases;
 
@@ -71,7 +71,7 @@ public class StoreFragment extends Fragment implements ApiCallback {
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view);
         progressHolder = (LinearLayout) layout.findViewById(R.id.progress_h);
         tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
-        placeholder = (TextView) layout.findViewById(R.id.placeholder);
+        placeholder = (LinearLayout) layout.findViewById(R.id.placeholder);
 
         imgUserThumb = (ImageView) layout.findViewById(R.id.img_user_thumb);
         txtFullName = (TextView) layout.findViewById(R.id.txt_fullname);

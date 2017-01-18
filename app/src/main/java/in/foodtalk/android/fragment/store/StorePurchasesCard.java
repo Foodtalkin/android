@@ -104,7 +104,7 @@ public class StorePurchasesCard extends Fragment {
             //Log.d("My App", metaData.toString());
 
         } catch (Throwable t) {
-            Log.e("My App", "Could not parse malformed JSON: \"" + purchasesObj.metaData + "\"");
+            Log.e("StorePurchasesCard", "setData Could not parse malformed JSON:");
         }
 
 

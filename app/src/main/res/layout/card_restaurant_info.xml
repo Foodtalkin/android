@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="13, main market, lodhi colony, new delhi"
-            android:textColor="@color/blackText1"
+            android:textColor="@color/silver"
             android:layout_marginTop="8dp"
             android:textSize="16sp"
             android:layout_marginLeft="10dp"
@@ -57,8 +57,7 @@
                 android:gravity="center_vertical|center_horizontal"
                 />
             <TextView
-
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="30dp"
                 android:id="@+id/checkin_view_restaurant"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"

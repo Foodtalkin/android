@@ -17,12 +17,17 @@
             android:background="@color/fun_blue">
             <TextView
                 android:id="@+id/txt_title1"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textColor="@color/snow"
                 android:textSize="20sp"
-                android:layout_centerInParent="true"/>
+                android:layout_centerVertical="true"
+                android:ellipsize="end"
+                android:textAlignment="center"
+                android:maxLines="1"
+                android:layout_marginRight="50dp"
+                android:layout_marginLeft="20dp"/>
             <ImageView
                 android:id="@+id/btn_purchases"
                 android:layout_width="wrap_content"
@@ -34,10 +39,12 @@
                 android:padding="3dp"/>
 
         </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/root_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            >
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -138,7 +145,7 @@
                             <android.support.v4.view.ViewPager
                                 android:id="@+id/view_pager"
                                 android:layout_width="match_parent"
-                                android:layout_height="330dp"
+                                android:layout_height="455dp"
                                 android:layout_marginTop="15dp"
                                 >
                                 <LinearLayout
@@ -225,7 +232,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="By purchasing you agree to our"
-                                            android:textSize="18sp"
+                                            android:textSize="16sp"
                                             android:clickable="false"/>
                                         <TextView
                                             android:layout_width="wrap_content"
@@ -241,16 +248,20 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="200dp"
                                     android:orientation="vertical"
-
                                     >
-                                    <TextView
-                                        android:id="@+id/txt_event_info"
-                                        android:layout_marginLeft="15dp"
-                                        android:layout_marginRight="15dp"
+                                    <android.support.v4.widget.NestedScrollView
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:text="--"
-                                        android:lineSpacingExtra="3sp"/>
+                                        android:layout_height="370dp"
+                                        android:padding="@dimen/activity_horizontal_margin">
+                                        <TextView
+                                            android:id="@+id/txt_event_info"
+                                            android:layout_marginLeft="15dp"
+                                            android:layout_marginRight="15dp"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="--"
+                                            android:lineSpacingExtra="3sp"/>
+                                    </android.support.v4.widget.NestedScrollView>
                                 </LinearLayout>
                             </android.support.v4.view.ViewPager>
                         </LinearLayout>
@@ -284,7 +295,6 @@
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
-
     </LinearLayout>
 
     <TextView
