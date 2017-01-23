@@ -3,7 +3,8 @@
     <string name="text_username">You are almost done, Just one last step. Select a unique username by which all food talkers will identify you in the app. It should be unique and can not be changed.</string>
     <string name="text_username_taken">This username is already taken!</string>
 
-    <string name="parseAppID">RBOZIK8Vti138uqPIucaBherLAB16JFa3ITi4kDu</string>
+    <!--<string name="parseAppID">RBOZIK8Vti138uqPIucaBherLAB16JFa3ITi4kDu</string>-->
+    <string name="parseAppID">foodtalk</string>
     <string name="parseClientID">Kavc924t4PGsZzQdwUoLS6nz3q3Wm5PfRUjEDj9a</string>
     <string name="notificationID">100</string>
 

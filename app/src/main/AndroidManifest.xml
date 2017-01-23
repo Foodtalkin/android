@@ -48,6 +48,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:theme">
+
+        <meta-data android:name="com.parse.push.gcm_sender_id" android:value="id:954814130907"/>
         <activity
             android:name=".SplashScreen"
             android:screenOrientation="portrait"
@@ -115,6 +117,8 @@
                 <category android:name="in.foodtalk.android" />
             </intent-filter>
         </receiver>
+
+
 
         <activity android:name=".ResultNotification" />
         <activity android:name="com.desmond.squarecamera.CameraActivity" />

@@ -9,11 +9,13 @@ import android.widget.Toast;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
+import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParsePushBroadcastReceiver;
 import com.parse.ParseUser;
 import com.parse.PushService;
 import com.parse.SaveCallback;
+import com.parse.interceptors.ParseStethoInterceptor;
 
 import in.foodtalk.android.Home;
 import in.foodtalk.android.R;
@@ -27,10 +29,22 @@ public class ParseUtils {
 
 
     public static void registerParse(Context context) {
+
+
         // initializing parse library
-        Parse.initialize(context, context.getString(R.string.parseAppID), context.getString(R.string.parseClientID));
+        //Parse.initialize(context, context.getString(R.string.parseAppID), context.getString(R.string.parseClientID));
+        Parse.initialize(new Parse.Configuration.Builder(context)
+                .applicationId(context.getString(R.string.parseAppID))
+                //.clientKey(null)
+                .server("http://52.74.136.146:1337/parse/")
+               // .addNetworkInterceptor(new ParseStethoInterceptor())
+                //.server("http://192.168.1.5:1337/parse/")
+                .build()
+        );
+
         ParseUser.enableAutomaticUser();
 
+        Parse.setLogLevel(Parse.LOG_LEVEL_ERROR);
 
 
 
@@ -39,6 +53,10 @@ public class ParseUtils {
             @Override
             public void done(ParseException e) {
                 Log.e(TAG, "Successfully subscribed to Parse!");
+                if (e != null){
+                    Log.e("ParseException", e.toString()+" done");
+                }
+
             }
         });
 
@@ -78,7 +96,11 @@ public class ParseUtils {
             @Override
             public void done(ParseException e) {
                 String deviceToken = (String) ParseInstallation.getCurrentInstallation().get("deviceToken");
-                Log.d("deviceToken callback", deviceToken+"");
+                Log.e("deviceToken callback", deviceToken+" ");
+
+                if (e!= null){
+                    Log.e("ParseException", e.toString()+" done");
+                }
                 appController.deviceToken = deviceToken;
             }
         });

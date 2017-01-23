@@ -320,7 +320,7 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback, View.
         }
 
         if (storeOffer.getString("iPurchasedIt").equals("1")){
-            txtBtnBuy.setText("Purchased");
+            txtBtnBuy.setText("Claimed");
             final int sdk = Build.VERSION.SDK_INT;
             if(sdk < Build.VERSION_CODES.JELLY_BEAN) {
                 btnBuyNow.setBackgroundDrawable( getResources().getDrawable(R.drawable.gradient_green_0) );

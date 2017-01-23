@@ -88,7 +88,7 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }else {
                 storeCardHolder.ptsBorder.setBackgroundResource(0);
                 storeCardHolder.txtPts.setTextColor(context.getResources().getColor(R.color.green_shamrock));
-                storeCardHolder.txtPts.setText("Purchased");
+                storeCardHolder.txtPts.setText("Claimed");
             }
 
             String date1 = DateFunction.convertFormat(storeObj.endDate,"yyyy-MM-dd HH:mm:ss","MMM dd");

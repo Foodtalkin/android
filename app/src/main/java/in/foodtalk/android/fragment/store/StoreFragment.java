@@ -122,6 +122,8 @@ public class StoreFragment extends Fragment implements ApiCallback {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("sessionId", db.getUserDetails().get("sessionId"));
         apiCall.apiRequestPost(getActivity(),jsonObject, Config.URL_STORE_LIST, "storeList", apiCallback);
+
+
     }
     @Override
     public void apiResponse(JSONObject response, String tag) {
