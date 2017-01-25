@@ -1,5 +1,6 @@
 package in.foodtalk.android.fragment.store;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -104,12 +105,13 @@ public class StorePurchasesFragment extends Fragment implements ApiCallback {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        myContext = (FragmentActivity) context;
-        fm = myContext.getSupportFragmentManager();
-        // fm = myContext.getSupportFragmentManager();
+    public void onAttach(Activity activity) {
 
+        myContext=(FragmentActivity) activity;
+        fm = myContext.getSupportFragmentManager();
+
+
+        super.onAttach(activity);
     }
 
     @Override
@@ -119,6 +121,7 @@ public class StorePurchasesFragment extends Fragment implements ApiCallback {
     }
 
     private void initialisePaging(){
+        Log.e("storePurchasesFramgnet","fm"+ fm);
         mPagerAdapter = new PurchasesPagerAdapter(fm, purchaseList, getActivity());
         ViewPager pager = (ViewPager) layout.findViewById(R.id.viewpager);
         pager.setAdapter(mPagerAdapter);

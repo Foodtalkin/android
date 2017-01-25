@@ -81,7 +81,7 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             if (storeObj.iPurchasedIt.equals("0")){
                 if (storeObj.costPoints.equals("")){
                     storeCardHolder.ptsBorder.setBackgroundResource(0);
-                    storeCardHolder.txtPts.setText("Free");
+                    storeCardHolder.txtPts.setText("");
                 }else {
                     storeCardHolder.txtPts.setText(storeObj.costPoints+" Pts");
                 }

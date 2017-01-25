@@ -24,6 +24,10 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.facebook.FacebookSdk;
 import com.flurry.android.FlurryAgent;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.StandardExceptionParser;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -38,6 +42,7 @@ import java.security.NoSuchAlgorithmException;
 import in.foodtalk.android.Home;
 import in.foodtalk.android.R;
 import in.foodtalk.android.communicator.OnBoardingCallback;
+import in.foodtalk.android.helper.AnalyticsTrackers;
 import in.foodtalk.android.helper.ParseUtils;
 import in.foodtalk.android.module.LruBitmapCache;
 
@@ -77,6 +82,11 @@ public class AppController extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        //--configure analytics
+        AnalyticsTrackers.initialize(this);
+        AnalyticsTrackers.getInstance().get(AnalyticsTrackers.Target.APP);
+        //---
 
         // configure and init Flurry
         new FlurryAgent.Builder()
@@ -142,6 +152,9 @@ public class AppController extends Application {
 
     public <T> void addToRequestQueue(Request<T> req, String tag) {
         // set the default tag if tag is empty
+        Log.i("AppController","requestQueue: "+tag);
+        sendEventByTag(tag);
+
         req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
         getRequestQueue().add(req);
     }
@@ -157,6 +170,80 @@ public class AppController extends Application {
         }
     }
 
+    private void sendEventByTag(String tag){
+        if (tag.equals("postlike")){
+            trackEvent("UI Action", "Click", "like");
+            Log.d("trackEvent","like");
+        }else if (tag.equals("postbookmark")){
+            trackEvent("UI Action", "Click", "bookmark");
+            Log.d("trackEvent","bookmark");
+        }
+        else if (tag.equals("userUnfollow")){
+            trackEvent("UI Action", "Click", "User Unfollow");
+            Log.d("trackEvent","userUnfollow");
+        }
+        else if (tag.equals("userFollow")){
+            trackEvent("UI Action", "Click", "User Follow");
+            Log.d("trackEvent","userFollow");
+        }if (tag.equals("sendComment")){
+            trackEvent("UI Action", "Click", "Comment Send");
+            Log.d("trackEvent","Comment Send");
+        }
+    }
 
+    //----------------google analytics functions------------------
+    public synchronized Tracker getGoogleAnalyticsTracker() {
+        AnalyticsTrackers analyticsTrackers = AnalyticsTrackers.getInstance();
+        return analyticsTrackers.get(AnalyticsTrackers.Target.APP);
+    }
 
+    /***
+     * Tracking screen view
+     *
+     * @param screenName screen name to be displayed on GA dashboard
+     */
+    public void trackScreenView(String screenName) {
+        Tracker t = getGoogleAnalyticsTracker();
+
+        // Set screen name.
+        t.setScreenName(screenName);
+
+        // Send a screen view.
+        t.send(new HitBuilders.ScreenViewBuilder().build());
+
+        GoogleAnalytics.getInstance(this).dispatchLocalHits();
+    }
+
+    /***
+     * Tracking exception
+     *
+     * @param e exception to be tracked
+     */
+    public void trackException(Exception e) {
+        if (e != null) {
+            Tracker t = getGoogleAnalyticsTracker();
+
+            t.send(new HitBuilders.ExceptionBuilder()
+                    .setDescription(
+                            new StandardExceptionParser(this, null)
+                                    .getDescription(Thread.currentThread().getName(), e))
+                    .setFatal(false)
+                    .build()
+            );
+        }
+    }
+
+    /***
+     * Tracking event
+     *
+     * @param category event category
+     * @param action   action of the event
+     * @param label    label
+     */
+    public void trackEvent(String category, String action, String label) {
+        Tracker t = getGoogleAnalyticsTracker();
+
+        // Build and send an Event.
+        t.send(new HitBuilders.EventBuilder().setCategory(category).setAction(action).setLabel(label).build());
+    }
 }

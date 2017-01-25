@@ -28,6 +28,7 @@ public class UserFollow {
     Config config;
     String apiUrl;
     Context context;
+    String requestTag;
     public UserFollow(Context context){
         config = new Config();
         db = new DatabaseHandler(context);
@@ -37,9 +38,11 @@ public class UserFollow {
 
         if (userFollow){
             apiUrl = config.URL_FOLLOW;
+            requestTag = "userFollow";
 
         }else {
             apiUrl = config.URL_UNFOLLOW;
+            requestTag = "userUnfollow";
         }
 
 
@@ -97,6 +100,6 @@ public class UserFollow {
                 return headers;
             }
         };
-        AppController.getInstance().addToRequestQueue(jsonObjReq,"postlike");
+        AppController.getInstance().addToRequestQueue(jsonObjReq, requestTag);
     }
 }

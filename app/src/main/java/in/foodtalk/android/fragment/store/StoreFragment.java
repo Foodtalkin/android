@@ -115,6 +115,12 @@ public class StoreFragment extends Fragment implements ApiCallback {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        tapToRetry.setVisibility(View.GONE);
+    }
+
     private void getStoreList() throws JSONException {
         progressHolder.setVisibility(View.VISIBLE);
         tapToRetry.setVisibility(View.GONE);

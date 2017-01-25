@@ -1,6 +1,7 @@
 package in.foodtalk.android.fragment.news;
 
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -87,6 +88,7 @@ public class NewsFragment extends Fragment implements ApiCallback, OpenFragmentC
         });
 
 
+
         try {
 
             getNewsData();
@@ -97,12 +99,13 @@ public class NewsFragment extends Fragment implements ApiCallback, OpenFragmentC
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        myContext = (FragmentActivity) context;
-        fm = myContext.getSupportFragmentManager();
-       // fm = myContext.getSupportFragmentManager();
+    public void onAttach(Activity activity) {
 
+        myContext=(FragmentActivity) activity;
+        fm = myContext.getSupportFragmentManager();
+
+
+        super.onAttach(activity);
     }
 
     @Override
@@ -112,13 +115,14 @@ public class NewsFragment extends Fragment implements ApiCallback, OpenFragmentC
     }
 
     private void initialisePaging(){
+        Log.d("NewsFragment","fm : "+fm);
         mPagerAdapter = new NewsPagerAdapter(fm, newsList, getActivity(), openFragmentCallback);
         VerticalViewPager pager = (VerticalViewPager) layout.findViewById(R.id.viewpager);
         pager.setAdapter(mPagerAdapter);
-        pager.setPageTransformer(true, new DepthPageTransformer());
+        //pager.setPageTransformer(true, new DepthPageTransformer());
 
 
-        pager.setCurrentItem(pagerCurrentPosition);
+        //pager.setCurrentItem(pagerCurrentPosition);
 
        // newsId = null;
        // pagerCurrentPosition = 0;

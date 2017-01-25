@@ -679,6 +679,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         FlurryAgent.logEvent(newFragment.getClass().getSimpleName());
 
+        AppController.getInstance().trackScreenView(newFragment.getClass().getName());
+
         if (newFragment == userProfile){
             subTitleHome.setText("");
             titleHome1.setText("");

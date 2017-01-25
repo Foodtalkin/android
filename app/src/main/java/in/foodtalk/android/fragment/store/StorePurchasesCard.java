@@ -3,6 +3,8 @@ package in.foodtalk.android.fragment.store;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -38,12 +40,11 @@ public class StorePurchasesCard extends Fragment {
 
     public PurchasesObj purchasesObj;
 
-    TextView txtEventPass, txtTitle, txtDate, txtTime, txtCoupon, txtName, txtAdmitCount, txtRefNo, txtTapToCopy, txtUrl, txtExpired;
-    ImageView imgCard;
+    TextView txtEventPass, txtTitle, txtDate, txtTime, txtCoupon, txtName, txtAdmitCount, txtRefNo, txtTapToCopy, txtUrl, txtExpired, txtAction;
+    ImageView imgCard, iconCall;
 
     LinearLayout couponHolder, redeemTab, redeemTab1;
     WebpageCallback webpageCallback;
-
 
     @Nullable
     @Override
@@ -61,9 +62,12 @@ public class StorePurchasesCard extends Fragment {
         txtTapToCopy = (TextView) layout.findViewById(R.id.txt_taptoCopy);
         txtUrl = (TextView) layout.findViewById(R.id.txt_url);
         txtExpired = (TextView) layout.findViewById(R.id.txt_expired);
+        txtAction = (TextView) layout.findViewById(R.id.txt_action);
 
         redeemTab = (LinearLayout) layout.findViewById(R.id.redeem_tab);
         redeemTab1 = (LinearLayout) layout.findViewById(R.id.redeem_tab1);
+
+        iconCall = (ImageView) layout.findViewById(R.id.icon_call);
 
         webpageCallback = (WebpageCallback) getActivity();
 
@@ -78,15 +82,13 @@ public class StorePurchasesCard extends Fragment {
         //txtName.setTypeface(face);
         txtAdmitCount.setTypeface(face);
         txtRefNo.setTypeface(face);
-
-
-
         setData();
         return layout;
     }
 
     String couponCode;
     String redemptionUrl;
+    String redemptionPhone;
     String validTill;
     String type;
 
@@ -98,6 +100,7 @@ public class StorePurchasesCard extends Fragment {
             metaData = new JSONObject(purchasesObj.metaData);
             couponCode = metaData.getString("couponCode");
             redemptionUrl = metaData.getString("redemptionUrl");
+            redemptionPhone = metaData.getString("redemptionPhone");
             validTill = metaData.getString("validTill");
             type = metaData.getString("type");
 
@@ -115,7 +118,34 @@ public class StorePurchasesCard extends Fragment {
         txtDate.setText(DateFunction.convertFormat(purchasesObj.endDate,"yyyy-MM-dd HH:mm:ss","MMM dd, yyyy"));
         txtTime.setText(DateFunction.convertFormat(purchasesObj.endDate,"yyyy-MM-dd HH:mm:ss","h:mm a"));
         txtCoupon.setText(couponCode);
-        txtUrl.setText(redemptionUrl);
+        if (redemptionUrl != null && !redemptionUrl.equals("")){
+            txtUrl.setText(redemptionUrl);
+            txtAction.setText("Tap to open");
+            iconCall.setVisibility(View.GONE);
+            redeemTab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    webpageCallback.inAppBrowser(false,"", redemptionUrl);
+                }
+            });
+        }else if (redemptionPhone != null && !redemptionPhone.equals("")){
+            txtUrl.setText(redemptionPhone);
+            txtAction.setText("Tap to call");
+            iconCall.setVisibility(View.VISIBLE);
+            redeemTab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //webpageCallback.inAppBrowser(false,"", redemptionUrl);
+                    Log.d("StorePpurchases","call");
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:"+redemptionPhone));
+                    startActivity(callIntent);
+                }
+            });
+        }else {
+            Log.d("StorepurchasesCard", "redemptionUrl or redemptionPhone is null/blank");
+        }
+
         txtEventPass.setText(purchasesObj.type);
 
         if (!purchasesObj.cardImage.equals("")){
@@ -179,12 +209,7 @@ public class StorePurchasesCard extends Fragment {
                 clipboard.setPrimaryClip(clip);
             }
         });
-        redeemTab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                webpageCallback.inAppBrowser(false,"", redemptionUrl);
-            }
-        });
+
     }
     public static int compareToDay(Date date1, Date date2) {
         if (date1 == null || date2 == null) {
