@@ -134,7 +134,7 @@ public class CheckIn extends Fragment implements SearchView.OnQueryTextListener,
                         switch (event.getAction()){
                             case MotionEvent.ACTION_UP:
                                 Log.d("onClick", "add restaurant");
-                                addRestaurantCallback.addNewRestaurant();
+//                                addRestaurantCallback.addNewRestaurant();
                                 break;
                         }
                         break;

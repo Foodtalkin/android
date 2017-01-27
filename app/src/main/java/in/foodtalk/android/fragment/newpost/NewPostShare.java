@@ -375,7 +375,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
                 switch (event.getAction()){
                     case MotionEvent.ACTION_UP:
                         Log.d("NewPostShare","addRestaurant");
-                        addRestaurantCallback.addNewRestaurant();
+                        addRestaurantCallback.addNewRestaurant(inputRestaurantSearch.getText().toString());
                         restaurantSearchView = false;
                         searchView = false;
                         break;
@@ -720,7 +720,7 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     @Override
     public void checkInRestaurant(String restaurantId, String restaurantName) {
         if (restaurantId == null){
-            addRestaurantCallback.addNewRestaurant();
+            addRestaurantCallback.addNewRestaurant(inputRestaurantSearch.getText().toString());
             restaurantSearchView = false;
             searchView = false;
         }else {

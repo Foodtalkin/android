@@ -2,6 +2,7 @@ package in.foodtalk.android.fragment;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
@@ -11,11 +12,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.facebook.login.LoginManager;
 
 import java.util.List;
 
+import in.foodtalk.android.BuildConfig;
 import in.foodtalk.android.FbLogin;
 import in.foodtalk.android.R;
 import in.foodtalk.android.module.DatabaseHandler;
@@ -29,6 +32,8 @@ public class OptionsFragment extends Fragment implements View.OnTouchListener {
     LinearLayout btnLogout;
 
     DatabaseHandler db;
+    String versionName;
+    TextView txtVersion;
 
     String[] email = {"contact@foodtalkindia.com"};
     @Override
@@ -36,10 +41,34 @@ public class OptionsFragment extends Fragment implements View.OnTouchListener {
         layout = inflater.inflate(R.layout.options_fragment, container, false);
         btnContact = (LinearLayout) layout.findViewById(R.id.btn_contact);
         btnLogout = (LinearLayout) layout.findViewById(R.id.btn_logout_options);
+        txtVersion = (TextView) layout.findViewById(R.id.txt_version);
         btnContact.setOnTouchListener(this);
         btnLogout.setOnTouchListener(this);
 
         db = new DatabaseHandler(getActivity());
+
+        PackageManager manager = getActivity().getPackageManager();
+        PackageInfo info = null;
+        try {
+            info = manager.getPackageInfo(
+                    getActivity().getPackageName(), 0);
+            versionName = info.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+        Log.d("OptionFragment BT", BuildConfig.BUILD_TYPE);
+
+
+        if (versionName != null){
+            if (BuildConfig.BUILD_TYPE.equals("debug")){
+                txtVersion.setText("Version "+versionName+" "+BuildConfig.BUILD_TYPE);
+            }
+            else {
+                txtVersion.setText("Version "+versionName);
+            }
+        }
         return layout;
     }
 

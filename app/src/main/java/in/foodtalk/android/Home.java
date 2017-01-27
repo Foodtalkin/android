@@ -678,15 +678,15 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         String backStateName = newFragment.getClass().getName();
 
         FlurryAgent.logEvent(newFragment.getClass().getSimpleName());
+        Log.d("Home setFragmentV", "simplename: "+newFragment.getClass().getSimpleName());
+        Log.d("Home setFragmentV", "simplename: "+newFragment.getClass().getName());
 
-        AppController.getInstance().trackScreenView(newFragment.getClass().getName());
+        AppController.getInstance().trackScreenView(newFragment.getClass().getSimpleName());
 
         if (newFragment == userProfile){
             subTitleHome.setText("");
             titleHome1.setText("");
         }
-
-
         // Log.d("newFragment", backStateName);
         Log.i("setFragmentView",newFragment.getClass().getSimpleName());
 
@@ -1589,9 +1589,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     }
 
     @Override
-    public void addNewRestaurant() {
+    public void addNewRestaurant(String rName) {
         Log.d("addNewRestaurant","addRestaurant");
         addRestaurant = new AddRestaurant();
+        addRestaurant.restaurantName = rName;
         setFragmentView(addRestaurant, R.id.container1, -1, true);
     }
 

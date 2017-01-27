@@ -5,5 +5,5 @@ package in.foodtalk.android.communicator;
  */
 public interface AddRestaurantCallback {
 
-    public void addNewRestaurant();
+    public void addNewRestaurant(String name);
 }

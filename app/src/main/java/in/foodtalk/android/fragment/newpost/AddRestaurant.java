@@ -132,6 +132,7 @@ public class AddRestaurant extends Fragment implements LatLonCallback, ApiCallba
     SelectCityCallback selectCityCallback;
     Boolean searchOnChangeText = true;
     String googlePlaceId;
+    public String restaurantName;
 
 
 
@@ -182,6 +183,11 @@ public class AddRestaurant extends Fragment implements LatLonCallback, ApiCallba
 
         inputRName = (EditText) layout.findViewById(R.id.input_name_add_restaurant);
         inputRAddress = (EditText) layout.findViewById(R.id.input_address_add_restaurant);
+
+        if (restaurantName != null){
+            inputRName.setText(restaurantName);
+        }
+
 
         latLonCallback = this;
 
