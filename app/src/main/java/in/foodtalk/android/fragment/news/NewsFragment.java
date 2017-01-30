@@ -72,6 +72,8 @@ public class NewsFragment extends Fragment implements ApiCallback, OpenFragmentC
         apiCallback = this;
         openFragmentCallback = this;
 
+        Log.d("NewsFragment onC","newsId: "+ newsId);
+
         webView = (WebView) layout.findViewById(R.id.webview);
 
         progressBar = (ProgressBar) layout.findViewById(R.id.progress_bar);
@@ -119,10 +121,10 @@ public class NewsFragment extends Fragment implements ApiCallback, OpenFragmentC
         mPagerAdapter = new NewsPagerAdapter(fm, newsList, getActivity(), openFragmentCallback);
         VerticalViewPager pager = (VerticalViewPager) layout.findViewById(R.id.viewpager);
         pager.setAdapter(mPagerAdapter);
-        //pager.setPageTransformer(true, new DepthPageTransformer());
+        pager.setPageTransformer(true, new DepthPageTransformer());
 
 
-        //pager.setCurrentItem(pagerCurrentPosition);
+        pager.setCurrentItem(pagerCurrentPosition);
 
        // newsId = null;
        // pagerCurrentPosition = 0;

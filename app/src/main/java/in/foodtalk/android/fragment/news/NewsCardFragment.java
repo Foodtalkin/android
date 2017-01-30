@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -28,8 +29,9 @@ import in.foodtalk.android.object.NewsObj;
 public class NewsCardFragment extends Fragment {
     View layout;
     public NewsObj newsObj;
-    TextView txtTitle, txtDes, txtSource, btnReadmore, txtTime;
-    ImageView coverImg, upArrow;
+    TextView txtTitle, txtDes, txtSource,  txtTime, txtReadmore;
+    ImageView coverImg;
+    RelativeLayout btnReadmore;
     public OpenFragmentCallback openFragmentCallback;
 
 
@@ -41,10 +43,11 @@ public class NewsCardFragment extends Fragment {
         txtTitle = (TextView) layout.findViewById(R.id.txt_title);
         txtDes = (TextView) layout.findViewById(R.id.txt_des);
         txtSource = (TextView) layout.findViewById(R.id.txt_source);
-        btnReadmore = (TextView) layout.findViewById(R.id.btn_readmore);
+        btnReadmore = (RelativeLayout) layout.findViewById(R.id.btn_readmore);
+        txtReadmore = (TextView) layout.findViewById(R.id.txt_readmore);
         coverImg = (ImageView) layout.findViewById(R.id.cover_img);
         //openFragmentCallback = (OpenFragmentCallback) getActivity();
-        upArrow = (ImageView) layout.findViewById(R.id.up_arrow);
+        //upArrow = (ImageView) layout.findViewById(R.id.up_arrow);
         txtTime = (TextView) layout.findViewById(R.id.txt_time);
         setImageSize();
         setContent();
@@ -65,7 +68,12 @@ public class NewsCardFragment extends Fragment {
     private void setContent(){
         txtTitle.setText(newsObj.title);
         txtDes.setText(newsObj.description);
-        txtSource.setText(newsObj.source);
+        if (newsObj.source.equals("")){
+            txtSource.setText("");
+        }else {
+            txtSource.setText(newsObj.source+" / ");
+        }
+
 
         SimpleDateFormat simpleDateFormat =
                 new SimpleDateFormat("yyyy-M-dd hh:mm:ss");
@@ -77,11 +85,11 @@ public class NewsCardFragment extends Fragment {
             e.printStackTrace();
         }
         if (newsObj.source.equals("")){
-            btnReadmore.setVisibility(View.INVISIBLE);
-            upArrow.setVisibility(View.VISIBLE);
+            txtReadmore.setVisibility(View.INVISIBLE);
+           // upArrow.setVisibility(View.VISIBLE);
         }else {
-            btnReadmore.setVisibility(View.VISIBLE);
-            upArrow.setVisibility(View.GONE);
+            txtReadmore.setVisibility(View.VISIBLE);
+            //upArrow.setVisibility(View.GONE);
         }
 
         Picasso.with(getActivity())
@@ -91,7 +99,7 @@ public class NewsCardFragment extends Fragment {
                 .placeholder(R.drawable.placeholder)
                 .into(coverImg);
 
-        btnReadmore.setOnClickListener(new View.OnClickListener() {
+        txtReadmore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openFragmentCallback.openFragment("newsWebView", newsObj.sourceUrl);

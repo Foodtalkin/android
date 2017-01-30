@@ -39,11 +39,14 @@ public class CustomPushReceiver extends ParsePushBroadcastReceiver {
     @Override
     protected void onPushReceive(Context context, Intent intent) {
         super.onPushReceive(context, intent);
+        String screenName = "_";
         if (intent == null)
             return;
         try {
             JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
             Log.e(TAG, "Push received: " + json);
+            screenName = json.getString("class");
+
            // parseIntent = intent;
            // Intent resultIntent = new Intent(context, ResultNotification.class);
             //showNotificationMessage(context, json.getString("alert"), "", resultIntent);
@@ -52,23 +55,36 @@ public class CustomPushReceiver extends ParsePushBroadcastReceiver {
         } catch (JSONException e) {
             Log.e(TAG, "Push message json exception: " + e.getMessage());
         }
+        AppController.getInstance().trackEvent("Notification", "Receive", screenName);
     }
 
     @Override
     protected void onPushDismiss(Context context, Intent intent) {
         super.onPushDismiss(context, intent);
+        String jsonData = intent.getExtras().getString("com.parse.Data");
+        JSONObject jsonObject = null;
+        String screenName = "_";
+        try {
+            jsonObject = new JSONObject(jsonData);
+            screenName = jsonObject.getString("class");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        AppController.getInstance().trackEvent("Notification","Dismiss", screenName);
     }
 
     @Override
     protected void onPushOpen(Context context, Intent intent) {
         super.onPushOpen(context, intent);
+        String screenName = "_";
         //isRunning(context);
         Log.d(TAG, "onPushOpen: isHomeActivity: "+ AppController.getInstance().isHomeActivity);
         if (AppController.getInstance().isHomeActivity){
             String jsonData = intent.getExtras().getString("com.parse.Data");
             try {
                 JSONObject jsonObject = new JSONObject(jsonData);
-                final String screenName = jsonObject.getString("class");
+                screenName = jsonObject.getString("class");
                 final String elementId = jsonObject.getString("elementId");
                 Log.d(TAG+" onPushOpen",screenName+" "+elementId);
             } catch (JSONException e) {
@@ -90,8 +106,7 @@ public class CustomPushReceiver extends ParsePushBroadcastReceiver {
                 Log.d("Tag parse", "onPushOpen Error : " + e);
             }
         }
-
-
+        AppController.getInstance().trackEvent("Notification", "Open", screenName);
     }
     private void sendMessage(Context context, String jsonData) {
         Log.d("sender", "Broadcasting message");

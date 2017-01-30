@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.parse.DeleteCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
@@ -31,20 +32,36 @@ public class ParseUtils {
     public static void registerParse(Context context) {
 
 
+
+
+
+
         // initializing parse library
         //Parse.initialize(context, context.getString(R.string.parseAppID), context.getString(R.string.parseClientID));
         Parse.initialize(new Parse.Configuration.Builder(context)
                 .applicationId(context.getString(R.string.parseAppID))
                 //.clientKey(null)
                 .server("http://52.74.136.146:1337/parse/")
+                //.server("http://api.parse.com/parse/")
                // .addNetworkInterceptor(new ParseStethoInterceptor())
                 //.server("http://192.168.1.5:1337/parse/")
                 .build()
+
         );
+        Log.d("ParseUtils","Parse initialize");
 
         ParseUser.enableAutomaticUser();
 
         Parse.setLogLevel(Parse.LOG_LEVEL_ERROR);
+
+//        ParseInstallation.getCurrentInstallation().deleteInBackground(new DeleteCallback() {
+//            @Override
+//            public void done(ParseException e) {
+//                Log.d("deleteInB","done");
+//            }
+//        });
+
+        //clearParseInstallation();
 
 
 
@@ -53,6 +70,8 @@ public class ParseUtils {
             @Override
             public void done(ParseException e) {
                 Log.e(TAG, "Successfully subscribed to Parse!");
+                String deviceToken = (String) ParseInstallation.getCurrentInstallation().get("deviceToken");
+                Log.d("ParseUtils","deviceToken: "+deviceToken);
                 if (e != null){
                     Log.e("ParseException", e.toString()+" done");
                 }
@@ -144,4 +163,22 @@ public class ParseUtils {
             }
         });
     }
+
+    public static void clearParseInstallation() {
+
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+
+        try {
+            if (installation != null){
+                installation.delete();
+            }else {
+                Log.e("ParseUtils","installation is null");
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }
