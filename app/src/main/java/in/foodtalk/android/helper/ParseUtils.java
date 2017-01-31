@@ -30,12 +30,6 @@ public class ParseUtils {
 
 
     public static void registerParse(Context context) {
-
-
-
-
-
-
         // initializing parse library
         //Parse.initialize(context, context.getString(R.string.parseAppID), context.getString(R.string.parseClientID));
         Parse.initialize(new Parse.Configuration.Builder(context)
@@ -52,7 +46,7 @@ public class ParseUtils {
 
         ParseUser.enableAutomaticUser();
 
-        Parse.setLogLevel(Parse.LOG_LEVEL_ERROR);
+        //Parse.setLogLevel(Parse.LOG_LEVEL_ERROR);
 
 //        ParseInstallation.getCurrentInstallation().deleteInBackground(new DeleteCallback() {
 //            @Override
