@@ -44,6 +44,7 @@ public class ParseUtils {
         );
         Log.d("ParseUtils","Parse initialize");
 
+
         ParseUser.enableAutomaticUser();
 
         //Parse.setLogLevel(Parse.LOG_LEVEL_ERROR);
