@@ -5,12 +5,17 @@ import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.object.LoginValue;
+
+import static android.content.Context.MODE_PRIVATE;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -70,8 +75,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE " + TABLE_LOGIN + " ADD "+KEY_EMAIL+" TEXT DEFAULT blank");
             db.execSQL("ALTER TABLE " + TABLE_LOGIN + " ADD "+KEY_CITY_ID+" TEXT DEFAULT blank");
         }
-
         Log.d("DatabaseHandler", "onUpgrade"+" oldV "+ oldVersion+" newV "+newVersion);
+
+//        if (newVersion == 3 ){
+//            AppController.getInstance().clearApplicationData();
+//            Log.d("DatabaseHandler", "clear app data: db version = 3");
+//        }
 
         // Create tables again
        // onCreate(db);
@@ -142,7 +151,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // return row count
         return rowCount;
     }
-
     /**
      * Re crate database
      * Delete all tables and create them again
@@ -172,5 +180,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // what value do you get here?
         return db.getVersion();
     }
+
+
 
 }

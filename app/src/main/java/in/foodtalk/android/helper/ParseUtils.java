@@ -45,6 +45,7 @@ public class ParseUtils {
         Log.d("ParseUtils","Parse initialize");
 
 
+
         ParseUser.enableAutomaticUser();
 
         //Parse.setLogLevel(Parse.LOG_LEVEL_ERROR);
@@ -65,8 +66,8 @@ public class ParseUtils {
             @Override
             public void done(ParseException e) {
                 Log.e(TAG, "Successfully subscribed to Parse!");
-                String deviceToken = (String) ParseInstallation.getCurrentInstallation().get("deviceToken");
-                Log.d("ParseUtils","deviceToken: "+deviceToken);
+                //String deviceToken = (String) ParseInstallation.getCurrentInstallation().get("deviceToken");
+                //Log.d("ParseUtils","deviceToken: "+deviceToken);
                 if (e != null){
                     Log.e("ParseException", e.toString()+" done");
                 }

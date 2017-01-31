@@ -118,7 +118,39 @@ public class StorePurchasesCard extends Fragment {
         txtDate.setText(DateFunction.convertFormat(purchasesObj.endDate,"yyyy-MM-dd HH:mm:ss","MMM dd, yyyy"));
         txtTime.setText(DateFunction.convertFormat(purchasesObj.endDate,"yyyy-MM-dd HH:mm:ss","h:mm a"));
         txtCoupon.setText(couponCode);
-        if (redemptionUrl != null && !redemptionUrl.equals("")){
+        Log.d("StorePurchasesCard","redemptionUrl: "+ redemptionUrl);
+
+        if (redemptionUrl.length() > 0){
+            Log.d("StorePurchasesCard","this is link offer");
+            txtUrl.setText(redemptionUrl);
+            txtAction.setText("Tap to open");
+            iconCall.setVisibility(View.GONE);
+            redeemTab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    webpageCallback.inAppBrowser(false,"", redemptionUrl);
+                }
+            });
+        }else {
+            Log.d("StorePurchasesCard","this is call offer");
+            txtUrl.setText(redemptionPhone);
+            txtAction.setText("Tap to call");
+            iconCall.setVisibility(View.VISIBLE);
+            redeemTab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //webpageCallback.inAppBrowser(false,"", redemptionUrl);
+                    Log.d("StorePpurchases","call");
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:"+redemptionPhone));
+                    startActivity(callIntent);
+                }
+            });
+        }
+
+
+       /*if (redemptionUrl != null && !redemptionUrl.equals("")){
+            Log.d("StorePurchasesCard","this is link offer");
             txtUrl.setText(redemptionUrl);
             txtAction.setText("Tap to open");
             iconCall.setVisibility(View.GONE);
@@ -129,6 +161,7 @@ public class StorePurchasesCard extends Fragment {
                 }
             });
         }else if (redemptionPhone != null && !redemptionPhone.equals("")){
+            Log.d("StorePurchasesCard","this is call offer");
             txtUrl.setText(redemptionPhone);
             txtAction.setText("Tap to call");
             iconCall.setVisibility(View.VISIBLE);
@@ -144,7 +177,7 @@ public class StorePurchasesCard extends Fragment {
             });
         }else {
             Log.d("StorepurchasesCard", "redemptionUrl or redemptionPhone is null/blank");
-        }
+        }*/
 
         txtEventPass.setText(purchasesObj.type);
 

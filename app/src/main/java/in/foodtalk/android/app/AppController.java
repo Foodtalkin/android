@@ -4,6 +4,7 @@ package in.foodtalk.android.app;
 import android.Manifest;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -36,6 +37,7 @@ import com.parse.Parse;
 import com.parse.ParseUser;
 import com.parse.PushService;
 
+import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -44,7 +46,10 @@ import in.foodtalk.android.R;
 import in.foodtalk.android.communicator.OnBoardingCallback;
 import in.foodtalk.android.helper.AnalyticsTrackers;
 import in.foodtalk.android.helper.ParseUtils;
+import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.LruBitmapCache;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class AppController extends Application {
 
@@ -74,6 +79,9 @@ public class AppController extends Application {
 
     public String versionName;
 
+
+
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -82,6 +90,8 @@ public class AppController extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        removeDataForParse();
 
         //--configure analytics
         AnalyticsTrackers.initialize(this);
@@ -245,5 +255,50 @@ public class AppController extends Application {
 
         // Build and send an Event.
         t.send(new HitBuilders.EventBuilder().setCategory(category).setAction(action).setLabel(label).build());
+    }
+
+    //-------
+
+    public void clearApplicationData() {
+        File cache = getCacheDir();
+        File appDir = new File(cache.getParent());
+        if(appDir.exists()){
+            String[] children = appDir.list();
+            for(String s : children){
+                if(!s.equals("lib")){
+                    deleteDir(new File(appDir, s));
+                    Log.i("TAG", "File /data/data/APP_PACKAGE/" + s +" DELETED");
+                }
+            }
+        }
+    }
+
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+
+        return dir.delete();
+    }
+
+    private void removeDataForParse(){
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+
+        Boolean isAppLaunchFirstTime = pref.getBoolean("First_time", false);
+        Log.d("appController","isAppLaunchFirsttime "+ isAppLaunchFirstTime);
+        if (!isAppLaunchFirstTime){
+            editor.putBoolean("First_time", true);
+            clearApplicationData();
+            Log.d("AppController","start first time");
+        }else {
+            Log.d("AppController","not first time");
+        }
     }
 }
