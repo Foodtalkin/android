@@ -61,24 +61,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
-            <TextView
-                android:id="@+id/txt_source"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="New York times / "
-                android:layout_centerVertical="true"
-                android:textColor="@color/silver"/>
+
             <TextView
                 android:id="@+id/txt_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_centerVertical="true"
-                android:text="5w ago"
 
+                android:layout_centerVertical="true"
+                android:text="5w ago /"
+                android:paddingLeft="10dp"
                 android:textColor="@color/silver"
-                android:layout_toRightOf="@+id/txt_source"/>
+                />
+            <TextView
+                android:id="@+id/txt_source"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New York times"
+                android:layout_centerVertical="true"
+                android:textColor="@color/silver"
+                android:layout_toRightOf="@+id/txt_time"
+                />
             <TextView
                 android:id="@+id/txt_readmore"
                 android:layout_width="wrap_content"

@@ -28,6 +28,7 @@ import in.foodtalk.android.apicall.UserFollow;
 import in.foodtalk.android.communicator.FollowListCallback;
 import in.foodtalk.android.communicator.ProfilePostOpenCallback;
 import in.foodtalk.android.communicator.UserProfileImgCallback;
+import in.foodtalk.android.module.ConvertNumber;
 import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.object.UserPostObj;
 import in.foodtalk.android.object.UserProfileObj;
@@ -128,8 +129,9 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             //profileHolder.checkins.setText(userProfileObj.checkInCount);
             double point = Double.parseDouble(userProfileObj.avilablePoints);
-            Log.d("abilablePoints", userProfileObj.avilablePoints);
-            profileHolder.checkins.setText(String.valueOf((long) point));
+           // Log.d("abilablePoints", ConvertNumber.withSuffix());
+
+            profileHolder.checkins.setText(String.valueOf(ConvertNumber.withSuffix((long) point)));
             profileHolder.followers.setText(userProfileObj.followersCount);
             profileHolder.following.setText(userProfileObj.followingCount);
 

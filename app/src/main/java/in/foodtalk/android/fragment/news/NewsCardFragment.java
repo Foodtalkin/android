@@ -71,7 +71,7 @@ public class NewsCardFragment extends Fragment {
         if (newsObj.source.equals("")){
             txtSource.setText("");
         }else {
-            txtSource.setText(newsObj.source+" / ");
+            txtSource.setText(newsObj.source);
         }
 
 
@@ -80,7 +80,13 @@ public class NewsCardFragment extends Fragment {
 
         try {
             Date createdate = simpleDateFormat.parse(newsObj.startDate);
-            txtTime.setText(DateFunction.timeDiffCurrent(createdate));
+            if (newsObj.source.equals("")){
+               // txtSource.setText("");
+                txtTime.setText(DateFunction.timeDiffCurrent(createdate));
+            }else {
+                txtTime.setText(DateFunction.timeDiffCurrent(createdate)+" / ");
+            }
+
         } catch (ParseException e) {
             e.printStackTrace();
         }

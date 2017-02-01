@@ -289,21 +289,7 @@ public class AppController extends Application {
         return dir.delete();
     }
 
-    private void removeDataForParse(){
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
 
-        Boolean isAppLaunchFirstTime = pref.getBoolean("First_time", false);
-        Log.d("appController","isAppLaunchFirsttime "+ isAppLaunchFirstTime);
-
-        if (!isAppLaunchFirstTime){
-            editor.putBoolean("First_time", true);
-            clearApplicationData();
-            Log.d("AppController","start first time");
-        }else {
-            Log.d("AppController","not first time");
-        }
-    }
     private void checkfirstTime(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if(!prefs.getBoolean("first_time", false))

@@ -29,6 +29,7 @@ import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.communicator.OpenFragmentCallback;
+import in.foodtalk.android.module.ConvertNumber;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.object.StoreObj;
@@ -215,7 +216,7 @@ public class StoreFragment extends Fragment implements ApiCallback {
         if (point < 1 ){
             txtPoints.setText("0");
         }else {
-            txtPoints.setText(String.valueOf((long) point));
+            txtPoints.setText(String.valueOf(ConvertNumber.withSuffix((long) point)));
         }
         //txtEventInfo.setText(profile.getString(""));
     }
