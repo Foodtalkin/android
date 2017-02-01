@@ -421,7 +421,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             Log.d("Get extras", "null--");
         }
         //----------------------------
-        getUserInfo();
+        int count  = db.getRowCount();
+        if (count > 0){
+            getUserInfo();
+        }else {
+            logOut();
+        }
+
 
         //---------------------
         if (ParseInstallation.getCurrentInstallation() != null){
@@ -433,7 +439,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 Log.e("Home", "ParseIns: userId is null");
                 logOut();
             }else {
-                openHomeFirst();
+                if (count > 0){
+                    openHomeFirst();
+                }
+
             }
         }else {
             Log.e("Home","parseInstallation is null");
@@ -2119,7 +2128,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         Log.d("openDetails","call");
     }
     private void getUserInfo(){
-        Log.d("home GetUserInfo",""+db.getUserDetails().get("cityId").equals("blank")+" : "+ db.getUserDetails());
+//        Log.d("home GetUserInfo",""+db.getUserDetails().get("cityId").equals("blank")+" : "+ db.getUserDetails());
         if (db.getUserDetails().get("cityId").equals("blank")){
             JSONObject jsonObject = new JSONObject();
             try {

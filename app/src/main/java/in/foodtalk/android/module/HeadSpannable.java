@@ -152,7 +152,7 @@ public class HeadSpannable {
 
 
         //commentTxt = blankSpace + comment;
-        commentTxt = comment;
+        commentTxt = comment+" ";
 
 
         SpannableStringBuilder userNSSB = new SpannableStringBuilder(userName);

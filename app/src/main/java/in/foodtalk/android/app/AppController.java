@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.multidex.MultiDex;
@@ -91,7 +92,8 @@ public class AppController extends Application {
     public void onCreate() {
         super.onCreate();
 
-        removeDataForParse();
+        //removeDataForParse();
+        checkfirstTime();
 
         //--configure analytics
         AnalyticsTrackers.initialize(this);
@@ -293,11 +295,27 @@ public class AppController extends Application {
 
         Boolean isAppLaunchFirstTime = pref.getBoolean("First_time", false);
         Log.d("appController","isAppLaunchFirsttime "+ isAppLaunchFirstTime);
+
         if (!isAppLaunchFirstTime){
             editor.putBoolean("First_time", true);
             clearApplicationData();
             Log.d("AppController","start first time");
         }else {
+            Log.d("AppController","not first time");
+        }
+    }
+    private void checkfirstTime(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if(!prefs.getBoolean("first_time", false))
+        {
+            Log.d("AppController","start first time");
+            clearApplicationData();
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("first_time", true);
+            editor.commit();
+        }
+        else
+        {
             Log.d("AppController","not first time");
         }
     }

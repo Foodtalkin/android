@@ -129,11 +129,13 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
 
             SimpleDateFormat simpleDateFormat =
-                    new SimpleDateFormat("yyyy-M-dd hh:mm:ss");
+                    new SimpleDateFormat("yyyy-M-dd HH:mm:ss");
             try {
                 Date createdate = simpleDateFormat.parse(current.createDate);
                 Date currentdate = simpleDateFormat.parse(current.currentDate);
                 postHolder.txtTime.setText(dateTimeDifference.difference(createdate, currentdate));
+               // Log.e("HomeFeedAdapter","position: "+ position+" createDate: "+ current.createDate+" currentData: "+ current.currentDate);
+                //Log.e("HomeFeedAdapter","timeDiff: "+ dateTimeDifference.difference(createdate, currentdate));
 
                // printDifference(date1, date2);
             } catch (ParseException e) {
