@@ -172,8 +172,6 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         });
 
 
-
-
         /*--swipeRefreshHome.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

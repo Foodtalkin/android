@@ -134,8 +134,6 @@ public class NewPostShare extends Fragment implements View.OnTouchListener, ApiC
     RatingBar ratingBar;
     AddRestaurantCallback addRestaurantCallback;
 
-
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

@@ -346,7 +346,7 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback, View.
 
         txtVanue.setText(storeOffer.getString("cityText"));
         txtEventInfo.setText(storeOffer.getString("description"));
-        txtDate.setText(DateFunction.convertFormat(storeOffer.getString("endDate"),"yyyy-MM-dd HH:mm:ss","MMM dd, yyyy h:mm a"));
+        txtDate.setText(DateFunction.convertFormat(storeOffer.getString("endDate"),"yyyy-MM-dd HH:mm:ss","MMM dd, yyyy"));
 
         /*btnTermsCondition.setOnTouchListener(new View.OnTouchListener() {
             @Override
