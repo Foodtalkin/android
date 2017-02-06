@@ -13,11 +13,12 @@
         android:orientation="horizontal"
         android:visibility="gone">
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
+        android:orientation="vertical"
+        >
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="55dp"
@@ -116,7 +117,7 @@
                 android:id="@+id/txt_uploading_dish"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
+                android:text="uploading dish"
                 android:layout_gravity="center"
                 android:layout_margin="0dp"
                 android:textColor="@color/snow"/>
@@ -135,14 +136,115 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="50dp">
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/view_overlay1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000"
+        android:alpha="0"
+        android:orientation="horizontal"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_alignParentBottom="true"
+        >
         <LinearLayout
+            android:id="@+id/new_post_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/snow"
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:layout_marginBottom="60dp"
+            android:layout_alignParentBottom="true"
+            android:clickable="true"
+            android:visibility="gone"
+            >
+            <TextView
+                android:id="@+id/btn_newpost_test"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Post"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                android:textColor="@color/slate"
+                android:padding="5dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                >
+                <LinearLayout
+                    android:id="@+id/btn_ask_question"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    >
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:clickable="false">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_question_24"
+                            android:clickable="false"/>
+                    </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ask a question"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:textColor="@color/red_persian"
+                        android:clickable="false"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/btn_share_dish"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/icon_newpost"
+                        android:layout_gravity="center"
+                        android:tint="@color/fun_blue"
+                        android:clickable="false"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Share a dish"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:textColor="@color/fun_blue"
+                        android:clickable="false"/>
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/main_navigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/navigation1"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
+            android:layout_alignParentBottom="true"
             >
             <LinearLayout
                 android:id="@+id/btn_home"
@@ -275,7 +377,8 @@
                     android:layout_gravity="center_horizontal"/>
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+
+    </RelativeLayout>
 
     <FrameLayout
         android:layout_width="match_parent"

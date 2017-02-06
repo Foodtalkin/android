@@ -8,5 +8,6 @@
         android:layout_centerHorizontal="true"
         android:indeterminateTint="#000"
         android:progressDrawable="@drawable/progress_bar"
+        android:layout_marginBottom="20dp"
         />
 </RelativeLayout>

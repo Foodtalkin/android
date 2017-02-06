@@ -28,6 +28,8 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -218,6 +220,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     private String dishSearchedName;
     private StringCase stringCase;
 
+    TextView btnNewpostTest;
+
 
 
     Bitmap photo;
@@ -227,6 +231,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     String review1;
     String restaurantIdNewPost;
     String dishName;
+
+    Animation slideUpAnimation, slideDownAnimation, showOverlay, hideOverlay;
+
+    LinearLayout viewOverlay;
+
+    LinearLayout btnAskQuestion, btnShareDish;
 
     CreatePostObj createPostObj;
     TextView txtUploadingDish;
@@ -238,6 +248,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
     ImageView btnOption;
     ImageView btnStoreHistory;
+
+    LinearLayout newPostBar;
+    Boolean newPostBarVisible = false;
 
     ApiCall apiCall;
 
@@ -278,6 +291,18 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         //getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.activity_home);
+
+        newPostBar = (LinearLayout) findViewById(R.id.new_post_bar);
+
+        btnAskQuestion = (LinearLayout) findViewById(R.id.btn_ask_question);
+        btnShareDish = (LinearLayout) findViewById(R.id.btn_share_dish);
+
+        btnNewpostTest = (TextView) findViewById(R.id.btn_newpost_test);
+
+        btnNewpostTest.setOnClickListener(this);
+
+
+        setAnimationNewpostBar();
 
         createPostObj = new CreatePostObj();
 
@@ -330,6 +355,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         searchHeader = (LinearLayout) findViewById(R.id.search_header);
 
+        viewOverlay = (LinearLayout) findViewById(R.id.view_overlay1);
+
+
+
         //getSupportActionBar().setDisplayShowTitleEnabled(false);
         //getSupportActionBar().setDisplayUseLogoEnabled(false);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -348,6 +377,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         btnHome.setOnClickListener(this);
         btnOption.setOnClickListener(this);
         btnStoreHistory.setOnClickListener(this);
+        btnAskQuestion.setOnClickListener(this);
+        btnShareDish.setOnClickListener(this);
         // Log.d("getInfo",db.getRowCount()+"");
         // Log.d("get user info", db.getUserDetails().get("userName")+"");
 
@@ -447,6 +478,55 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }else {
             Log.e("Home","parseInstallation is null");
         }
+    }
+
+    private void setAnimationNewpostBar(){
+        slideUpAnimation = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.slide_up_animation);
+
+        slideDownAnimation = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.slide_down_animation);
+
+        showOverlay = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.alpha_show_anim);
+        hideOverlay = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.alpha_hide_anim);
+
+        slideUpAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                newPostBarVisible = true;
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+               // int[] pos={newPostBar.getLeft(),newPostBar.getTop(),newPostBar.getRight(),newPostBar.getBottom()};
+               // newPostBar.layout(pos[0],pos[1],pos[2],pos[3]);
+                newPostBar.setVisibility(View.GONE);
+                Log.d("animationListener","onAnimationEnd");
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        slideDownAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                newPostBarVisible = false;
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+               // int[] pos={newPostBar.getLeft(),newPostBar.getTop(),newPostBar.getRight(),newPostBar.getBottom()};
+               // newPostBar.layout(pos[0],pos[1],pos[2],pos[3]);
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 
     private void openHomeFirst(){
@@ -620,15 +700,32 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 }*/
                 break;
             case R.id.btn_newpost:
-                if (pageNo != 2) {
-                    photo = null;
-                    startCheckIn(null);
-                    /*newpostFragment = new CheckIn();
-                    setFragmentView(newpostFragment, R.id.container1, 2, true);*/
-                    //titleHome.setText("New Post");
-                    //pageNo = 2;
+//                if (pageNo != 2) {
+//                    photo = null;
+//                    startCheckIn(null);
+//                }
+                if (!newPostBarVisible){
+                    newPostBar.startAnimation(slideUpAnimation);
+                    viewOverlay.animate().alpha((float) 0.7).setDuration(300);
+                    newPostBar.setVisibility(View.VISIBLE);
+//                    viewOverlay.startAnimation(showOverlay);
+                }else {
+                    newPostBar.startAnimation(slideDownAnimation);
+//                    viewOverlay.startAnimation(hideOverlay);
+                    viewOverlay.animate().alpha(0).setDuration(300);
+                    newPostBar.setVisibility(View.GONE);
                 }
-                //Log.d("onClick", "btn newpost");
+
+                Log.d("onClick", "btn newpost");
+                break;
+            case R.id.btn_ask_question:
+                Log.d("onClick", "btn ask question");
+                break;
+            case R.id.btn_share_dish:
+                Log.d("onClick", "btn share dish");
+                break;
+            case R.id.btn_newpost_test:
+                Log.d("onClick", "btn_newpost_test");
                 break;
             case R.id.btn_notification:
                 currentFragment = this.getFragmentManager().findFragmentById(R.id.container);
