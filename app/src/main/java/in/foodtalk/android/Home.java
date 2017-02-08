@@ -16,7 +16,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.net.Uri;
 
+import android.os.CountDownTimer;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -357,6 +359,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         viewOverlay = (LinearLayout) findViewById(R.id.view_overlay1);
 
+        viewOverlay.setVisibility(View.GONE);
+
 
 
         //getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -379,6 +383,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         btnStoreHistory.setOnClickListener(this);
         btnAskQuestion.setOnClickListener(this);
         btnShareDish.setOnClickListener(this);
+        viewOverlay.setOnClickListener(this);
         // Log.d("getInfo",db.getRowCount()+"");
         // Log.d("get user info", db.getUserDetails().get("userName")+"");
 
@@ -481,7 +486,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     }
 
     private void setAnimationNewpostBar(){
-        //newPostBar.setVisibility(View.GONE);
+        newPostBar.setVisibility(View.GONE);
+        //viewOverlay.setVisibility(View.GONE);
 
         slideUpAnimation = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.slide_up_animation);
@@ -495,7 +501,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         slideUpAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                newPostBarVisible = true;
+                newPostBarVisible = false;
                 newPostBar.setVisibility(View.VISIBLE);
             }
 
@@ -504,7 +510,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                // int[] pos={newPostBar.getLeft(),newPostBar.getTop(),newPostBar.getRight(),newPostBar.getBottom()};
                // newPostBar.layout(pos[0],pos[1],pos[2],pos[3]);
                 newPostBar.setVisibility(View.GONE);
-                Log.d("animationListener","onAnimationEnd");
+                viewOverlay.setVisibility(View.GONE);
+                Log.d("animationListener","slideUp onAnimationEnd");
             }
 
             @Override
@@ -515,15 +522,19 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         slideDownAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                newPostBarVisible = false;
+                newPostBarVisible = true;
                 newPostBar.setVisibility(View.VISIBLE);
+                viewOverlay.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
                // int[] pos={newPostBar.getLeft(),newPostBar.getTop(),newPostBar.getRight(),newPostBar.getBottom()};
                // newPostBar.layout(pos[0],pos[1],pos[2],pos[3]);
-                newPostBar.setVisibility(View.GONE);
+               // newPostBar.setVisibility(View.GONE);
+               // newPostBar.setVisibility(View.INVISIBLE);
+               // newPostBar.setAlpha((float) 0.5);
+                Log.d("animationListener","slideDown onAnimationEnd");
 
             }
 
@@ -532,6 +543,15 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
             }
         });
+    }
+
+    private void showPostBar(){
+        newPostBar.startAnimation(slideDownAnimation);
+        viewOverlay.animate().alpha((float) 0.7).setDuration(300);
+    }
+    private void hidePostBar(){
+        newPostBar.startAnimation(slideUpAnimation);
+        viewOverlay.animate().alpha(0).setDuration(300);
     }
 
     private void openHomeFirst(){
@@ -669,6 +689,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     }
     @Override
     public void onClick(View v) {
+        if (newPostBarVisible){
+            hidePostBar();
+        }
         switch (v.getId()) {
             case R.id.btn_home:
                 //Log.d("onClick", "btn home");
@@ -677,7 +700,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                     setFragmentView(homeFragment, R.id.container, 0, false);
                     // titleHome.setText("Home");
                     pageNo = 0;
-
                    // getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 }else {
                     homeFragment.scrollToTop();
@@ -705,23 +727,26 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 }*/
                 break;
             case R.id.btn_newpost:
-                if (pageNo != 2) {
+               /* if (pageNo != 2) {
                     photo = null;
                     startCheckIn(null);
-                }
-                /*if (!newPostBarVisible){
-                    newPostBar.startAnimation(slideUpAnimation);
-                    viewOverlay.animate().alpha(0).setDuration(300);
+                }*/
+                newPostBar.setVisibility(View.VISIBLE);
+                if (!newPostBarVisible){
+                    showPostBar();
+                   // newPostBar.startAnimation(slideDownAnimation);
+                   // viewOverlay.animate().alpha((float) 0.7).setDuration(300);
                     //newPostBar.setVisibility(View.VISIBLE);
                    // newPostBarVisible = true;
 //                    viewOverlay.startAnimation(showOverlay);
                 }else {
-                    newPostBar.startAnimation(slideDownAnimation);
+                    hidePostBar();
+                    //newPostBar.startAnimation(slideUpAnimation);
 //                    viewOverlay.startAnimation(hideOverlay);
-                    viewOverlay.animate().alpha((float) 0.7).setDuration(300);
+                    //viewOverlay.animate().alpha(0).setDuration(300);
                    // newPostBar.setVisibility(View.GONE);
                    // newPostBarVisible = false;
-                }*/
+                }
 
                 Log.d("onClick", "btn newpost");
                 break;
@@ -730,9 +755,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 break;
             case R.id.btn_share_dish:
                 Log.d("onClick", "btn share dish");
+                photo = null;
+                startCheckIn(null);
                 break;
             case R.id.btn_newpost_test:
-                Log.d("onClick", "btn_newpost_test");
+               // Log.d("onClick", "btn_newpost_test");
+                break;
+            case R.id.view_overlay1:
+
                 break;
             case R.id.btn_notification:
                 currentFragment = this.getFragmentManager().findFragmentById(R.id.container);
