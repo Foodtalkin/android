@@ -29,6 +29,7 @@ public class PurchasesObj {
     public String paidCostPoints;
     public String createDate;
     public String metaData;
+    public String isUsed;
 
 
 }

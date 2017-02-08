@@ -59,13 +59,16 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         StoreCardHolder storeCardHolder;
-        if (viewType == VIEW_OFFER){
+       /* if (viewType == VIEW_OFFER){
             view = layoutInflater.inflate(R.layout.card_store1, parent, false);
             storeCardHolder = new StoreCardHolder(view);
             return storeCardHolder;
         }else {
             return null;
-        }
+        }*/
+        view = layoutInflater.inflate(R.layout.card_store1, parent, false);
+        storeCardHolder = new StoreCardHolder(view);
+        return storeCardHolder;
     }
 
     @Override

@@ -216,6 +216,7 @@ public class StorePurchasesFragment extends Fragment implements ApiCallback {
             purchasesObj.paidCostPoints = purchasesList.getJSONObject(i).getString("paidCostPoints");
             purchasesObj.createDate = purchasesList.getJSONObject(i).getString("createDate");
             purchasesObj.metaData = purchasesList.getJSONObject(i).getString("metaData");
+            purchasesObj.isUsed = purchasesList.getJSONObject(i).getString("isUsed");
             purchaseList.add(purchasesObj);
             if (storeItemId != null){
                 if (storeItemId.equals(purchasesObj.storeItemId)){

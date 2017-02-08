@@ -481,19 +481,22 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     }
 
     private void setAnimationNewpostBar(){
+        //newPostBar.setVisibility(View.GONE);
+
         slideUpAnimation = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.slide_up_animation);
 
         slideDownAnimation = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.slide_down_animation);
 
-        showOverlay = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.alpha_show_anim);
-        hideOverlay = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.alpha_hide_anim);
+       // showOverlay = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.alpha_show_anim);
+       // hideOverlay = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.alpha_hide_anim);
 
         slideUpAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
                 newPostBarVisible = true;
+                newPostBar.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -513,12 +516,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             @Override
             public void onAnimationStart(Animation animation) {
                 newPostBarVisible = false;
+                newPostBar.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
                // int[] pos={newPostBar.getLeft(),newPostBar.getTop(),newPostBar.getRight(),newPostBar.getBottom()};
                // newPostBar.layout(pos[0],pos[1],pos[2],pos[3]);
+                newPostBar.setVisibility(View.GONE);
 
             }
 
@@ -700,21 +705,23 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 }*/
                 break;
             case R.id.btn_newpost:
-//                if (pageNo != 2) {
-//                    photo = null;
-//                    startCheckIn(null);
-//                }
-                if (!newPostBarVisible){
+                if (pageNo != 2) {
+                    photo = null;
+                    startCheckIn(null);
+                }
+                /*if (!newPostBarVisible){
                     newPostBar.startAnimation(slideUpAnimation);
-                    viewOverlay.animate().alpha((float) 0.7).setDuration(300);
-                    newPostBar.setVisibility(View.VISIBLE);
+                    viewOverlay.animate().alpha(0).setDuration(300);
+                    //newPostBar.setVisibility(View.VISIBLE);
+                   // newPostBarVisible = true;
 //                    viewOverlay.startAnimation(showOverlay);
                 }else {
                     newPostBar.startAnimation(slideDownAnimation);
 //                    viewOverlay.startAnimation(hideOverlay);
-                    viewOverlay.animate().alpha(0).setDuration(300);
-                    newPostBar.setVisibility(View.GONE);
-                }
+                    viewOverlay.animate().alpha((float) 0.7).setDuration(300);
+                   // newPostBar.setVisibility(View.GONE);
+                   // newPostBarVisible = false;
+                }*/
 
                 Log.d("onClick", "btn newpost");
                 break;

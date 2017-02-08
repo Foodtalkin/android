@@ -40,10 +40,10 @@ public class StorePurchasesCard extends Fragment {
 
     public PurchasesObj purchasesObj;
 
-    TextView txtEventPass, txtTitle, txtDate, txtTime, txtCoupon, txtName, txtAdmitCount, txtRefNo, txtTapToCopy, txtUrl, txtExpired, txtAction;
+    TextView txtEventPass, txtTitle, txtDate, txtTime, txtCoupon, txtName, txtAdmitCount, txtRefNo, txtTapToCopy, txtUrl, txtExpired, txtAction, txtInfoDinein;
     ImageView imgCard, iconCall;
 
-    LinearLayout couponHolder, redeemTab, redeemTab1;
+    LinearLayout couponHolder, redeemTab, redeemTab1, dineInInfo, infoRedeem;
     WebpageCallback webpageCallback;
 
     @Nullable
@@ -56,16 +56,20 @@ public class StorePurchasesCard extends Fragment {
         txtTime = (TextView) layout.findViewById(R.id.txt_time);
         txtCoupon = (TextView) layout.findViewById(R.id.txt_coupon);
         txtName = (TextView) layout.findViewById(R.id.txt_name);
-        txtAdmitCount = (TextView) layout.findViewById(R.id.txt_admit_count);
-        txtRefNo = (TextView) layout.findViewById(R.id.txt_ref_no);
+        //txtAdmitCount = (TextView) layout.findViewById(R.id.txt_admit_count);
+       // txtRefNo = (TextView) layout.findViewById(R.id.txt_ref_no);
         imgCard = (ImageView) layout.findViewById(R.id.img_card);
         txtTapToCopy = (TextView) layout.findViewById(R.id.txt_taptoCopy);
         txtUrl = (TextView) layout.findViewById(R.id.txt_url);
         txtExpired = (TextView) layout.findViewById(R.id.txt_expired);
         txtAction = (TextView) layout.findViewById(R.id.txt_action);
+        txtInfoDinein = (TextView) layout.findViewById(R.id.txt_dine_in);
+        dineInInfo = (LinearLayout) layout.findViewById(R.id.dine_in_info);
+        infoRedeem = (LinearLayout) layout.findViewById(R.id.info_redeem);
 
         redeemTab = (LinearLayout) layout.findViewById(R.id.redeem_tab);
         redeemTab1 = (LinearLayout) layout.findViewById(R.id.redeem_tab1);
+
 
         iconCall = (ImageView) layout.findViewById(R.id.icon_call);
 
@@ -79,9 +83,10 @@ public class StorePurchasesCard extends Fragment {
         txtTime.setTypeface(face);
         txtCoupon.setTypeface(face);
         txtExpired.setTypeface(face);
+        txtInfoDinein.setTypeface(face);
         //txtName.setTypeface(face);
-        txtAdmitCount.setTypeface(face);
-        txtRefNo.setTypeface(face);
+       // txtAdmitCount.setTypeface(face);
+      //  txtRefNo.setTypeface(face);
         setData();
         return layout;
     }
@@ -120,33 +125,43 @@ public class StorePurchasesCard extends Fragment {
         txtCoupon.setText(couponCode);
         Log.d("StorePurchasesCard","redemptionUrl: "+ redemptionUrl);
 
-        if (redemptionUrl.length() > 0){
-            Log.d("StorePurchasesCard","this is link offer");
-            txtUrl.setText(redemptionUrl);
-            txtAction.setText("Tap to open");
+        if (purchasesObj.type.equals("DINE-IN")){
+            dineInInfo.setVisibility(View.VISIBLE);
+            infoRedeem.setVisibility(View.GONE);
             iconCall.setVisibility(View.GONE);
-            redeemTab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    webpageCallback.inAppBrowser(false,"", redemptionUrl);
-                }
-            });
+            txtTapToCopy.setVisibility(View.GONE);
+            //txtTapToCopy.setVisibility(View.INVISIBLE);
+            //Log.d("StorePurchasesCard","type dine-in");
         }else {
-            Log.d("StorePurchasesCard","this is call offer");
-            txtUrl.setText(redemptionPhone);
-            txtAction.setText("Tap to call");
-            iconCall.setVisibility(View.VISIBLE);
-            redeemTab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //webpageCallback.inAppBrowser(false,"", redemptionUrl);
-                    Log.d("StorePpurchases","call");
-                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:"+redemptionPhone));
-                    startActivity(callIntent);
-                }
-            });
+            if (redemptionUrl.length() > 0){
+                Log.d("StorePurchasesCard","this is link offer");
+                txtUrl.setText(redemptionUrl);
+                txtAction.setText("Tap to open");
+                iconCall.setVisibility(View.GONE);
+                redeemTab.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        webpageCallback.inAppBrowser(false,"", redemptionUrl);
+                    }
+                });
+            }else {
+                Log.d("StorePurchasesCard","this is call offer");
+                txtUrl.setText(redemptionPhone);
+                txtAction.setText("Tap to call");
+                iconCall.setVisibility(View.VISIBLE);
+                redeemTab.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //webpageCallback.inAppBrowser(false,"", redemptionUrl);
+                        Log.d("StorePpurchases","call");
+                        Intent callIntent = new Intent(Intent.ACTION_CALL);
+                        callIntent.setData(Uri.parse("tel:"+redemptionPhone));
+                        startActivity(callIntent);
+                    }
+                });
+            }
         }
+
 
 
        /*if (redemptionUrl != null && !redemptionUrl.equals("")){
@@ -215,20 +230,21 @@ public class StorePurchasesCard extends Fragment {
             e.printStackTrace();
         }*/
 
+
+
         if (DateFunction.compareToCurrentDate("yyyy-MM-dd HH:mm:ss",purchasesObj.endDate) < 0){
             redeemTab.setVisibility(View.GONE);
             redeemTab1.setVisibility(View.VISIBLE);
         }else {
-            redeemTab.setVisibility(View.VISIBLE);
-            redeemTab1.setVisibility(View.GONE);
+            if(purchasesObj.isUsed.equals("0")){
+                redeemTab.setVisibility(View.VISIBLE);
+                redeemTab1.setVisibility(View.GONE);
+            }else {
+                redeemTab.setVisibility(View.GONE);
+                redeemTab1.setVisibility(View.VISIBLE);
+                txtExpired.setText("redeemed");
+            }
         }
-
-
-
-
-
-
-
 
         final ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
 
