@@ -79,7 +79,7 @@ public class HomeFragment extends Fragment {
     ProgressBar homeProgress;
 
 
-    private int pageNo = 1;
+    public int pageNo = 1;
 
     LinearLayout tapToRetry;
 
@@ -216,6 +216,7 @@ public class HomeFragment extends Fragment {
         obj.put("includeCount", "1");
         obj.put("includeFollowed","1");
         obj.put("postUserId",db.getUserDetails().get("userId"));
+        obj.put("type","all");
         //Log.d("getPostFeed","pageNo: "+pageNo);
         obj.put("page",Integer.toString(pageNo));
         obj.put("recordCount","10");
@@ -426,7 +427,6 @@ public class HomeFragment extends Fragment {
            try {
                pageNo = 1;
                getPostFeed("refresh");
-
            } catch (JSONException e) {
                e.printStackTrace();
            }

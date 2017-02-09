@@ -97,6 +97,7 @@ import in.foodtalk.android.fragment.DiscoverFragment;
 import in.foodtalk.android.fragment.FavouritesFragment;
 import in.foodtalk.android.fragment.FollowListFragment;
 import in.foodtalk.android.fragment.HomeFragment;
+import in.foodtalk.android.fragment.newpost.PostQuestion;
 import in.foodtalk.android.fragment.news.NewsFragment;
 import in.foodtalk.android.fragment.postdetails.LikeListFragment;
 import in.foodtalk.android.fragment.MoreFragment;
@@ -177,6 +178,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     PostDetailsFragment postDetailsFragment;
     FollowListFragment followListFragment;
     NewsFragment newsFragment;
+    PostQuestion postQuestion;
 
     //-------dummy fragment created for temporary use to set Legal screen title----
     Fragment legalFragment = new Fragment();
@@ -747,11 +749,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                    // newPostBar.setVisibility(View.GONE);
                    // newPostBarVisible = false;
                 }
-
                 Log.d("onClick", "btn newpost");
                 break;
             case R.id.btn_ask_question:
                 Log.d("onClick", "btn ask question");
+                postQuestion = new PostQuestion();
+                setFragmentView(postQuestion, R.id.container1, -1, true);
                 break;
             case R.id.btn_share_dish:
                 Log.d("onClick", "btn share dish");
@@ -2315,6 +2318,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     }
     @Override
     public void openFragment(String fragmentName, String value) {
+        Log.d("home","openFragment: "+fragmentName);
         if (fragmentName.equals("postDetails")){
             /*likeListFragment = new LikeListFragment();
             likeListFragment.postId = value;
@@ -2351,6 +2355,20 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }
         if (fragmentName.equals("storeFragment")){
             setFragmentView(storeFragment, R.id.container1, -1, true);
+        }
+        if (fragmentName.equals("homeRefresh")){
+            currentFragment = this.getFragmentManager().findFragmentById(R.id.container);
+            if (currentFragment == homeFragment){
+                try {
+                    homeFragment.pageNo = 1;
+                    homeFragment.getPostFeed("refresh");
+                    Log.d("home","openFragment: refresh home");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else {
+                setFragmentView(homeFragment, R.id.container, 0, false);
+            }
         }
     }
     private void openStorePurchases(String storeItemId){

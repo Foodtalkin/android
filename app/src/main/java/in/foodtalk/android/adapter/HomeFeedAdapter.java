@@ -333,7 +333,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public ProgressViewHolder(View itemView) {
             super(itemView);
             progressBar = (ProgressBar) itemView.findViewById(R.id.loadmore_progress);
-
         }
     }
 
