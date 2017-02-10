@@ -334,6 +334,7 @@ public class HomeFragment extends Fragment {
             current.restaurantIsActive = postArray.getJSONObject(i).getString("restaurantIsActive");
             current.region = postArray.getJSONObject(i).getString("cityName");
             current.tip = postArray.getJSONObject(i).getString("tip");
+            current.type = postArray.getJSONObject(i).getString("type");
            // postData.clear();
             postData.add(current);
             Log.d("dish name", postData.get(i).userId);

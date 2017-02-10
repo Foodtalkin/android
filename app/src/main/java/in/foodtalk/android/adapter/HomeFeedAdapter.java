@@ -66,7 +66,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
 
-    LinearLayout starHolder;
+    //LinearLayout starHolder;
 
     HeadSpannable headSpannable;
     UserThumbCallback userThumbCallback;
@@ -122,11 +122,11 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             PostObj current = postObj.get(position);
             PostHolder postHolder = (PostHolder) holder;
             //postHolder.txtHeadLine.setText(current.userName+" is having "+current.dishName+" at "+current.restaurantName);
-            if (current.restaurantName.equals("")){
-                String htmlHeadline = "<font color='#0369db'>"+current.userName+"</font> <font color='#1a1a1a'>is having </font><font color='#0369db'> "+current.dishName+"</font><font color='#1a1a1a'>.</font>";
-            }else {
-                String htmlHeadline = "<font color='#0369db'>"+current.userName+"</font> <font color='#1a1a1a'>is having </font><font color='#0369db'> "+current.dishName+"</font><font color='#1a1a1a'> at </font><font color='#369db'>"+current.restaurantName+"</font><font color='#1a1a1a'>.</font>";
-            }
+//            if (current.restaurantName.equals("")){
+//                String htmlHeadline = "<font color='#0369db'>"+current.userName+"</font> <font color='#1a1a1a'>is having </font><font color='#0369db'> "+current.dishName+"</font><font color='#1a1a1a'>.</font>";
+//            }else {
+//                String htmlHeadline = "<font color='#0369db'>"+current.userName+"</font> <font color='#1a1a1a'>is having </font><font color='#0369db'> "+current.dishName+"</font><font color='#1a1a1a'> at </font><font color='#369db'>"+current.restaurantName+"</font><font color='#1a1a1a'>.</font>";
+//            }
 
             SimpleDateFormat simpleDateFormat =
                     new SimpleDateFormat("yyyy-M-dd HH:mm:ss");
@@ -208,7 +208,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             }
 
-            setStarRating(current.rating, postHolder);
+
             //postHolder.postId = current.id;
             postHolder.postObj1 = current;
 
@@ -232,12 +232,24 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 Log.e("HomeFeedAdapter","null iBookark position: "+position);
             }
             //Log.d("image url", current.postImage);
-            Picasso.with(context)
-                    .load(current.postImage)
-                    //.fit().centerCrop()
-                    .fit()
-                    .placeholder(R.drawable.placeholder)
-                    .into(postHolder.dishImage);
+            postHolder.dishImage.setVisibility(View.VISIBLE);
+            if (current.type.equals("dish")){
+                Picasso.with(context)
+                        .load(current.postImage)
+                        //.fit().centerCrop()
+                        .fit()
+                        .placeholder(R.drawable.placeholder)
+                        .into(postHolder.dishImage);
+                setStarRating(current.rating, postHolder);
+                postHolder.shadowBottom.setVisibility(View.VISIBLE);
+                postHolder.starHolder.setVisibility(View.VISIBLE);
+
+            }else if (current.type.equals("question")){
+                postHolder.dishImage.setVisibility(View.INVISIBLE);
+                postHolder.starHolder.setVisibility(View.GONE);
+                postHolder.shadowBottom.setVisibility(View.GONE);
+            }
+
 
             //Log.d("userThumb large",current.userThumb);
             Picasso.with(context)
@@ -274,7 +286,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void setStarRating(String rating, PostHolder holder){
         if (rating.equals("0")){
-            starHolder.setVisibility(View.GONE);
+            holder.starHolder.setVisibility(View.GONE);
         }
         if(rating.equals("1")){
             holder.imgRating1.setVisibility(View.VISIBLE);
@@ -358,7 +370,11 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ImageView imgRating4;
         ImageView imgRating5;
 
+        View shadowBottom;
+
         String userId;
+
+        LinearLayout starHolder;
 
 
 
@@ -386,6 +402,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             likeIconImg = (ImageView) itemView.findViewById(R.id.icon_heart_img);
             txtTip = (TextView) itemView.findViewById(R.id.txt_tip);
             bookmarImg = (ImageView) itemView.findViewById(R.id.img_icon_bookmark);
+
+            shadowBottom = itemView.findViewById(R.id.shadow_bottom);
 
             countHolder = (LinearLayout) itemView.findViewById(R.id.count_holder);
 

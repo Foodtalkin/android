@@ -38,4 +38,6 @@ public class PostObj {
     public String timeElapsed;
 
     public String region;
+
+    public String type;
 }

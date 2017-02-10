@@ -62,7 +62,8 @@
                 android:layout_weight="1">
                 <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="#E9F2F5">
                     <ImageView
                         android:id="@+id/dish_img"
                         android:layout_width="match_parent"
@@ -72,6 +73,7 @@
                         android:src="@drawable/placeholder"
                         />
                     <View
+                        android:id="@+id/shadow_bottom"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:background="@drawable/gradient"
