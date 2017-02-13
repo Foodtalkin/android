@@ -179,7 +179,7 @@ public class CommentFragment extends Fragment implements MentionCallback  {
             if (eventType!= null){
                 if (eventType.equals("2")){
                     openFragmentCallback.openFragment("postDetails", postId);
-                }else if (eventType.equals("4") || eventType.equals("9") || eventType.equals("12")){
+                }else if (eventType.equals("4") || eventType.equals("9") || eventType.equals("12") || eventType.equals("14")){
                     openFragmentCallback.openFragment("commentListPost", postId);
 
                 }else if (eventType.equals("11")){
@@ -310,8 +310,9 @@ public class CommentFragment extends Fragment implements MentionCallback  {
         postObj.timeElapsed = post.getString("timeElapsed");
 
         postObj.region = post.getString("cityName");
+        postObj.type = post.getString("type");
 
-        txtUserName.setText(postObj.dishName);
+        txtUserName.setText(postObj.userName+"'s post");
         CommentObj commentObj = new CommentObj();
         commentObj.viewType = "post";
         if (postDataList.size()>0){

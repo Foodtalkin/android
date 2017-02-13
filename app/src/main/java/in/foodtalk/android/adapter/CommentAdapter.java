@@ -2,6 +2,7 @@ package in.foodtalk.android.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
@@ -60,7 +61,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private final int VIEW_POST = 0;
     private final int VIEW_COMMENT = 1;
 
-    LinearLayout starHolder;
+   // LinearLayout starHolder;
 
     DateTimeDifference dateTimeDifference;
 
@@ -158,11 +159,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }else {
                 postHolder.txtBookmarkCopy.setText("Bookmarks");
             }
-            if (postObj.comment_count.equals("1")){
-                postHolder.txtCommentCopy.setText("Comment");
-            }else {
-                postHolder.txtCommentCopy.setText("Comments");
-            }
+
             //----------
 
 
@@ -179,23 +176,9 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 e.printStackTrace();
             }
 
-            if (postObj.restaurantIsActive.equals("1")) {
-                if (postObj.region.equals("")){
-                    headSpannable.code(postHolder.txtHeadLine, postObj.userName, postObj.dishName, postObj.restaurantName, postObj.userId, postObj.checkedInRestaurantId, true , "commentFragment");
-                }else {
-                    headSpannable.code(postHolder.txtHeadLine, postObj.userName, postObj.dishName, postObj.restaurantName+", "+postObj.region, postObj.userId, postObj.checkedInRestaurantId, true , "commentFragment");
-                }
 
-            }else {
-                if (postObj.region.equals("")){
-                    headSpannable.code(postHolder.txtHeadLine, postObj.userName, postObj.dishName, postObj.restaurantName, postObj.userId, postObj.checkedInRestaurantId, false, "commentFragment");
-                }else {
-                    headSpannable.code(postHolder.txtHeadLine, postObj.userName, postObj.dishName, postObj.restaurantName+", "+postObj.region, postObj.userId, postObj.checkedInRestaurantId, false, "commentFragment");
-                }
 
-            }
 
-           setStarRating(postObj.rating, postHolder);
             //postHolder.postId = current.id;
            // postHolder.postObj1 = current;
 
@@ -218,12 +201,70 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 Log.e("HomeFeedAdapter","null iBookark position: "+position);
             }
             //Log.d("image url", current.postImage);
-            Picasso.with(context)
-                    .load(postObj.postImage)
-                    //.fit().centerCrop()
-                    .fit()
-                    .placeholder(R.drawable.placeholder)
-                    .into(postHolder.dishImage);
+            String reviewTip = postObj.tip.trim();
+            if (postObj.type.equals("dish")){
+                Picasso.with(context)
+                        .load(postObj.postImage)
+                        //.fit().centerCrop()
+                        .fit()
+                        .placeholder(R.drawable.placeholder)
+                        .into(postHolder.dishImage);
+                setStarRating(postObj.rating, postHolder);
+
+                postHolder.shadowBottom.setVisibility(View.VISIBLE);
+                postHolder.starHolder.setVisibility(View.VISIBLE);
+
+                if(reviewTip.equals("")){
+                    postHolder.txtTip.setVisibility(View.GONE);
+                }else {
+                    postHolder.txtTip.setVisibility(View.VISIBLE);
+                    postHolder.txtTip.setText(reviewTip);
+                }
+
+                postHolder.txtQuestion.setVisibility(View.GONE);
+                postHolder.iconBookmark.setVisibility(View.VISIBLE);
+                postHolder.iconShare.setVisibility(View.VISIBLE);
+
+                if (postObj.restaurantIsActive.equals("1")) {
+                    if (postObj.region.equals("")){
+                        headSpannable.code(postHolder.txtHeadLine, postObj.userName, postObj.dishName, postObj.restaurantName, postObj.userId, postObj.checkedInRestaurantId, true , "commentFragment");
+                    }else {
+                        headSpannable.code(postHolder.txtHeadLine, postObj.userName, postObj.dishName, postObj.restaurantName+", "+postObj.region, postObj.userId, postObj.checkedInRestaurantId, true , "commentFragment");
+                    }
+
+                }else {
+                    if (postObj.region.equals("")){
+                        headSpannable.code(postHolder.txtHeadLine, postObj.userName, postObj.dishName, postObj.restaurantName, postObj.userId, postObj.checkedInRestaurantId, false, "commentFragment");
+                    }else {
+                        headSpannable.code(postHolder.txtHeadLine, postObj.userName, postObj.dishName, postObj.restaurantName+", "+postObj.region, postObj.userId, postObj.checkedInRestaurantId, false, "commentFragment");
+                    }
+                }
+
+                if (postObj.comment_count.equals("1")){
+                    postHolder.txtCommentCopy.setText("Comment");
+                }else {
+                    postHolder.txtCommentCopy.setText("Comments");
+                }
+            }else if (postObj.type.equals("question")){
+                postHolder.dishImage.setVisibility(View.INVISIBLE);
+                postHolder.starHolder.setVisibility(View.GONE);
+                postHolder.shadowBottom.setVisibility(View.GONE);
+                postHolder.txtQuestion.setVisibility(View.VISIBLE);
+                postHolder.txtQuestion.setText(reviewTip);
+                postHolder.txtTip.setVisibility(View.GONE);
+                postHolder.iconBookmark.setVisibility(View.INVISIBLE);
+                postHolder.iconShare.setVisibility(View.INVISIBLE);
+
+                headSpannable.code(postHolder.txtHeadLine, postObj.userName, null, null, postObj.userId, null, false , "commentFragment");
+
+                if (postObj.comment_count.equals("1")){
+                    postHolder.txtCommentCopy.setText("Answer");
+                }else {
+                    postHolder.txtCommentCopy.setText("Answers");
+                }
+            }
+
+
 
             //Log.d("userThumb large",current.userThumb);
             Picasso.with(context)
@@ -272,7 +313,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public void setStarRating(String rating, PostHolder holder){
         if (rating.equals("0")){
-            starHolder.setVisibility(View.GONE);
+            holder.starHolder.setVisibility(View.GONE);
         }
         if(rating.equals("1")){
             holder.imgRating1.setVisibility(View.VISIBLE);
@@ -335,6 +376,11 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         String userId;
 
+        LinearLayout starHolder;
+        View shadowBottom;
+
+        TextView txtQuestion;
+
 
 
         //String postId;
@@ -361,6 +407,13 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             likeIconImg = (ImageView) itemView.findViewById(R.id.icon_heart_img);
             txtTip = (TextView) itemView.findViewById(R.id.txt_tip);
             bookmarImg = (ImageView) itemView.findViewById(R.id.img_icon_bookmark);
+
+            txtQuestion = (TextView) itemView.findViewById(R.id.txt_question);
+            Typeface tf = Typeface.createFromAsset(context.getAssets(),
+                    "fonts/GaramondPremrPro.otf");
+            txtQuestion.setTypeface(tf);
+
+            shadowBottom = itemView.findViewById(R.id.shadow_bottom);
 
             countHolder = (LinearLayout) itemView.findViewById(R.id.count_holder);
 

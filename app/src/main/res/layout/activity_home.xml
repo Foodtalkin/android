@@ -161,7 +161,7 @@
             android:layout_height="wrap_content"
             android:background="@color/snow"
             android:orientation="vertical"
-            android:paddingBottom="10dp"
+            android:paddingBottom="16dp"
             android:layout_marginBottom="60dp"
             android:layout_alignParentBottom="true"
             android:clickable="true"

@@ -45,6 +45,7 @@ public class HeadSpannable {
         headSpannableCallback = (HeadSpannableCallback) context;
 
     }
+
     public void code(TextView txt, String userName, String dishName, String restaurantName, String userId, String checkinRestaurantId, Boolean rLink, String requestFrom){
         //String mystring = userName;
 
@@ -53,35 +54,48 @@ public class HeadSpannable {
         uName.setSpan(new MyClickableSpan(userName, userId , checkinRestaurantId, USER_PROFILE), 0, uName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         uName.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.card_head_highlight)), 0, uName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
+        SpannableString dName = null;
+        SpannableString rName = null;
         //String mystring1 ="Pizza Hut";
-        SpannableString dName= new SpannableString(dishName);
-        dName.setSpan(new MyClickableSpan(dishName, userId , checkinRestaurantId, DISH), 0, dName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        dName.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.card_head_highlight)), 0, dName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        if (dishName != null){
+            dName= new SpannableString(dishName);
+            dName.setSpan(new MyClickableSpan(dishName, userId , checkinRestaurantId, DISH), 0, dName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            dName.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.card_head_highlight)), 0, dName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        SpannableString rName= new SpannableString(restaurantName);
-        rName.setSpan(new MyClickableSpan(restaurantName, userId , checkinRestaurantId, RESTAURANT_PROFILE), 0, rName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        rName.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.card_head_highlight)), 0, rName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            rName= new SpannableString(restaurantName);
+            rName.setSpan(new MyClickableSpan(restaurantName, userId , checkinRestaurantId, RESTAURANT_PROFILE), 0, rName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            rName.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.card_head_highlight)), 0, rName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
 
         txt.setText(uName);
         //Log.d("HeadSpannable", uName);
-        if (userName.equals("foodtalk") || userName.equals("grubguide")){
-            txt.append(" recommends ");
-        }else {
-            txt.append(" is having ");
-        }
-
-        txt.append(dName);
-        if (!restaurantName.equals("") && !restaurantName.equals(", ")){
-            txt.append(" at ");
-        }
-
-        if (!restaurantName.equals(", ")){
-            if (rLink){
-                txt.append(rName);
+        if (dishName != null){
+            if (userName.equals("foodtalk") || userName.equals("grubguide")){
+                txt.append(" recommends ");
             }else {
-                txt.append(restaurantName);
+                txt.append(" is having ");
+            }
+        }else {
+            txt.append(" asked a question");
+        }
+
+
+        if (dishName != null){
+            txt.append(dName);
+            if (!restaurantName.equals("") && !restaurantName.equals(", ")){
+                txt.append(" at ");
+            }
+
+            if (!restaurantName.equals(", ")){
+                if (rLink){
+                    txt.append(rName);
+                }else {
+                    txt.append(restaurantName);
+                }
             }
         }
+
         makeLinksFocusable(txt);
     }
     class MyClickableSpan extends ClickableSpan {// extend ClickableSpan

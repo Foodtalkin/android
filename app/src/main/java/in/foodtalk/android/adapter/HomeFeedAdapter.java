@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
@@ -19,6 +20,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -179,34 +181,12 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }else {
                 postHolder.txtBookmarkCopy.setText("Bookmarks");
             }
-            if (current.commentCount.equals("1")){
-                postHolder.txtCommentCopy.setText("Comment");
-            }else {
-                postHolder.txtCommentCopy.setText("Comments");
-            }
 
-            String reviewTip = current.tip.trim();
-            if(reviewTip.equals("")){
-                postHolder.txtTip.setVisibility(View.GONE);
-            }else {
-                postHolder.txtTip.setVisibility(View.VISIBLE);
-                postHolder.txtTip.setText(reviewTip);
-            }
+
+
             postHolder.userId = current.userId;
 
-            if (current.restaurantIsActive.equals("1")) {
-                if (current.region.equals("")){
-                    headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, true , "HomeFeed");
-                }else {
-                    headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName+", "+current.region, current.userId, current.checkedInRestaurantId, true , "HomeFeed");
-                }
-            }else {
-                if (current.region.equals("")){
-                    headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, false, "HomeFeed");
-                }else {
-                    headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName+", "+current.region, current.userId, current.checkedInRestaurantId, false, "HomeFeed");
-                }
-            }
+
 
 
             //postHolder.postId = current.id;
@@ -232,6 +212,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 Log.e("HomeFeedAdapter","null iBookark position: "+position);
             }
             //Log.d("image url", current.postImage);
+            String reviewTip = current.tip.trim();
             postHolder.dishImage.setVisibility(View.VISIBLE);
             if (current.type.equals("dish")){
                 Picasso.with(context)
@@ -244,10 +225,55 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 postHolder.shadowBottom.setVisibility(View.VISIBLE);
                 postHolder.starHolder.setVisibility(View.VISIBLE);
 
+
+                if(reviewTip.equals("")){
+                    postHolder.txtTip.setVisibility(View.GONE);
+                }else {
+                    postHolder.txtTip.setVisibility(View.VISIBLE);
+                    postHolder.txtTip.setText(reviewTip);
+                }
+
+                postHolder.txtQuestion.setVisibility(View.GONE);
+                postHolder.iconBookmark.setVisibility(View.VISIBLE);
+                postHolder.iconShare.setVisibility(View.VISIBLE);
+
+                if (current.restaurantIsActive.equals("1")) {
+                    if (current.region.equals("")){
+                        headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, true , "HomeFeed");
+                    }else {
+                        headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName+", "+current.region, current.userId, current.checkedInRestaurantId, true , "HomeFeed");
+                    }
+                }else {
+                    if (current.region.equals("")){
+                        headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, false, "HomeFeed");
+                    }else {
+                        headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName+", "+current.region, current.userId, current.checkedInRestaurantId, false, "HomeFeed");
+                    }
+                }
+
+                if (current.commentCount.equals("1")){
+                    postHolder.txtCommentCopy.setText("Comment");
+                }else {
+                    postHolder.txtCommentCopy.setText("Comments");
+                }
+
             }else if (current.type.equals("question")){
                 postHolder.dishImage.setVisibility(View.INVISIBLE);
                 postHolder.starHolder.setVisibility(View.GONE);
                 postHolder.shadowBottom.setVisibility(View.GONE);
+                postHolder.txtQuestion.setVisibility(View.VISIBLE);
+                postHolder.txtQuestion.setText(reviewTip);
+                postHolder.txtTip.setVisibility(View.GONE);
+                postHolder.iconBookmark.setVisibility(View.INVISIBLE);
+                postHolder.iconShare.setVisibility(View.INVISIBLE);
+
+                headSpannable.code(postHolder.txtHeadLine, current.userName, null, null, current.userId, null, false , "HomeFeed");
+
+                if (current.commentCount.equals("1")){
+                    postHolder.txtCommentCopy.setText("Answer");
+                }else {
+                    postHolder.txtCommentCopy.setText("Answers");
+                }
             }
 
 
@@ -359,6 +385,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView txtCountBookmark;
         TextView txtCountComment;
         TextView txtTip;
+        TextView txtQuestion;
         ImageView likeHeart;
         ImageView likeIconImg;
         ImageView bookmarImg;
@@ -375,6 +402,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         String userId;
 
         LinearLayout starHolder;
+
+        RelativeLayout postHolderView;
 
 
 
@@ -402,6 +431,13 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             likeIconImg = (ImageView) itemView.findViewById(R.id.icon_heart_img);
             txtTip = (TextView) itemView.findViewById(R.id.txt_tip);
             bookmarImg = (ImageView) itemView.findViewById(R.id.img_icon_bookmark);
+            postHolderView = (RelativeLayout) itemView.findViewById(R.id.post_holder);
+
+            txtQuestion = (TextView) itemView.findViewById(R.id.txt_question);
+
+            Typeface tf = Typeface.createFromAsset(context.getAssets(),
+                    "fonts/GaramondPremrPro.otf");
+            txtQuestion.setTypeface(tf);
 
             shadowBottom = itemView.findViewById(R.id.shadow_bottom);
 
@@ -432,7 +468,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             iconShare = (LinearLayout) itemView.findViewById(R.id.icon_share_holder);
 
 
-            dishImage.setOnTouchListener(this);
+            //dishImage.setOnTouchListener(this);
             iconLike.setOnTouchListener(this);
             iconBookmark.setOnTouchListener(this);
             iconComment.setOnTouchListener(this);
@@ -440,6 +476,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             userThumbnail.setOnTouchListener(this);
             iconShare.setOnTouchListener(this);
             txtTip.setOnTouchListener(this);
+            postHolderView.setOnTouchListener(this);
             /*iconShare.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -722,6 +759,45 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             Log.d("HomeFeedAdapter","btn_details clicked");
                             openFragmentCallback.openFragment("postDetails", postObj1.id);
                             break;
+                    }
+                    break;
+                case R.id.post_holder:
+                    Log.d("HomeFeedAdapter","clicked postholder");
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:{
+                            //Log.d("clicked", "dish image"+ getPosition());
+                            long thisTime = System.currentTimeMillis();
+                            if (thisTime - lastTouchTime < 250) {
+                                Log.d("clicked", "img double");
+                                likeHeart.setVisibility(View.VISIBLE);
+                                likeHeart.startAnimation(mAnimation);
+                                if (postObj1.iLikedIt.equals("0")){
+                                    //-----update image when click on like icon--
+                                    likeIconImg.setImageResource(R.drawable.ic_heart_filled);
+                                    String likeCount = String.valueOf(Integer.parseInt(txtCountLike.getText().toString())+1);
+                                    txtCountLike.setText(likeCount);
+                                    //----update postObj for runtime-----------
+                                    postObj1.iLikedIt = "1";
+                                    postObj1.likeCount = likeCount;
+                                    postObj.set(getPosition(), postObj1);
+                                    //------------------------------------------
+                                    if(likeCallback != null){
+                                        likeCallback.like(getPosition(), postObj1.id, true);
+                                    }else{
+                                        Log.e("HomeFeedAdapter","null likeCallback");
+                                    }
+                                }
+
+                                // Double click
+                                //p = mapView.getProjection().fromPixels((int) e.getX(), (int) e.getY());
+                                lastTouchTime = -1;
+                            } else {
+                                // too slow
+                                Log.d("clicked", "question single");
+                                lastTouchTime = thisTime;
+                            }
+                        }
+                        break;
                     }
                     break;
             }
