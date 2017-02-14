@@ -181,7 +181,6 @@ public class CommentFragment extends Fragment implements MentionCallback  {
                     openFragmentCallback.openFragment("postDetails", postId);
                 }else if (eventType.equals("4") || eventType.equals("9") || eventType.equals("12") || eventType.equals("14")){
                     openFragmentCallback.openFragment("commentListPost", postId);
-
                 }else if (eventType.equals("11")){
                     openFragmentCallback.openFragment("bookmarkListPost", postId);
                 }
@@ -389,9 +388,6 @@ public class CommentFragment extends Fragment implements MentionCallback  {
                                     Log.d("Response error", "Session has expired");
                                     // logOut();
                                 }else {
-
-
-
                                         Log.e("Response status", "some error");
 
                                 }

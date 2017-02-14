@@ -97,6 +97,7 @@ import in.foodtalk.android.fragment.DiscoverFragment;
 import in.foodtalk.android.fragment.FavouritesFragment;
 import in.foodtalk.android.fragment.FollowListFragment;
 import in.foodtalk.android.fragment.HomeFragment;
+import in.foodtalk.android.fragment.QuestionFragment;
 import in.foodtalk.android.fragment.newpost.PostQuestion;
 import in.foodtalk.android.fragment.news.NewsFragment;
 import in.foodtalk.android.fragment.postdetails.LikeListFragment;
@@ -179,6 +180,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     FollowListFragment followListFragment;
     NewsFragment newsFragment;
     PostQuestion postQuestion;
+    QuestionFragment questionFragment;
 
     //-------dummy fragment created for temporary use to set Legal screen title----
     Fragment legalFragment = new Fragment();
@@ -409,6 +411,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         storeFragment = new StoreFragment();
         storeFragment.title = titleHome;
         storeHistoryFragment = new StoreHistoryFragment();
+
+        questionFragment = new QuestionFragment();
 
 
         //deepLinkfb();
@@ -1390,6 +1394,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
            case "news":
                Log.d("More","news clicked");
                openNews(null);
+               break;
+           case "question":
+               setFragmentView(questionFragment, R.id.container, -1, true);
                break;
        }
     }

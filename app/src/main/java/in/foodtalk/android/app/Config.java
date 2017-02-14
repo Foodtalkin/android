@@ -73,4 +73,6 @@ public class Config {
     public static String URL_STORE_DETAIL = "http://"+IP+"/index.php/service/storeOffer/get";
     public static String URL_STORE_PURCHASES = "http://"+IP+"/index.php/service/storeItem/listPurchase";
     public static String URL_STORE_BUY = "http://"+IP+"/index.php/service/storeItem/purchase";
+
+    public static String URL_QUESTION_LIST = "http://"+IP+"/index.php/service/user/getQuestionPosts";
 }
