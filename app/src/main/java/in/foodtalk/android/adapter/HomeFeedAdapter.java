@@ -699,7 +699,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                     optionCallback.option(getPosition(),postObj1.id,postObj1.userId);
                                 }
                             }, 300);
-
                             break;
                     }
                 }
@@ -707,7 +706,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 case R.id.icon_share_holder:{
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
-
                             Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
                                 @Override
@@ -787,7 +785,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                         Log.e("HomeFeedAdapter","null likeCallback");
                                     }
                                 }
-
                                 // Double click
                                 //p = mapView.getProjection().fromPixels((int) e.getX(), (int) e.getY());
                                 lastTouchTime = -1;

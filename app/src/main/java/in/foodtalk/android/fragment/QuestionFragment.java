@@ -203,7 +203,10 @@ public class QuestionFragment extends Fragment {
 
     public void getPostFeed(final String tag) throws JSONException {
 
-
+        if (tag.equals("refresh")){
+            pageNo = 1;
+            Log.d("QuestionFragment","refresh");
+        }
 
         Log.d("getQuestionFeed", "post data");
         JSONObject obj = new JSONObject();

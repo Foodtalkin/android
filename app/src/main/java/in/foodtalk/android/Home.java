@@ -999,7 +999,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
     @Override
     public void option(int position, String postId, String userId) {
-        Log.d("option callback", "post id: " + postId);
+        Log.d("Home @Ovrd option", "post id: " + postId);
         showDialog(postId, userId);
     }
 
@@ -1323,32 +1323,54 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     public void postDelete() {
         Log.d("postDelete","update recyclerview");
         currentFragment = this.getFragmentManager().findFragmentById(R.id.container1);
-        //Log.d("postDeleted","name: "+ currentFragment.getClass().getSimpleName());
+
         if (currentFragment != null){
+            Log.d("postDeleted","name: "+ currentFragment.getClass().getSimpleName());
             if (currentFragment == commentFragment){
                 getFragmentManager().popBackStack();
                 currentFragment = this.getFragmentManager().findFragmentById(R.id.container);
                 if (currentFragment == homeFragment){
                     try {
                         homeFragment.getPostFeed("refresh");
+                        Log.d("home","home refresh 1");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
                 Log.d("postDeleted","popBack");
-            }else {
-                Log.d("postDeleted","home feed refresh");
+            }else if (currentFragment == homeFragment){
+                Log.d("home","home refresh 2");
+
                 try {
                     homeFragment.getPostFeed("refresh");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            } else if (currentFragment == questionFragment){
+                try {
+                    questionFragment.getPostFeed("refresh");
+                    Log.d("home","question refresh 1");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
+
         }else {
-            try {
-                homeFragment.getPostFeed("refresh");
-            } catch (JSONException e) {
-                e.printStackTrace();
+            currentFragment = this.getFragmentManager().findFragmentById(R.id.container);
+            if (currentFragment == homeFragment){
+                try {
+                    homeFragment.getPostFeed("refresh");
+                    Log.d("home","home refresh 3");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else if (currentFragment == questionFragment){
+                try {
+                    questionFragment.getPostFeed("refresh");
+                    Log.d("home","question refresh 2");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -2058,6 +2080,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             }else if (listType.equals("following")){
                 titleHome.setText("Following");
             }
+        }
+
+        if (fragment == questionFragment){
+            header.setVisibility(View.VISIBLE);
+            header1.setVisibility(View.GONE);
+            titleHome.setText("My Questions");
         }
        // Log.d("check ids","myId:"+userId+" userId:"+currentProfileUserId+" f: "+fragment.getClass().getSimpleName());
        /* if (fragment == userProfile && currentProfileUserId.equals(userId)){
