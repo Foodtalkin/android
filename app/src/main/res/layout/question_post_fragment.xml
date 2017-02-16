@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#E9F2F5">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <in.foodtalk.android.module.MyEditText
+            android:id="@+id/input_question"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Looking for a home baker for a 20 people catering in colaba, any suggestions?"
+            android:gravity="top"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:textColor="#4A4A4A"
+            android:maxLength="150"
+            android:background="@android:color/transparent"/>
+        <TextView
+            android:id="@+id/txt_count_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Write 9 more character to post."
+            android:textColor="@color/silver"
+            android:layout_margin="10dp"/>
+        <LinearLayout
+            android:id="@+id/btn_post"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/active"
+            android:gravity="center"
+            android:layout_alignParentBottom="true">
+            <TextView
+                android:id="@+id/txt_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ASK"
+                android:textColor="@color/snow"
+                android:textSize="18dp"
+                android:clickable="false"
+
+                />
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:visibility="gone"
+                android:layout_centerInParent="true"
+                android:indeterminateTint="@color/snow"
+                android:progressDrawable="@drawable/progress_bar"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

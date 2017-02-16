@@ -445,7 +445,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                     final String elementId = jsonObject.getString("elementId");
                     final String eventType = jsonObject.getString("eventType");
                     openNotificationFragment(screenName, elementId, eventType);
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -469,8 +468,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }else {
             logOut();
         }
-
-
         //---------------------
         if (ParseInstallation.getCurrentInstallation() != null){
             Log.e("Home", "ParseIns: "+ ParseInstallation.getCurrentInstallation().getString("userId"));
@@ -484,7 +481,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 if (count > 0){
                     openHomeFirst();
                 }
-
             }
         }else {
             Log.e("Home","parseInstallation is null");
@@ -541,7 +537,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                // newPostBar.setVisibility(View.INVISIBLE);
                // newPostBar.setAlpha((float) 0.5);
                 Log.d("animationListener","slideDown onAnimationEnd");
-
             }
 
             @Override
