@@ -74,6 +74,7 @@ public class PostReportApi {
                                 if(tag.equals("report")){
                                     showToast(context.getString(R.string.postReportMsg));
                                 }else if(tag.equals("delete")){
+                                    Log.d("PostReportApi","delete successfully");
                                     deleteCallback.postDelete();
                                 }
                             }else {

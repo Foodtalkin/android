@@ -1335,7 +1335,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 Log.d("postDeleted","popBack");
             }else if (currentFragment == homeFragment){
                 Log.d("home","home refresh 2");
-
                 try {
                     homeFragment.getPostFeed("refresh");
                 } catch (JSONException e) {

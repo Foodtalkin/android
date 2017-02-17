@@ -8,11 +8,13 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -113,7 +115,22 @@ public class PostQuestion extends Fragment implements ApiCallback {
 
     private void setTextListner(){
 
+        inputQuestion.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                Log.d("setOnEditorActi","actionId "+actionId+" D: "+ EditorInfo.IME_ACTION_DONE);
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    // your action here
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
+
         inputQuestion.addTextChangedListener(new TextWatcher() {
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -124,8 +141,24 @@ public class PostQuestion extends Fragment implements ApiCallback {
             }
             @Override
             public void afterTextChanged(Editable s) {
+
+                String result = s.toString().replaceAll("  ", " ");
+                if (!s.toString().equals(result)) {
+                    inputQuestion.setText(result);
+                    inputQuestion.setSelection(result.length());
+                    // alert the user
+                }
+
+                for(int i = s.length(); i > 0; i--) {
+                    if(s.subSequence(i-1, i).toString().equals("\n")){
+                        s.replace(i-1, i, "");
+                    }
+                }
+                //String myTextString = s.toString();
+
                 String txt = s.toString();
-                Log.d("PostQuestion","afterTextChanged: "+ txt +"count: "+txt.length());
+
+                //Log.d("PostQuestion","afterTextChanged: "+ txt +"count: "+txt.length());
                 if (txt.length() == 0){
                     txtCountInfo.setText("Write your question to post.");
                     enablePost = false;
