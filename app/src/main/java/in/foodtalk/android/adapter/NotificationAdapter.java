@@ -64,6 +64,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         notiHolder.txtNameTransparent.setText(current.raiserName);
         notiHolder.txtMsg.setText(Html.fromHtml("<font color='#1d6bd5'>"+current.raiserName+"</font> "+msg));
         //notiHolder.txtMsg.setText(headSpannable.notificationSpannable(current.raiserName, current.raiserId,msg), TextView.BufferType.SPANNABLE);
+        Log.d("Notification","eventType: "+current.eventType+" position: "+position);
         switch (current.eventType){
             case "2":
                 notiHolder.notificationIcon.setImageResource(R.drawable.ic_like_card_24);
@@ -80,6 +81,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 break;
             case "11":
                 notiHolder.notificationIcon.setImageResource(R.drawable.ic_bookmark_card_24);
+                break;
+            case "14":
+                notiHolder.notificationIcon.setImageResource(R.drawable.ic_q_noti);
                 break;
         }
         Picasso.with(context)

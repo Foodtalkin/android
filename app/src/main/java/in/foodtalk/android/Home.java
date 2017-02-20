@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -127,6 +128,7 @@ import in.foodtalk.android.module.CloudinaryUpload;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.NewPostUpload;
 import in.foodtalk.android.module.StringCase;
+import in.foodtalk.android.module.Version;
 import in.foodtalk.android.object.CreatePostObj;
 import in.foodtalk.android.object.LoginValue;
 import in.foodtalk.android.object.RestaurantPostObj;
@@ -144,6 +146,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     LinearLayout btnHome, btnDiscover, btnNewPost, btnNotifications, btnMore;
     ImageView homeIcon, discoverIcon, newpostIcon, notiIcon, moreIcon;
     TextView txtHomeIcon, txtDiscoverIcon, txtNewpostIcon, txtNotiIcon, txtMoreIcon;
+
+
+
 
     private ImageView[] icons;
     private TextView[] txtIcons;
@@ -305,6 +310,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         btnNewpostTest = (TextView) findViewById(R.id.btn_newpost_test);
 
+
+
         btnNewpostTest.setOnClickListener(this);
 
 
@@ -415,6 +422,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         questionFragment = new QuestionFragment();
 
 
+        //-----I called this method to check version Control----
+        versionCheck();
+
+
         //deepLinkfb();
 
         dialogImgFrom = new Dialog(this);
@@ -458,7 +469,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             }
         } else {
             //Log.e("SavedInstance", "is not Null");
-            newString= (String) savedInstanceState.getSerializable("STRING_I_NEED");
+            newString = (String) savedInstanceState.getSerializable("STRING_I_NEED");
             Log.d("Get extras", "null--");
         }
         //----------------------------
@@ -485,6 +496,18 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }else {
             Log.e("Home","parseInstallation is null");
         }
+    }
+
+    private void versionCheck(){
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("sessionId", sessionId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        apiCall.apiRequestPost(this,jsonObject,Config.URL_APP_VERSION,"versionCheck", this);
     }
 
     private void setAnimationNewpostBar(){
@@ -1113,6 +1136,31 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 startActivityForResult(Intent.createChooser(intent, "Select File"), FROM_GALLERY);*/
             }
         });
+    }
+    private void dialogUpdateApp(String msg){
+        TextView versionUpdateMsg;
+        LinearLayout btnUpdate;
+        Dialog updateDialog = new Dialog(this);
+        updateDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        updateDialog.setCancelable(false);
+        updateDialog.setContentView(R.layout.dialog_update);
+        versionUpdateMsg = (TextView) updateDialog.findViewById(R.id.txt_msg);
+        btnUpdate = (LinearLayout) updateDialog.findViewById(R.id.btn_update);
+        versionUpdateMsg.setText(msg);
+        updateDialog.show();
+
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                }
+            }
+        });
+
     }
     private void showDialog(String postId, final String userId){
 
@@ -2229,7 +2277,46 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 e.printStackTrace();
             }
         }
+        if (response != null){
+            if (tag.equals("versionCheck")){
+                Log.d("home apiResponse",response+"");
+                try {
+                    versionControl(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         Log.d("api response home", tag);
+    }
+    private void versionControl(JSONObject response)throws JSONException{
+        PackageManager manager = getPackageManager();
+        PackageInfo info = null;
+        try {
+            info = manager.getPackageInfo(
+                   getPackageName(), 0);
+           // versionName = info.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if (response.getString("status").equals("OK")){
+            String v = response.getJSONArray("app_version").getJSONObject(0).getString("version");
+            String msg = response.getJSONArray("app_version").getJSONObject(0).getString("message");
+            String platform = response.getJSONArray("app_version").getJSONObject(0).getString("platform");
+
+            if (info != null && platform.equals("android")){
+                Version currentV = new Version(info.versionName);
+                Version requiredV = new Version(v);
+                Log.d("version server",v);
+                Log.d("version current",info.versionName);
+                Log.d("versionControl", String.valueOf(currentV.compareTo(requiredV)));
+                if (currentV.compareTo(requiredV) == -1){
+                    Log.e("Home","Required app version is "+v+" please update your app");
+                    dialogUpdateApp(msg);
+                }
+            }
+        }
     }
     private void addUserToDb(JSONObject response) throws JSONException {
 
@@ -2399,6 +2486,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             }else {
                 setFragmentView(homeFragment, R.id.container, 0, false);
             }
+        }
+
+        if (fragmentName.equals("questionFragment")){
+            postQuestion = new PostQuestion();
+            setFragmentView(postQuestion, R.id.container1, -1, true);
         }
     }
     private void openStorePurchases(String storeItemId){

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -42,6 +43,7 @@ import in.foodtalk.android.adapter.HomeFeedAdapter;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.NewPostCallback;
+import in.foodtalk.android.communicator.OpenFragmentCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.EndlessRecyclerOnScrollListener;
@@ -59,7 +61,11 @@ public class QuestionFragment extends Fragment {
     HomeFeedAdapter homeFeedAdapter;
     List<PostObj> postData = new ArrayList<>();
 
+    OpenFragmentCallback openFragmentCallback;
+
     private RecyclerView.LayoutManager mLayoutManager;
+
+    LinearLayout placeholderMain;
 
     PostLikeCallback likeCallback;
 
@@ -80,18 +86,41 @@ public class QuestionFragment extends Fragment {
 
     Activity activity;
 
+    TextView placeHolder;
+
+    TextView btnAskQuestion;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        layout = inflater.inflate(R.layout.home_fragment, container, false);
+        layout = inflater.inflate(R.layout.question_fragment, container, false);
         //postLikeCallback = this;
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_home);
         swipeRefreshHome = (SwipeRefreshLayout) layout.findViewById(R.id.swipeRefreshHome);
         // use a linear layout manager
 
         tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
+        placeHolder = (TextView) layout.findViewById(R.id.place_holder);
+
+        openFragmentCallback = (OpenFragmentCallback) getActivity();
+
+
+        btnAskQuestion = (TextView) layout.findViewById(R.id.btn_ask_question);
+
+        btnAskQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("QuestionFragment","ask question");
+                openFragmentCallback.openFragment("questionFragment","");
+            }
+        });
+        placeholderMain = (LinearLayout) layout.findViewById(R.id.placeholder);
+        //placeHolder.setVisibility(View.GONE);
+        placeholderMain.setVisibility(View.GONE);
 
         homeProgress = (ProgressBar) layout.findViewById(R.id.home_progress);
+
+
 
         if(postData != null){
             Log.d("postData","size: "+ postData);
@@ -298,7 +327,16 @@ public class QuestionFragment extends Fragment {
 
         homeProgress.setVisibility(View.GONE);
 
+
+
         JSONArray postArray = response.getJSONArray("tipPosts");
+
+        if (postArray.length() == 0 && !tag.equals("loadMore")){
+            placeholderMain.setVisibility(View.VISIBLE);
+           // placeHolder.setText("No question");
+        }else {
+            placeholderMain.setVisibility(View.GONE);
+        }
         //JSONObject postObject = postArray.getJSONObject(0);
         //String userName = postObject.getString("userName");
         //Log.d("user name from post", userName);

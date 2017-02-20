@@ -75,4 +75,5 @@ public class Config {
     public static String URL_STORE_BUY = "http://"+IP+"/index.php/service/storeItem/purchase";
 
     public static String URL_QUESTION_LIST = "http://"+IP+"/index.php/service/user/getQuestionPosts";
+    public static String URL_APP_VERSION = "http://"+IP+"/index.php/service/auth/appVersionControl";
 }

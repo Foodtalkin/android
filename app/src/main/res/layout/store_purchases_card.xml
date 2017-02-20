@@ -1,19 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent"
-
     >
+    <LinearLayout
+        android:id="@+id/redeem_tab1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="15dp"
+        android:orientation="vertical"
+        android:layout_below="@+id/card_view"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_purchase_72"/>
+        <TextView
+            android:id="@+id/txt_expired"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Expired"
+            android:textColor="@color/darkblue"/>
+
+    </LinearLayout>
+
     <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="0dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
         card_view:cardUseCompatPadding="true"
-        card_view:cardBackgroundColor="@color/snow">
+        card_view:cardBackgroundColor="@color/snow"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -251,27 +273,4 @@
 
         </LinearLayout>
     </android.support.v7.widget.CardView>
-
-    <LinearLayout
-        android:id="@+id/redeem_tab1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="15dp"
-        android:orientation="vertical"
-        android:layout_below="@+id/card_view"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_purchase_72"/>
-        <TextView
-            android:id="@+id/txt_expired"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Expired"
-            android:textColor="@color/darkblue"/>
-
-    </LinearLayout>
 </RelativeLayout>

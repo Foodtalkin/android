@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/bg_color">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshHome"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_home"
+            android:scrollbars="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+    <LinearLayout
+        android:id="@+id/placeholder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:gravity="center">
+        <TextView
+            android:id="@+id/place_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You haven't asked any question yet"
+            android:visibility="visible"
+            android:textColor="@color/silver"
+            />
+        <TextView
+            android:id="@+id/btn_ask_question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ask one now"
+            android:textColor="@color/active"
+            android:padding="5dp"
+            android:layout_marginTop="10dp"
+            android:textSize="16dp"
+            />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/home_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminateTint="#000"
+        android:progressDrawable="@drawable/progress_bar"
+        />
+    <LinearLayout
+        android:id="@+id/tap_to_retry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:padding="20dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_portable_wifi_off_black_48dp"
+            android:layout_gravity="center_horizontal"
+            android:tint="@color/blackText1"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Cannot connect to internet \n tap to retry."
+            android:textAlignment="center"
+            android:textColor="@color/blackText1"
+            android:textSize="16sp"
+            android:clickable="false"/>
+    </LinearLayout>
+</RelativeLayout>

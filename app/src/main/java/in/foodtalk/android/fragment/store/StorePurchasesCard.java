@@ -235,14 +235,17 @@ public class StorePurchasesCard extends Fragment {
         if (DateFunction.compareToCurrentDate("yyyy-MM-dd HH:mm:ss",purchasesObj.endDate) < 0){
             redeemTab.setVisibility(View.GONE);
             redeemTab1.setVisibility(View.VISIBLE);
+            Log.e("StorePurchasesCard","hide "+"title:"+ purchasesObj.title);
         }else {
             if(purchasesObj.isUsed.equals("0")){
                 redeemTab.setVisibility(View.VISIBLE);
                 redeemTab1.setVisibility(View.GONE);
+                Log.e("StorePurchasesCard","visible "+"title:"+ purchasesObj.title);
             }else {
                 redeemTab.setVisibility(View.GONE);
                 redeemTab1.setVisibility(View.VISIBLE);
                 txtExpired.setText("redeemed");
+                Log.e("StorePurchasesCard","hide "+"title:"+ purchasesObj.title);
             }
         }
 
