@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content"
     android:background="@color/bg_color">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -91,11 +90,12 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/store"/>
+                android:src="@drawable/ic_nearby_more"
+                />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Store"
+                android:text="Nearby"
                 android:textColor="#000000"
                 android:layout_gravity="center_vertical"
                 android:textSize="@dimen/txt_size_more"

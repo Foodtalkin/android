@@ -166,7 +166,9 @@ public class StoreFragment extends Fragment implements ApiCallback {
         if (listArray.length() == 0){
             placeholder.setVisibility(View.VISIBLE);
         }
-
+        StoreObj storeObj = new StoreObj();
+        storeObj.type = "userInfo";
+        //listStore.add(storeObj);
         // Log.d("rListArray", "total: "+ rListArray.length());
         for (int i=0;i<listArray.length();i++){
             //Log.d("store frag", listArray.getJSONObject(i).getString("type")+"");

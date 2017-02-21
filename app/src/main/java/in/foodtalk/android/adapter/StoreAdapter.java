@@ -43,6 +43,7 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     StoreCallback storeCallback;
 
     private final int VIEW_OFFER = 0;
+    private final int USER_INFO = 1;
 
     public StoreAdapter (Context context, List<StoreObj>listStore){
 
@@ -59,6 +60,7 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         StoreCardHolder storeCardHolder;
+        Log.e("StoreAdapter","type: "+viewType);
        /* if (viewType == VIEW_OFFER){
             view = layoutInflater.inflate(R.layout.card_store1, parent, false);
             storeCardHolder = new StoreCardHolder(view);
@@ -164,6 +166,9 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         switch (listStore.get(position).type){
             case "OFFER":
                 viewType = VIEW_OFFER;
+                break;
+            case "userInfo":
+                viewType = USER_INFO;
                 break;
         }
         return viewType;

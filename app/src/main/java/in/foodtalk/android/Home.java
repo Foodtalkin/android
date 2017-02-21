@@ -478,6 +478,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             getUserInfo();
         }else {
             logOut();
+            Log.e("Home","logout from 480 line: db.getRowCount 0");
         }
         //---------------------
         if (ParseInstallation.getCurrentInstallation() != null){
@@ -486,7 +487,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 Log.e("Home", "ParseIns: userId is blank");
             }*/
             if (ParseInstallation.getCurrentInstallation().getString("userId") == null){
-                Log.e("Home", "ParseIns: userId is null");
+                Log.e("Home", "logOut from 490 line : ParseIns: userId is null");
                 logOut();
             }else {
                 if (count > 0){
@@ -694,7 +695,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 setFragmentView(curatedFragment, R.id.container, -1, true);
                 break;
             case "Store":
-                setFragmentView(storeFragment, R.id.container1, -1, true);
+                openStoreFragment();
                 break;
             case "BookStore":
                 setFragmentView(storeHistoryFragment, R.id.container, -1, true);
@@ -708,7 +709,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             case "Purchases":
                 openStorePurchases(elementId);
                 break;
-
         }
     }
     @Override
@@ -739,9 +739,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 currentFragment = this.getFragmentManager().findFragmentById(R.id.container);
                 if(currentFragment != discoverFragment){
                     discoverFragment.pageType = DISCOVER_SCREEN;
-                    setFragmentView(discoverFragment, R.id.container, 1, false);
+                    //setFragmentView(discoverFragment, R.id.container, 1, false);
+                    openStoreFragment();
                     //titleHome.setText("Discover");
-                    pageNo = 1;
+                   // pageNo = 1;
                 }
               /* if (pageNo != 1) {
                     discoverFragment.pageType = DISCOVER_SCREEN;
@@ -819,7 +820,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 //Log.d("onClick", "btn more");
                 break;
             case R.id.btn_logout:
-                //Log.d("btn clicked", "logout");
+                Log.e("home", "btn clicked 823 line : logout");
                 logOut();
                 break;
             case R.id.txt_search_home:
@@ -838,7 +839,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
                 break;
             case R.id.btn_store_history:
-                setFragmentView(storeHistoryFragment, R.id.container, -1, true);
+                //setFragmentView(storeHistoryFragment, R.id.container, -1, true);
+                openStorePurchases("");
                 break;
         }
     }
@@ -985,6 +987,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
 
     private void logOut() {
+        Log.e("Home","logOut function call");
         db.resetTables();
         LoginManager.getInstance().logOut();
         Intent i = new Intent(this, FbLogin.class);
@@ -1453,7 +1456,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                setFragmentView(curatedFragment, R.id.container, -1, true);
                break;
            case "store":
-               setFragmentView(storeFragment, R.id.container1, -1, true);
+               //openStoreFragment();
+               discoverFragment.pageType = DISCOVER_SCREEN;
+               setFragmentView(discoverFragment, R.id.container, -1, false);
                break;
            case "news":
                Log.d("More","news clicked");
@@ -1464,6 +1469,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                break;
        }
     }
+    private void openStoreFragment(){
+        setFragmentView(storeFragment, R.id.container, 1, true);
+        pageNo = 1;
+    }
     private void openNews(String newId){
         newsFragment = new NewsFragment();
         //newsFragment.pagerCurrentPosition = pageNum;
@@ -1472,7 +1481,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     }
     @Override
     public void getUserInfo(String points, String userName) {
-
         Double v2 = Double.parseDouble(points);
         int v3 = (int) Math.floor(v2);
         //Double pointValue = Double.parseDouble(points);
@@ -2471,7 +2479,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             openStorePurchases(value);
         }
         if (fragmentName.equals("storeFragment")){
-            setFragmentView(storeFragment, R.id.container1, -1, true);
+
+            openStoreFragment();
         }
         if (fragmentName.equals("homeRefresh")){
             currentFragment = this.getFragmentManager().findFragmentById(R.id.container);
