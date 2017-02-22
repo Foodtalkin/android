@@ -157,7 +157,7 @@ public class StoreFragment extends Fragment implements ApiCallback {
         progressHolder.setVisibility(View.GONE);
         tapToRetry.setVisibility(View.GONE);
 
-        setUserData(response.getJSONObject("profile"));
+        //setUserData(response.getJSONObject("profile"));
 
 
         // this.response = response;
@@ -168,7 +168,7 @@ public class StoreFragment extends Fragment implements ApiCallback {
         }
         StoreObj storeObj = new StoreObj();
         storeObj.type = "userInfo";
-        //listStore.add(storeObj);
+        listStore.add(storeObj);
         // Log.d("rListArray", "total: "+ rListArray.length());
         for (int i=0;i<listArray.length();i++){
             //Log.d("store frag", listArray.getJSONObject(i).getString("type")+"");
@@ -201,7 +201,7 @@ public class StoreFragment extends Fragment implements ApiCallback {
 
         //Log.d("send list", "total: "+restaurantList.size());
         if (getActivity() != null){
-            storeAdapter = new StoreAdapter(getActivity(),listStore);
+            storeAdapter = new StoreAdapter(getActivity(),listStore, response.getJSONObject("profile"));
             //checkInAdapter = new CheckInAdapter(getActivity(),restaurantList);
             recyclerView.setAdapter(storeAdapter);
         }

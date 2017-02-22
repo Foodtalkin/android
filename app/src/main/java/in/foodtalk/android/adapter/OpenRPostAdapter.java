@@ -16,6 +16,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -196,6 +197,8 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             //postHolder.postId = current.id;
             postHolder.postObj1 = current;
 
+            postHolder.userId = current.userId;
+
             if(current.iLikedIt != null){
                 if (current.iLikedIt.equals("1")){
                     postHolder.likeIconImg.setImageResource(R.drawable.ic_heart_filled);
@@ -214,7 +217,6 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             }else {
                 Log.e("HomeFeedAdapter","null iBookark position: "+position);
             }
-
             //Log.d("image url", current.postImage);
           //  Log.d("cardholder height",postHolder.cardHolder.getHeight()+"");
             Picasso.with(context)
@@ -350,6 +352,8 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         LinearLayout countHolder;
 
+        RelativeLayout postHolderView;
+
         public PostHolder(final View itemView) {
             super(itemView);
             txtLikeCopy = (TextView) itemView.findViewById(R.id.txt_like_copy);
@@ -365,6 +369,8 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             likeIconImg = (ImageView) itemView.findViewById(R.id.icon_heart_img);
             txtTip = (TextView) itemView.findViewById(R.id.txt_tip);
             bookmarImg = (ImageView) itemView.findViewById(R.id.img_icon_bookmark);
+
+            postHolderView = (RelativeLayout) itemView.findViewById(R.id.post_holder);
 
             countHolder = (LinearLayout) itemView.findViewById(R.id.count_holder);
 
@@ -393,13 +399,14 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             iconShare = (LinearLayout) itemView.findViewById(R.id.icon_share_holder);
 
 
-            dishImage.setOnTouchListener(this);
+            //dishImage.setOnTouchListener(this);
             iconLike.setOnTouchListener(this);
             iconBookmark.setOnTouchListener(this);
             iconComment.setOnTouchListener(this);
             iconOption.setOnTouchListener(this);
             userThumbnail.setOnTouchListener(this);
             iconShare.setOnTouchListener(this);
+            postHolderView.setOnTouchListener(this);
             /*iconShare.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -483,7 +490,7 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 case R.id.dish_img: {
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:{
-                            //Log.d("clicked", "dish image"+ getPosition());
+                            Log.d("OpenRPostAdapter", "click dish image"+ getPosition());
                             long thisTime = System.currentTimeMillis();
                             if (thisTime - lastTouchTime < 250) {
                                 Log.d("clicked", "img double");
@@ -522,7 +529,7 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 case R.id.icon_like_holder:{
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
-                            Log.d("clicked", "icon like");
+                            Log.d("OpenRPostAdapter", "click icon like");
                             if (postObj1.iLikedIt.equals("0")){
                                 likeIconImg.setImageResource(R.drawable.ic_heart_filled);
                                 String likeCount = String.valueOf(Integer.parseInt(txtCountLike.getText().toString())+1);
@@ -652,7 +659,7 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 case R.id.userThumb:
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
-                            Log.d("clicked", "user thumnails");
+                            Log.d("OpenRPostAdapter", "user thumnails userId: "+ userId);
                             userThumbCallback.thumbClick(userId);
                             break;
                     }
@@ -662,7 +669,6 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         case MotionEvent.ACTION_UP:
                             Log.d("HomeFeedAdapter", "btn like clicked");
                             openFragmentCallback.openFragment("postDetails", postObj1.id);
-
                             break;
                     }
                     break;
@@ -688,6 +694,44 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             Log.d("HomeFeedAdapter","btn_details clicked");
                             openFragmentCallback.openFragment("postDetails", postObj1.id);
                             break;
+                    }
+                    break;
+                case R.id.post_holder:
+                    Log.d("HomeFeedAdapter","clicked postholder");
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:{
+                            //Log.d("clicked", "dish image"+ getPosition());
+                            long thisTime = System.currentTimeMillis();
+                            if (thisTime - lastTouchTime < 250) {
+                                Log.d("clicked", "img double");
+                                likeHeart.setVisibility(View.VISIBLE);
+                                likeHeart.startAnimation(mAnimation);
+                                if (postObj1.iLikedIt.equals("0")){
+                                    //-----update image when click on like icon--
+                                    likeIconImg.setImageResource(R.drawable.ic_heart_filled);
+                                    String likeCount = String.valueOf(Integer.parseInt(txtCountLike.getText().toString())+1);
+                                    txtCountLike.setText(likeCount);
+                                    //----update postObj for runtime-----------
+                                    postObj1.iLikedIt = "1";
+                                    postObj1.likeCount = likeCount;
+                                    postObj.set(getPosition(), postObj1);
+                                    //------------------------------------------
+                                    if(likeCallback != null){
+                                        likeCallback.like(getPosition(), postObj1.id, true);
+                                    }else{
+                                        Log.e("HomeFeedAdapter","null likeCallback");
+                                    }
+                                }
+                                // Double click
+                                //p = mapView.getProjection().fromPixels((int) e.getX(), (int) e.getY());
+                                lastTouchTime = -1;
+                            } else {
+                                // too slow
+                                Log.d("clicked", "question single");
+                                lastTouchTime = thisTime;
+                            }
+                        }
+                        break;
                     }
                     break;
             }

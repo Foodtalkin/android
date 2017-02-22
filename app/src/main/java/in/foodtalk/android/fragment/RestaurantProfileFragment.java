@@ -116,14 +116,13 @@ public class RestaurantProfileFragment extends Fragment {
     public void getRestaurantProfile(final String tag) throws JSONException {
 
         String url = "";
-
         if (tag.equals("restaurantProfile")){
             url = config.URL_RESTAURANT_PROFILE;
-
         }else if (tag.equals("myProfilePost")){
-            //url = config.URL_USER_POST_IMAGE;
+            url = config.URL_RESTAURANT_POST_IMAGE;
+        }else if (tag.equals("myProfilePostMore")){
+            url = config.URL_RESTAURANT_POST_IMAGE;
         }
-
         //Log.d("getUserProfile", "call");
 
         JSONObject obj = new JSONObject();
@@ -191,16 +190,13 @@ public class RestaurantProfileFragment extends Fragment {
 
         if (postArray.length() == 0){
             loadMoreData = false;
-
             RestaurantPostObj rPostObj = new RestaurantPostObj();
             rPostObj.viewType = "errorCopy";
-            rPostList.add(rPostObj);
-
+            if (tag.equals("myProfilePostMore")){
+                rPostList.add(rPostObj);
+            }
             //Log.d("postArray length", "0");
-        }else if (postArray.length() < 15){
-            //Log.d("postArray length", postArray.length()+"");
-            loadMoreData = false;
-        }
+        }else
         //--------------------
 
 
@@ -276,7 +272,7 @@ public class RestaurantProfileFragment extends Fragment {
                     loading = true;
                     //Log.d("loadMore", "call getPostFeed('loadMore')");
                     try {
-                        getRestaurantProfile("myProfilePost");
+                        getRestaurantProfile("myProfilePostMore");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

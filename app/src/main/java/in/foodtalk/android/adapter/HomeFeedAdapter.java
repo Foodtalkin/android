@@ -561,7 +561,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 case R.id.dish_img: {
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:{
-                            //Log.d("clicked", "dish image"+ getPosition());
+                            Log.d("HomeFeedAdapter", "click dish image"+ getPosition());
                             long thisTime = System.currentTimeMillis();
                             if (thisTime - lastTouchTime < 250) {
                                 Log.d("clicked", "img double");
@@ -600,7 +600,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 case R.id.icon_like_holder:{
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
-                            Log.d("clicked", "icon like");
+                            Log.d("HomeFeedAdapter", "clicke icon like");
                             if (postObj1.iLikedIt.equals("0")){
                                 likeIconImg.setImageResource(R.drawable.ic_heart_filled);
                                 String likeCount = String.valueOf(Integer.parseInt(txtCountLike.getText().toString())+1);

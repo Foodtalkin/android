@@ -26,8 +26,10 @@ import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.communicator.StoreCallback;
+import in.foodtalk.android.module.ConvertNumber;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.DateFunction;
+import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.object.StoreObj;
 
 /**
@@ -45,8 +47,9 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private final int VIEW_OFFER = 0;
     private final int USER_INFO = 1;
 
-    public StoreAdapter (Context context, List<StoreObj>listStore){
+    JSONObject profile;
 
+    public StoreAdapter (Context context, List<StoreObj>listStore, JSONObject profile){
         Log.d("store adapter", "list length "+listStore.size());
         this.context = context;
         this.listStore = listStore;
@@ -54,12 +57,14 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         db = new DatabaseHandler(context);
         apiCallback = (ApiCallback) context;
         storeCallback = (StoreCallback) context;
-
+        this.profile = profile;
     }
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         StoreCardHolder storeCardHolder;
+        CardUserInfo cardUserInfo;
+
         Log.e("StoreAdapter","type: "+viewType);
        /* if (viewType == VIEW_OFFER){
             view = layoutInflater.inflate(R.layout.card_store1, parent, false);
@@ -68,9 +73,15 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }else {
             return null;
         }*/
-        view = layoutInflater.inflate(R.layout.card_store1, parent, false);
-        storeCardHolder = new StoreCardHolder(view);
-        return storeCardHolder;
+        if (viewType == USER_INFO){
+            view = layoutInflater.inflate(R.layout.store_userinfo_card, parent, false);
+            cardUserInfo = new CardUserInfo(view);
+            return cardUserInfo;
+        }else {
+            view = layoutInflater.inflate(R.layout.card_store1, parent, false);
+            storeCardHolder = new StoreCardHolder(view);
+            return storeCardHolder;
+        }
     }
 
     @Override
@@ -104,6 +115,14 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     //.fit()
                     .placeholder(R.drawable.placeholder)
                     .into(storeCardHolder.imgCard);
+        }if (holder instanceof CardUserInfo){
+            CardUserInfo cardUserInfo = (CardUserInfo) holder;
+            try {
+                setUserData(profile, cardUserInfo);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
         /*StoreObj current = listStore.get(position);
         StoreCardHolder storeCardHolder = (StoreCardHolder) holder;
@@ -155,6 +174,25 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 break;
         }*/
     }
+
+    private void setUserData(JSONObject profile, CardUserInfo cardUserInfo) throws JSONException {
+        Picasso.with(context)
+                .load(profile.getString("image"))
+                .fit()
+                .placeholder(R.drawable.placeholder)
+                .into(cardUserInfo.userThumb);
+        cardUserInfo.txtFullname.setText(StringCase.caseSensitive(profile.getString("fullName")));
+        cardUserInfo.txtUsername.setText(profile.getString("userName"));
+        double point = Double.parseDouble(profile.getString("avilablePoints"));
+        if (point < 1 ){
+            cardUserInfo.txtPts.setText("0");
+        }else {
+            cardUserInfo.txtPts.setText(String.valueOf(ConvertNumber.withSuffix((long) point)));
+        }
+        //txtEventInfo.setText(profile.getString(""));
+    }
+
+
     @Override
     public int getItemCount() {
         return listStore.size();
@@ -174,6 +212,19 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return viewType;
     }
 
+    class CardUserInfo extends RecyclerView.ViewHolder{
+        ImageView userThumb;
+        TextView txtFullname, txtUsername, txtPts;
+        public CardUserInfo(View itemView) {
+            super(itemView);
+
+            userThumb = (ImageView) itemView.findViewById(R.id.img_user_thumb);
+            txtFullname = (TextView) itemView.findViewById(R.id.txt_fullname);
+            txtUsername = (TextView) itemView.findViewById(R.id.txt_username);
+            txtPts = (TextView) itemView.findViewById(R.id.txt_pts);
+        }
+    }
+
     class StoreCardHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
 
         Button btn;
@@ -185,16 +236,12 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         LinearLayout btnCard, ptsBorder;
 
 
-
-
-
         long requiredPoints;
         long havePoints;
         boolean purchased;
 
         public StoreCardHolder(View itemView) {
             super(itemView);
-
             imgCard = (ImageView) itemView.findViewById(R.id.img_card);
             txtType = (TextView) itemView.findViewById(R.id.txt_type);
             txtTitle = (TextView) itemView.findViewById(R.id.txt_title);

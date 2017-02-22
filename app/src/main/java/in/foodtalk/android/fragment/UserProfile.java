@@ -110,7 +110,7 @@ public class UserProfile extends Fragment implements LatLonCallback, UserProfile
         if (postList.size() > 0){
             postList.clear();
             loadMoreData = true;
-            Log.d("loadData: ","clear post data");
+            Log.d("UserProfile: ","clear post data");
         }
         pageNo = 1;
         loading = false;
@@ -153,7 +153,7 @@ public class UserProfile extends Fragment implements LatLonCallback, UserProfile
 
         userId = db.getUserDetails().get("userId");
 
-        Log.d("check user ids","userId: "+userId+ " userIdOther: "+userIdOther);
+        Log.d("UserProfile","userId: "+userId+ " userIdOther: "+userIdOther);
         if (userIdOther != null){
             if (userIdOther.equals(userId)){
                 Log.d("userIds","Match");
@@ -165,7 +165,6 @@ public class UserProfile extends Fragment implements LatLonCallback, UserProfile
                 Log.d("userIds", "not match");
             }
         }
-
         try {
             getUserProfile("myProfile");
         } catch (JSONException e) {
@@ -188,6 +187,8 @@ public class UserProfile extends Fragment implements LatLonCallback, UserProfile
             url = config.URL_USER_PROFILE;
 
         }else if (tag.equals("myProfilePost")){
+            url = config.URL_USER_POST_IMAGE;
+        }else if (tag.equals("myProfilePostMore")){
             url = config.URL_USER_POST_IMAGE;
         }
 
@@ -274,13 +275,13 @@ public class UserProfile extends Fragment implements LatLonCallback, UserProfile
 
             UserPostObj userPostObj = new UserPostObj();
             userPostObj.viewType = "errorCopy";
-            postList.add(userPostObj);
+            if (tag.equals("myProfilePostMore")){
+                postList.add(userPostObj);
+            }
+
 
             //Log.d("postArray length", "0");
-        }else if (postArray.length() < 15){
-            //Log.d("postArray length", postArray.length()+"");
-            loadMoreData = false;
-        }
+        }else
         //--------------------------------------------------------------------------------
 
         for(int i=0; postArray.length() > i; i++){
@@ -347,7 +348,9 @@ public class UserProfile extends Fragment implements LatLonCallback, UserProfile
         recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(null, staggeredGridLayoutManager) {
             @Override
             public void onLoadMore(int current_page) {
-                //Log.d("scroll listener", "loading: "+ loading+" loadMoreData: "+loadMoreData);
+                //Log.d("UserProrile", "loading: "+ loading+" loadMoreData: "+loadMoreData);
+
+                Log.d("UserProrile", "onLoadMore loading: "+loading+" loadMoreData: "+ loadMoreData);
 
                 if(!loading && loadMoreData == true){
                     pageNo++;
@@ -358,9 +361,9 @@ public class UserProfile extends Fragment implements LatLonCallback, UserProfile
                     userProfileAdapter.notifyItemInserted(postList.size()-1);
                     //--homeFeedAdapter.notifyItemInserted(postData.size()-1);
                     loading = true;
-                    //Log.d("loadMore", "call getPostFeed('loadMore')");
+                    Log.d("UserProfile", "call getPostFeed('loadMore')");
                     try {
-                        getUserProfile("myProfilePost");
+                        getUserProfile("myProfilePostMore");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

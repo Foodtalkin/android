@@ -148,8 +148,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     TextView txtHomeIcon, txtDiscoverIcon, txtNewpostIcon, txtNotiIcon, txtMoreIcon;
 
 
-
-
     private ImageView[] icons;
     private TextView[] txtIcons;
     private int[] imgR;

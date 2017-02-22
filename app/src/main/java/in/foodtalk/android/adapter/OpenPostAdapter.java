@@ -16,6 +16,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -359,6 +360,7 @@ public class OpenPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView txtLikeCopy, txtCommentCopy, txtBookmarkCopy;
 
         LinearLayout countHolder;
+        RelativeLayout postHolderView;
 
         public PostHolder(final View itemView) {
             super(itemView);
@@ -382,6 +384,8 @@ public class OpenPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             btnBookmark = (LinearLayout) itemView.findViewById(R.id.btn_bookmark);
             btnComment = (LinearLayout) itemView.findViewById(R.id.btn_comment);
 
+            postHolderView = (RelativeLayout) itemView.findViewById(R.id.post_holder);
+
 
             likeHeart = (ImageView) itemView.findViewById(R.id.like_heart);
 
@@ -403,13 +407,14 @@ public class OpenPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             iconShare = (LinearLayout) itemView.findViewById(R.id.icon_share_holder);
 
 
-            dishImage.setOnTouchListener(this);
+            //dishImage.setOnTouchListener(this);
             iconLike.setOnTouchListener(this);
             iconBookmark.setOnTouchListener(this);
             iconComment.setOnTouchListener(this);
             iconOption.setOnTouchListener(this);
             userThumbnail.setOnTouchListener(this);
             iconShare.setOnTouchListener(this);
+            postHolderView.setOnTouchListener(this);
             /*iconShare.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -436,6 +441,7 @@ public class OpenPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             btnBookmark.setOnTouchListener(this);
             btnComment.setOnTouchListener(this);
             txtTip.setOnTouchListener(this);
+
 
             //btnDetails.setOnTouchListener(this);
            /* btnDetails.setOnTouchListener(new View.OnTouchListener() {
@@ -662,7 +668,7 @@ public class OpenPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 case R.id.userThumb:
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
-                            Log.d("clicked", "user thumnails");
+                            Log.d("OpenPostAdapter", "user thumnails userId: "+ userId);
                             userThumbCallback.thumbClick(userId);
                             break;
                     }
@@ -700,6 +706,45 @@ public class OpenPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             break;
                     }
                     break;
+                case R.id.post_holder:
+                    Log.d("HomeFeedAdapter","clicked postholder");
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:{
+                            //Log.d("clicked", "dish image"+ getPosition());
+                            long thisTime = System.currentTimeMillis();
+                            if (thisTime - lastTouchTime < 250) {
+                                Log.d("clicked", "img double");
+                                likeHeart.setVisibility(View.VISIBLE);
+                                likeHeart.startAnimation(mAnimation);
+                                if (postObj1.iLikedIt.equals("0")){
+                                    //-----update image when click on like icon--
+                                    likeIconImg.setImageResource(R.drawable.ic_heart_filled);
+                                    String likeCount = String.valueOf(Integer.parseInt(txtCountLike.getText().toString())+1);
+                                    txtCountLike.setText(likeCount);
+                                    //----update postObj for runtime-----------
+                                    postObj1.iLikedIt = "1";
+                                    postObj1.likeCount = likeCount;
+                                    postObj.set(getPosition(), postObj1);
+                                    //------------------------------------------
+                                    if(likeCallback != null){
+                                        likeCallback.like(getPosition(), postObj1.id, true);
+                                    }else{
+                                        Log.e("HomeFeedAdapter","null likeCallback");
+                                    }
+                                }
+                                // Double click
+                                //p = mapView.getProjection().fromPixels((int) e.getX(), (int) e.getY());
+                                lastTouchTime = -1;
+                            } else {
+                                // too slow
+                                Log.d("clicked", "question single");
+                                lastTouchTime = thisTime;
+                            }
+                        }
+                        break;
+                    }
+                    break;
+
             }
             return false;
         }
