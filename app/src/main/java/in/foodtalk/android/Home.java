@@ -1400,6 +1400,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         }else {
             currentFragment = this.getFragmentManager().findFragmentById(R.id.container);
+            Log.d("postDeleted else","name: "+ currentFragment.getClass().getSimpleName());
             if (currentFragment == homeFragment){
                 try {
                     homeFragment.getPostFeed("refresh");
@@ -1416,8 +1417,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 }
             }
         }
-
-
     }
     @Override
     public void btnClick(String type, int position) {

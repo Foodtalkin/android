@@ -119,8 +119,7 @@ public class RestaurantProfileFragment extends Fragment {
         if (tag.equals("restaurantProfile")){
             url = config.URL_RESTAURANT_PROFILE;
         }else if (tag.equals("myProfilePost")){
-            url = config.URL_RESTAURANT_POST_IMAGE;
-        }else if (tag.equals("myProfilePostMore")){
+            //url = config.URL_USER_POST_IMAGE;
             url = config.URL_RESTAURANT_POST_IMAGE;
         }
         //Log.d("getUserProfile", "call");
@@ -129,6 +128,7 @@ public class RestaurantProfileFragment extends Fragment {
         obj.put("sessionId",db.getUserDetails().get("sessionId"));
         obj.put("restaurantId", restaurantId);
         obj.put("page",Integer.toString(pageNo));
+        Log.d("RestaurantProfileF","pageNo: "+pageNo);
         //obj.put("selectedUserId", userIdOther);
         //obj.put("latitude",lat);
         //obj.put("longitude",lon);
@@ -190,16 +190,17 @@ public class RestaurantProfileFragment extends Fragment {
 
         if (postArray.length() == 0){
             loadMoreData = false;
-            RestaurantPostObj rPostObj = new RestaurantPostObj();
-            rPostObj.viewType = "errorCopy";
-            if (tag.equals("myProfilePostMore")){
+            if (tag.equals("restaurantProfile")){
+                RestaurantPostObj rPostObj = new RestaurantPostObj();
+                rPostObj.viewType = "errorCopy";
                 rPostList.add(rPostObj);
             }
             //Log.d("postArray length", "0");
-        }else
+        }else if (postArray.length() < 15){
+            //Log.d("postArray length", postArray.length()+"");
+           // loadMoreData = false;
+        }
         //--------------------
-
-
 
         for (int i=0;i<postArray.length();i++){
             RestaurantPostObj current = new RestaurantPostObj();
@@ -272,7 +273,7 @@ public class RestaurantProfileFragment extends Fragment {
                     loading = true;
                     //Log.d("loadMore", "call getPostFeed('loadMore')");
                     try {
-                        getRestaurantProfile("myProfilePostMore");
+                        getRestaurantProfile("myProfilePost");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

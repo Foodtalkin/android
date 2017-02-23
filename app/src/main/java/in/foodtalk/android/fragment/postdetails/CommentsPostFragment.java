@@ -590,27 +590,22 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
 
         linearLayoutManager.scrollToPosition(postDataList.size());
         commentAdapterNew.notifyDataSetChanged();
-
+        placeHolder.setVisibility(View.GONE);
         Log.d("addnew comment response", comment.getString("comment")+"");
     }
-
     private Paint p = new Paint();
 
     private void initSwipe(){
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-
-
             @Override
             public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                 if (viewHolder instanceof CommentAdapterNew.PostHolder) return 0;
                 return super.getSwipeDirs(recyclerView, viewHolder);
             }
-
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 return false;
             }
-
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();

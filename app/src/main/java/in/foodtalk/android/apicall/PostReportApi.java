@@ -48,7 +48,6 @@ public class PostReportApi {
        // this.tag = tag;
         if (tag.equals("delete")){
             apiUrl = config.URL_POST_DELETE;
-
         }else if(tag.equals("report")) {
             apiUrl = config.URL_POST_REPORT;
         }

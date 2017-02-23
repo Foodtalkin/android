@@ -118,16 +118,19 @@ public class DiscoverAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }else {
                 headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, false, "Discover");
             }*/
+            Log.d("DiscoverAdapter","region: "+current.region);
             if (current.restaurantIsActive.equals("1")) {
                 if (current.region.equals("")){
                     headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, true , "Discover");
                 }else {
+
                     headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName+", "+current.region, current.userId, current.checkedInRestaurantId, true , "Discover");
                 }
             }else {
                 if (current.region.equals("")){
                     headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName, current.userId, current.checkedInRestaurantId, false, "Discover");
                 }else {
+
                     headSpannable.code(postHolder.txtHeadLine, current.userName, current.dishName, current.restaurantName+", "+current.region, current.userId, current.checkedInRestaurantId, false, "Discover");
                 }
             }

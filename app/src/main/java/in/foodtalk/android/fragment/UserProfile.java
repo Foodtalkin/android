@@ -119,7 +119,6 @@ public class UserProfile extends Fragment implements LatLonCallback, UserProfile
 
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
-
         //btnFollow = (Button) layout.findViewById(R.id.btn_follow_profile);
         return layout;
     }
@@ -136,11 +135,6 @@ public class UserProfile extends Fragment implements LatLonCallback, UserProfile
         //getLocation = new GetLocation(getActivity(), latLonCallback);
 
        // getLocation.onStart();
-
-
-
-
-
         if (getActivity() != null){
             context = getActivity();
         }
@@ -187,8 +181,6 @@ public class UserProfile extends Fragment implements LatLonCallback, UserProfile
             url = config.URL_USER_PROFILE;
 
         }else if (tag.equals("myProfilePost")){
-            url = config.URL_USER_POST_IMAGE;
-        }else if (tag.equals("myProfilePostMore")){
             url = config.URL_USER_POST_IMAGE;
         }
 
@@ -269,19 +261,20 @@ public class UserProfile extends Fragment implements LatLonCallback, UserProfile
             showUserImage(userProfile.image);
         }
 
-        //----if array length 0 or less then 15 then ignore loadmore next time------------
+        //----if array length 0 or less then 15 then ignore loadmore next time------------+
+        Log.d("UserProfile","tag: "+  tag);
         if (postArray.length() == 0){
             loadMoreData = false;
-
-            UserPostObj userPostObj = new UserPostObj();
-            userPostObj.viewType = "errorCopy";
-            if (tag.equals("myProfilePostMore")){
+            if (tag.equals("myProfile")){
+                UserPostObj userPostObj = new UserPostObj();
+                userPostObj.viewType = "errorCopy";
                 postList.add(userPostObj);
             }
-
-
             //Log.d("postArray length", "0");
-        }else
+        }else if (postArray.length() < 15){
+            //Log.d("postArray length", postArray.length()+"");
+            //loadMoreData = false;
+        }
         //--------------------------------------------------------------------------------
 
         for(int i=0; postArray.length() > i; i++){
@@ -363,7 +356,7 @@ public class UserProfile extends Fragment implements LatLonCallback, UserProfile
                     loading = true;
                     Log.d("UserProfile", "call getPostFeed('loadMore')");
                     try {
-                        getUserProfile("myProfilePostMore");
+                        getUserProfile("myProfilePost");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

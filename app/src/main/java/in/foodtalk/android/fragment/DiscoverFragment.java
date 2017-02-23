@@ -438,11 +438,10 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
             current.restaurantIsActive = postArray.getJSONObject(i).getString("restaurantIsActive");
             current.checkedInRestaurantId = postArray.getJSONObject(i).getString("checkedInRestaurantId");
             current.tip = postArray.getJSONObject(i).getString("tip");
-            current.region = postArray.getJSONObject(i).getString("city");
+            current.region = postArray.getJSONObject(i).getString("cityName");
             // postData.clear();
             postData.add(current);
             Log.d("dish name", postData.get(i).userId);
-
         }
         //postData = (List<PostObj>) postObj;
         if (tag.equals("load")){
