@@ -342,7 +342,7 @@ public class HomeFragment extends Fragment {
         //postData = (List<PostObj>) postObj;
         if (tag.equals("load")){
             if(getActivity() != null){
-                homeFeedAdapter = new HomeFeedAdapter(getActivity(), postData, postLikeCallback);
+                homeFeedAdapter = new HomeFeedAdapter(getActivity(), postData, postLikeCallback,"HomeFragment");
                 recyclerView.setAdapter(homeFeedAdapter);
             }
             else {
@@ -428,6 +428,7 @@ public class HomeFragment extends Fragment {
            try {
                pageNo = 1;
                getPostFeed("refresh");
+               scrollToTop();
            } catch (JSONException e) {
                e.printStackTrace();
            }

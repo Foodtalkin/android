@@ -846,10 +846,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         String backStateName = newFragment.getClass().getName();
 
         FlurryAgent.logEvent(newFragment.getClass().getSimpleName());
-        Log.d("Home setFragmentV", "simplename: "+newFragment.getClass().getSimpleName());
+        Log.d("Home setFragmentV", "simplename: "+newFragment.getClass().getSimpleName().replaceAll("Fragment",""));
         Log.d("Home setFragmentV", "simplename: "+newFragment.getClass().getName());
 
-        AppController.getInstance().trackScreenView(newFragment.getClass().getSimpleName());
+        screenViewTrack(newFragment.getClass().getSimpleName());
 
         if (newFragment == userProfile){
             subTitleHome.setText("");
@@ -914,6 +914,34 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         /*if(this.getFragmentManager().findFragmentById(R.id.container1) == null){
             setTitle(newFragment);
         }*/
+    }
+
+
+    private void screenViewTrack(String name){
+        /*if (name.equals("MoreFragment")){
+            AppController.getInstance().trackScreenView("More");
+        }else if (name.equals("UserProfile")){
+            AppController.getInstance().trackScreenView("UserProfile");
+        }else if (name.equals("HomeFragment")){
+            AppController.getInstance().trackScreenView("Home");
+        }else if (name.equals("PostDetailsFragment")){
+            AppController.getInstance().trackScreenView("PostDetails");
+        }else if (name.equals("OpenPostFragment")){
+            AppController.getInstance().trackScreenView("OpenPost");
+        }else if (name.equals("DiscoverFragment")){
+            AppController.getInstance().trackScreenView("Discover");
+        }else if (name.equals("NotiFragment")){
+            AppController.getInstance().trackScreenView("Notification");
+        }else if (name.equals("StoreFragment")){
+            AppController.getInstance().trackScreenView("Store");
+        }else if (name.equals("SearchFragment")){
+            AppController.getInstance().trackScreenView("Search");
+        }else if (name.equals("NewPostShare")){
+            AppController.getInstance().trackScreenView("NewPost");
+        }*/
+        String screenName = name.replaceAll("Fragment","");
+        AppController.getInstance().trackScreenView(screenName);
+
     }
     Boolean backPressed = false;
 
@@ -1017,9 +1045,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     }
 
     @Override
-    public void option(int position, String postId, String userId) {
+    public void option(int position, String postId, String userId, String from) {
         Log.d("Home @Ovrd option", "post id: " + postId);
-        showDialog(postId, userId);
+        showDialog(postId, userId, from);
     }
 
     //String phone1;
@@ -1163,7 +1191,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         });
 
     }
-    private void showDialog(String postId, final String userId){
+    private void showDialog(String postId, final String userId, final String from){
 
         currentPostUserId = userId;
         currentPostId = postId;
@@ -1232,7 +1260,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 Log.d("btnClick", "reportAlertYes");
                 dialogPost.dismiss();
                 try {
-                    postReportApi.postReport(sessionId ,currentPostId, "report");
+                    postReportApi.postReport(sessionId ,currentPostId, "report", from);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -1250,7 +1278,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             public void onClick(View v) {
                 dialogPost.dismiss();
                 try {
-                    postReportApi.postReport(sessionId ,currentPostId, "delete");
+                    postReportApi.postReport(sessionId ,currentPostId, "delete", from);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -1364,11 +1392,38 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
 
     @Override
-    public void postDelete() {
+    public void postDelete(String from) {
         Log.d("postDelete","update recyclerview");
         currentFragment = this.getFragmentManager().findFragmentById(R.id.container1);
 
-        if (currentFragment != null){
+        Log.d("Home","postDelete from: "+ from);
+
+        if (from.equals("HomeFragment")){
+            try {
+                homeFragment.getPostFeed("refresh");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else if (from.equals("QuestionFragment")){
+            try {
+                questionFragment.getPostFeed("refresh");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else if (from.equals("OpenPostFragment")){
+            try {
+                openPostFragment.getPostFeed("refresh");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else if (from.equals("OpenRPostFragment")){
+            /*try {
+                openRPostFragment.getPostFeed("refresh");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }*/
+        }
+        /*if (currentFragment != null){
             Log.d("postDeleted","name: "+ currentFragment.getClass().getSimpleName());
             if (currentFragment == commentFragment){
                 getFragmentManager().popBackStack();
@@ -1397,7 +1452,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                     e.printStackTrace();
                 }
             }
-
         }else {
             currentFragment = this.getFragmentManager().findFragmentById(R.id.container);
             Log.d("postDeleted else","name: "+ currentFragment.getClass().getSimpleName());
@@ -1416,7 +1470,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                     e.printStackTrace();
                 }
             }
-        }
+        }*/
     }
     @Override
     public void btnClick(String type, int position) {
@@ -2485,6 +2539,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 try {
                     homeFragment.pageNo = 1;
                     homeFragment.getPostFeed("refresh");
+                    homeFragment.scrollToTop();
                     Log.d("home","openFragment: refresh home");
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -2497,6 +2552,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         if (fragmentName.equals("questionFragment")){
             postQuestion = new PostQuestion();
             setFragmentView(postQuestion, R.id.container1, -1, true);
+        }
+        if (fragmentName.equals("earningInfo")){
+            earningInfoDialog();
         }
     }
     private void openStorePurchases(String storeItemId){
@@ -2530,5 +2588,21 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }else {
             setFragmentView (webViewFragment, R.id.container1, -1, true);
         }
+    }
+
+    private void earningInfoDialog(){
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_earning_info);
+
+        dialog.show();
+
+        LinearLayout btnOk = (LinearLayout) dialog.findViewById(R.id.btn_ok);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 }

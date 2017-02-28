@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.communicator.OpenFragmentCallback;
 import in.foodtalk.android.module.DateFunction;
 import in.foodtalk.android.object.NewsObj;
@@ -109,6 +110,7 @@ public class NewsCardFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 openFragmentCallback.openFragment("newsWebView", newsObj.sourceUrl);
+                AppController.getInstance().trackEvent("News", "open", "Read more");
             }
         });
     }

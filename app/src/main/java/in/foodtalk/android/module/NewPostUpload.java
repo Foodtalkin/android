@@ -144,6 +144,6 @@ public class NewPostUpload {
         final int DEFAULT_TIMEOUT = 6000;
         // Adding request to request queue
         jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        AppController.getInstance().addToRequestQueue(jsonObjReq,"uploadpost");
+        AppController.getInstance().addToRequestQueue(jsonObjReq,"uploadDish");
     }
 }

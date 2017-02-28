@@ -379,7 +379,7 @@ public class QuestionFragment extends Fragment {
         //postData = (List<PostObj>) postObj;
         if (tag.equals("load")){
             if(getActivity() != null){
-                homeFeedAdapter = new HomeFeedAdapter(getActivity(), postData, postLikeCallback);
+                homeFeedAdapter = new HomeFeedAdapter(getActivity(), postData, postLikeCallback, "QuestionFragment");
                 recyclerView.setAdapter(homeFeedAdapter);
             }
             else {

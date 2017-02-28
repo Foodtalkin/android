@@ -16,6 +16,7 @@ import java.util.List;
 import in.foodtalk.android.R;
 import in.foodtalk.android.communicator.OpenRestaurantCallback;
 import in.foodtalk.android.fragment.CuratedFragment;
+import in.foodtalk.android.module.GetRange;
 import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.object.RestaurantListObj;
 
@@ -57,7 +58,7 @@ public class CuratedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         //postHolder.txtKm.setText(km+" KM");
         restaurantHolder.rDistance.setText(km+" KM");
 
-        int price = Integer.valueOf(current.priceRange);
+        /*int price = Integer.valueOf(current.priceRange);
 
         String rs = context.getResources().getString(R.string.rs);
 
@@ -67,7 +68,9 @@ public class CuratedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             restaurantHolder.rRange.setText(rs+" Mid Range");
         } else {
             restaurantHolder.rRange.setText(rs+" Splurge");
-        }
+        }*/
+
+        restaurantHolder.rRange.setText(GetRange.getRangePrice(context, current.priceRange));
     }
     @Override
     public int getItemCount() {

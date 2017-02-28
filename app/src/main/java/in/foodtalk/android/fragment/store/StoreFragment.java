@@ -1,5 +1,6 @@
 package in.foodtalk.android.fragment.store;
 
+import android.app.Dialog;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -65,6 +67,7 @@ public class StoreFragment extends Fragment implements ApiCallback {
 
 
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -81,6 +84,7 @@ public class StoreFragment extends Fragment implements ApiCallback {
         txtPoints = (TextView) layout.findViewById(R.id.txt_pts);
 
         openFragmentCallback = (OpenFragmentCallback) getActivity();
+
 
         btnPurchases = (ImageView) layout.findViewById(R.id.btn_purchases);
         btnPurchases.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +125,8 @@ public class StoreFragment extends Fragment implements ApiCallback {
         super.onResume();
         tapToRetry.setVisibility(View.GONE);
     }
+
+
 
     private void getStoreList() throws JSONException {
         progressHolder.setVisibility(View.VISIBLE);

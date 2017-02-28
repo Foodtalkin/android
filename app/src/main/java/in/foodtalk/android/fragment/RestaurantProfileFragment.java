@@ -178,6 +178,8 @@ public class RestaurantProfileFragment extends Fragment {
             rProfile.phone2 = profile.getString("phone2");
             rProfile.checkInCount = profile.getString("checkInCount");
             rProfile.distance = profile.getString("distance");
+            rProfile.priceRange = profile.getString("priceRange");
+
 
             RestaurantPostObj restaurantPostObj = new RestaurantPostObj();
             restaurantPostObj.viewType = "profileInfo";
@@ -232,6 +234,7 @@ public class RestaurantProfileFragment extends Fragment {
             current.timeElapsed = postArray.getJSONObject(i).getString("timeElapsed");
             current.restaurantIsActive = postArray.getJSONObject(i).getString("restaurantIsActive");
             current.region = postArray.getJSONObject(i).getString("region");
+
 
             rPostList.add(current);
         }

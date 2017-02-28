@@ -25,6 +25,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.communicator.CommentCallback;
 import in.foodtalk.android.communicator.OpenFragmentCallback;
 import in.foodtalk.android.communicator.PostBookmarkCallback;
@@ -632,7 +633,7 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                 @Override
                                 public void run() {
                                     //Second fragment after 5 seconds appears
-                                    optionCallback.option(getPosition(),postObj1.id,postObj1.userId);
+                                    optionCallback.option(getPosition(),postObj1.id,postObj1.userId,"OpenRPostFragment");
                                 }
                             }, 300);
 
@@ -743,5 +744,6 @@ public class OpenRPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT, "http://foodtalk.in/post/"+postId);
         context.startActivity(Intent.createChooser(shareIntent, "Share link using"));
+        AppController.getInstance().trackEvent("Post","share", "share Post");
     }
 }

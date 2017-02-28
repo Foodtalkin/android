@@ -264,7 +264,6 @@ public class UserProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             btnFollowers.setOnTouchListener(this);
             btnFollowing.setOnTouchListener(this);
         }
-
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             switch (v.getId()){

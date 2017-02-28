@@ -43,7 +43,7 @@ public class PostReportApi {
         this.context = context;
         deleteCallback = (PostDeleteCallback) context;
     }
-    public void postReport(String sessionId, String postId, final String tag) throws JSONException {
+    public void postReport(String sessionId, String postId, final String tag, final String from) throws JSONException {
 
        // this.tag = tag;
         if (tag.equals("delete")){
@@ -74,7 +74,7 @@ public class PostReportApi {
                                     showToast(context.getString(R.string.postReportMsg));
                                 }else if(tag.equals("delete")){
                                     Log.d("PostReportApi","delete successfully");
-                                    deleteCallback.postDelete();
+                                    deleteCallback.postDelete(from);
                                 }
                             }else {
                                 String errorCode = response.getString("errorCode");
@@ -114,7 +114,7 @@ public class PostReportApi {
                 return headers;
             }
         };
-        AppController.getInstance().addToRequestQueue(jsonObjReq,"postbookmark");
+        AppController.getInstance().addToRequestQueue(jsonObjReq,"postReport");
     }
 
     public void showToast(String msg){

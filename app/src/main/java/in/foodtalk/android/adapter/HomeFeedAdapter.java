@@ -1,5 +1,6 @@
 package in.foodtalk.android.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -79,12 +80,16 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     OpenFragmentCallback openFragmentCallback;
 
-    public HomeFeedAdapter(Context context, List<PostObj> postObj, PostLikeCallback postLikeCallback){
+    String from;
+
+    public HomeFeedAdapter(Context context, List<PostObj> postObj, PostLikeCallback postLikeCallback, String from){
         layoutInflater = LayoutInflater.from(context);
         this.postObj = postObj;
         this.context = context;
         //Log.d("from adapter function", postObj.get(0).dishName);
        // Log.d("from adapter function", postObj.get(1).dishName);
+
+        this.from = from;
 
         likeCallback = (PostLikeCallback) context;
         bookmarkCallback = (PostBookmarkCallback) context;
@@ -696,7 +701,10 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 @Override
                                 public void run() {
                                     //Second fragment after 5 seconds appears
-                                    optionCallback.option(getPosition(),postObj1.id,postObj1.userId);
+                                    //((Activity) context).getFragmentManager()
+                                    //getClass().getSimpleName();
+                                    Log.d("HomeFeedAdapter","name: "+from);
+                                    optionCallback.option(getPosition(),postObj1.id,postObj1.userId,from);
                                 }
                             }, 300);
                             break;
@@ -806,5 +814,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT, "http://foodtalk.in/post/"+postId);
         context.startActivity(Intent.createChooser(shareIntent, "Share link using"));
+        AppController.getInstance().trackEvent("Post","share", "share Post");
     }
 }

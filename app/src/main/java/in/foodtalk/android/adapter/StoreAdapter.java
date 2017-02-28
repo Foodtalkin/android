@@ -25,6 +25,7 @@ import in.foodtalk.android.R;
 import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;
+import in.foodtalk.android.communicator.OpenFragmentCallback;
 import in.foodtalk.android.communicator.StoreCallback;
 import in.foodtalk.android.module.ConvertNumber;
 import in.foodtalk.android.module.DatabaseHandler;
@@ -43,6 +44,7 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     DatabaseHandler db;
     ApiCallback apiCallback;
     StoreCallback storeCallback;
+    OpenFragmentCallback openFragmentCallback;
 
     private final int VIEW_OFFER = 0;
     private final int USER_INFO = 1;
@@ -57,6 +59,7 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         db = new DatabaseHandler(context);
         apiCallback = (ApiCallback) context;
         storeCallback = (StoreCallback) context;
+        openFragmentCallback = (OpenFragmentCallback) context;
         this.profile = profile;
     }
     @Override
@@ -215,6 +218,7 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     class CardUserInfo extends RecyclerView.ViewHolder{
         ImageView userThumb;
         TextView txtFullname, txtUsername, txtPts;
+        TextView btnEarningInfo;
         public CardUserInfo(View itemView) {
             super(itemView);
 
@@ -222,6 +226,24 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             txtFullname = (TextView) itemView.findViewById(R.id.txt_fullname);
             txtUsername = (TextView) itemView.findViewById(R.id.txt_username);
             txtPts = (TextView) itemView.findViewById(R.id.txt_pts);
+            btnEarningInfo = (TextView) itemView.findViewById(R.id.btn_earning_info);
+
+            btnEarningInfo.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            switch (v.getId()){
+                                case R.id.btn_earning_info:
+                                    Log.d("StoreAdapter","clicked earning info");
+                                    openFragmentCallback.openFragment("earningInfo","");
+                                    break;
+                            }
+                            break;
+                    }
+                    return false;
+                }
+            });
         }
     }
 

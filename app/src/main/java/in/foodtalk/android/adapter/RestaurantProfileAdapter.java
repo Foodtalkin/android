@@ -25,6 +25,7 @@ import in.foodtalk.android.R;
 import in.foodtalk.android.communicator.PhoneCallback;
 import in.foodtalk.android.communicator.ProfilePostOpenCallback;
 import in.foodtalk.android.communicator.ProfileRPostOpenCallback;
+import in.foodtalk.android.module.GetRange;
 import in.foodtalk.android.object.RestaurantPostObj;
 import in.foodtalk.android.object.RestaurantProfileObj;
 
@@ -109,7 +110,8 @@ public class RestaurantProfileAdapter extends RecyclerView.Adapter<RecyclerView.
             RProfileHolder rProfileHolder = (RProfileHolder) holder;
             rProfileHolder.rName.setText(rProfileObj.restaurantName);
             rProfileHolder.rAddress.setText(rProfileObj.address);
-            rProfileHolder.checkinCount.setText(rProfileObj.checkInCount+" Checkin");
+            //rProfileHolder.checkinCount.setText(rProfileObj.checkInCount+" Checkin");
+            rProfileHolder.checkinCount.setText(GetRange.getRangePrice(context, rProfileObj.priceRange));
             Log.d("checkinCount", rProfileObj.checkInCount+"");
             rProfileHolder.phone1 = rProfileObj.phone1;
             rProfileHolder.phone2 = rProfileObj.phone2;

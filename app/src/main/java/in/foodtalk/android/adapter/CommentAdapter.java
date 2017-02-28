@@ -676,7 +676,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                 @Override
                                 public void run() {
                                     //Second fragment after 5 seconds appears
-                                    optionCallback.option(getPosition(),postObj.id,postObj.userId);
+                                    optionCallback.option(getPosition(),postObj.id,postObj.userId,"CommentFragment");
                                 }
                             }, 300);
 

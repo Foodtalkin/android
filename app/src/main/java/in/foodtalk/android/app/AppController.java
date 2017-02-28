@@ -184,31 +184,41 @@ public class AppController extends Application {
 
     private void sendEventByTag(String tag){
         if (tag.equals("postlike")){
-            trackEvent("UI Action", "Click", "like");
+            trackEvent("Post", "like", "Like Post");
             Log.d("trackEvent","like");
         }else if (tag.equals("postbookmark")){
-            trackEvent("UI Action", "Click", "bookmark");
+            trackEvent("Post", "bookmark", "bookmark Post");
             Log.d("trackEvent","bookmark");
         }
         else if (tag.equals("userUnfollow")){
-            trackEvent("UI Action", "Click", "User Unfollow");
+            trackEvent("user", "unfollow", "User unfollow");
             Log.d("trackEvent","userUnfollow");
         }
         else if (tag.equals("userFollow")){
-            trackEvent("UI Action", "Click", "User Follow");
+            trackEvent("user", "follow", "User follow");
             Log.d("trackEvent","userFollow");
-        }if (tag.equals("sendComment")){
-            trackEvent("UI Action", "Click", "Comment Send");
+        }else if (tag.equals("sendComment")){
+            trackEvent("comment", "add", "Create Comment");
             Log.d("trackEvent","Comment Send");
+        }else if (tag.equals("reportComment")){
+            trackEvent("comment", "report", "Report Comment");
+        }else if (tag.equals("deleteComment")){
+            trackEvent("comment", "delete", "Delete Comment");
+        }else if (tag.equals("uploadDish")){
+            trackEvent("Post", "add", "Create Post");
+        }else if (tag.equals("postQuestion")){
+            trackEvent("Post", "add", "Ask a Question");
+        }else if (tag.equals("postReport")){
+            trackEvent("Post", "report", "report Post");
+        }else if (tag.equals("storeItemBuy")){
+            trackEvent("store", "purchase", "store Item Purchase");
         }
     }
-
     //----------------google analytics functions------------------
     public synchronized Tracker getGoogleAnalyticsTracker() {
         AnalyticsTrackers analyticsTrackers = AnalyticsTrackers.getInstance();
         return analyticsTrackers.get(AnalyticsTrackers.Target.APP);
     }
-
     /***
      * Tracking screen view
      *
@@ -216,6 +226,8 @@ public class AppController extends Application {
      */
     public void trackScreenView(String screenName) {
         Tracker t = getGoogleAnalyticsTracker();
+
+        Log.d("AppController","trackScreenView: "+ screenName);
 
         // Set screen name.
         t.setScreenName(screenName);
@@ -274,7 +286,6 @@ public class AppController extends Application {
             }
         }
     }
-
     public static boolean deleteDir(File dir) {
         if (dir != null && dir.isDirectory()) {
             String[] children = dir.list();
@@ -285,10 +296,8 @@ public class AppController extends Application {
                 }
             }
         }
-
         return dir.delete();
     }
-
 
     private void checkfirstTime(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);

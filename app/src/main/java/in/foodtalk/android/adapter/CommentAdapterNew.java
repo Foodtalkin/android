@@ -502,7 +502,7 @@ public class CommentAdapterNew extends RecyclerView.Adapter<RecyclerView.ViewHol
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("clicked", "post user id"+postObj.userId +"post id: "+postObj.id );
-                            optionCallback.option(getPosition(),postObj.id,postObj.userId);
+                            optionCallback.option(getPosition(),postObj.id,postObj.userId, "CommentsPostFragment");
                             break;
                     }
                 }
