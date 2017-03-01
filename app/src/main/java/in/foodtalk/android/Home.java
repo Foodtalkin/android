@@ -147,7 +147,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     ImageView homeIcon, discoverIcon, newpostIcon, notiIcon, moreIcon;
     TextView txtHomeIcon, txtDiscoverIcon, txtNewpostIcon, txtNotiIcon, txtMoreIcon;
 
-
     private ImageView[] icons;
     private TextView[] txtIcons;
     private int[] imgR;
@@ -400,6 +399,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         // Log.d("get user info", "user id: "+db.getUserDetails().get("userId"));
         //Log.d("get user info", "full name: "+db.getUserDetails().get("fullName"));
         //Log.d("get user info", "user name: "+db.getUserDetails().get("userName"));
+
 
         userId = db.getUserDetails().get("userId");
         sessionId = db.getUserDetails().get("sessionId");
@@ -918,7 +918,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
 
     private void screenViewTrack(String name){
-        /*if (name.equals("MoreFragment")){
+        if (name.equals("MoreFragment")){
             AppController.getInstance().trackScreenView("More");
         }else if (name.equals("UserProfile")){
             AppController.getInstance().trackScreenView("UserProfile");
@@ -938,9 +938,42 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             AppController.getInstance().trackScreenView("Search");
         }else if (name.equals("NewPostShare")){
             AppController.getInstance().trackScreenView("NewPost");
-        }*/
-        String screenName = name.replaceAll("Fragment","");
-        AppController.getInstance().trackScreenView(screenName);
+        }else if (name.equals("CommentFragment")){
+            AppController.getInstance().trackScreenView("Comments");
+        }else if (name.equals("NewsFragment")){
+            AppController.getInstance().trackScreenView("News");
+        }else if (name.equals("StoreDetailsFragment")){
+            AppController.getInstance().trackScreenView("StoreDetails");
+        }else if (name.equals("OptionsFragment")){
+            AppController.getInstance().trackScreenView("Options");
+        }else if (name.equals("RestaurantProfileFragment")){
+            AppController.getInstance().trackScreenView("RestaurantProfile");
+        }else if (name.equals("PostQuestion")){
+            AppController.getInstance().trackScreenView("PostQuestion");
+        }else if (name.equals("FollowListFragment")){
+            AppController.getInstance().trackScreenView("FollowList");
+        }else if (name.equals("QuestionFragment")){
+            AppController.getInstance().trackScreenView("MyQuestion");
+        }else if (name.equals("StorePurchasesFragment")){
+            AppController.getInstance().trackScreenView("StorePurchases");
+        }else if (name.equals("CuratedFragment")){
+            AppController.getInstance().trackScreenView("CityGuide");
+        }else if (name.equals("OpenRPostFragment")){
+            AppController.getInstance().trackScreenView("RestaurantPost");
+        }else if (name.equals("AddRestaurant")){
+            AppController.getInstance().trackScreenView("AddRestaurant");
+        }else if (name.equals("WebViewFragment")){
+            AppController.getInstance().trackScreenView("InAppBrowser");
+        }else if (name.equals("FavouritesFragment")){
+            AppController.getInstance().trackScreenView("Favourites");
+        }else if (name.equals("StoreHistoryFragment")){
+            AppController.getInstance().trackScreenView("Favourites");
+        }else {
+            String screenName = name.replaceAll("Fragment","");
+            AppController.getInstance().trackScreenView(screenName);
+        }
+        //String screenName = name.replaceAll("Fragment","");
+        //AppController.getInstance().trackScreenView(screenName);
 
     }
     Boolean backPressed = false;
@@ -1509,7 +1542,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
            case "store":
                //openStoreFragment();
                discoverFragment.pageType = DISCOVER_SCREEN;
-               setFragmentView(discoverFragment, R.id.container, -1, false);
+               setFragmentView(discoverFragment, R.id.container, -1, true);
                break;
            case "news":
                Log.d("More","news clicked");

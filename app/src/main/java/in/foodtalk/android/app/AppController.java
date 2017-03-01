@@ -234,7 +234,6 @@ public class AppController extends Application {
 
         // Send a screen view.
         t.send(new HitBuilders.ScreenViewBuilder().build());
-
         GoogleAnalytics.getInstance(this).dispatchLocalHits();
     }
 

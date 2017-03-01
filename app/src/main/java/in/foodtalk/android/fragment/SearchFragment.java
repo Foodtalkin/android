@@ -19,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import in.foodtalk.android.R;
+import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.communicator.SearchCallback;
 import in.foodtalk.android.search.Pager;
 
@@ -137,11 +138,8 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
     @Override
     public void onAttach(Activity activity) {
-
         myContext=(FragmentActivity) activity;
         fm = myContext.getSupportFragmentManager();
-
-
         super.onAttach(activity);
     }
 
@@ -177,19 +175,21 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             switch (tabSeleted){
                 case 0:
                     searchCallback1.searchKey(txtSearch.getText().toString(),"dish");
-                    break;
+                    AppController.getInstance().trackEvent("Search","Dish","DishSearch");
+                break;
                 case 1:
                     searchCallback2.searchKey(txtSearch.getText().toString(),"user");
+                    AppController.getInstance().trackEvent("Search","User","UserSearch");
                     break;
                 case 2:
                     searchCallback3.searchKey(txtSearch.getText().toString(),"restaurant");
+                    AppController.getInstance().trackEvent("Search","Restaurant","RestaurantSearch");
                     break;
             }
         }
         searchTabLayout.setScrollPosition(position,0f,true);
         setCallbackRef(position);
     }
-
     @Override
     public void onPageScrollStateChanged(int state) {
         //og.d("onPageSeleted", state+"");

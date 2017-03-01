@@ -34,6 +34,8 @@ public class SplashScreen extends AppCompatActivity {
 
         deepLinkfb();
 
+        AppController.getInstance().trackScreenView("Splash");
+
 
 
         db = new DatabaseHandler(getApplicationContext());

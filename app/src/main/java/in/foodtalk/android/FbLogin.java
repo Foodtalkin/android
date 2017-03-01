@@ -143,6 +143,8 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         pDialog.setMessage("Loading...");
         pDialog.setCancelable(true);
 
+        AppController.getInstance().trackScreenView("Login");
+
         fragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
 
         btnFbAppRemove = (LinearLayout) findViewById(R.id.btn_fbapp_remove);

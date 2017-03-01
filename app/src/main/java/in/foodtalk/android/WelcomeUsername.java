@@ -115,7 +115,7 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
         inputEmail = (EditText) findViewById(R.id.txt_email);
 
 
-
+        AppController.getInstance().trackScreenView("Onboarding");
         //setFragmentView(selectUsername, R.id.onboard_holder, false);
 
         txtEmailError = (TextView) findViewById(R.id.txt_email_error);
