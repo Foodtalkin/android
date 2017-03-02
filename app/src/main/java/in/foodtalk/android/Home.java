@@ -187,6 +187,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     //-------dummy fragment created for temporary use to set Legal screen title----
     Fragment legalFragment = new Fragment();
 
+
     UserProfile userProfile;
 
     PostLikeApi postLikeApi;
@@ -476,6 +477,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             getUserInfo();
         }else {
             logOut();
+            AppController.getInstance().trackEvent("Logout","db rowCount 0","HomeActivity");
             Log.e("Home","logout from 480 line: db.getRowCount 0");
         }
         //---------------------
@@ -486,6 +488,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             }*/
             if (ParseInstallation.getCurrentInstallation().getString("userId") == null){
                 Log.e("Home", "logOut from 490 line : ParseIns: userId is null");
+                AppController.getInstance().trackEvent("Logout","userIdNull Parse "+userId,"HomeActivity");
                 logOut();
             }else {
                 if (count > 0){

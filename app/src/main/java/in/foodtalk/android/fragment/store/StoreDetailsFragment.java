@@ -251,11 +251,11 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback, View.
         apiCall.apiRequestPost(getActivity(),jsonObject, Config.URL_STORE_DETAIL, "storeDetails", apiCallback);
     }
     private void buyNow() throws JSONException {
-       // progressHolder.setVisibility(View.VISIBLE);
+        //progressHolder.setVisibility(View.VISIBLE);
         //tapToRetry.setVisibility(View.GONE);
         //placeholder.setVisibility(View.GONE);
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("sessionId", db.getUserDetails().get("sessionId"));
+        jsonObject.put("sessionId", db.getUserDetails().get("sessio0nId"));
         jsonObject.put("storeItemId", storeId);
         apiCall.apiRequestPost(getActivity(),jsonObject, Config.URL_STORE_BUY, "storeItemBuy", apiCallback);
         progressBarView(true);

@@ -100,6 +100,8 @@ public class AppController extends Application {
         AnalyticsTrackers.getInstance().get(AnalyticsTrackers.Target.APP);
         //---
 
+
+
         // configure and init Flurry
         new FlurryAgent.Builder()
                 .withLogEnabled(true)
@@ -231,7 +233,6 @@ public class AppController extends Application {
 
         // Set screen name.
         t.setScreenName(screenName);
-
         // Send a screen view.
         t.send(new HitBuilders.ScreenViewBuilder().build());
         GoogleAnalytics.getInstance(this).dispatchLocalHits();

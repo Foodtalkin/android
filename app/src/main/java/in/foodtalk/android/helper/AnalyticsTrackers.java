@@ -3,6 +3,7 @@ package in.foodtalk.android.helper;
 import android.content.Context;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import java.util.HashMap;

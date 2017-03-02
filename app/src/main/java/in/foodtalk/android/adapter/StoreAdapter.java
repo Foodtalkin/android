@@ -113,7 +113,8 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             String date1 = DateFunction.convertFormat(storeObj.endDate,"yyyy-MM-dd HH:mm:ss","MMM dd");
             storeCardHolder.txtDate.setText(date1);
             Picasso.with(context)
-                    .load(storeObj.cardImage)
+                    //.load(storeObj.cardImage)
+                    .load(storeObj.coverImage)
                     .fit().centerCrop()
                     //.fit()
                     .placeholder(R.drawable.placeholder)

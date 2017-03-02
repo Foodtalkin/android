@@ -237,6 +237,8 @@ public class HomeFragment extends Fragment {
                                 String errorCode = response.getString("errorCode");
                                 if(errorCode.equals("6")){
                                     Log.d("Response error", "Session has expired");
+                                    String userId = db.getUserDetails().get("userId");
+                                    AppController.getInstance().trackEvent("Logout","Session expired "+userId,"Home");
                                     logOut();
                                 }else {
                                     Log.e("Response status", "some error");

@@ -22,7 +22,7 @@
             >
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="120dp"
                 android:id="@+id/img">
                 <ImageView
                     android:id="@+id/img_card"
