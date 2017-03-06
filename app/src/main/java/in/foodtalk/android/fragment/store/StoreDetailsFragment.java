@@ -255,7 +255,7 @@ public class StoreDetailsFragment extends Fragment implements ApiCallback, View.
         //tapToRetry.setVisibility(View.GONE);
         //placeholder.setVisibility(View.GONE);
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("sessionId", db.getUserDetails().get("sessio0nId"));
+        jsonObject.put("sessionId", db.getUserDetails().get("sessionId"));
         jsonObject.put("storeItemId", storeId);
         apiCall.apiRequestPost(getActivity(),jsonObject, Config.URL_STORE_BUY, "storeItemBuy", apiCallback);
         progressBarView(true);

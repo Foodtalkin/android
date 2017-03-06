@@ -2247,6 +2247,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 userProfileOpen(id);
                 getFragmentManager().beginTransaction().remove(searchFragment).commit();
 
+               // AppController.getInstance().trackEvent("Search","UserSearch",dishName);
+
                 break;
             case RESTAURANT_SEARCH:
 
@@ -2259,6 +2261,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 setFragmentView(restaurantProfileFragment, R.id.container, -1, true);*/
                 openRProfile(id);
                 getFragmentManager().beginTransaction().remove(searchFragment).commit();
+
+               // AppController.getInstance().trackEvent("Search","UserSearch",dishName);
                 break;
             case DISH_SEARCH:
                 /*dishResultFragment = new DiscoverFragment();
