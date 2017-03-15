@@ -172,7 +172,6 @@ public class AppController extends Application {
         req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
         getRequestQueue().add(req);
     }
-
     public <T> void addToRequestQueue(Request<T> req) {
         req.setTag(TAG);
         getRequestQueue().add(req);
@@ -298,7 +297,6 @@ public class AppController extends Application {
         }
         return dir.delete();
     }
-
     private void checkfirstTime(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if(!prefs.getBoolean("first_time", false))

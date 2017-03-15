@@ -62,7 +62,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_CITY_ID + " TEXT,"
                 + KEY_EMAIL +" TEXT"+ ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
-
         Log.d("DatabaseHandler", "onCreate");
     }
 

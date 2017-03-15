@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 import in.foodtalk.android.FbLogin;
+import in.foodtalk.android.Home;
 import in.foodtalk.android.R;
 import in.foodtalk.android.adapter.FavouritesAdapter;
 import in.foodtalk.android.adapter.HomeFeedAdapter;
@@ -254,8 +255,6 @@ public class FavouritesFragment extends Fragment {
             }
         });
     }
-
-
 
     private void logOut(){
         db.resetTables();

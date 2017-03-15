@@ -305,14 +305,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         btnAskQuestion = (LinearLayout) findViewById(R.id.btn_ask_question);
         btnShareDish = (LinearLayout) findViewById(R.id.btn_share_dish);
-
         btnNewpostTest = (TextView) findViewById(R.id.btn_newpost_test);
 
-
-
         btnNewpostTest.setOnClickListener(this);
-
-
         setAnimationNewpostBar();
 
         createPostObj = new CreatePostObj();
@@ -1557,7 +1552,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
        }
     }
     private void openStoreFragment(){
-        setFragmentView(storeFragment, R.id.container, 1, true);
+        setFragmentView(storeFragment, R.id.container, 1, false);
         pageNo = 1;
     }
     private void openNews(String newId){

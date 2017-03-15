@@ -102,6 +102,8 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     storeCardHolder.ptsBorder.setBackgroundResource(0);
                     storeCardHolder.txtPts.setText("");
                 }else {
+                    storeCardHolder.ptsBorder.setBackgroundResource(R.drawable.rect_border);
+                    storeCardHolder.txtPts.setTextColor(context.getResources().getColor(R.color.active));
                     storeCardHolder.txtPts.setText(storeObj.costPoints+" Pts");
                 }
             }else {
@@ -109,7 +111,6 @@ public class StoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 storeCardHolder.txtPts.setTextColor(context.getResources().getColor(R.color.green_shamrock));
                 storeCardHolder.txtPts.setText("Claimed");
             }
-
             String date1 = DateFunction.convertFormat(storeObj.endDate,"yyyy-MM-dd HH:mm:ss","MMM dd");
             storeCardHolder.txtDate.setText(date1);
             Picasso.with(context)

@@ -17,21 +17,27 @@ import java.util.Map;
 
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.UserAgent;
 
 /**
  * Created by RetailAdmin on 27-04-2016.
  */
-public class PostLikeApi {
+public class PostLikeApi implements ApiCallback {
     DatabaseHandler db;
     Config config;
     String apiUrl;
     Context context;
+
+    ApiCallback apiCallback;
+
+    ApiCall apiCall;
     public PostLikeApi(Context context){
         config = new Config();
         db = new DatabaseHandler(context);
         this.context = context;
+        apiCallback = (ApiCallback) context;
     }
     public void postLike(String postId, boolean likePost) throws JSONException {
 
@@ -42,10 +48,12 @@ public class PostLikeApi {
             apiUrl = config.URL_POST_UNLIKE;
         }
 
-
         JSONObject obj = new JSONObject();
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
         obj.put("postId",postId);
+
+       // apiCall.apiRequestPost(context, obj, apiUrl, "postLike", apiCallback);
+
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                 apiUrl, obj,
                 new Response.Listener<JSONObject>() {
@@ -97,5 +105,31 @@ public class PostLikeApi {
             }
         };
         AppController.getInstance().addToRequestQueue(jsonObjReq,"postlike");
+    }
+
+    @Override
+    public void apiResponse(JSONObject response, String tag) {
+        if (tag.equals("apiLike")){
+            if (response != null){
+                try {
+                    String status = response.getString("status");
+                    if (!status.equals("error")){
+                        //-- getAndSave(response);
+                        //loadDataIntoView(response);
+                    }else {
+                        String errorCode = response.getString("errorCode");
+                        if(errorCode.equals("6")){
+                            Log.d("Response error", "Session has expired");
+                            //logOut();
+                        }else {
+                            Log.e("Response status", "some error");
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("Json Error", e+"");
+                }
+            }
+        }
     }
 }

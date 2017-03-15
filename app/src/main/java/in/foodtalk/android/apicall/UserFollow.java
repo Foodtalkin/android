@@ -39,13 +39,10 @@ public class UserFollow {
         if (userFollow){
             apiUrl = config.URL_FOLLOW;
             requestTag = "userFollow";
-
         }else {
             apiUrl = config.URL_UNFOLLOW;
             requestTag = "userUnfollow";
         }
-
-
         JSONObject obj = new JSONObject();
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
         //obj.put("postId",postId);

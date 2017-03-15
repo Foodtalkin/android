@@ -37,7 +37,6 @@ public class PostBookmarkApi {
 
         if (bookmarkPost){
             apiUrl = config.URL_POST_BOOKMARK;
-
         }else {
             apiUrl = config.URL_POST_REMOVE_BOOKMARK;
         }

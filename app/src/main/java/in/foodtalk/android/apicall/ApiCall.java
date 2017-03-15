@@ -30,9 +30,7 @@ public class ApiCall {
     ApiCallback apiCallback1;
     public void apiRequestPost(final Context context, JSONObject obj, String url, final String tag, ApiCallback apiCallback){
 
-            apiCallback1 = apiCallback;
-
-
+        apiCallback1 = apiCallback;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, obj,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -64,7 +62,7 @@ public class ApiCall {
                                     if (tag.equals("userReport") || tag.equals("restaurantReport")){
                                         showToast(context, "Your report send successfully.");
                                     }
-                                   // showToast(context.getString(R.string.postReportMsg));
+                                   //showToast(context.getString(R.string.postReportMsg));
                                 }
                             }
                         } catch (JSONException e) {
@@ -79,7 +77,7 @@ public class ApiCall {
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.e("error response", "Error: " + error.getMessage());
                 apiCallback1.apiResponse(null, tag);
-                // hideProgressDialog();
+                //hideProgressDialog();
             }
         }){
             /**
