@@ -39,6 +39,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_USER_NAME = "userName";
     private static final String KEY_EMAIL = "email";
     private static final String KEY_CITY_ID = "cityId";
+    private static final String KEY_RTID = "rTId";
 
     public Boolean oldDb = false;
 
@@ -47,6 +48,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
+        String ss = "ALTER TABLE " + TABLE_LOGIN + " ADD "+KEY_RTID+" TEXT DEFAULT "+getUserDetails().get("sessionId")+'"';
+        Log.e("table alter",ss );
     }
 
     // Creating Tables
@@ -56,6 +60,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_ID + " INTEGER PRIMARY KEY,"
                 + KEY_FID + " TEXT,"
                 + KEY_SID + " TEXT,"
+                //+ KEY_RTID + " TEXT,"
                 + KEY_UID + " TEXT,"
                 + KEY_NAME + " TEXT,"
                 + KEY_USER_NAME + " TEXT,"
@@ -63,6 +68,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_EMAIL +" TEXT"+ ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
         Log.d("DatabaseHandler", "onCreate");
+
+
     }
 
     // Upgrading database
@@ -74,15 +81,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE " + TABLE_LOGIN + " ADD "+KEY_EMAIL+" TEXT DEFAULT blank");
             db.execSQL("ALTER TABLE " + TABLE_LOGIN + " ADD "+KEY_CITY_ID+" TEXT DEFAULT blank");
         }
+        if (newVersion == 3){
+
+            db.execSQL("ALTER TABLE " + TABLE_LOGIN + " ADD "+KEY_RTID+" TEXT DEFAULT blank");
+            //Log.e("DatabaseHandler","newVersion 3 "+getUserDetails().get("sessionId"));
+           // Log.e("DatabaseHandler","newVersion 3 ");
+        }
         Log.d("DatabaseHandler", "onUpgrade"+" oldV "+ oldVersion+" newV "+newVersion);
-
-//        if (newVersion == 3 ){
-//            AppController.getInstance().clearApplicationData();
-//            Log.d("DatabaseHandler", "clear app data: db version = 3");
-//        }
-
-        // Create tables again
-       // onCreate(db);
     }
 
     /**
@@ -101,6 +106,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_USER_NAME, loginValue.userName);
         values.put(KEY_EMAIL, loginValue.email);
         values.put(KEY_CITY_ID, loginValue.cityId);
+        //values.put(KEY_RTID, loginValue.rtId);
 
         // Inserting Row
         db.insert(TABLE_LOGIN, null, values);
@@ -126,6 +132,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             user.put("userName", cursor.getString(cursor.getColumnIndex(KEY_USER_NAME)));
             user.put("email",cursor.getString(cursor.getColumnIndex(KEY_EMAIL)));
             user.put("cityId",cursor.getString(cursor.getColumnIndex(KEY_CITY_ID)));
+            //user.put("rtoken", cursor.getString(cursor.getColumnIndex(KEY_RTID)));
 
         }
         Log.d("cursor ", cursor+"");

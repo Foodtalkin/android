@@ -20,7 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import in.foodtalk.android.app.AppController;
+import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;
+import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.UserAgent;
 
 /**
@@ -28,8 +30,10 @@ import in.foodtalk.android.module.UserAgent;
  */
 public class ApiCall {
     ApiCallback apiCallback1;
-    public void apiRequestPost(final Context context, JSONObject obj, String url, final String tag, ApiCallback apiCallback){
+    DatabaseHandler db;
+    public void apiRequestPost(final Context context, final JSONObject obj, final String url, final String tag, final ApiCallback apiCallback){
 
+        db = new DatabaseHandler(context);
         apiCallback1 = apiCallback;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, obj,
                 new Response.Listener<JSONObject>() {
@@ -58,6 +62,7 @@ public class ApiCall {
                                 if(errorCode.equals("6")){
                                     Log.d("Response error", "Session has expired");
                                     //logOut();
+                                    getSessionToken(context, obj, url, tag, apiCallback);
                                 }else if(errorCode.equals("7")) {
                                     if (tag.equals("userReport") || tag.equals("restaurantReport")){
                                         showToast(context, "Your report send successfully.");
@@ -105,5 +110,66 @@ public class ApiCall {
                 msg, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 300);
         toast.show();
+    }
+
+
+    public void getSessionToken(final Context context, JSONObject obj, String url, final String tag, ApiCallback apiCallback){
+
+        JSONObject obj1 = new JSONObject();
+        try {
+            obj1.put("refreshToken", "f3ac1cd274324f427db924cf4412f8a79fc15997");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Config.URL_AUTH_REFRESH, obj1,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+
+                        Log.d("ApiCall","getSessionToken: "+ response);
+                        try {
+                            String status = response.getString("status");
+                            if (!status.equals("error")){
+                                //-- getAndSave(response);
+                                //loadDataIntoView(response);
+
+                            }else {
+                                String errorCode = response.getString("errorCode");
+                                if(errorCode.equals("6")){
+                                    Log.d("Response error", "Session has expired");
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.d("Json Error", e+"");
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e("error response", "Error: " + error.getMessage());
+                apiCallback1.apiResponse(null, tag);
+            }
+        }){
+            /**
+             * Passing some request headers
+             * */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                UserAgent userAgent = new UserAgent();
+                if (userAgent.getUserAgent(context) != null ){
+                    headers.put("User-agent", userAgent.getUserAgent(context));
+                }
+                return headers;
+            }
+        };
+        final int DEFAULT_TIMEOUT = 6000;
+        // Adding request to request queue
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        AppController.getInstance().addToRequestQueue(jsonObjectRequest, tag);
     }
 }

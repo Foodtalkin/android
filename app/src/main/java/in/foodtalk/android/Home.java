@@ -391,7 +391,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         // Log.d("getInfo",db.getRowCount()+"");
         // Log.d("get user info", db.getUserDetails().get("userName")+"");
 
-        // Log.d("get user info", "session id: "+db.getUserDetails().get("sessionId"));
+
+
+         //Log.e("get user info", "refresh token: "+db.getUserDetails().get("rtoken"));
         // Log.d("get user info", "user id: "+db.getUserDetails().get("userId"));
         //Log.d("get user info", "full name: "+db.getUserDetails().get("fullName"));
         //Log.d("get user info", "user name: "+db.getUserDetails().get("userName"));

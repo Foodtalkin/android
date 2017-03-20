@@ -4,8 +4,8 @@ package in.foodtalk.android.app;
  * Created by RetailAdmin on 19-04-2016.
  */
 public class Config {
-   // private static  String IP = "52.74.13.4"; // test server
-    private static  String IP = "52.74.136.146";// live server
+    private static  String IP = "52.74.13.4"; // test server
+   // private static  String IP = "52.74.136.146";// live server
     public static String URL_LOGIN = "http://"+IP+"/index.php/service/auth/signin"; // ----testing url
    // public static String URL_LOGIN = "http://52.74.136.146/index.php/service/auth/signin";
 
@@ -76,4 +76,6 @@ public class Config {
 
     public static String URL_QUESTION_LIST = "http://"+IP+"/index.php/service/user/getQuestionPosts";
     public static String URL_APP_VERSION = "http://"+IP+"/index.php/service/auth/appVersionControl";
+
+    public static String URL_AUTH_REFRESH = "http://"+IP+"/index.php/service/auth/refresh";
 }

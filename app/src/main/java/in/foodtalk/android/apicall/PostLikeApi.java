@@ -37,7 +37,8 @@ public class PostLikeApi implements ApiCallback {
         config = new Config();
         db = new DatabaseHandler(context);
         this.context = context;
-        apiCallback = (ApiCallback) context;
+        apiCallback = this;
+        apiCall = new ApiCall();
     }
     public void postLike(String postId, boolean likePost) throws JSONException {
 
@@ -52,7 +53,7 @@ public class PostLikeApi implements ApiCallback {
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
         obj.put("postId",postId);
 
-       // apiCall.apiRequestPost(context, obj, apiUrl, "postLike", apiCallback);
+       apiCall.apiRequestPost(context, obj, apiUrl, "postLike", apiCallback);
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                 apiUrl, obj,
@@ -104,7 +105,7 @@ public class PostLikeApi implements ApiCallback {
                 return headers;
             }
         };
-        AppController.getInstance().addToRequestQueue(jsonObjReq,"postlike");
+        //AppController.getInstance().addToRequestQueue(jsonObjReq,"postlike");
     }
 
     @Override

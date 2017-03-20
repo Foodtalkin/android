@@ -623,6 +623,7 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                             String channels = jObj.getString("channels");
                             String email = jObj.getString("email");
                             String cityId = jObj.getString("cityName");
+                            String rToken = response.getString("refreshToken");
                             String region;
                             if (jObj.has("region")){
                                 region = jObj.getString("region");
@@ -660,6 +661,7 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                             loginValue.name = fullName;
                             loginValue.lat = lat;
                             loginValue.lon = lon;
+                            loginValue.rtId = rToken;
                             //loginValue.userName = userName;
 
                             loginValue.userName = ((userName.equals("")) ? "N/A" : userName);
