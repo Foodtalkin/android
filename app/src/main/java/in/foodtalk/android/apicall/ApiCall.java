@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import in.foodtalk.android.Home;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;
@@ -120,12 +121,7 @@ public class ApiCall {
         String sessionId = db.getUserDetails().get("sessionId");
         JSONObject obj1 = new JSONObject();
         try {
-            if (refreshToken.equals("blank")){
-                //obj1.put("refreshToken", "f3ac1cd274324f427db924cf4412f8a79fc15997");
-               // obj1.put("refreshToken", sessionId);
-            }else {
-                obj1.put("refreshToken", refreshToken);
-            }
+            obj1.put("refreshToken", refreshToken);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -146,10 +142,11 @@ public class ApiCall {
                                 obj.put("sessionId", db.getUserDetails().get("sessionId"));
                                 Log.d("ApiCall","new sessionId: "+ db.getUserDetails().get("sessionId"));
                                 apiRequestPost(context, obj, url, tag, apiCallback);
-
                             }else {
                                 String errorCode = response.getString("errorCode");
-                                if(errorCode.equals("6")){
+                                if(errorCode.equals("106")){
+                                    Home home = (Home) context;
+                                    home.logOut();
                                     Log.d("Response error", "Session has expired");
                                 }
                             }

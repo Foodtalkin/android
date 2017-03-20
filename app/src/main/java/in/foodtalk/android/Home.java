@@ -1045,7 +1045,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     }
 
 
-    private void logOut() {
+    public void logOut() {
         Log.e("Home","logOut function call");
         db.resetTables();
         LoginManager.getInstance().logOut();
