@@ -113,15 +113,23 @@ public class ApiCall {
     }
 
 
-    public void getSessionToken(final Context context, JSONObject obj, String url, final String tag, ApiCallback apiCallback){
+    public void getSessionToken(final Context context, final JSONObject obj, final String url, final String tag, final ApiCallback apiCallback){
 
+
+        String refreshToken = db.getUserDetails().get("refreshtoken");
+        String sessionId = db.getUserDetails().get("sessionId");
         JSONObject obj1 = new JSONObject();
         try {
-            obj1.put("refreshToken", "f3ac1cd274324f427db924cf4412f8a79fc15997");
+            if (refreshToken.equals("blank")){
+                //obj1.put("refreshToken", "f3ac1cd274324f427db924cf4412f8a79fc15997");
+               // obj1.put("refreshToken", sessionId);
+            }else {
+                obj1.put("refreshToken", refreshToken);
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Config.URL_AUTH_REFRESH, obj1,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -134,6 +142,10 @@ public class ApiCall {
                             if (!status.equals("error")){
                                 //-- getAndSave(response);
                                 //loadDataIntoView(response);
+                                db.updateTokens(db.getUserDetails().get("userId"), response.getString("sessionId"), response.getString("refreshToken"));
+                                obj.put("sessionId", db.getUserDetails().get("sessionId"));
+                                Log.d("ApiCall","new sessionId: "+ db.getUserDetails().get("sessionId"));
+                                apiRequestPost(context, obj, url, tag, apiCallback);
 
                             }else {
                                 String errorCode = response.getString("errorCode");

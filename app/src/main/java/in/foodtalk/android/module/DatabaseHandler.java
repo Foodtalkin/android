@@ -22,7 +22,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     // Database Name
     private static final String DATABASE_NAME = "appDb";
@@ -60,7 +60,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_ID + " INTEGER PRIMARY KEY,"
                 + KEY_FID + " TEXT,"
                 + KEY_SID + " TEXT,"
-                //+ KEY_RTID + " TEXT,"
+                + KEY_RTID + " TEXT,"
                 + KEY_UID + " TEXT,"
                 + KEY_NAME + " TEXT,"
                 + KEY_USER_NAME + " TEXT,"
@@ -84,6 +84,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (newVersion == 3){
 
             db.execSQL("ALTER TABLE " + TABLE_LOGIN + " ADD "+KEY_RTID+" TEXT DEFAULT blank");
+
+            db.execSQL("UPDATE " + TABLE_LOGIN + " SET "+KEY_RTID+" = "+KEY_SID);
+
             //Log.e("DatabaseHandler","newVersion 3 "+getUserDetails().get("sessionId"));
            // Log.e("DatabaseHandler","newVersion 3 ");
         }
@@ -106,11 +109,27 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_USER_NAME, loginValue.userName);
         values.put(KEY_EMAIL, loginValue.email);
         values.put(KEY_CITY_ID, loginValue.cityId);
-        //values.put(KEY_RTID, loginValue.rtId);
+        values.put(KEY_RTID, loginValue.rtId);
+
+
+
+        db.update(TABLE_LOGIN, values, KEY_UID+" = "+loginValue.uId,null);
 
         // Inserting Row
         db.insert(TABLE_LOGIN, null, values);
         db.close(); // Closing database connection
+    }
+
+    public void updateTokens(String uId, String sId, String rToken){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_SID, sId);
+        values.put(KEY_RTID, rToken);
+
+        db.update(TABLE_LOGIN, values, KEY_UID + " = '" + uId + "'", null);
+        db.close(); // Closing database connection
+
     }
     /**
      * Getting user data from database
@@ -132,7 +151,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             user.put("userName", cursor.getString(cursor.getColumnIndex(KEY_USER_NAME)));
             user.put("email",cursor.getString(cursor.getColumnIndex(KEY_EMAIL)));
             user.put("cityId",cursor.getString(cursor.getColumnIndex(KEY_CITY_ID)));
-            //user.put("rtoken", cursor.getString(cursor.getColumnIndex(KEY_RTID)));
+            user.put("refreshtoken", cursor.getString(cursor.getColumnIndex(KEY_RTID)));
 
         }
         Log.d("cursor ", cursor+"");
@@ -186,7 +205,4 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // what value do you get here?
         return db.getVersion();
     }
-
-
-
 }
