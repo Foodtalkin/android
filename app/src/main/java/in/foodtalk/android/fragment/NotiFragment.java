@@ -31,8 +31,10 @@ import java.util.Map;
 
 import in.foodtalk.android.R;
 import in.foodtalk.android.adapter.NotificationAdapter;
+import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.UserAgent;
 import in.foodtalk.android.object.NotificationObj;
@@ -40,7 +42,7 @@ import in.foodtalk.android.object.NotificationObj;
 /**
  * Created by RetailAdmin on 21-04-2016.
  */
-public class NotiFragment extends Fragment {
+public class NotiFragment extends Fragment implements ApiCallback {
     View layout;
     Config config;
     DatabaseHandler db;
@@ -56,6 +58,8 @@ public class NotiFragment extends Fragment {
 
     Context context;
 
+    ApiCall apiCall;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.noti_fragment, container, false);
@@ -64,6 +68,8 @@ public class NotiFragment extends Fragment {
 
         txtMsg = (TextView) layout.findViewById(R.id.txt_msg);
         progressBar = (LinearLayout) layout.findViewById(R.id.progress_bar);
+
+        apiCall = new ApiCall();
 
         linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -75,7 +81,7 @@ public class NotiFragment extends Fragment {
 
         Log.d("notification","open");
         try {
-            getNotiList("load");
+            getNotiList("getNotificationList");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -88,72 +94,8 @@ public class NotiFragment extends Fragment {
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
         obj.put("notificationGroup", "1");
 
+        apiCall.apiRequestPost(getActivity(), obj, Config.URL_NOTIFICATION, tag, this);
 
-        //Log.d("post page number param", pageNo+"");
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                config.URL_NOTIFICATION, obj,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        //Log.d(TAG, "After Sending JsongObj"+response.toString());
-                        //msgResponse.setText(response.toString());
-                        Log.d("Login Respond", response.toString());
-                        try {
-                            String status = response.getString("status");
-                            if (!status.equals("error")){
-                                //-- getAndSave(response);
-                                loadDataIntoView(response , "load");
-                               // loadDataIntoView(response , tag);
-                            }else {
-                                String errorCode = response.getString("errorCode");
-                                if(errorCode.equals("6")){
-                                    Log.d("Response error", "Session has expired");
-                                   // logOut();
-                                }else {
-                                    Log.e("Response status", "some error");
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.d("Json Error", e+"");
-                        }
-                        //----------------------
-                        //hideProgressDialog();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d("Response", "Error: " + error.getMessage());
-               // showToast("Please check your internet connection");
-
-                if (tag.equals("load")){
-                   // tapToRetry.setVisibility(View.VISIBLE);
-                  //  progressBar.setVisibility(View.GONE);
-                }
-
-
-                // hideProgressDialog();
-            }
-        }) {
-            /**
-             * Passing some request headers
-             * */
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                UserAgent userAgent = new UserAgent();
-                if (userAgent.getUserAgent(getActivity()) != null ){
-                    headers.put("User-agent", userAgent.getUserAgent(getActivity()));
-                }
-                return headers;
-            }
-        };
-
-        final int DEFAULT_TIMEOUT = 6000;
-        // Adding request to request queue
-        jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        AppController.getInstance().addToRequestQueue(jsonObjReq,"gethomefeed");
     }
     private void loadDataIntoView(JSONObject response , String tag) throws JSONException {
         JSONArray notiArray = response.getJSONArray("notifications");
@@ -177,5 +119,31 @@ public class NotiFragment extends Fragment {
         }
         notificationAdapter = new NotificationAdapter(context, notiList);
         recyclerView.setAdapter(notificationAdapter);
+    }
+    @Override
+    public void apiResponse(JSONObject response, String tag) {
+        if (tag.equals("getNotificationList")){
+            if (response != null){
+                try {
+                    String status = response.getString("status");
+                    if (!status.equals("error")){
+                        //-- getAndSave(response);
+                        loadDataIntoView(response , "load");
+                        // loadDataIntoView(response , tag);
+                    }else {
+                        String errorCode = response.getString("errorCode");
+                        if(errorCode.equals("6")){
+                            Log.d("Response error", "Session has expired");
+                            // logOut();
+                        }else {
+                            Log.e("Response status", "some error");
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("Json Error", e+"");
+                }
+            }
+        }
     }
 }

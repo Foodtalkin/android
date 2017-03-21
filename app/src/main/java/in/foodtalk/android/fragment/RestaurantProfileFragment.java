@@ -32,8 +32,10 @@ import java.util.Map;
 
 import in.foodtalk.android.R;
 import in.foodtalk.android.adapter.RestaurantProfileAdapter;
+import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.EndlessRecyclerOnScrollListener;
 import in.foodtalk.android.module.UserAgent;
@@ -43,7 +45,7 @@ import in.foodtalk.android.object.RestaurantProfileObj;
 /**
  * Created by RetailAdmin on 17-05-2016.
  */
-public class RestaurantProfileFragment extends Fragment {
+public class RestaurantProfileFragment extends Fragment implements ApiCallback {
     String restaurantId;
     View layout;
     RecyclerView recyclerView;
@@ -68,6 +70,9 @@ public class RestaurantProfileFragment extends Fragment {
     StaggeredGridLayoutManager staggeredGridLayoutManager;
     private int pageNo = 1;
 
+
+    ApiCall apiCall;
+
     /*public RestaurantProfileFragment(String restaurantId){
         this.restaurantId = restaurantId;
     }*/
@@ -79,6 +84,8 @@ public class RestaurantProfileFragment extends Fragment {
         restaurantId =  getArguments().getString("restaurantId");
         recyclerView = (RecyclerView) layout.findViewById(R.id.restaurant_profile_recycler_view);
         progressBar = (LinearLayout) layout.findViewById(R.id.progress_bar);
+
+        apiCall = new ApiCall();
 
         if (rPostList.size() > 0){
             rPostList.clear();
@@ -132,41 +139,8 @@ public class RestaurantProfileFragment extends Fragment {
         //obj.put("selectedUserId", userIdOther);
         //obj.put("latitude",lat);
         //obj.put("longitude",lon);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                url,
-                obj,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("Responsne", response+"");
-                        try {
-                            loadDataIntoView(response, tag);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d("Response","Error: "+ error.getMessage());
-            }
-        }){
-            //--Passing some request headers--
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                UserAgent userAgent = new UserAgent();
-                if (userAgent.getUserAgent(getActivity()) != null ){
-                    headers.put("User-agent", userAgent.getUserAgent(getActivity()));
-                }
-                return headers;
-            }
-        };
-        final int DEFAULT_TIMEOUT = 6000;
-        //Adding request to request queue
-        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        AppController.getInstance().addToRequestQueue(jsonObjectRequest,"getUserProfile");
+
+        apiCall.apiRequestPost(getActivity(), obj, url, tag, this);
     }
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
         progressBar.setVisibility(View.GONE);
@@ -290,4 +264,14 @@ public class RestaurantProfileFragment extends Fragment {
     }
 
 
+    @Override
+    public void apiResponse(JSONObject response, String tag) {
+        if (response != null){
+            try {
+                loadDataIntoView(response, tag);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

@@ -39,8 +39,10 @@ import in.foodtalk.android.Home;
 import in.foodtalk.android.R;
 import in.foodtalk.android.adapter.FavouritesAdapter;
 import in.foodtalk.android.adapter.HomeFeedAdapter;
+import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.EndlessRecyclerOnScrollListener;
 import in.foodtalk.android.module.UserAgent;
@@ -50,7 +52,7 @@ import in.foodtalk.android.object.PostObj;
 /**
  * Created by RetailAdmin on 13-05-2016.
  */
-public class FavouritesFragment extends Fragment {
+public class FavouritesFragment extends Fragment implements ApiCallback {
     View layout;
     RecyclerView recyclerView;
     DatabaseHandler db;
@@ -65,6 +67,8 @@ public class FavouritesFragment extends Fragment {
     ProgressBar progressBar;
     LinearLayout tapToRetry;
     TextView placeholderFavourites;
+
+    ApiCall apiCall;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.favourites_fragment, container, false);
@@ -72,6 +76,8 @@ public class FavouritesFragment extends Fragment {
 
         progressBar = (ProgressBar) layout.findViewById(R.id.progress_bar);
         tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
+
+        apiCall = new ApiCall();
 
         placeholderFavourites = (TextView) layout.findViewById(R.id.placeholder_favourites);
 
@@ -114,77 +120,8 @@ public class FavouritesFragment extends Fragment {
         //Log.d("getPostFeed","pageNo: "+pageNo);
         obj.put("page",Integer.toString(pageNo));
         //obj.put("recordCount","10");
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                config.URL_FAVOURITES, obj,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
 
-                        progressBar.setVisibility(View.GONE);
-                        //Log.d(TAG, "After Sending JsongObj"+response.toString());
-                        //msgResponse.setText(response.toString());
-                        Log.d("Login Respond", response.toString());
-                        try {
-                            String status = response.getString("status");
-                            if (!status.equals("error")){
-                                //-- getAndSave(response);
-                                loadDataIntoView(response , tag);
-                            }else {
-                                String errorCode = response.getString("errorCode");
-                                if(errorCode.equals("6")){
-                                    Log.d("Response error", "Session has expired");
-                                    logOut();
-                                }else {
-                                    Log.e("Response status", "some error");
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.d("Json Error", e+"");
-                        }
-                        //----------------------
-                        //hideProgressDialog();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d("Response", "Error: " + error.getMessage());
-                showToast("Please check your internet connection");
-
-                if (tag.equals("load")){
-                    progressBar.setVisibility(View.GONE);
-                    tapToRetry.setVisibility(View.VISIBLE);
-                }
-
-                if(tag.equals("refresh")){
-                    //swipeRefreshHome.setRefreshing(false);
-                }
-                if(tag.equals("loadMore")){
-                    //remove(null);
-                    //callScrollClass();
-                    pageNo--;
-                }
-                // hideProgressDialog();
-            }
-        }) {
-            /**
-             * Passing some request headers
-             * */
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                UserAgent userAgent = new UserAgent();
-                if (userAgent.getUserAgent(getActivity()) != null ){
-                    headers.put("User-agent", userAgent.getUserAgent(getActivity()));
-                }
-                return headers;
-            }
-        };
-        final int DEFAULT_TIMEOUT = 6000;
-        // Adding request to request queue
-        jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        AppController.getInstance().addToRequestQueue(jsonObjReq,"gethomefeed");
+        apiCall.apiRequestPost(getActivity(), obj, Config.URL_FAVOURITES, tag, this);
     }
 
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
@@ -267,5 +204,45 @@ public class FavouritesFragment extends Fragment {
                 msg, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 300);
         toast.show();
+    }
+
+    @Override
+    public void apiResponse(JSONObject response, String tag) {
+        if (response != null){
+            try {
+                String status = response.getString("status");
+                if (!status.equals("error")){
+                    //-- getAndSave(response);
+                    loadDataIntoView(response , tag);
+                }else {
+                    String errorCode = response.getString("errorCode");
+                    if(errorCode.equals("6")){
+                        Log.d("Response error", "Session has expired");
+                        logOut();
+                    }else {
+                        Log.e("Response status", "some error");
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.d("Json Error", e+"");
+            }
+        } else {
+            showToast("Please check your internet connection");
+
+            if (tag.equals("load")){
+                progressBar.setVisibility(View.GONE);
+                tapToRetry.setVisibility(View.VISIBLE);
+            }
+
+            if(tag.equals("refresh")){
+                //swipeRefreshHome.setRefreshing(false);
+            }
+            if(tag.equals("loadMore")){
+                //remove(null);
+                //callScrollClass();
+                pageNo--;
+            }
+        }
     }
 }

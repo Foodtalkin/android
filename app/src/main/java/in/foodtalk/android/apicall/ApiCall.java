@@ -130,8 +130,6 @@ public class ApiCall {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-
-
                         Log.d("ApiCall","getSessionToken: "+ response);
                         try {
                             String status = response.getString("status");

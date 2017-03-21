@@ -23,13 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
+
 import com.facebook.login.LoginManager;
 
 import org.json.JSONArray;
@@ -44,8 +38,10 @@ import java.util.Map;
 import in.foodtalk.android.FbLogin;
 import in.foodtalk.android.R;
 import in.foodtalk.android.adapter.HomeFeedAdapter;
+import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.communicator.NewPostCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.module.DatabaseHandler;
@@ -56,7 +52,7 @@ import in.foodtalk.android.object.PostObj;
 /**
  * Created by RetailAdmin on 21-04-2016.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements ApiCallback {
     View layout;
     DatabaseHandler db;
     Config config;
@@ -85,6 +81,8 @@ public class HomeFragment extends Fragment {
 
     Activity activity;
 
+    ApiCall apiCall;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         layout = inflater.inflate(R.layout.home_fragment, container, false);
@@ -96,6 +94,8 @@ public class HomeFragment extends Fragment {
         tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
 
         homeProgress = (ProgressBar) layout.findViewById(R.id.home_progress);
+
+        apiCall = new ApiCall();
 
         if(postData != null){
             Log.d("postData","size: "+ postData);
@@ -219,80 +219,8 @@ public class HomeFragment extends Fragment {
         //Log.d("getPostFeed","pageNo: "+pageNo);
         obj.put("page",Integer.toString(pageNo));
         obj.put("recordCount","10");
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                config.URL_POST_LIST, obj,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        //Log.d(TAG, "After Sending JsongObj"+response.toString());
-                        //msgResponse.setText(response.toString());
-                        Log.d("Login Respond", response.toString());
-                        try {
-                            String status = response.getString("status");
-                            if (!status.equals("error")){
-                               //-- getAndSave(response);
-                                loadDataIntoView(response , tag);
-                            }else {
-                                String errorCode = response.getString("errorCode");
-                                if(errorCode.equals("6")){
-                                    Log.d("Response error", "Session has expired");
-                                    String userId = db.getUserDetails().get("userId");
-                                    AppController.getInstance().trackEvent("Logout","Session expired "+userId,"Home");
-                                    logOut();
-                                }else {
-                                    Log.e("Response status", "some error");
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.d("Json Error", e+"");
-                        }
-                        //----------------------
-                        //hideProgressDialog();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d("Response", "Error: " + error.getMessage());
-                showToast("Please check your internet connection");
 
-                if (tag.equals("load")){
-                    tapToRetry.setVisibility(View.VISIBLE);
-                    homeProgress.setVisibility(View.GONE);
-                }
-
-
-                if(tag.equals("refresh")){
-                    swipeRefreshHome.setRefreshing(false);
-                }
-                if(tag.equals("loadMore")){
-                    remove(null);
-                    callScrollClass();
-                    loading = false;
-                    pageNo--;
-                }
-                // hideProgressDialog();
-            }
-        }) {
-            /**
-             * Passing some request headers
-             * */
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                UserAgent userAgent = new UserAgent();
-                if (userAgent.getUserAgent(getActivity()) != null ){
-                    headers.put("User-agent", userAgent.getUserAgent(getActivity()));
-                }
-                return headers;
-            }
-        };
-
-        final int DEFAULT_TIMEOUT = 6000;
-        // Adding request to request queue
-        jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        AppController.getInstance().addToRequestQueue(jsonObjReq,"gethomefeed");
+        apiCall.apiRequestPost(getActivity(),obj,Config.URL_POST_LIST, tag, this);
     }
     private void loadDataIntoView(JSONObject response , String tag) throws JSONException {
 
@@ -439,4 +367,52 @@ public class HomeFragment extends Fragment {
         Log.d("scroll position", recyclerView.getScrollY()+"");
         recyclerView.smoothScrollToPosition(0);
     }
+
+    @Override
+    public void apiResponse(JSONObject response, String tag) {
+
+            if (response != null){
+                try {
+                    String status = response.getString("status");
+                    if (!status.equals("error")){
+                        //-- getAndSave(response);
+                        loadDataIntoView(response , tag);
+                        Log.d("HomeFragment", "apiResponse: "+ tag);
+                    }else {
+                        String errorCode = response.getString("errorCode");
+                        if(errorCode.equals("6")){
+                            //Log.d("Response error", "Session has expired");
+                            //String userId = db.getUserDetails().get("userId");
+                            //AppController.getInstance().trackEvent("Logout","Session expired "+userId,"Home");
+                            //logOut();
+                        }else {
+                            Log.e("Response status", "some error");
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("Json Error", e+"");
+                }
+            }else {
+                showToast("Please check your internet connection");
+
+                if (tag.equals("load")){
+                    tapToRetry.setVisibility(View.VISIBLE);
+                    homeProgress.setVisibility(View.GONE);
+                }
+
+
+                if(tag.equals("refresh")){
+                    swipeRefreshHome.setRefreshing(false);
+                }
+                if(tag.equals("loadMore")){
+                    remove(null);
+                    callScrollClass();
+                    loading = false;
+                    pageNo--;
+                }
+            }
+
+        }
+
 }

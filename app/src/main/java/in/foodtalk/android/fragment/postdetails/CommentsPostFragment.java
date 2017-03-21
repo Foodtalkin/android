@@ -89,12 +89,6 @@ public class CommentsPostFragment extends Fragment implements ApiCallback, Menti
     JSONArray mentionUArray = new JSONArray();
     CommentNewCallback commentNewCallback;
 
-
-
-
-
-
-
     CommentAdapterNew commentAdapterNew;
     FollowedListAdapter followedListAdapter;
 

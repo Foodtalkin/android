@@ -40,8 +40,10 @@ import in.foodtalk.android.R;
 import in.foodtalk.android.adapter.DiscoverAdapter;
 import in.foodtalk.android.adapter.HomeFeedAdapter;
 import in.foodtalk.android.adapter.OpenPostAdapter;
+import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.communicator.LatLonCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.module.DatabaseHandler;
@@ -54,7 +56,7 @@ import in.foodtalk.android.object.UserPostObj;
 /**
  * Created by RetailAdmin on 21-04-2016.
  */
-public class OpenPostFragment extends Fragment implements View.OnTouchListener {
+public class OpenPostFragment extends Fragment implements View.OnTouchListener, ApiCallback {
 
 
     View layout;
@@ -66,6 +68,8 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
     DiscoverAdapter discoverAdapter;
     OpenPostAdapter openPostAdapter;
     List<UserPostObj> postData;
+
+    ApiCall apiCall;
 
     private RecyclerView.LayoutManager mLayoutManager;
 
@@ -106,6 +110,8 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
         layout = inflater.inflate(R.layout.open_post_fragment, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.recycler_view_open_post);
         progressBar = (LinearLayout) layout.findViewById(R.id.progress_bar);
+
+        apiCall = new ApiCall();
 
         recyclerView.setOnTouchListener(this);
 
@@ -197,71 +203,8 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
 
 
         Log.d("post page number param", pageNo+"");
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                config.URL_USER_POST_IMAGE, obj,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        //Log.d(TAG, "After Sending JsongObj"+response.toString());
-                        //msgResponse.setText(response.toString());
-                        Log.d("Login Respond", response.toString());
-                        try {
-                            String status = response.getString("status");
-                            if (!status.equals("error")){
-                                //-- getAndSave(response);
-                                loadDataIntoView(response , tag);
-                            }else {
-                                String errorCode = response.getString("errorCode");
-                                if(errorCode.equals("6")){
-                                    Log.d("Response error", "Session has expired");
-                                    logOut();
-                                }else {
-                                    Log.e("Response status", "some error");
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.d("Json Error", e+"");
-                        }
-                        //----------------------
-                        //hideProgressDialog();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d("Response", "Error: " + error.getMessage());
-                showToast("Please check your internet connection");
 
-                if(tag.equals("refresh")){
-                   //-- swipeRefreshHome.setRefreshing(false);
-                }
-                if(tag.equals("loadMore")){
-                    remove(null);
-                    //callScrollClass();
-                    pageNo--;
-                }
-                // hideProgressDialog();
-            }
-        }) {
-            /**
-             * Passing some request headers
-             * */
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                UserAgent userAgent = new UserAgent();
-                if (userAgent.getUserAgent(getActivity()) != null ){
-                    headers.put("User-agent", userAgent.getUserAgent(getActivity()));
-                }
-                return headers;
-            }
-        };
-
-        final int DEFAULT_TIMEOUT = 6000;
-        // Adding request to request queue
-        jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        AppController.getInstance().addToRequestQueue(jsonObjReq,"gethomefeed");
+        apiCall.apiRequestPost(getActivity(), obj, Config.URL_USER_POST_IMAGE, tag, this);
     }
     private void loadDataIntoView(JSONObject response , String tag) throws JSONException {
 
@@ -424,5 +367,40 @@ public class OpenPostFragment extends Fragment implements View.OnTouchListener {
                 break;
         }
         return false;
+    }
+
+    @Override
+    public void apiResponse(JSONObject response, String tag) {
+        if (response != null){
+            try {
+                String status = response.getString("status");
+                if (!status.equals("error")){
+                    //-- getAndSave(response);
+                    loadDataIntoView(response , tag);
+                }else {
+                    String errorCode = response.getString("errorCode");
+                    if(errorCode.equals("6")){
+                        Log.d("Response error", "Session has expired");
+                        logOut();
+                    }else {
+                        Log.e("Response status", "some error");
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.d("Json Error", e+"");
+            }
+        }else {
+            showToast("Please check your internet connection");
+
+            if(tag.equals("refresh")){
+                //-- swipeRefreshHome.setRefreshing(false);
+            }
+            if(tag.equals("loadMore")){
+                remove(null);
+                //callScrollClass();
+                pageNo--;
+            }
+        }
     }
 }

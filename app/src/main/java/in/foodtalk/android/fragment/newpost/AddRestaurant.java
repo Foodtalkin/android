@@ -49,6 +49,7 @@ import in.foodtalk.android.R;
 import in.foodtalk.android.adapter.newpost.CheckInAdapter;
 import in.foodtalk.android.adapter.newpost.CityListAdapter;
 import in.foodtalk.android.adapter.onboarding.SelectCityAdapter;
+import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.apicall.GetCitiesApi;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
@@ -94,6 +95,8 @@ public class AddRestaurant extends Fragment implements LatLonCallback, ApiCallba
     LinearLayoutManager linearLayoutManager;
 
     StringCase stringCase;
+
+    ApiCall apiCall;
 
     List<SelectCityObj> cityList = new ArrayList<>();
    Boolean addressSection = true;
@@ -145,6 +148,8 @@ public class AddRestaurant extends Fragment implements LatLonCallback, ApiCallba
 
         apiCallback = this;
         selectCityCallback = this;
+
+        apiCall = new ApiCall();
 
         locationSection = (LinearLayout) layout.findViewById(R.id.location_add_restaurant);
         //--txtCity = (TextView) layout.findViewById(R.id.txt_city_add_restaurant);
@@ -296,73 +301,8 @@ public class AddRestaurant extends Fragment implements LatLonCallback, ApiCallba
         obj.put("google_place_id", googlePlaceId);
 //        obj.put("region",txtCity.getText().toString());
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                config.URL_ADD_RESTAURANT, obj,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        //Log.d(TAG, "After Sending JsongObj"+response.toString());
-                        //msgResponse.setText(response.toString());
-                        Log.d("Login Respond", response.toString());
-                        try {
-                            String status = response.getString("status");
-                            if (!status.equals("error")){
-                                //Log.d("api call","restaurant added"+ response.getString("restaurantId"));
-                                addedRestaurantCallback.restaurantAdded(response.getString("restaurantId"), inputRName.getText().toString());
-                                errorMsg(false, "");
-                                //-- getAndSave(response);
-                                //loadDataIntoView(response , tag);
-                            }else {
-                                String errorCode = response.getString("errorCode");
-                                if(errorCode.equals("6")){
-                                    Log.d("Response error", "Session has expired");
-                                    //logOut();
-                                }else {
-                                    Log.e("Response status", "some error");
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.d("Json Error", e+"");
-                        }
-                        //----------------------
-                        //hideProgressDialog();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d("Response", "Error: " + error.getMessage());
-                //showToast("Please check your internet connection");
 
-                if(tag.equals("refresh")){
-                    //swipeRefreshHome.setRefreshing(false);
-                }
-                if(tag.equals("loadMore")){
-                    //remove(null);
-                    //callScrollClass();
-                    //pageNo--;
-                }
-                // hideProgressDialog();
-            }
-        }) {
-            /**
-             * Passing some request headers
-             * */
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                UserAgent userAgent = new UserAgent();
-                if (userAgent.getUserAgent(getActivity()) != null ){
-                    headers.put("User-agent", userAgent.getUserAgent(getActivity()));
-                }
-                return headers;
-            }
-        };
-        final int DEFAULT_TIMEOUT = 6000;
-        // Adding request to request queue
-        jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        AppController.getInstance().addToRequestQueue(jsonObjReq,"gethomefeed");
+        apiCall.apiRequestPost(getActivity(), obj,Config.URL_ADD_RESTAURANT, "addRestaurant", apiCallback);
     }
 
     private void textListener(){
@@ -489,6 +429,32 @@ public class AddRestaurant extends Fragment implements LatLonCallback, ApiCallba
             }else {
                 ToastShow.showToast(getActivity(), "Please check your internet connection");
                 btnSendEnabled(true);
+            }
+
+        }
+        if (tag.equals("addRestaurant")){
+            if (response != null){
+                try {
+                    String status = response.getString("status");
+                    if (!status.equals("error")){
+                        //Log.d("api call","restaurant added"+ response.getString("restaurantId"));
+                        addedRestaurantCallback.restaurantAdded(response.getString("restaurantId"), inputRName.getText().toString());
+                        errorMsg(false, "");
+                        //-- getAndSave(response);
+                        //loadDataIntoView(response , tag);
+                    }else {
+                        String errorCode = response.getString("errorCode");
+                        if(errorCode.equals("6")){
+                            Log.d("Response error", "Session has expired");
+                            //logOut();
+                        }else {
+                            Log.e("Response status", "some error");
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("Json Error", e+"");
+                }
             }
 
         }

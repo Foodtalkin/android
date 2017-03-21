@@ -37,8 +37,10 @@ import java.util.Map;
 
 import in.foodtalk.android.R;
 import in.foodtalk.android.adapter.UserProfileAdapter;
+import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.communicator.LatLonCallback;
 import in.foodtalk.android.communicator.UserProfileCallback;
 import in.foodtalk.android.communicator.UserProfileImgCallback;
@@ -53,7 +55,7 @@ import in.foodtalk.android.object.UserProfileObj;
 /**
  * Created by RetailAdmin on 06-05-2016.
  */
-public class UserProfile extends Fragment implements LatLonCallback, UserProfileImgCallback {
+public class UserProfile extends Fragment implements LatLonCallback, UserProfileImgCallback, ApiCallback {
 
     View layout;
 
@@ -64,6 +66,8 @@ public class UserProfile extends Fragment implements LatLonCallback, UserProfile
 
     UserPostObj userPost;
     UserProfileObj userProfile;
+
+    ApiCall apiCall;
 
 
 
@@ -107,6 +111,7 @@ public class UserProfile extends Fragment implements LatLonCallback, UserProfile
         layout = inflater.inflate(R.layout.user_profile_fragment, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.user_profile_recycler_view);
         imgHolder = (ImageView) layout.findViewById(R.id.img_holder);
+        apiCall = new ApiCall();
         if (postList.size() > 0){
             postList.clear();
             loadMoreData = true;
@@ -193,6 +198,7 @@ public class UserProfile extends Fragment implements LatLonCallback, UserProfile
         obj.put("selectedUserId", userIdOther);
         //obj.put("latitude",lat);
         //obj.put("longitude",lon);
+        apiCall.apiRequestPost(getActivity(), obj, url, tag, this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
                 url,
                 obj,
@@ -227,7 +233,7 @@ public class UserProfile extends Fragment implements LatLonCallback, UserProfile
         final int DEFAULT_TIMEOUT = 6000;
         //Adding request to request queue
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        AppController.getInstance().addToRequestQueue(jsonObjectRequest,"getUserProfile");
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest,"getUserProfile");
     }
 
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
@@ -408,5 +414,16 @@ public class UserProfile extends Fragment implements LatLonCallback, UserProfile
     @Override
     public void showUImage() {
         dialog.show();
+    }
+
+    @Override
+    public void apiResponse(JSONObject response, String tag) {
+        if (response!= null){
+            try {
+                loadDataIntoView(response, tag);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

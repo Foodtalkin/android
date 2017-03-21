@@ -28,13 +28,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,8 +42,10 @@ import java.util.Map;
 import in.foodtalk.android.R;
 import in.foodtalk.android.adapter.CommentAdapter;
 import in.foodtalk.android.adapter.FollowedListAdapter;
+import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.communicator.MentionCallback;
 import in.foodtalk.android.communicator.OpenFragmentCallback;
 import in.foodtalk.android.module.DatabaseHandler;
@@ -63,7 +58,7 @@ import in.foodtalk.android.object.UserMention;
 /**
  * Created by RetailAdmin on 20-06-2016.
  */
-public class CommentFragment extends Fragment implements MentionCallback  {
+public class CommentFragment extends Fragment implements MentionCallback, ApiCallback {
     View layout;
     Config config;
     DatabaseHandler db;
@@ -104,6 +99,8 @@ public class CommentFragment extends Fragment implements MentionCallback  {
     TextView txtPlaceHolder;
     OpenFragmentCallback openFragmentCallback;
 
+    ApiCall apiCall;
+
 
     /*public CommentFragment (String postId){
         this.postId = postId;
@@ -117,6 +114,8 @@ public class CommentFragment extends Fragment implements MentionCallback  {
         openFragmentCallback = (OpenFragmentCallback) getActivity();
 
         postId =  getArguments().getString("postId");
+
+        apiCall = new ApiCall();
 
 
         recyclerViewMention = (RecyclerView) layout.findViewById(R.id.recycler_view_mention);
@@ -209,78 +208,7 @@ public class CommentFragment extends Fragment implements MentionCallback  {
         JSONObject obj = new JSONObject();
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
         obj.put("postId",postId);
-        //Log.d("getPostFeed","pageNo: "+pageNo);
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                config.URL_GET_POST, obj,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        //Log.d(TAG, "After Sending JsongObj"+response.toString());
-                        //msgResponse.setText(response.toString());
-                        Log.d("Login Respond", response.toString());
-                        try {
-                            String status = response.getString("status");
-                            if (!status.equals("error")){
-                                //-- getAndSave(response);
-                                getListFollowed("load");
-                                loadDataIntoView(response , tag);
-                            }else {
-                                String errorCode = response.getString("errorCode");
-                                if(errorCode.equals("6")){
-                                    Log.d("Response error", "Session has expired");
-                                   // logOut();
-                                }else {
-                                    if (errorCode.equals("3")){
-                                        Log.e("Response status", "error no post avilable");
-                                        txtPlaceHolder.setText("This post is not available");
-                                        progressBar.setVisibility(View.GONE);
-                                    }else {
-                                        Log.e("Response status", "some error");
-                                    }
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.d("Json Error", e+"");
-                        }
-                        //----------------------
-                        //hideProgressDialog();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d("Response", "Error: " + error.getMessage());
-               // showToast("Please check your internet connection");
-
-                if(tag.equals("refresh")){
-                    //-- swipeRefreshHome.setRefreshing(false);
-                }
-                if(tag.equals("loadMore")){
-                    //remove(null);
-                    //callScrollClass();
-                   // pageNo--;
-                }
-                // hideProgressDialog();
-            }
-        }) {
-            /**
-             * Passing some request headers
-             * */
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                UserAgent userAgent = new UserAgent();
-                if (userAgent.getUserAgent(getActivity()) != null ){
-                    headers.put("User-agent", userAgent.getUserAgent(getActivity()));
-                }
-                return headers;
-            }
-        };
-        final int DEFAULT_TIMEOUT = 6000;
-        // Adding request to request queue
-        jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        AppController.getInstance().addToRequestQueue(jsonObjReq,"gethomefeed");
+        apiCall.apiRequestPost(getActivity(),obj, Config.URL_GET_POST, "getPostFeed", this);
     }
 
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
@@ -367,73 +295,8 @@ public class CommentFragment extends Fragment implements MentionCallback  {
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
         obj.put("selectedUserId",userId);
         //Log.d("getPostFeed","pageNo: "+pageNo);
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                config.URL_LIST_FOLLOWED, obj,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        //Log.d(TAG, "After Sending JsongObj"+response.toString());
-                        //msgResponse.setText(response.toString());
-                        Log.d("Login Respond", response.toString());
-                        try {
-                            String status = response.getString("status");
-                            if (!status.equals("error")){
-                                setListFollowed(response);
 
-                                //-- getAndSave(response);
-                                //loadDataIntoView(response , tag);
-                            }else {
-                                String errorCode = response.getString("errorCode");
-                                if(errorCode.equals("6")){
-                                    Log.d("Response error", "Session has expired");
-                                    // logOut();
-                                }else {
-                                        Log.e("Response status", "some error");
-
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.d("Json Error", e+"");
-                        }
-                        //----------------------
-                        //hideProgressDialog();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d("Response", "Error: " + error.getMessage());
-                // showToast("Please check your internet connection");
-
-                if(tag.equals("refresh")){
-                    //-- swipeRefreshHome.setRefreshing(false);
-                }
-                if(tag.equals("loadMore")){
-                    //remove(null);
-                    //callScrollClass();
-                    // pageNo--;
-                }
-                // hideProgressDialog();
-            }
-        }) {
-            /**
-             * Passing some request headers
-             * */
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                UserAgent userAgent = new UserAgent();
-                if (userAgent.getUserAgent(getActivity()) != null ){
-                    headers.put("User-agent", userAgent.getUserAgent(getActivity()));
-                }
-                return headers;
-            }
-        };
-        final int DEFAULT_TIMEOUT = 6000;
-        // Adding request to request queue
-        jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        AppController.getInstance().addToRequestQueue(jsonObjReq,"gethomefeed");
+        apiCall.apiRequestPost(getActivity(),obj,Config.URL_LIST_FOLLOWED, "getListFollowed", this);
     }
 
     private void setListFollowed(JSONObject response) throws JSONException {
@@ -478,68 +341,7 @@ public class CommentFragment extends Fragment implements MentionCallback  {
         obj.put("comment", base64);
 
 
-        Log.d("json to send",obj+"");
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                config.URL_COMMENT_ADD, obj,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        //Log.d(TAG, "After Sending JsongObj"+response.toString());
-                        //msgResponse.setText(response.toString());
-                        Log.d("Login Respond", response.toString());
-                        try {
-                            String status = response.getString("status");
-                            if (!status.equals("error")){
-                                //-- getAndSave(response);
-                               // loadDataIntoView(response , tag);
-                                addNewComment (response);
-                            }else {
-                                String errorCode = response.getString("errorCode");
-                                if(errorCode.equals("6")){
-                                    Log.d("Response error", "Session has expired");
-                                    // logOut();
-                                }else {
-                                    Log.e("Response status", "some error");
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.d("Json Error", e+"");
-                        }
-                        //----------------------
-                        //hideProgressDialog();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d("Response", "Error: " + error.getMessage());
-                // showToast("Please check your internet connection");
-
-                if(tag.equals("refresh")){
-                    //-- swipeRefreshHome.setRefreshing(false);
-                }
-                if(tag.equals("loadMore")){
-                    //remove(null);
-                    //callScrollClass();
-                    // pageNo--;
-                }
-                // hideProgressDialog();
-            }
-        }) {
-            /**
-             * Passing some request headers
-             * */
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                return headers;
-            }
-        };
-        final int DEFAULT_TIMEOUT = 6000;
-        // Adding request to request queue
-        jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        AppController.getInstance().addToRequestQueue(jsonObjReq,"sendComment");
+        apiCall.apiRequestPost(getActivity(),obj,Config.URL_COMMENT_ADD, "sendComment", this);
     }
 
     private void  addNewComment (JSONObject response) throws JSONException {
@@ -739,78 +541,9 @@ public class CommentFragment extends Fragment implements MentionCallback  {
             apiURL = config.URL_DELETE_COMMENT;
         }
 
-        //obj.put("userMentioned", ListArray of mentioned user);
-        /*byte[] data = new byte[0];
-        try {
-            data = commentTxt.getBytes("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        String base64 = Base64.encodeToString(data, Base64.DEFAULT);
-        obj.put("comment", base64);*/
-        //Log.d("getPostFeed","pageNo: "+pageNo);
+        apiCall.apiRequestPost(getActivity(), obj, apiURL, flagType+"Comment", this);
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                apiURL, obj,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        //Log.d(TAG, "After Sending JsongObj"+response.toString());
-                        //msgResponse.setText(response.toString());
-                        Log.d("Login Respond", response.toString());
-                        try {
-                            String status = response.getString("status");
-                            if (!status.equals("error")){
-                                //-- getAndSave(response);
-                                // loadDataIntoView(response , tag);
-                                //addNewComment (response);
-                            }else {
-                                String errorCode = response.getString("errorCode");
-                                if(errorCode.equals("6")){
-                                    Log.d("Response error", "Session has expired");
-                                    // logOut();
-                                }else {
-                                    Log.e("Response status", "some error");
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.d("Json Error", e+"");
-                        }
-                        //----------------------
-                        //hideProgressDialog();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d("Response", "Error: " + error.getMessage());
-                // showToast("Please check your internet connection");
 
-                if(tag.equals("refresh")){
-                    //-- swipeRefreshHome.setRefreshing(false);
-                }
-                if(tag.equals("loadMore")){
-                    //remove(null);
-                    //callScrollClass();
-                    // pageNo--;
-                }
-                // hideProgressDialog();
-            }
-        }) {
-            /**
-             * Passing some request headers
-             * */
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                return headers;
-            }
-        };
-        final int DEFAULT_TIMEOUT = 6000;
-        // Adding request to request queue
-        jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        AppController.getInstance().addToRequestQueue(jsonObjReq,flagType+"Comment");
     }
 
     private void txtListener(){
@@ -946,5 +679,82 @@ public class CommentFragment extends Fragment implements MentionCallback  {
         mentionUArray.put(mentionObject);
         //String lastWord = str.substring(str.lastIndexOf(" ")+1);
         Log.d("mentionUser", "user: "+userName+" userId: "+userId);
+    }
+
+    @Override
+    public void apiResponse(JSONObject response, String tag) {
+        if (response != null){
+            if (tag.equals("getPostFeed")){
+                try {
+                    String status = response.getString("status");
+                    if (!status.equals("error")){
+                        //-- getAndSave(response);
+                        getListFollowed("load");
+                        loadDataIntoView(response , tag);
+                    }else {
+                        String errorCode = response.getString("errorCode");
+                        if(errorCode.equals("6")){
+                            Log.d("Response error", "Session has expired");
+                            // logOut();
+                        }else {
+                            if (errorCode.equals("3")){
+                                Log.e("Response status", "error no post avilable");
+                                txtPlaceHolder.setText("This post is not available");
+                                progressBar.setVisibility(View.GONE);
+                            }else {
+                                Log.e("Response status", "some error");
+                            }
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("Json Error", e+"");
+                }
+            }
+            if (tag.equals("getListFollowed")){
+                try {
+                    String status = response.getString("status");
+                    if (!status.equals("error")){
+                        setListFollowed(response);
+
+                        //-- getAndSave(response);
+                        //loadDataIntoView(response , tag);
+                    }else {
+                        String errorCode = response.getString("errorCode");
+                        if(errorCode.equals("6")){
+                            Log.d("Response error", "Session has expired");
+                            // logOut();
+                        }else {
+                            Log.e("Response status", "some error");
+
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("Json Error", e+"");
+                }
+            }
+            if (tag.equals("sendComment")){
+                try {
+                    String status = response.getString("status");
+                    if (!status.equals("error")){
+                        //-- getAndSave(response);
+                        // loadDataIntoView(response , tag);
+                        addNewComment (response);
+                    }else {
+                        String errorCode = response.getString("errorCode");
+                        if(errorCode.equals("6")){
+                            Log.d("Response error", "Session has expired");
+                            // logOut();
+                        }else {
+                            Log.e("Response status", "some error");
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("Json Error", e+"");
+                }
+            }
+        }
     }
 }
