@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import in.foodtalk.android.Home;
+import in.foodtalk.android.WelcomeUsername;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
 import in.foodtalk.android.communicator.ApiCallback;
@@ -143,8 +144,15 @@ public class ApiCall {
                             }else {
                                 String errorCode = response.getString("errorCode");
                                 if(errorCode.equals("106")){
-                                    Home home = (Home) context;
-                                    home.logOut();
+
+                                    String activityName = context.getClass().getSimpleName();
+                                    if (activityName.equals("Home")){
+                                        Home home = (Home) context;
+                                        home.logOut();
+                                    }else if (activityName.equals("WelcomeUsername")){
+                                        WelcomeUsername welcomeUsername = (WelcomeUsername) context;
+                                        welcomeUsername.logOut();
+                                    }
                                     Log.d("Response error", "Session has expired");
                                 }
                             }

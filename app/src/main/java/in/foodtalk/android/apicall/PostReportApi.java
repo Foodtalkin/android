@@ -21,6 +21,7 @@ import java.util.Map;
 import in.foodtalk.android.R;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.communicator.PostDeleteCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.UserAgent;
@@ -28,13 +29,19 @@ import in.foodtalk.android.module.UserAgent;
 /**
  * Created by RetailAdmin on 29-04-2016.
  */
-public class PostReportApi {
+public class PostReportApi implements ApiCallback {
 
     DatabaseHandler db;
     Config config;
     String apiUrl;
     Context context;
     PostDeleteCallback deleteCallback;
+
+    ApiCall apiCall;
+
+    String from;
+
+    String tag1;
 
    // String tag;
     public PostReportApi (Context context){
@@ -52,69 +59,18 @@ public class PostReportApi {
             apiUrl = config.URL_POST_REPORT;
         }
 
+        this.from = from;
+
         JSONObject obj = new JSONObject();
         //obj.put("sessionId", db.getUserDetails().get("sessionId"));
         obj.put("sessionId", sessionId);
         obj.put("postId", postId);
 
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                apiUrl, obj,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        //Log.d(TAG, "After Sending JsongObj"+response.toString());
-                        //msgResponse.setText(response.toString());
-                        Log.d("like api Respond", response.toString());
-                        try {
-                            String status = response.getString("status");
-                            if (!status.equals("error")){
-                                //-- getAndSave(response);
-                                //loadDataIntoView(response);
-                                if(tag.equals("report")){
-                                    showToast(context.getString(R.string.postReportMsg));
-                                }else if(tag.equals("delete")){
-                                    Log.d("PostReportApi","delete successfully");
-                                    deleteCallback.postDelete(from);
-                                }
-                            }else {
-                                String errorCode = response.getString("errorCode");
-                                if(errorCode.equals("6")){
-                                    Log.d("Response error", "Session has expired");
-                                    //logOut();
-                                }else if(errorCode.equals("7")) {
-                                    Log.e("Response error", "Already Report");
-                                    showToast(context.getString(R.string.postReportMsg));
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.d("Json Error", e+"");
-                        }
-                        //----------------------
-                        //hideProgressDialog();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                 VolleyLog.e("error response", "Error: " + error.getMessage());
-                // hideProgressDialog();
-            }
-        }) {
-            /**
-             * Passing some request headers
-             * */
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                UserAgent userAgent = new UserAgent();
-                if (userAgent.getUserAgent(context) != null ){
-                    headers.put("User-agent", userAgent.getUserAgent(context));
-                }
-                return headers;
-            }
-        };
-        AppController.getInstance().addToRequestQueue(jsonObjReq,"postReport");
+        apiCall = new ApiCall();
+
+        tag1 = tag;
+
+        apiCall.apiRequestPost(context, obj, apiUrl, "postReport", this);
     }
 
     public void showToast(String msg){
@@ -122,5 +78,38 @@ public class PostReportApi {
                 msg, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 300);
         toast.show();
+    }
+
+    @Override
+    public void apiResponse(JSONObject response, String tag) {
+        if (tag.equals("postReport")){
+            if (response != null){
+                try {
+                    String status = response.getString("status");
+                    if (!status.equals("error")){
+                        //-- getAndSave(response);
+                        //loadDataIntoView(response);
+                        if(tag1.equals("report")){
+                            showToast(context.getString(R.string.postReportMsg));
+                        }else if(tag1.equals("delete")){
+                            Log.d("PostReportApi","delete successfully");
+                            deleteCallback.postDelete(from);
+                        }
+                    }else {
+                        String errorCode = response.getString("errorCode");
+                        if(errorCode.equals("6")){
+                            Log.d("Response error", "Session has expired");
+                            //logOut();
+                        }else if(errorCode.equals("7")) {
+                            Log.e("Response error", "Already Report");
+                            showToast(context.getString(R.string.postReportMsg));
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("Json Error", e+"");
+                }
+            }
+        }
     }
 }

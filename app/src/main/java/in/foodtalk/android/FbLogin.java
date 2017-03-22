@@ -67,8 +67,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.fragment.WebViewFragment;
 import in.foodtalk.android.fragment.intro.DiscoverIntro;
 import in.foodtalk.android.fragment.intro.EatIntro;
@@ -85,7 +87,7 @@ import in.foodtalk.android.object.LoginInfo;
 import in.foodtalk.android.object.LoginValue;
 
 public class FbLogin extends AppCompatActivity implements OnClickListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
+        GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener, ApiCallback {
 
 
     private CallbackManager callbackManager;
@@ -118,6 +120,8 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
     LinearLayout btnTermsC;
     FrameLayout fragmentContainer;
 
+    ApiCall apiCall;
+
 
     View vpNav1;
     View vpNav2;
@@ -137,6 +141,8 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         config = new Config();
 
         parseUtils = new ParseUtils();
+
+        apiCall = new ApiCall();
 
 
         pDialog = new ProgressDialog(this);
@@ -596,129 +602,8 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
         //obj.put("twitterId","");
         //obj.put("googleId","");
         //Log.d("JSon obj",obj+"");
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                config.URL_LOGIN, obj,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
+        apiCall.apiRequestPost(this, obj, Config.URL_LOGIN, tag, this);
 
-                        hideProgressDialog();
-                        //Log.d(TAG, "After Sending JsongObj"+response.toString());
-                        //msgResponse.setText(response.toString());
-                        Log.d("onResponse", "check resonse");
-                        Log.d("Login Respond", response.toString());
-
-                        /*JSONObject jObj = new JSONObject(response);
-                        JSONObject status = jObj.getJSONObject("status");
-                        String type = status.getString("type");*/
-                        try {
-                            String apiMessage  = response.getString("apiMessage");
-
-                            JSONObject jObj = response.getJSONObject("profile");
-                            String fullName = jObj.getString("fullName");
-                            String fId = jObj.getString("facebookId");
-                            String userName = jObj.getString("userName");
-                            String uId = response.getString("userId");
-                            String sessionId = response.getString("sessionId");
-                            String channels = jObj.getString("channels");
-                            String email = jObj.getString("email");
-                            String cityId = jObj.getString("cityName");
-                            String rToken = response.getString("refreshToken");
-                            String region;
-                            if (jObj.has("region")){
-                                region = jObj.getString("region");
-                            } else {
-                                region = "";
-                            }
-                            FlurryAgent.setUserId(userName);
-
-                            String str = "android,ios,web,desktop";
-
-                            parseInfo(response.getString("userId"),
-                                    jObj.getString("channels"),
-                                    jObj.getString("cityId"),
-                                    jObj.getString("stateId"),
-                                    jObj.getString("countryId"),
-                                    jObj.getString("regionId"));
-                           // parseInst(uId);
-                            //subscribeWithInfo(String userId,String locationIdentifire, String work, String channels);
-                           /*parseUtils.subscribeWithInfo(uId,"en-IN","development", region);
-                            List<String> items = Arrays.asList(channels.split("\\s*,\\s*"));
-                            for (int i=0;i<items.size();i++){
-                                Log.d("items", items.get(i));
-                                parseUtils.subscribeToChannels(items.get(i));
-                            }*/
-                            //parseUtils.subscribeToChannels("Android");
-                           // parseUtils.subscribeToChannels("Web");
-                           // parseUtils.subscribeToChannels("Ios");
-                           // parseUtils.unSubscribeToChannels(channels);
-                           // parseUtils.unSubscribeToChannels("channels");
-
-                            LoginValue loginValue = new LoginValue();
-                            loginValue.fbId = fId;
-                            loginValue.uId = uId;
-                            loginValue.sId = sessionId;
-                            loginValue.name = fullName;
-                            loginValue.lat = lat;
-                            loginValue.lon = lon;
-                            loginValue.rtId = rToken;
-                            //loginValue.userName = userName;
-
-                            loginValue.userName = ((userName.equals("")) ? "N/A" : userName);
-                            if (loginInfo.email != null){
-                                loginValue.email = ((email.equals("")) ? loginInfo.email : email);
-                            }else {
-                                loginValue.email = ((email.equals("")) ? "N/A" : email);
-                            }
-
-                            loginValue.cityId = ((cityId.equals("")) ? "N/A" : cityId);
-
-                           // Log.d("check table", db.getRowCount()+"");
-                            db.addUser(loginValue);
-
-                            //------Start new activity according to api response
-                            if(userName.equals("") || userName.equals(null)){
-                                gotoOnboarding(loginInfo.email);
-                            }else if (email.equals("")){
-                                gotoOnboarding(loginInfo.email);
-
-                            }else if (cityId.equals("")){
-                                gotoOnboarding(loginInfo.email);
-                            }else {
-                                gotoHome();
-                            }
-                            finish();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        //----------------------
-                        //hideProgressDialog();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
-                // hideProgressDialog();
-            }
-        }) {
-            /**
-             * Passing some request headers
-             * */
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                UserAgent userAgent = new UserAgent();
-                if (userAgent.getUserAgent(getApplicationContext()) != null ){
-                    headers.put("User-agent", userAgent.getUserAgent(getApplicationContext()));
-                }
-                return headers;
-            }
-        };
-        final int DEFAULT_TIMEOUT = 60000;
-        // Adding request to request queue
-        jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        AppController.getInstance().addToRequestQueue(jsonObjReq,tag);
         // Cancelling request
         // ApplicationController.getInstance().getRequestQueue().cancelAll(tag_json_obj);
     }
@@ -865,5 +750,100 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
                         }
                     }
                 });
+    }
+
+    @Override
+    public void apiResponse(JSONObject response, String tag) {
+        if (response != null){
+            hideProgressDialog();
+            //Log.d(TAG, "After Sending JsongObj"+response.toString());
+            //msgResponse.setText(response.toString());
+            Log.d("onResponse", "check resonse");
+            Log.d("Login Respond", response.toString());
+
+                        /*JSONObject jObj = new JSONObject(response);
+                        JSONObject status = jObj.getJSONObject("status");
+                        String type = status.getString("type");*/
+            try {
+                String apiMessage  = response.getString("apiMessage");
+
+                JSONObject jObj = response.getJSONObject("profile");
+                String fullName = jObj.getString("fullName");
+                String fId = jObj.getString("facebookId");
+                String userName = jObj.getString("userName");
+                String uId = response.getString("userId");
+                String sessionId = response.getString("sessionId");
+                String channels = jObj.getString("channels");
+                String email = jObj.getString("email");
+                String cityId = jObj.getString("cityName");
+                String rToken = response.getString("refreshToken");
+                String region;
+                if (jObj.has("region")){
+                    region = jObj.getString("region");
+                } else {
+                    region = "";
+                }
+                FlurryAgent.setUserId(userName);
+
+                String str = "android,ios,web,desktop";
+
+                parseInfo(response.getString("userId"),
+                        jObj.getString("channels"),
+                        jObj.getString("cityId"),
+                        jObj.getString("stateId"),
+                        jObj.getString("countryId"),
+                        jObj.getString("regionId"));
+                // parseInst(uId);
+                //subscribeWithInfo(String userId,String locationIdentifire, String work, String channels);
+                           /*parseUtils.subscribeWithInfo(uId,"en-IN","development", region);
+                            List<String> items = Arrays.asList(channels.split("\\s*,\\s*"));
+                            for (int i=0;i<items.size();i++){
+                                Log.d("items", items.get(i));
+                                parseUtils.subscribeToChannels(items.get(i));
+                            }*/
+                //parseUtils.subscribeToChannels("Android");
+                // parseUtils.subscribeToChannels("Web");
+                // parseUtils.subscribeToChannels("Ios");
+                // parseUtils.unSubscribeToChannels(channels);
+                // parseUtils.unSubscribeToChannels("channels");
+
+                LoginValue loginValue = new LoginValue();
+                loginValue.fbId = fId;
+                loginValue.uId = uId;
+                loginValue.sId = sessionId;
+                loginValue.name = fullName;
+                loginValue.lat = lat;
+                loginValue.lon = lon;
+                loginValue.rtId = rToken;
+                //loginValue.userName = userName;
+
+                loginValue.userName = ((userName.equals("")) ? "N/A" : userName);
+                if (loginInfo.email != null){
+                    loginValue.email = ((email.equals("")) ? loginInfo.email : email);
+                }else {
+                    loginValue.email = ((email.equals("")) ? "N/A" : email);
+                }
+
+                loginValue.cityId = ((cityId.equals("")) ? "N/A" : cityId);
+
+                // Log.d("check table", db.getRowCount()+"");
+                db.addUser(loginValue);
+
+                //------Start new activity according to api response
+                if(userName.equals("") || userName.equals(null)){
+                    gotoOnboarding(loginInfo.email);
+                }else if (email.equals("")){
+                    gotoOnboarding(loginInfo.email);
+
+                }else if (cityId.equals("")){
+                    gotoOnboarding(loginInfo.email);
+                }else {
+                    gotoHome();
+                }
+                finish();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

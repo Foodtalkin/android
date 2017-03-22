@@ -14,6 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.cloudinary.Api;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,15 +23,17 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
+import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.communicator.NewPostCallback;
 import in.foodtalk.android.object.CreatePostObj;
 
 /**
  * Created by RetailAdmin on 31-05-2016.
  */
-public class NewPostUpload {
+public class NewPostUpload implements ApiCallback {
 
     Config config;
     CreatePostObj createPostObj;
@@ -38,6 +41,8 @@ public class NewPostUpload {
     NewPostCallback newPostCallback;
     LinearLayout progressBar;
     Context context;
+
+    ApiCall apiCall;
 
     public NewPostUpload (CreatePostObj createPostObj , NewPostCallback newPostCallback, LinearLayout progressBar, Context context){
         config = new Config();
@@ -49,6 +54,8 @@ public class NewPostUpload {
         this.newPostCallback = newPostCallback;
 
         this.context = context;
+
+        apiCall = new ApiCall();
 
         //newPostCallback = ;
     }
@@ -83,67 +90,38 @@ public class NewPostUpload {
         obj.put("shareOnFacebook",createPostObj.shareOnFacebook);
         obj.put("shareOnTwitter",createPostObj.shareOnTwitter);
         obj.put("shareOnInstagram",createPostObj.shareOnInstagram);
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                config.URL_POST_CREATE, obj,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        //Log.d(TAG, "After Sending JsongObj"+response.toString());
-                        //msgResponse.setText(response.toString());
-                        Log.d("api Respond", response.toString());
-                        try {
-                            String status = response.getString("status");
-                            if (!status.equals("error")){
-                                //-- getAndSave(response);
-                                progressBar.setVisibility(View.GONE);
 
-                                newPostCallback.onPostCreated("sucsses");
-                                Log.d("newPOstCallback","run");
+        apiCall.apiRequestPost(context, obj, Config.URL_POST_CREATE, "uploadDish", this);
+    }
 
-                                //loadDataIntoView(response , tag);
-                            }else {
-                                String errorCode = response.getString("errorCode");
-                                if(errorCode.equals("6")){
-                                    Log.d("Response error", "Session has expired");
-                                    //logOut();
-                                }else {
-                                    Log.e("Response status", "some error");
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.d("Json Error", e+"");
+    @Override
+    public void apiResponse(JSONObject response, String tag) {
+        if (tag.equals("uploadDish")){
+            if (response != null){
+                try {
+                    String status = response.getString("status");
+                    if (!status.equals("error")){
+                        //-- getAndSave(response);
+                        progressBar.setVisibility(View.GONE);
+
+                        newPostCallback.onPostCreated("sucsses");
+                        Log.d("newPOstCallback","run");
+
+                        //loadDataIntoView(response , tag);
+                    }else {
+                        String errorCode = response.getString("errorCode");
+                        if(errorCode.equals("6")){
+                            Log.d("Response error", "Session has expired");
+                            //logOut();
+                        }else {
+                            Log.e("Response status", "some error");
                         }
-                        //----------------------
-                        //hideProgressDialog();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d("Response", "Error: " + error.getMessage());
-
-                Log.d("onErrorResponse","check oyur internet connection");
-                //showToast("Please check your internet connection");
-                // hideProgressDialog();
-            }
-        }) {
-            /**
-             * Passing some request headers
-             * */
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                UserAgent userAgent = new UserAgent();
-                if (userAgent.getUserAgent(context) != null ){
-                    headers.put("User-agent", userAgent.getUserAgent(context));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("Json Error", e+"");
                 }
-                return headers;
             }
-        };
-        final int DEFAULT_TIMEOUT = 6000;
-        // Adding request to request queue
-        jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(DEFAULT_TIMEOUT, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        AppController.getInstance().addToRequestQueue(jsonObjReq,"uploadDish");
+        }
     }
 }

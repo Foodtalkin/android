@@ -38,6 +38,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.facebook.login.LoginManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -646,5 +647,14 @@ public class WelcomeUsername extends AppCompatActivity implements View.OnClickLi
         } else {
             super.onBackPressed();
         }
+    }
+
+    public void logOut() {
+        Log.e("Home","logOut function call");
+        db.resetTables();
+        LoginManager.getInstance().logOut();
+        Intent i = new Intent(this, FbLogin.class);
+        startActivity(i);
+        finish();
     }
 }

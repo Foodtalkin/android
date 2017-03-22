@@ -17,21 +17,24 @@ import java.util.Map;
 
 import in.foodtalk.android.app.AppController;
 import in.foodtalk.android.app.Config;
+import in.foodtalk.android.communicator.ApiCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.UserAgent;
 
 /**
  * Created by RetailAdmin on 27-04-2016.
  */
-public class PostBookmarkApi {
+public class PostBookmarkApi implements ApiCallback {
     DatabaseHandler db;
     Config config;
     String apiUrl;
     Context context;
+    ApiCall apiCall;
     public PostBookmarkApi (Context context){
         config = new Config();
         db = new DatabaseHandler(context);
         this.context = context;
+        apiCall = new ApiCall();
     }
     public void postBookmark(String postId, boolean bookmarkPost) throws JSONException {
 
@@ -45,56 +48,12 @@ public class PostBookmarkApi {
         JSONObject obj = new JSONObject();
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
         obj.put("postId",postId);
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                apiUrl, obj,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        //Log.d(TAG, "After Sending JsongObj"+response.toString());
-                        //msgResponse.setText(response.toString());
-                        Log.d("like api Respond", response.toString());
-                        try {
-                            String status = response.getString("status");
-                            if (!status.equals("error")){
-                                //-- getAndSave(response);
-                                //loadDataIntoView(response);
-                            }else {
-                                String errorCode = response.getString("errorCode");
-                                if(errorCode.equals("6")){
-                                    Log.d("Response error", "Session has expired");
-                                    //logOut();
-                                }else {
-                                    Log.e("Response status", "some error");
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.d("Json Error", e+"");
-                        }
-                        //----------------------
-                        //hideProgressDialog();
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // VolleyLog.d(TAG, "Error: " + error.getMessage());
-                // hideProgressDialog();
-            }
-        }) {
-            /**
-             * Passing some request headers
-             * */
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                UserAgent userAgent = new UserAgent();
-                if (userAgent.getUserAgent(context) != null ){
-                    headers.put("User-agent", userAgent.getUserAgent(context));
-                }
-                return headers;
-            }
-        };
-        AppController.getInstance().addToRequestQueue(jsonObjReq,"postbookmark");
+
+        apiCall.apiRequestPost(context, obj, apiUrl, "postbookmark", this);
+    }
+
+    @Override
+    public void apiResponse(JSONObject response, String tag) {
+
     }
 }
