@@ -95,7 +95,6 @@ public class FbLogin extends AppCompatActivity implements OnClickListener, Googl
     private String TAG = Login.class.getSimpleName();
 
     private Config config;
-
     private ParseUtils parseUtils;
 
     LinearLayout btnFbAppRemove;
