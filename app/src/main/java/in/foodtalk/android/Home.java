@@ -57,6 +57,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Map;
 
+import in.foodtalk.android.activity.gallery.GalleryView;
 import in.foodtalk.android.apicall.ApiCall;
 import in.foodtalk.android.apicall.PostBookmarkApi;
 import in.foodtalk.android.apicall.PostLikeApi;
@@ -1674,7 +1675,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         if (photo == null){
             //dialogImgFrom();
-            requestForCameraPermission();
+            //requestForCameraPermission();
+
+            launchGallery();
             Log.d("picImage","dialogImageFrom");
         }else {
             startDishTagging();
@@ -1699,6 +1702,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             launch();
             Log.d("rForCameraP","launch()");
         }
+    }
+    private void launchGallery(){
+        Intent launcGallery = new Intent(this, GalleryView.class);
+        startActivityForResult(launcGallery, CUATOM_IMG_PIKER);
     }
     private void launch() {
         Intent startCustomCameraIntent = new Intent(this, CameraActivity.class);
@@ -1974,6 +1981,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             if (requestCode == SELECT_FILE){
                 //Log.d("requeestCode", "SELECT_FILE");
 
+                Log.d("Home","uri img: "+data.getData());
                 cropIntent(data.getData());
                 /*try {
                     Bitmap  mBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
@@ -2000,6 +2008,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             }
             if (requestCode == REQUEST_CROP){
                // Log.d("requeestCode", "REQUEST_CROP");
+            }
+            if (requestCode == CUATOM_IMG_PIKER){
+                Log.e("Home","onActivityResult: path: "+ data.getStringArrayExtra("all_path"));
             }
             if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
                 if (data != null){

@@ -123,6 +123,7 @@
         <activity android:name=".ResultNotification" />
         <activity android:name="com.desmond.squarecamera.CameraActivity" />
         <activity android:name=".StoreActivity"></activity>
+        <activity android:name=".activity.gallery.GalleryView"/>
 
         <!--
           Optionally, register AnalyticsReceiver and AnalyticsService to support background
