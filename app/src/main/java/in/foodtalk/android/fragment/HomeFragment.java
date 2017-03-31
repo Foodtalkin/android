@@ -46,6 +46,7 @@ import in.foodtalk.android.communicator.NewPostCallback;
 import in.foodtalk.android.communicator.PostLikeCallback;
 import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.EndlessRecyclerOnScrollListener;
+import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.module.UserAgent;
 import in.foodtalk.android.object.PostObj;
 
@@ -94,6 +95,8 @@ public class HomeFragment extends Fragment implements ApiCallback {
         tapToRetry = (LinearLayout) layout.findViewById(R.id.tap_to_retry);
 
         homeProgress = (ProgressBar) layout.findViewById(R.id.home_progress);
+
+
 
         apiCall = new ApiCall();
 
@@ -220,7 +223,10 @@ public class HomeFragment extends Fragment implements ApiCallback {
         obj.put("page",Integer.toString(pageNo));
         obj.put("recordCount","10");
 
-        apiCall.apiRequestPost(getActivity(),obj,Config.URL_POST_LIST, tag, this);
+        if (getActivity() != null)
+            apiCall.apiRequestPost(getActivity(),obj,Config.URL_POST_LIST, tag, this);
+
+
     }
     private void loadDataIntoView(JSONObject response , String tag) throws JSONException {
 

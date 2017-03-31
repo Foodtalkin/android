@@ -286,6 +286,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
         AppController.getInstance().isHomeActivity = true;
 
+
+
        // imageCapture = new ImageCapture(this);
 
        // requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -1677,7 +1679,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             //dialogImgFrom();
             //requestForCameraPermission();
 
-            launchGallery();
+            //launchGallery();
+            galleryIntent();
             Log.d("picImage","dialogImageFrom");
         }else {
             startDishTagging();
@@ -1953,10 +1956,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
     //----------new camera and gallery and crop code----------------
     private void galleryIntent()
     {
-        Intent intent = new Intent();
+        /*Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);//
-        startActivityForResult(Intent.createChooser(intent, "Select File"),SELECT_FILE);
+        startActivityForResult(Intent.createChooser(intent, "Select File"),SELECT_FILE);*/
+        launchGallery();
     }
 
     private void cameraIntent()
@@ -1983,6 +1987,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
 
                 Log.d("Home","uri img: "+data.getData());
                 cropIntent(data.getData());
+
                 /*try {
                     Bitmap  mBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
                     imgV.setImageBitmap(mBitmap);
@@ -2003,6 +2008,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                     //onCaptureImageResult(data);
                 }else {
                     galleryIntent();
+                    //launchGallery();
                 }
 
             }
@@ -2010,7 +2016,21 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                // Log.d("requeestCode", "REQUEST_CROP");
             }
             if (requestCode == CUATOM_IMG_PIKER){
-                Log.e("Home","onActivityResult: path: "+ data.getStringArrayExtra("all_path"));
+
+                //Log.e("onActivityResult","data: "+ data.getStringExtra("all_path"));
+                if (data != null){
+                    String value = data.getStringExtra("all_path");
+                    if (!value.equals("gotoCam")){
+                        cropIntent(Uri.fromFile(new File(data.getStringExtra("all_path"))));
+                    }else {
+                        //launch();
+                        requestForCameraPermission();
+                    }
+                    Log.e("Home","onActivityResult: path: "+ data.getStringExtra("all_path"));
+
+                }else {
+                    Log.e("result", "data null");
+                }
             }
             if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
                 if (data != null){
@@ -2053,8 +2073,11 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
                 Log.d("onActivityResult","back from crop");
                 galleryIntent();
+                //launchGallery();
             }
-
+            if (requestCode == REQUEST_CAMERA){
+                galleryIntent();
+            }
         }
     }
     //-----------------end camera gallery and crop

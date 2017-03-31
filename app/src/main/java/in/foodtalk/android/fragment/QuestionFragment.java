@@ -254,7 +254,8 @@ public class QuestionFragment extends Fragment implements ApiCallback {
 
         Log.e("QuestionFragment","call page: "+Integer.toString(pageNo));
 
-        apiCall.apiRequestPost(getActivity(), obj, Config.URL_QUESTION_LIST, tag, this);
+        if (getActivity()!=null)
+            apiCall.apiRequestPost(getActivity(), obj, Config.URL_QUESTION_LIST, tag, this);
     }
     private void loadDataIntoView(JSONObject response , String tag) throws JSONException {
 

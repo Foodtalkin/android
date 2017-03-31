@@ -100,9 +100,11 @@ public class FollowListFragment extends Fragment implements ApiCallback {
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
         obj.put("selectedUserId", userId);
         if (listType.equals("followers")){
-            apiCall.apiRequestPost(getActivity(),obj, Config.URL_LIST_FOLLOWER,listType,apiCallback);
+            if (getActivity()!=null)
+                apiCall.apiRequestPost(getActivity(),obj, Config.URL_LIST_FOLLOWER,listType,apiCallback);
         }else if (listType.equals("following")){
-            apiCall.apiRequestPost(getActivity(),obj, Config.URL_LIST_FOLLOWED,listType,apiCallback);
+            if (getActivity()!=null)
+                apiCall.apiRequestPost(getActivity(),obj, Config.URL_LIST_FOLLOWED,listType,apiCallback);
         }
     }
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {

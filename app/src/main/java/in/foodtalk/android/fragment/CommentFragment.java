@@ -208,7 +208,8 @@ public class CommentFragment extends Fragment implements MentionCallback, ApiCal
         JSONObject obj = new JSONObject();
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
         obj.put("postId",postId);
-        apiCall.apiRequestPost(getActivity(),obj, Config.URL_GET_POST, "getPostFeed", this);
+        if (getActivity()!=null)
+            apiCall.apiRequestPost(getActivity(),obj, Config.URL_GET_POST, "getPostFeed", this);
     }
 
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {
@@ -296,7 +297,8 @@ public class CommentFragment extends Fragment implements MentionCallback, ApiCal
         obj.put("selectedUserId",userId);
         //Log.d("getPostFeed","pageNo: "+pageNo);
 
-        apiCall.apiRequestPost(getActivity(),obj,Config.URL_LIST_FOLLOWED, "getListFollowed", this);
+        if (getActivity()!=null)
+            apiCall.apiRequestPost(getActivity(),obj,Config.URL_LIST_FOLLOWED, "getListFollowed", this);
     }
 
     private void setListFollowed(JSONObject response) throws JSONException {
@@ -340,8 +342,8 @@ public class CommentFragment extends Fragment implements MentionCallback, ApiCal
         String base64 = Base64.encodeToString(data, Base64.DEFAULT);
         obj.put("comment", base64);
 
-
-        apiCall.apiRequestPost(getActivity(),obj,Config.URL_COMMENT_ADD, "sendComment", this);
+        if (getActivity()!=null)
+            apiCall.apiRequestPost(getActivity(),obj,Config.URL_COMMENT_ADD, "sendComment", this);
     }
 
     private void  addNewComment (JSONObject response) throws JSONException {
@@ -541,7 +543,8 @@ public class CommentFragment extends Fragment implements MentionCallback, ApiCal
             apiURL = config.URL_DELETE_COMMENT;
         }
 
-        apiCall.apiRequestPost(getActivity(), obj, apiURL, flagType+"Comment", this);
+        if (getActivity()!=null)
+            apiCall.apiRequestPost(getActivity(), obj, apiURL, flagType+"Comment", this);
 
 
     }

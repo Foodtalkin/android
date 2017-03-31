@@ -317,7 +317,8 @@ public class DiscoverFragment extends Fragment implements View.OnTouchListener, 
         }
 
 
-        apiCall.apiRequestPost(getActivity(), obj, Config.URL_POST_DISCOVER, tag, this);
+        if (getActivity()!=null)
+            apiCall.apiRequestPost(getActivity(), obj, Config.URL_POST_DISCOVER, tag, this);
     }
     private void loadDataIntoView(JSONObject response , String tag) throws JSONException {
 

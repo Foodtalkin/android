@@ -121,7 +121,8 @@ public class FavouritesFragment extends Fragment implements ApiCallback {
         obj.put("page",Integer.toString(pageNo));
         //obj.put("recordCount","10");
 
-        apiCall.apiRequestPost(getActivity(), obj, Config.URL_FAVOURITES, tag, this);
+        if (getActivity()!=null)
+            apiCall.apiRequestPost(getActivity(), obj, Config.URL_FAVOURITES, tag, this);
     }
 
     private void loadDataIntoView(JSONObject response, String tag) throws JSONException {

@@ -26,6 +26,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.facebook.FacebookSdk;
 import com.flurry.android.FlurryAgent;
+import com.google.android.gms.analytics.ExceptionReporter;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.StandardExceptionParser;
@@ -45,6 +46,7 @@ import java.security.NoSuchAlgorithmException;
 import in.foodtalk.android.Home;
 import in.foodtalk.android.R;
 import in.foodtalk.android.communicator.OnBoardingCallback;
+import in.foodtalk.android.helper.AnalyticsExceptionParser;
 import in.foodtalk.android.helper.AnalyticsTrackers;
 import in.foodtalk.android.helper.ParseUtils;
 import in.foodtalk.android.module.DatabaseHandler;
@@ -79,8 +81,6 @@ public class AppController extends Application {
     public String deviceToken;
 
     public String versionName;
-
-
 
 
     @Override
@@ -142,6 +142,12 @@ public class AppController extends Application {
         } catch (NoSuchAlgorithmException e) {
 
         }
+
+        ExceptionReporter reporter = new ExceptionReporter(
+                AnalyticsTrackers.getInstance().get(AnalyticsTrackers.Target.APP),
+                Thread.getDefaultUncaughtExceptionHandler(), this);
+        reporter.setExceptionParser(new AnalyticsExceptionParser(this, null));
+        Thread.setDefaultUncaughtExceptionHandler(reporter);
     }
 
     public static synchronized AppController getInstance() {
