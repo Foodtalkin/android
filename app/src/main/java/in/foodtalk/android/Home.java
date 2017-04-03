@@ -846,8 +846,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         }
     }
     private void setFragmentView(Fragment newFragment, int container, int pageN, boolean bStack) {
-        String backStateName = newFragment.getClass().getName();
 
+        if(newFragment.isAdded())
+        {
+            return; //or return false/true, based on where you are calling from
+        }
+
+
+        String backStateName = newFragment.getClass().getName();
         FlurryAgent.logEvent(newFragment.getClass().getSimpleName());
         Log.d("Home setFragmentV", "simplename: "+newFragment.getClass().getSimpleName().replaceAll("Fragment",""));
         Log.d("Home setFragmentV", "simplename: "+newFragment.getClass().getName());
