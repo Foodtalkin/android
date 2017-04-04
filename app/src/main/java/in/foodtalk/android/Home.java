@@ -877,14 +877,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
                 icons[pageNo].setColorFilter(ContextCompat.getColor(this, R.color.icon));
                 icons[pageN].setColorFilter(ContextCompat.getColor(this, R.color.snow));
 
-
                 txtIcons[pageNo].setTextColor(getResources().getColor(R.color.icon));
                 txtIcons[pageN].setTextColor(getResources().getColor(R.color.snow));
             }
             else {
                 //Log.d("fragment","newpostFragment");
             }
-
              FragmentManager manager = getFragmentManager();
             //boolean fragmentPopped = manager.popBackStackImmediate (backStateName, 0);
 

@@ -209,9 +209,6 @@ public class HomeFragment extends Fragment implements ApiCallback {
     }
 
     public void getPostFeed(final String tag) throws JSONException {
-
-
-
         Log.d("getPostFeed", "post data");
         JSONObject obj = new JSONObject();
         obj.put("sessionId", db.getUserDetails().get("sessionId"));
@@ -223,10 +220,10 @@ public class HomeFragment extends Fragment implements ApiCallback {
         obj.put("page",Integer.toString(pageNo));
         obj.put("recordCount","10");
 
-        if (getActivity() != null)
+        if (getActivity() != null){
             apiCall.apiRequestPost(getActivity(),obj,Config.URL_POST_LIST, tag, this);
-
-
+            apiCall.apiRequestPost(getActivity(),obj,Config.URL_ADWORD_LIST, "adword", this);
+        }
     }
     private void loadDataIntoView(JSONObject response , String tag) throws JSONException {
 
@@ -377,6 +374,7 @@ public class HomeFragment extends Fragment implements ApiCallback {
     @Override
     public void apiResponse(JSONObject response, String tag) {
 
+        if (!tag.equals("adword")){
             if (response != null){
                 try {
                     String status = response.getString("status");
@@ -418,7 +416,8 @@ public class HomeFragment extends Fragment implements ApiCallback {
                     pageNo--;
                 }
             }
-
+        }else if (tag.equals("adword")){
+            Log.d("HomeFragment","response: "+response);
         }
-
+    }
 }
