@@ -69,6 +69,9 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
 
+    private final int VIEW_AD_NEWS = 2;
+    private final int VIEW_AD_STORE = 3;
+
     //LinearLayout starHolder;
 
     HeadSpannable headSpannable;
@@ -110,6 +113,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         PostHolder postHolder;
         ProgressViewHolder progressViewHolder;
+        AdNewsHolder adNewsHolder;
+        AdStoreHolder adStoreHolder;
 
         if(viewType == VIEW_ITEM){
             View view = layoutInflater.inflate(R.layout.card_view_post, parent, false);
@@ -119,6 +124,14 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             View view = layoutInflater.inflate(R.layout.progress_load_more, parent, false);
             progressViewHolder = new ProgressViewHolder(view);
             return progressViewHolder;
+        }else if (viewType == VIEW_AD_NEWS){
+            View view = layoutInflater.inflate(R.layout.card_ad_news, parent, false);
+            adNewsHolder = new AdNewsHolder(view);
+            return  adNewsHolder;
+        }else if (viewType == VIEW_AD_STORE){
+            View view = layoutInflater.inflate(R.layout.card_ad_store, parent, false);
+            adStoreHolder = new AdStoreHolder(view);
+            return  adStoreHolder;
         }else {
             return null;
         }
@@ -273,31 +286,29 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 postHolder.iconShare.setVisibility(View.INVISIBLE);
 
                 headSpannable.code(postHolder.txtHeadLine, current.userName, null, null, current.userId, null, false , "HomeFeed");
-
                 if (current.commentCount.equals("1")){
                     postHolder.txtCommentCopy.setText("Answer");
                 }else {
                     postHolder.txtCommentCopy.setText("Answers");
                 }
             }
-
-
             //Log.d("userThumb large",current.userThumb);
             Picasso.with(context)
                     .load(current.userImage)
                     .placeholder(R.drawable.placeholder)
                     .into(postHolder.userThumbnail);
+        }else if (holder instanceof AdNewsHolder){
+            AdNewsHolder adNewsHolder = (AdNewsHolder) holder;
+            PostObj current = postObj.get(position);
+        } else if (holder instanceof AdStoreHolder){
+            AdStoreHolder adStoreHolder = (AdStoreHolder) holder;
+            PostObj current = postObj.get(position);
         }else {
-           // holder.set
+           //holder.set
             ProgressViewHolder progressViewHolder = (ProgressViewHolder) holder;
             progressViewHolder.progressBar.setIndeterminate(true);
         }
     }
-
-
-
-
-
 
     @Override
     public int getItemCount() {
@@ -366,19 +377,76 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
-        return postObj.get(position) != null ? VIEW_ITEM : VIEW_PROG;
+        if (postObj.get(position) != null){
+            if (postObj.get(position).type.equals("adNews")){
+                return VIEW_AD_NEWS;
+            }else if (postObj.get(position).type.equals("adStore")){
+                return VIEW_AD_NEWS;
+            }else {
+                //return postObj.get(position) != null ? VIEW_ITEM : VIEW_PROG;
+                return VIEW_ITEM;
+            }
+        }else {
+            return VIEW_PROG;
+        }
+
     }
 
     class ProgressViewHolder extends RecyclerView.ViewHolder {
-
         public ProgressBar progressBar;
-
         public ProgressViewHolder(View itemView) {
             super(itemView);
             progressBar = (ProgressBar) itemView.findViewById(R.id.loadmore_progress);
         }
     }
 
+    class AdNewsHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
+        TextView txtTitle, txtHeadline, txtDes, btn_readmore;
+        ImageView imgView;
+        public AdNewsHolder(View itemView) {
+            super(itemView);
+            txtTitle = (TextView) itemView.findViewById(R.id.txt_title);
+            txtHeadline = (TextView) itemView.findViewById(R.id.txt_headline);
+            txtDes = (TextView) itemView.findViewById(R.id.txt_des);
+            imgView = (ImageView) itemView.findViewById(R.id.img_view);
+            btn_readmore = (TextView) itemView.findViewById(R.id.btn_readmore);
+            btn_readmore.setOnTouchListener(this);
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch (v.getId()){
+                case R.id.btn_readmore:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("HomeFeedAdapter","clicked news readmore");
+                            break;
+                    }
+                    break;
+            }
+            return false;
+        }
+    }
+
+    class AdStoreHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
+        TextView txtTitle, txtHeadline, txtDes, btn_buynow;
+        ImageView imgView;
+
+        public AdStoreHolder(View itemView) {
+            super(itemView);
+            txtTitle = (TextView) itemView.findViewById(R.id.txt_title);
+            txtHeadline = (TextView) itemView.findViewById(R.id.txt_headline);
+            txtDes = (TextView) itemView.findViewById(R.id.txt_des);
+            imgView = (ImageView) itemView.findViewById(R.id.img_view);
+            btn_buynow = (TextView) itemView.findViewById(R.id.btn_readmore);
+            btn_buynow.setOnTouchListener(this);
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            return false;
+        }
+    }
 
     class PostHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
 
