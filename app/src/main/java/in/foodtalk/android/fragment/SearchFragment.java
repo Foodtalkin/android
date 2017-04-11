@@ -110,7 +110,6 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
@@ -123,8 +122,6 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
                 if (tabSeleted == 2){
                     searchCallback3.searchKey(s.toString(),"restaurant");
                 }
-
-
             }
 
             @Override

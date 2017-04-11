@@ -40,4 +40,8 @@ public class PostObj {
     public String region;
 
     public String type;
+    public String coverImage;
+    public String title;
+    public String shortDescription;
+    public String actionButtonText;
 }

@@ -378,9 +378,9 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemViewType(int position) {
         if (postObj.get(position) != null){
-            if (postObj.get(position).type.equals("adNews")){
+            if (postObj.get(position).type.equals("news")){
                 return VIEW_AD_NEWS;
-            }else if (postObj.get(position).type.equals("adStore")){
+            }else if (postObj.get(position).type.equals("storeItem")){
                 return VIEW_AD_NEWS;
             }else {
                 //return postObj.get(position) != null ? VIEW_ITEM : VIEW_PROG;

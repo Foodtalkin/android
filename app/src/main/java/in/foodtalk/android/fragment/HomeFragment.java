@@ -222,9 +222,15 @@ public class HomeFragment extends Fragment implements ApiCallback {
 
         if (getActivity() != null){
             apiCall.apiRequestPost(getActivity(),obj,Config.URL_POST_LIST, tag, this);
-            apiCall.apiRequestPost(getActivity(),obj,Config.URL_ADWORD_LIST, "adword", this);
+
         }
     }
+    public void getAdList(String tag) throws JSONException {
+        JSONObject obj = new JSONObject();
+        obj.put("sessionId", db.getUserDetails().get("sessionId"));
+        apiCall.apiRequestPost(getActivity(),obj,Config.URL_ADWORD_LIST, tag, this);
+    }
+
     private void loadDataIntoView(JSONObject response , String tag) throws JSONException {
 
         swipeRefreshHome.setRefreshing(false);
@@ -269,7 +275,7 @@ public class HomeFragment extends Fragment implements ApiCallback {
             current.type = postArray.getJSONObject(i).getString("type");
            // postData.clear();
             postData.add(current);
-            Log.d("dish name", postData.get(i).userId);
+            //Log.d("dish name", postData.get(i).userId);
         }
         //postData = (List<PostObj>) postObj;
         if (tag.equals("load")){
@@ -284,7 +290,6 @@ public class HomeFragment extends Fragment implements ApiCallback {
             // recyclerView.invalidate();
 
             callScrollClass();
-
             Log.d("Response LoadData", "Load");
 
         }else if (tag.equals("refresh")){
@@ -371,6 +376,57 @@ public class HomeFragment extends Fragment implements ApiCallback {
         recyclerView.smoothScrollToPosition(0);
     }
 
+    //----here is the code for insert ads---------------------
+    JSONObject adwordJson;
+    int indexAd1 = 0;
+    int preCounter = 0;
+    private void insertAds(JSONObject response) throws JSONException{
+
+        if (response != null){
+            adwordJson = response;
+            Log.e("HomeFragment","insertAds first");
+        }else {
+            Log.e("HomeFragment","insertAds after");
+        }
+
+
+
+        int adPosition = Integer.parseInt(adwordJson.getString("position"));
+
+        int total = postData.size()+(10/adPosition);
+        int totalAds = adwordJson.getJSONArray("result").length();
+        Log.d("totalAds","");
+        PostObj postObj;
+        for (int i = preCounter; i< total; i++){
+            if ((i+1)%adPosition == 0){
+                if (indexAd1 < totalAds){
+                    postObj = getValueObj(adwordJson, indexAd1);
+                }else {
+                    indexAd1 = 0;
+                    postObj = getValueObj(adwordJson, indexAd1);
+                }
+                postData.add(i, postObj);
+                indexAd1++;
+            }
+            preCounter = i;
+        }
+    }
+    private PostObj getValueObj(JSONObject response, int indexAd1) throws JSONException {
+        PostObj postObj = new PostObj();
+        JSONObject result = response.getJSONArray("result").getJSONObject(indexAd1);
+        JSONObject contentObj = result.getJSONObject("content");
+
+        postObj.title = contentObj.getString("title");
+        postObj.coverImage = contentObj.getString("coverImage");
+        postObj.shortDescription = contentObj.getString("shortDescription");
+        postObj.actionButtonText = contentObj.getString("actionButtonText");
+        postObj.type = result.getString("type");
+        return postObj;
+    }
+    //--------------------------------------------------------
+
+
+
     @Override
     public void apiResponse(JSONObject response, String tag) {
 
@@ -381,6 +437,16 @@ public class HomeFragment extends Fragment implements ApiCallback {
                     if (!status.equals("error")){
                         //-- getAndSave(response);
                         loadDataIntoView(response , tag);
+                        if (tag.equals("load")){
+                            getAdList("adword");
+                        }
+                        if (tag.equals("loadMore")){
+                            try {
+                                insertAds(null);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         Log.d("HomeFragment", "apiResponse: "+ tag);
                     }else {
                         String errorCode = response.getString("errorCode");
@@ -418,6 +484,11 @@ public class HomeFragment extends Fragment implements ApiCallback {
             }
         }else if (tag.equals("adword")){
             Log.d("HomeFragment","response: "+response);
+            try {
+                insertAds(response);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
