@@ -300,9 +300,27 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }else if (holder instanceof AdNewsHolder){
             AdNewsHolder adNewsHolder = (AdNewsHolder) holder;
             PostObj current = postObj.get(position);
+            //adNewsHolder.txtTitle.setText(current.title);
+            adNewsHolder.txtHeadline.setText(current.title);
+            adNewsHolder.txtDes.setText(current.shortDescription);
+            adNewsHolder.btn_readmore.setText(current.actionButtonText);
+            Picasso.with(context)
+                    .load(current.coverImage)
+                    .placeholder(R.drawable.placeholder)
+                    .into(adNewsHolder.imgView);
+
         } else if (holder instanceof AdStoreHolder){
             AdStoreHolder adStoreHolder = (AdStoreHolder) holder;
             PostObj current = postObj.get(position);
+
+            //adStoreHolder.txtTitle.setText(current.title);
+            adStoreHolder.txtHeadline.setText(current.title);
+            adStoreHolder.txtDes.setText(current.shortDescription);
+            adStoreHolder.btn_buynow.setText(current.actionButtonText);
+            Picasso.with(context)
+                    .load(current.coverImage)
+                    .placeholder(R.drawable.placeholder)
+                    .into(adStoreHolder.imgView);
         }else {
            //holder.set
             ProgressViewHolder progressViewHolder = (ProgressViewHolder) holder;
@@ -381,7 +399,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if (postObj.get(position).type.equals("news")){
                 return VIEW_AD_NEWS;
             }else if (postObj.get(position).type.equals("storeItem")){
-                return VIEW_AD_NEWS;
+                return VIEW_AD_STORE;
             }else {
                 //return postObj.get(position) != null ? VIEW_ITEM : VIEW_PROG;
                 return VIEW_ITEM;
@@ -438,7 +456,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             txtHeadline = (TextView) itemView.findViewById(R.id.txt_headline);
             txtDes = (TextView) itemView.findViewById(R.id.txt_des);
             imgView = (ImageView) itemView.findViewById(R.id.img_view);
-            btn_buynow = (TextView) itemView.findViewById(R.id.btn_readmore);
+            btn_buynow = (TextView) itemView.findViewById(R.id.btn_buynow);
             btn_buynow.setOnTouchListener(this);
         }
 

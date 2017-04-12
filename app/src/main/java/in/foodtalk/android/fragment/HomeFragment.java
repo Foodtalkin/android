@@ -389,26 +389,25 @@ public class HomeFragment extends Fragment implements ApiCallback {
             Log.e("HomeFragment","insertAds after");
         }
 
-
-
         int adPosition = Integer.parseInt(adwordJson.getString("position"));
-
         int total = postData.size()+(10/adPosition);
         int totalAds = adwordJson.getJSONArray("result").length();
-        Log.d("totalAds","");
+        Log.d("insertAds", "totalAdaps: "+totalAds);
         PostObj postObj;
         for (int i = preCounter; i< total; i++){
             if ((i+1)%adPosition == 0){
                 if (indexAd1 < totalAds){
                     postObj = getValueObj(adwordJson, indexAd1);
+                    Log.d("insertAds","loop: "+i+" : "+"indexAd: "+indexAd1);
                 }else {
                     indexAd1 = 0;
                     postObj = getValueObj(adwordJson, indexAd1);
+                    Log.d("insertAds","loop: "+i+" : "+"indexAd: "+indexAd1);
                 }
                 postData.add(i, postObj);
                 indexAd1++;
             }
-            preCounter = i;
+            preCounter = i+1;
         }
     }
     private PostObj getValueObj(JSONObject response, int indexAd1) throws JSONException {
@@ -416,17 +415,25 @@ public class HomeFragment extends Fragment implements ApiCallback {
         JSONObject result = response.getJSONArray("result").getJSONObject(indexAd1);
         JSONObject contentObj = result.getJSONObject("content");
 
+        Log.d("insertAds", "result: "+result);
+
         postObj.title = contentObj.getString("title");
+        /*postObj.coverImage = contentObj.getString("coverImage");
+        postObj.shortDescription = contentObj.getString("description");
+        postObj.actionButtonText = contentObj.getString("actionButtonText");*/
         postObj.coverImage = contentObj.getString("coverImage");
-        postObj.shortDescription = contentObj.getString("shortDescription");
-        postObj.actionButtonText = contentObj.getString("actionButtonText");
         postObj.type = result.getString("type");
+        if (postObj.type.equals("news")){
+            postObj.shortDescription = contentObj.getString("description");
+        }else {
+            postObj.shortDescription = contentObj.getString("shortDescription");
+        }
+
+        postObj.actionButtonText = result.getString("actionButtonText");
+
         return postObj;
     }
     //--------------------------------------------------------
-
-
-
     @Override
     public void apiResponse(JSONObject response, String tag) {
 
