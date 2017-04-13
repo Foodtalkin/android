@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/snow">
+        android:background="@color/snow"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -21,7 +25,7 @@
         <ImageView
             android:id="@+id/img_view"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="135dp"
             android:scaleType="centerCrop"
             android:src="@drawable/placeholder"/>
         <LinearLayout
@@ -48,6 +52,8 @@
                 android:layout_marginTop="10dp"
                 android:lineSpacingExtra="2dp"
                 android:textColor="@color/slate"
+                android:ellipsize="end"
+                android:maxLines="2"
                 android:text="After Masala library and Farzi Cafe, Pa Pa Ya is Kalra's first foray into Pan- Asia"/>
             <TextView
                 android:id="@+id/btn_buynow"
@@ -65,5 +71,12 @@
                 android:background="@drawable/round_bg_blue"
                 android:clickable="true"/>
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.66dp"
+            android:layout_above="@+id/comment_send_holder"
+            android:background="@color/silver"
+            android:layout_marginTop="10dp"
+            />
     </LinearLayout>
 </RelativeLayout>

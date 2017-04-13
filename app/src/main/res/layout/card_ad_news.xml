@@ -48,6 +48,8 @@
                 android:layout_marginTop="10dp"
                 android:lineSpacingExtra="2dp"
                 android:textColor="@color/slate"
+                android:ellipsize="end"
+                android:maxLines="2"
                 android:text="After Masala library and Farzi Cafe, Pa Pa Ya is Kalra's first foray into Pan- Asia"/>
             <TextView
                 android:id="@+id/btn_readmore"
@@ -61,5 +63,12 @@
                 android:textSize="16sp"
                 android:clickable="true"/>
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.66dp"
+            android:layout_above="@+id/comment_send_holder"
+            android:background="@color/silver"
+            android:layout_marginTop="10dp"
+            />
     </LinearLayout>
 </RelativeLayout>

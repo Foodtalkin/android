@@ -2630,6 +2630,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
         if (fragmentName.equals("earningInfo")){
             earningInfoDialog();
         }
+        if (fragmentName.equals("news")){
+            openNews(value);
+        }
+        if (fragmentName.equals("storeDetailsFragment")){
+            openStoreDetails("", value);
+        }
     }
     private void openStorePurchases(String storeItemId){
         StorePurchasesFragment storePurchasesFragment = new StorePurchasesFragment();

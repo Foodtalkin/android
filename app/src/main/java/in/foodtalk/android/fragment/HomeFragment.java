@@ -423,12 +423,14 @@ public class HomeFragment extends Fragment implements ApiCallback {
         postObj.actionButtonText = contentObj.getString("actionButtonText");*/
         postObj.coverImage = contentObj.getString("coverImage");
         postObj.type = result.getString("type");
+
         if (postObj.type.equals("news")){
             postObj.shortDescription = contentObj.getString("description");
+            postObj.id = contentObj.getString("id");
         }else {
             postObj.shortDescription = contentObj.getString("shortDescription");
+            postObj.id = contentObj.getString("storeItemId");
         }
-
         postObj.actionButtonText = result.getString("actionButtonText");
 
         return postObj;

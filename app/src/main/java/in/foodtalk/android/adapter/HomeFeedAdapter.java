@@ -304,6 +304,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             adNewsHolder.txtHeadline.setText(current.title);
             adNewsHolder.txtDes.setText(current.shortDescription);
             adNewsHolder.btn_readmore.setText(current.actionButtonText);
+            adNewsHolder.newsId = current.id;
             Picasso.with(context)
                     .load(current.coverImage)
                     .placeholder(R.drawable.placeholder)
@@ -317,6 +318,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             adStoreHolder.txtHeadline.setText(current.title);
             adStoreHolder.txtDes.setText(current.shortDescription);
             adStoreHolder.btn_buynow.setText(current.actionButtonText);
+            adStoreHolder.id = current.id;
             Picasso.with(context)
                     .load(current.coverImage)
                     .placeholder(R.drawable.placeholder)
@@ -421,6 +423,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     class AdNewsHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
         TextView txtTitle, txtHeadline, txtDes, btn_readmore;
         ImageView imgView;
+        String newsId;
         public AdNewsHolder(View itemView) {
             super(itemView);
             txtTitle = (TextView) itemView.findViewById(R.id.txt_title);
@@ -438,6 +441,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("HomeFeedAdapter","clicked news readmore");
+                            openFragmentCallback.openFragment("news",newsId);
                             break;
                     }
                     break;
@@ -449,7 +453,7 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     class AdStoreHolder extends RecyclerView.ViewHolder implements View.OnTouchListener{
         TextView txtTitle, txtHeadline, txtDes, btn_buynow;
         ImageView imgView;
-
+        String id;
         public AdStoreHolder(View itemView) {
             super(itemView);
             txtTitle = (TextView) itemView.findViewById(R.id.txt_title);
@@ -462,6 +466,16 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
+            switch (v.getId()){
+                case R.id.btn_buynow:
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_UP:
+                            Log.d("HomeFeedAdapter","clicked news readmore");
+                            openFragmentCallback.openFragment("storeDetailsFragment",id);
+                            break;
+                    }
+                    break;
+            }
             return false;
         }
     }
