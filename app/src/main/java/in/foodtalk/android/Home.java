@@ -2582,6 +2582,20 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             postDetailsFragment.setCurrentPage = 1;
             setFragmentView(postDetailsFragment, R.id.container1, -1, true);
         }
+        if (fragmentName.equals("postDetailsForNews")){
+            postDetailsFragment = new PostDetailsFragment();
+            postDetailsFragment.postId = value;
+            postDetailsFragment.type = "news";
+            setFragmentView(postDetailsFragment, R.id.container1, -1, true);
+        }
+
+        if (fragmentName.equals("commentListPostForNews")){
+            postDetailsFragment = new PostDetailsFragment();
+            postDetailsFragment.postId = value;
+            postDetailsFragment.setCurrentPage = 1;
+            postDetailsFragment.type = "news";
+            setFragmentView(postDetailsFragment, R.id.container1, -1, true);
+        }
         if (fragmentName.equals("userProfileFLikeList")){
             userProfileOpen(value);
             getFragmentManager().beginTransaction().remove(postDetailsFragment).commit();
@@ -2595,6 +2609,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             postDetailsFragment.setCurrentPage = 2;
             setFragmentView(postDetailsFragment, R.id.container1, -1, true);
         }
+
         if (fragmentName.equals("newsWebView")){
             Log.d("openWebPage", value);
             //openWebPage(value, "News");

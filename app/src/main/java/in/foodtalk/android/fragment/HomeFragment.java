@@ -112,13 +112,11 @@ public class HomeFragment extends Fragment implements ApiCallback {
                 try {
                     pageNo = 1;
                     getPostFeed("refresh");
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         });
-
         tapToRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,8 +130,6 @@ public class HomeFragment extends Fragment implements ApiCallback {
                 }
             }
         });
-
-
         return layout;
     }
     @Override
@@ -145,13 +141,12 @@ public class HomeFragment extends Fragment implements ApiCallback {
         }
 
         linearLayoutManager = new LinearLayoutManager(activity);
-
         mLayoutManager = new LinearLayoutManager(activity.getApplicationContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         config = new Config();
         db = new DatabaseHandler(activity.getApplicationContext());
         postObj = new PostObj();
-       Log.d("get user info F", db.getUserDetails().get("sessionId"));
+        Log.d("get user info F", db.getUserDetails().get("sessionId"));
         Log.d("get user info F", db.getUserDetails().get("userId"));
         try {
             getPostFeed("load");
@@ -171,8 +166,6 @@ public class HomeFragment extends Fragment implements ApiCallback {
         Log.d("Fragment","onDestroy");
         super.onDestroy();
     }
-
-
 
     @Override
     public void onDetach() {
@@ -439,6 +432,7 @@ public class HomeFragment extends Fragment implements ApiCallback {
     @Override
     public void apiResponse(JSONObject response, String tag) {
 
+        Log.e("apiResponse","tag: "+tag);
         if (!tag.equals("adword")){
             if (response != null){
                 try {
@@ -448,6 +442,12 @@ public class HomeFragment extends Fragment implements ApiCallback {
                         loadDataIntoView(response , tag);
                         if (tag.equals("load")){
                             getAdList("adword");
+                        }
+                        if (tag.equals("refresh")){
+
+                            indexAd1 = 0;
+                            preCounter = 0;
+                            insertAds(null);
                         }
                         if (tag.equals("loadMore")){
                             try {

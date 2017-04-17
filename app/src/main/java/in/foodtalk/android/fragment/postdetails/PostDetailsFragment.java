@@ -48,6 +48,7 @@ public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSele
     ViewPager pager;
     public String postId;
     public int setCurrentPage = -1;
+    public String type = "";
 
     DatabaseHandler db;
 
@@ -113,7 +114,10 @@ public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSele
         fragments = new Vector<android.support.v4.app.Fragment>();
         fragments.add(android.support.v4.app.Fragment.instantiate(getActivity(),LikeListFragment.class.getName()));
         fragments.add(android.support.v4.app.Fragment.instantiate(getActivity(),CommentsPostFragment.class.getName()));
-        fragments.add(android.support.v4.app.Fragment.instantiate(getActivity(),BookmarkListFragment.class.getName()));
+        if (!type.equals("news")){
+            fragments.add(android.support.v4.app.Fragment.instantiate(getActivity(),BookmarkListFragment.class.getName()));
+        }
+
         //fragments.add(Fragment.instantiate())
 
 
@@ -122,7 +126,6 @@ public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSele
         hashMap.put("sessionId", db.getUserDetails().get("sessionId"));
 
         adapter = new PagerAdapterPd(fm, fragments, hashMap);
-
         pager.setAdapter(adapter);
 
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

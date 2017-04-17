@@ -368,7 +368,7 @@ public class SelectCity extends Fragment implements ApiCallback, SelectCityCallb
 
     private void parseInfo(String uId, String channels, String cityId, String stateId, String countryId, String regionId){
         parseUtils.subscribeWithInfo(uId,"en-IN","development", cityId, stateId, countryId, regionId);
-
+        Log.d("SelectCity","send parseInfo");
         List<String> items = Arrays.asList(channels.split("\\s*,\\s*"));
         for (int i=0;i<items.size();i++){
             Log.d("items", items.get(i));

@@ -838,7 +838,12 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("HomeFeedAdapter", "btn like clicked");
-                            openFragmentCallback.openFragment("postDetails", postObj1.id);
+                            if (postObj1.type.equals("news")){
+                                openFragmentCallback.openFragment("postDetailsForNews", postObj1.id);
+                            }else {
+                                openFragmentCallback.openFragment("postDetails", postObj1.id);
+                            }
+
 
                             break;
                     }
@@ -856,6 +861,11 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         case MotionEvent.ACTION_UP:
                             Log.d("HomeFeedAdapter", "btn comment clicked");
                             openFragmentCallback.openFragment("commentListPost", postObj1.id);
+                            if (postObj1.type.equals("news")){
+                                openFragmentCallback.openFragment("commentListPostForNews", postObj1.id);
+                            }else {
+                                openFragmentCallback.openFragment("commentListPost", postObj1.id);
+                            }
                             break;
                     }
                     break;

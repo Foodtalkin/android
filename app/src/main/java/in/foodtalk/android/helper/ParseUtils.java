@@ -71,7 +71,6 @@ public class ParseUtils {
                 if (e != null){
                     Log.e("ParseException", e.toString()+" done");
                 }
-
             }
         });
 
