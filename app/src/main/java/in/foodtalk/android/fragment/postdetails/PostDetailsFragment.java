@@ -114,8 +114,12 @@ public class PostDetailsFragment extends Fragment implements TabLayout.OnTabSele
         fragments = new Vector<android.support.v4.app.Fragment>();
         fragments.add(android.support.v4.app.Fragment.instantiate(getActivity(),LikeListFragment.class.getName()));
         fragments.add(android.support.v4.app.Fragment.instantiate(getActivity(),CommentsPostFragment.class.getName()));
-        if (!type.equals("news")){
+
+        Log.d("PostDetailsFragment","type : "+type);
+        if (!type.equals("question")){
             fragments.add(android.support.v4.app.Fragment.instantiate(getActivity(),BookmarkListFragment.class.getName()));
+        }else {
+            tabBookmark.setVisibility(View.GONE);
         }
 
         //fragments.add(Fragment.instantiate())

@@ -2582,18 +2582,18 @@ public class Home extends AppCompatActivity implements View.OnClickListener,
             postDetailsFragment.setCurrentPage = 1;
             setFragmentView(postDetailsFragment, R.id.container1, -1, true);
         }
-        if (fragmentName.equals("postDetailsForNews")){
+        if (fragmentName.equals("postDetailsForQuestion")){
             postDetailsFragment = new PostDetailsFragment();
             postDetailsFragment.postId = value;
-            postDetailsFragment.type = "news";
+            postDetailsFragment.type = "question";
             setFragmentView(postDetailsFragment, R.id.container1, -1, true);
         }
 
-        if (fragmentName.equals("commentListPostForNews")){
+        if (fragmentName.equals("commentListPostForQuestion")){
             postDetailsFragment = new PostDetailsFragment();
             postDetailsFragment.postId = value;
             postDetailsFragment.setCurrentPage = 1;
-            postDetailsFragment.type = "news";
+            postDetailsFragment.type = "question";
             setFragmentView(postDetailsFragment, R.id.container1, -1, true);
         }
         if (fragmentName.equals("userProfileFLikeList")){

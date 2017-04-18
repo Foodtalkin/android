@@ -838,8 +838,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
                             Log.d("HomeFeedAdapter", "btn like clicked");
-                            if (postObj1.type.equals("news")){
-                                openFragmentCallback.openFragment("postDetailsForNews", postObj1.id);
+                            if (postObj1.type.equals("question")){
+                                openFragmentCallback.openFragment("postDetailsForQuestion", postObj1.id);
                             }else {
                                 openFragmentCallback.openFragment("postDetails", postObj1.id);
                             }
@@ -851,7 +851,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 case R.id.btn_bookmark:
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
-                            Log.d("HomeFeedAdapter", "btn bookmark clicked");
                             openFragmentCallback.openFragment("bookmarkListPost", postObj1.id);
                             break;
                     }
@@ -859,10 +858,8 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 case R.id.btn_comment:
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
-                            Log.d("HomeFeedAdapter", "btn comment clicked");
-                            openFragmentCallback.openFragment("commentListPost", postObj1.id);
-                            if (postObj1.type.equals("news")){
-                                openFragmentCallback.openFragment("commentListPostForNews", postObj1.id);
+                            if (postObj1.type.equals("question")){
+                                openFragmentCallback.openFragment("commentListPostForQuestion", postObj1.id);
                             }else {
                                 openFragmentCallback.openFragment("commentListPost", postObj1.id);
                             }
@@ -872,7 +869,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 case R.id.txt_tip:
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
-                            Log.d("HomeFeedAdapter","btn_details clicked");
                             openFragmentCallback.openFragment("postDetails", postObj1.id);
                             break;
                     }
@@ -881,7 +877,6 @@ public class HomeFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     Log.d("HomeFeedAdapter","clicked postholder");
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:{
-                            //Log.d("clicked", "dish image"+ getPosition());
                             long thisTime = System.currentTimeMillis();
                             if (thisTime - lastTouchTime < 250) {
                                 Log.d("clicked", "img double");
