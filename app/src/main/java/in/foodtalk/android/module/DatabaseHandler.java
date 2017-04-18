@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import in.foodtalk.android.app.AppController;
+import in.foodtalk.android.object.AdValue;
 import in.foodtalk.android.object.LoginValue;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -29,6 +30,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // Contacts table name
     private static final String TABLE_LOGIN = "loginInfo";
+    private static final String TABLE_ADWORD = "adword";
+
+    private static final String KEY_AW_ID = "id";
+    private static final String KEY_AD_ID = "adId";
+    private static final String KEY_AD_VIEW = "adView";
+    private static final String KEY_AD_CLICK = "adClick";
+
 
     // Contacts Table Columns names
     private static final String KEY_ID = "id";
@@ -69,7 +77,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(CREATE_CONTACTS_TABLE);
         Log.d("DatabaseHandler", "onCreate");
 
-
+        String CREATE_ADWORD_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_ADWORD + "("
+                + KEY_AW_ID + " INTEGER PRIMARY KEY,"
+                + KEY_AD_ID + " INTEGER,"
+                + KEY_AD_VIEW + " INTEGER,"
+                + KEY_AD_CLICK + " INTEGER,"
+                +")";
+        db.execSQL(CREATE_ADWORD_TABLE);
     }
 
     // Upgrading database
@@ -82,15 +96,29 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE " + TABLE_LOGIN + " ADD "+KEY_CITY_ID+" TEXT DEFAULT blank");
         }
         if (newVersion == 3){
-
             db.execSQL("ALTER TABLE " + TABLE_LOGIN + " ADD "+KEY_RTID+" TEXT DEFAULT blank");
-
             db.execSQL("UPDATE " + TABLE_LOGIN + " SET "+KEY_RTID+" = "+KEY_SID);
-
             //Log.e("DatabaseHandler","newVersion 3 "+getUserDetails().get("sessionId"));
            // Log.e("DatabaseHandler","newVersion 3 ");
         }
         Log.d("DatabaseHandler", "onUpgrade"+" oldV "+ oldVersion+" newV "+newVersion);
+    }
+
+    public void addAd(AdValue adValue){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_AD_ID, adValue.adId);
+        values.put(KEY_AD_VIEW, adValue.adView);
+        values.put(KEY_AD_CLICK, adValue.adClick);
+
+        db.insert(TABLE_ADWORD, null, values);
+        db.close(); // Closing database connection
+    }
+
+    public void increaseAdValue(String key){
+        SQLiteDatabase db = this.getWritableDatabase();
+        //db.update(TABLE_ADWORD, values, KEY_UID+" = "+loginValue.uId,null);
+        db.close();
     }
 
     /**
@@ -112,9 +140,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_RTID, loginValue.rtId);
 
 
-
         db.update(TABLE_LOGIN, values, KEY_UID+" = "+loginValue.uId,null);
-
         // Inserting Row
         db.insert(TABLE_LOGIN, null, values);
         db.close(); // Closing database connection
@@ -143,7 +169,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // Move to first row
         cursor.moveToFirst();
         if(cursor.getCount() > 0){
-
             user.put("facebooId", cursor.getString(cursor.getColumnIndex(KEY_FID)));
             user.put("sessionId", cursor.getString(cursor.getColumnIndex(KEY_SID)));
             user.put("userId", cursor.getString(cursor.getColumnIndex(KEY_UID)));
@@ -152,7 +177,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             user.put("email",cursor.getString(cursor.getColumnIndex(KEY_EMAIL)));
             user.put("cityId",cursor.getString(cursor.getColumnIndex(KEY_CITY_ID)));
             user.put("refreshtoken", cursor.getString(cursor.getColumnIndex(KEY_RTID)));
-
         }
         Log.d("cursor ", cursor+"");
         cursor.close();
