@@ -403,6 +403,12 @@ public class HomeFragment extends Fragment implements ApiCallback {
             preCounter = i+1;
         }
     }
+    private void saveAllAds(JSONObject response) throws JSONException{
+        int totalAds = adwordJson.getJSONArray("result").length();
+        for (int i = 0; i<totalAds; i++){
+
+        }
+    }
     private PostObj getValueObj(JSONObject response, int indexAd1) throws JSONException {
         PostObj postObj = new PostObj();
         JSONObject result = response.getJSONArray("result").getJSONObject(indexAd1);

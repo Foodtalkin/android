@@ -79,7 +79,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         String CREATE_ADWORD_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_ADWORD + "("
                 + KEY_AW_ID + " INTEGER PRIMARY KEY,"
-                + KEY_AD_ID + " INTEGER,"
+                + KEY_AD_ID + " TEXT,"
                 + KEY_AD_VIEW + " INTEGER,"
                 + KEY_AD_CLICK + " INTEGER,"
                 +")";
@@ -108,19 +108,50 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_AD_ID, adValue.adId);
-        values.put(KEY_AD_VIEW, adValue.adView);
-        values.put(KEY_AD_CLICK, adValue.adClick);
+        values.put(KEY_AD_VIEW, 0);
+        values.put(KEY_AD_CLICK, 0);
 
         db.insert(TABLE_ADWORD, null, values);
         db.close(); // Closing database connection
     }
 
-    public void increaseAdValue(String key){
+    public void increaseAdClick(String adId){
         SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        db.execSQL("UPDATE " + TABLE_ADWORD + " SET "+KEY_AD_CLICK+" = "+KEY_AD_CLICK+1 +" WHERE " + KEY_AD_ID + " = " + adId);
+        //db.update(TABLE_ADWORD, values, KEY_UID+" = "+loginValue.uId,null);
+        db.close();
+    }
+    public void increaseAdView(String adId){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        db.execSQL("UPDATE " + TABLE_ADWORD + " SET "+KEY_AD_VIEW+" = "+KEY_AD_VIEW+1 +" WHERE " + KEY_AD_ID + " = " + adId);
         //db.update(TABLE_ADWORD, values, KEY_UID+" = "+loginValue.uId,null);
         db.close();
     }
 
+    public HashMap<String, String> getAdData(){
+        HashMap<String,String> adData = new HashMap<String,String>();
+        return adData;
+    }
+
+    public void resetAdTables(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        // Delete All Rows
+        db.delete(TABLE_ADWORD, null, null);
+        db.close();
+    }
+
+    public int getAdRowCount() {
+        String countQuery = "SELECT  * FROM " + TABLE_ADWORD;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int rowCount = cursor.getCount();
+        db.close();
+        cursor.close();
+        // return row count
+        return rowCount;
+    }
     /**
      * All CRUD(Create, Read, Update, Delete) Operations
      */
