@@ -48,6 +48,7 @@ import in.foodtalk.android.module.DatabaseHandler;
 import in.foodtalk.android.module.EndlessRecyclerOnScrollListener;
 import in.foodtalk.android.module.StringCase;
 import in.foodtalk.android.module.UserAgent;
+import in.foodtalk.android.object.AdValue;
 import in.foodtalk.android.object.PostObj;
 
 /**
@@ -378,6 +379,7 @@ public class HomeFragment extends Fragment implements ApiCallback {
         if (response != null){
             adwordJson = response;
             Log.e("HomeFragment","insertAds first");
+            //saveAllAds(response);
         }else {
             Log.e("HomeFragment","insertAds after");
         }
@@ -405,9 +407,16 @@ public class HomeFragment extends Fragment implements ApiCallback {
     }
     private void saveAllAds(JSONObject response) throws JSONException{
         int totalAds = adwordJson.getJSONArray("result").length();
+        db.resetAdTables();
         for (int i = 0; i<totalAds; i++){
+            AdValue adValue = new AdValue();
 
+            adValue.adId = adwordJson.getJSONArray("result").getJSONObject(i).getString("id");
+
+            db.addAd(adValue);
         }
+
+        Log.d("HomeFragment", "savedAdd: "+db.getAdRowCount());
     }
     private PostObj getValueObj(JSONObject response, int indexAd1) throws JSONException {
         PostObj postObj = new PostObj();

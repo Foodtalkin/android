@@ -81,9 +81,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_AW_ID + " INTEGER PRIMARY KEY,"
                 + KEY_AD_ID + " TEXT,"
                 + KEY_AD_VIEW + " INTEGER,"
-                + KEY_AD_CLICK + " INTEGER,"
+                + KEY_AD_CLICK + " INTEGER"
                 +")";
-        db.execSQL(CREATE_ADWORD_TABLE);
+        //db.execSQL(CREATE_ADWORD_TABLE);
     }
 
     // Upgrading database
